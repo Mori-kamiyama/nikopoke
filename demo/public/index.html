@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nikipoke Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: "Zen Kaku Gothic New", sans-serif; }
+        .hp-bar-fill { transition: width 0.5s ease-in-out; }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-slate-900 via-gray-900 to-slate-800 text-white min-h-screen flex flex-col items-center p-4">
+    <div id="lobby" class="w-full max-w-md bg-gray-800 p-6 rounded-xl shadow-lg mt-10">
+        <h1 class="text-2xl font-bold mb-4 text-center">nikipoke Demo</h1>
+        <p class="text-sm text-gray-300 mb-4">名前とルームを入れて、対戦モードを選んでください。</p>
+        <div id="lobby-error" class="hidden bg-red-900/60 border border-red-700 text-red-200 text-sm p-2 rounded mb-3"></div>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">プレイヤー名</label>
+                <input type="text" id="playerName" class="w-full bg-gray-700 border border-gray-600 rounded p-2" placeholder="なまえ">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">ルームID</label>
+                <input type="text" id="roomId" class="w-full bg-gray-700 border border-gray-600 rounded p-2" value="lobby">
+            </div>
+            <div id="team-builder" class="bg-gray-900/40 border border-gray-700 rounded-lg p-3 space-y-3">
+                <div>
+                    <div class="text-sm font-semibold">チーム編成</div>
+                    <div class="text-xs text-gray-300">参加前にポケモンと技を選んでください。</div>
+                </div>
+                <div id="team-slots" class="space-y-3">
+                    <div class="team-slot bg-gray-800/70 rounded-lg p-3 border border-gray-700" data-team-slot="0">
+                        <div class="text-xs uppercase text-gray-400">Slot 1</div>
+                        <select class="species-select w-full bg-gray-700 border border-gray-600 rounded p-2 mt-2"></select>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <select class="ability-select w-full bg-gray-700 border border-gray-600 rounded p-2" title="特性"></select>
+                            <select class="item-select w-full bg-gray-700 border border-gray-600 rounded p-2" title="持ち物"></select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="0"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="1"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="2"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="3"></select>
+                        </div>
+                    </div>
+                    <div class="team-slot bg-gray-800/70 rounded-lg p-3 border border-gray-700" data-team-slot="1">
+                        <div class="text-xs uppercase text-gray-400">Slot 2</div>
+                        <select class="species-select w-full bg-gray-700 border border-gray-600 rounded p-2 mt-2"></select>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <select class="ability-select w-full bg-gray-700 border border-gray-600 rounded p-2" title="特性"></select>
+                            <select class="item-select w-full bg-gray-700 border border-gray-600 rounded p-2" title="持ち物"></select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="0"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="1"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="2"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="3"></select>
+                        </div>
+                    </div>
+                    <div class="team-slot bg-gray-800/70 rounded-lg p-3 border border-gray-700" data-team-slot="2">
+                        <div class="text-xs uppercase text-gray-400">Slot 3</div>
+                        <select class="species-select w-full bg-gray-700 border border-gray-600 rounded p-2 mt-2"></select>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <select class="ability-select w-full bg-gray-700 border border-gray-600 rounded p-2" title="特性"></select>
+                            <select class="item-select w-full bg-gray-700 border border-gray-600 rounded p-2" title="持ち物"></select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="0"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="1"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="2"></select>
+                            <select class="move-select w-full bg-gray-700 border border-gray-600 rounded p-2" data-move-slot="3"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="join('pve_minimax')" class="bg-blue-600 hover:bg-blue-700 p-2 rounded font-bold">VS AI (Minimax)</button>
+                <button onclick="join('pve_mcts')" class="bg-green-600 hover:bg-green-700 p-2 rounded font-bold">VS AI (MCTS)</button>
+                <button onclick="join('pvp')" class="col-span-2 bg-purple-600 hover:bg-purple-700 p-2 rounded font-bold">対人戦 (PvP)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="battle" class="hidden w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div id="battle-header" class="md:col-span-3 bg-gray-800/90 p-4 rounded-xl border border-gray-700 flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+            <div class="flex flex-wrap gap-4">
+                <div>
+                    <div class="text-xs uppercase text-gray-400">Room</div>
+                    <div id="room-label" class="font-semibold">-</div>
+                </div>
+                <div>
+                    <div class="text-xs uppercase text-gray-400">Mode</div>
+                    <div id="mode-label" class="font-semibold">-</div>
+                </div>
+                <div>
+                    <div class="text-xs uppercase text-gray-400">Turn</div>
+                    <div id="turn-label" class="font-semibold">-</div>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-4">
+                <div>
+                    <div class="text-xs uppercase text-gray-400">You</div>
+                    <div id="player-label" class="font-semibold">-</div>
+                </div>
+                <div>
+                    <div class="text-xs uppercase text-gray-400">Opponent</div>
+                    <div id="opponent-label" class="font-semibold">-</div>
+                </div>
+                <div>
+                    <div class="text-xs uppercase text-gray-400">Status</div>
+                    <div id="battle-status" class="font-semibold text-gray-200">準備中</div>
+                </div>
+            </div>
+            <div>
+                <button id="leave-button" onclick="leaveRoom()" class="bg-red-700 hover:bg-red-600 px-4 py-2 rounded text-sm font-bold">退出</button>
+            </div>
+        </div>
+        <!-- Opponent Area -->
+        <div class="md:col-span-2 bg-gray-800 p-4 rounded-xl relative overflow-hidden h-96 flex flex-col justify-between border-4 border-gray-700">
+            <div id="opponent-info" class="self-end bg-gray-700 p-3 rounded-lg w-64 shadow-md">
+                <div class="flex justify-between font-bold">
+                    <span id="opp-name">???</span>
+                    <span>Lv.50</span>
+                </div>
+                <div id="opp-types" class="text-xs text-gray-300 mt-1"></div>
+                <div id="opp-ability-item" class="text-xs text-gray-400 mt-0.5"></div>
+                <div class="w-full bg-gray-600 h-3 rounded-full mt-2 overflow-hidden">
+                    <div id="opp-hp-bar" class="hp-bar-fill bg-green-500 h-full w-full"></div>
+                </div>
+                <div class="flex justify-between text-xs mt-1">
+                    <div id="opp-status" class="text-left"></div>
+                    <div id="opp-hp-text">100 / 100</div>
+                </div>
+            </div>
+
+            <div id="player-info" class="self-start bg-gray-700 p-3 rounded-lg w-64 shadow-md">
+                <div class="flex justify-between font-bold">
+                    <span id="my-name">???</span>
+                    <span>Lv.50</span>
+                </div>
+                <div id="my-types" class="text-xs text-gray-300 mt-1"></div>
+                <div id="my-ability-item" class="text-xs text-gray-400 mt-0.5"></div>
+                <div class="w-full bg-gray-600 h-3 rounded-full mt-2 overflow-hidden">
+                    <div id="my-hp-bar" class="hp-bar-fill bg-green-500 h-full w-full"></div>
+                </div>
+                <div class="flex justify-between text-xs mt-1">
+                    <div id="my-status"></div>
+                    <div id="my-hp-text">100 / 100</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log and Actions Area -->
+        <div class="flex flex-col gap-4">
+            <div id="log" class="bg-black p-3 rounded-lg h-64 overflow-y-auto font-mono text-sm border border-gray-700">
+                <div>バトル開始を待っています...</div>
+            </div>
+            <div id="actions" class="bg-gray-800 p-4 rounded-xl flex flex-col gap-2">
+                <div class="bg-gray-700 rounded-lg p-1 flex gap-1 text-sm font-semibold">
+                    <button id="tab-move" class="flex-1 rounded-md py-1 bg-blue-700" onclick="showActionTab('move')">技</button>
+                    <button id="tab-switch" class="flex-1 rounded-md py-1 bg-gray-600" onclick="showActionTab('switch')">交代</button>
+                </div>
+                <div id="move-grid" class="grid grid-cols-2 gap-2">
+                    <!-- Moves will be here -->
+                </div>
+                <div id="switch-grid" class="hidden grid grid-cols-1 gap-2">
+                    <!-- Switches will be here -->
+                </div>
+                <div id="item-actions" class="mt-2">
+                    <button id="item-button" class="w-full bg-amber-600 hover:bg-amber-500 text-black font-bold py-2 rounded">
+                        持ち物を使う
+                    </button>
+                </div>
+            </div>
+            <div id="team-summary" class="bg-gray-800 p-4 rounded-xl">
+                <div class="text-xs uppercase text-gray-400 mb-2">チーム</div>
+                <div id="team-list" class="space-y-2 text-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="switch-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+        <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 w-full max-w-md shadow-xl">
+            <div class="text-sm font-bold mb-2">交代先を選択</div>
+            <div id="switch-modal-message" class="text-xs text-gray-300 mb-3">交代先を選んでください。</div>
+            <div id="switch-modal-grid" class="grid grid-cols-1 gap-2"></div>
+            <div class="mt-4">
+                <div class="text-xs text-gray-400 mb-1">ログ</div>
+                <div id="switch-modal-log" class="bg-black/50 border border-gray-700 rounded p-2 text-xs font-mono max-h-32 overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="client.js"></script>
+</body>
+</html>

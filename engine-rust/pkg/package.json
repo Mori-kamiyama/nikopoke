@@ -1,0 +1,11 @@
+{
+  "name": "engine-rust",
+  "version": "0.1.0",
+  "files": [
+    "engine_rust_bg.wasm",
+    "engine_rust.js",
+    "engine_rust.d.ts"
+  ],
+  "main": "engine_rust.js",
+  "types": "engine_rust.d.ts"
+}

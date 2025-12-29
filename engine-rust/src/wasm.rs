@@ -1,0 +1,543 @@
+use crate::ai::{get_best_move_mcts, get_best_move_minimax};
+use crate::core::battle::{is_battle_over, step_battle, BattleOptions};
+use crate::core::factory::{create_creature, CreateCreatureOptions};
+use crate::core::state::{
+    Action, ActionType, BattleHistory, BattleState, BattleTurn, CreatureState, FieldEffect,
+    FieldState, PlayerState, Status,
+};
+use crate::data::learnsets::LearnsetDatabase;
+use crate::data::moves::MoveDatabase;
+use crate::data::species::SpeciesDatabase;
+use crate::core::state::create_battle_state;
+use js_sys::Math;
+use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use std::collections::HashMap;
+use wasm_bindgen::prelude::*;
+
+static SPECIES_DB: Lazy<SpeciesDatabase> =
+    Lazy::new(|| SpeciesDatabase::load_default().unwrap_or_else(|_| SpeciesDatabase::new()));
+static LEARNSETS_DB: Lazy<LearnsetDatabase> =
+    Lazy::new(|| LearnsetDatabase::load_default().unwrap_or_default());
+static MOVE_DB: Lazy<MoveDatabase> =
+    Lazy::new(|| MoveDatabase::load_default().unwrap_or_else(|_| MoveDatabase::minimal()));
+
+#[derive(Clone, Debug, Default, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct CreateCreatureOptionsWire {
+    moves: Option<Vec<String>>,
+    ability: Option<String>,
+    name: Option<String>,
+    level: Option<u32>,
+    item: Option<String>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct StatusWire {
+    id: String,
+    remaining_turns: Option<i32>,
+    #[serde(default)]
+    data: HashMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct FieldEffectWire {
+    id: String,
+    remaining_turns: Option<i32>,
+    #[serde(default)]
+    data: HashMap<String, Value>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct CreatureStateWire {
+    id: String,
+    species_id: String,
+    name: String,
+    level: u32,
+    types: Vec<String>,
+    moves: Vec<String>,
+    ability: Option<String>,
+    item: Option<String>,
+    hp: i32,
+    max_hp: i32,
+    stages: crate::core::state::StatStages,
+    #[serde(default)]
+    statuses: Vec<StatusWire>,
+    #[serde(default)]
+    move_pp: HashMap<String, i32>,
+    #[serde(default)]
+    ability_data: HashMap<String, Value>,
+    #[serde(default)]
+    volatile_data: HashMap<String, Value>,
+    attack: i32,
+    defense: i32,
+    sp_attack: i32,
+    sp_defense: i32,
+    speed: i32,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct PlayerStateWire {
+    id: String,
+    name: String,
+    team: Vec<CreatureStateWire>,
+    #[serde(default)]
+    active_slot: usize,
+    #[serde(default)]
+    last_fainted_ability: Option<String>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct FieldStateWire {
+    #[serde(default)]
+    global: Vec<FieldEffectWire>,
+    #[serde(default)]
+    sides: HashMap<String, Vec<FieldEffectWire>>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct ActionWire {
+    #[serde(rename = "type")]
+    action_type: String,
+    player_id: String,
+    move_id: Option<String>,
+    target_id: Option<String>,
+    slot: Option<usize>,
+    priority: Option<i32>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct BattleTurnWire {
+    turn: u32,
+    actions: Vec<ActionWire>,
+    log: Vec<String>,
+    rng: Vec<f64>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct BattleHistoryWire {
+    turns: Vec<BattleTurnWire>,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct BattleStateWire {
+    players: Vec<PlayerStateWire>,
+    field: FieldStateWire,
+    turn: u32,
+    #[serde(default)]
+    log: Vec<String>,
+    history: Option<BattleHistoryWire>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct StepBattleOptionsWire {
+    record_history: Option<bool>,
+}
+
+fn js_err(message: impl ToString) -> JsValue {
+    JsValue::from_str(&message.to_string())
+}
+
+fn action_type_from_js(value: &str) -> Result<ActionType, String> {
+    match value {
+        "move" => Ok(ActionType::Move),
+        "switch" => Ok(ActionType::Switch),
+        "use_item" => Ok(ActionType::UseItem),
+        other => Err(format!("Unknown action type: {}", other)),
+    }
+}
+
+fn action_type_to_js(value: &ActionType) -> &'static str {
+    match value {
+        ActionType::Move => "move",
+        ActionType::Switch => "switch",
+        ActionType::UseItem => "use_item",
+    }
+}
+
+fn default_moves(species_id: &str) -> Vec<String> {
+    let Some(learnset) = LEARNSETS_DB.get(species_id) else {
+        return Vec::new();
+    };
+    learnset
+        .iter()
+        .filter(|move_id| MOVE_DB.get(move_id.as_str()).is_some())
+        .take(4)
+        .cloned()
+        .collect()
+}
+
+impl From<Status> for StatusWire {
+    fn from(status: Status) -> Self {
+        Self {
+            id: status.id,
+            remaining_turns: status.remaining_turns,
+            data: status.data,
+        }
+    }
+}
+
+impl From<StatusWire> for Status {
+    fn from(status: StatusWire) -> Self {
+        Self {
+            id: status.id,
+            remaining_turns: status.remaining_turns,
+            data: status.data,
+        }
+    }
+}
+
+impl From<FieldEffect> for FieldEffectWire {
+    fn from(effect: FieldEffect) -> Self {
+        Self {
+            id: effect.id,
+            remaining_turns: effect.remaining_turns,
+            data: effect.data,
+        }
+    }
+}
+
+impl From<FieldEffectWire> for FieldEffect {
+    fn from(effect: FieldEffectWire) -> Self {
+        Self {
+            id: effect.id,
+            remaining_turns: effect.remaining_turns,
+            data: effect.data,
+        }
+    }
+}
+
+impl From<CreatureState> for CreatureStateWire {
+    fn from(creature: CreatureState) -> Self {
+        Self {
+            id: creature.id,
+            species_id: creature.species_id,
+            name: creature.name,
+            level: creature.level,
+            types: creature.types,
+            moves: creature.moves,
+            ability: creature.ability,
+            item: creature.item,
+            hp: creature.hp,
+            max_hp: creature.max_hp,
+            stages: creature.stages,
+            statuses: creature.statuses.into_iter().map(StatusWire::from).collect(),
+            move_pp: creature.move_pp,
+            ability_data: creature.ability_data,
+            volatile_data: creature.volatile_data,
+            attack: creature.attack,
+            defense: creature.defense,
+            sp_attack: creature.sp_attack,
+            sp_defense: creature.sp_defense,
+            speed: creature.speed,
+        }
+    }
+}
+
+impl From<CreatureStateWire> for CreatureState {
+    fn from(creature: CreatureStateWire) -> Self {
+        Self {
+            id: creature.id,
+            species_id: creature.species_id,
+            name: creature.name,
+            level: creature.level,
+            types: creature.types,
+            moves: creature.moves,
+            ability: creature.ability,
+            item: creature.item,
+            hp: creature.hp,
+            max_hp: creature.max_hp,
+            stages: creature.stages,
+            statuses: creature.statuses.into_iter().map(Status::from).collect(),
+            move_pp: creature.move_pp,
+            ability_data: creature.ability_data,
+            volatile_data: creature.volatile_data,
+            attack: creature.attack,
+            defense: creature.defense,
+            sp_attack: creature.sp_attack,
+            sp_defense: creature.sp_defense,
+            speed: creature.speed,
+        }
+    }
+}
+
+impl From<PlayerState> for PlayerStateWire {
+    fn from(player: PlayerState) -> Self {
+        Self {
+            id: player.id,
+            name: player.name,
+            team: player.team.into_iter().map(CreatureStateWire::from).collect(),
+            active_slot: player.active_slot,
+            last_fainted_ability: player.last_fainted_ability,
+        }
+    }
+}
+
+impl From<PlayerStateWire> for PlayerState {
+    fn from(player: PlayerStateWire) -> Self {
+        Self {
+            id: player.id,
+            name: player.name,
+            team: player.team.into_iter().map(CreatureState::from).collect(),
+            active_slot: player.active_slot,
+            last_fainted_ability: player.last_fainted_ability,
+        }
+    }
+}
+
+impl From<FieldState> for FieldStateWire {
+    fn from(field: FieldState) -> Self {
+        Self {
+            global: field.global.into_iter().map(FieldEffectWire::from).collect(),
+            sides: field
+                .sides
+                .into_iter()
+                .map(|(k, v)| (k, v.into_iter().map(FieldEffectWire::from).collect()))
+                .collect(),
+        }
+    }
+}
+
+impl From<FieldStateWire> for FieldState {
+    fn from(field: FieldStateWire) -> Self {
+        Self {
+            global: field.global.into_iter().map(FieldEffect::from).collect(),
+            sides: field
+                .sides
+                .into_iter()
+                .map(|(k, v)| (k, v.into_iter().map(FieldEffect::from).collect()))
+                .collect(),
+        }
+    }
+}
+
+impl From<Action> for ActionWire {
+    fn from(action: Action) -> Self {
+        Self {
+            action_type: action_type_to_js(&action.action_type).to_string(),
+            player_id: action.player_id,
+            move_id: action.move_id,
+            target_id: action.target_id,
+            slot: action.slot,
+            priority: action.priority,
+        }
+    }
+}
+
+impl TryFrom<ActionWire> for Action {
+    type Error = String;
+
+    fn try_from(action: ActionWire) -> Result<Self, Self::Error> {
+        Ok(Self {
+            player_id: action.player_id,
+            action_type: action_type_from_js(&action.action_type)?,
+            move_id: action.move_id,
+            target_id: action.target_id,
+            slot: action.slot,
+            priority: action.priority,
+        })
+    }
+}
+
+impl From<BattleTurn> for BattleTurnWire {
+    fn from(turn: BattleTurn) -> Self {
+        Self {
+            turn: turn.turn,
+            actions: turn.actions.into_iter().map(ActionWire::from).collect(),
+            log: turn.log,
+            rng: turn.rng,
+        }
+    }
+}
+
+impl TryFrom<BattleTurnWire> for BattleTurn {
+    type Error = String;
+
+    fn try_from(turn: BattleTurnWire) -> Result<Self, Self::Error> {
+        Ok(Self {
+            turn: turn.turn,
+            actions: turn
+                .actions
+                .into_iter()
+                .map(Action::try_from)
+                .collect::<Result<_, _>>()?,
+            log: turn.log,
+            rng: turn.rng,
+        })
+    }
+}
+
+impl From<BattleHistory> for BattleHistoryWire {
+    fn from(history: BattleHistory) -> Self {
+        Self {
+            turns: history.turns.into_iter().map(BattleTurnWire::from).collect(),
+        }
+    }
+}
+
+impl TryFrom<BattleHistoryWire> for BattleHistory {
+    type Error = String;
+
+    fn try_from(history: BattleHistoryWire) -> Result<Self, Self::Error> {
+        Ok(Self {
+            turns: history
+                .turns
+                .into_iter()
+                .map(BattleTurn::try_from)
+                .collect::<Result<_, _>>()?,
+        })
+    }
+}
+
+impl From<BattleState> for BattleStateWire {
+    fn from(state: BattleState) -> Self {
+        Self {
+            players: state.players.into_iter().map(PlayerStateWire::from).collect(),
+            field: FieldStateWire::from(state.field),
+            turn: state.turn,
+            log: state.log,
+            history: state.history.map(BattleHistoryWire::from),
+        }
+    }
+}
+
+impl TryFrom<BattleStateWire> for BattleState {
+    type Error = String;
+
+    fn try_from(state: BattleStateWire) -> Result<Self, Self::Error> {
+        Ok(Self {
+            players: state.players.into_iter().map(PlayerState::from).collect(),
+            field: FieldState::from(state.field),
+            turn: state.turn,
+            log: state.log,
+            history: match state.history {
+                Some(history) => Some(BattleHistory::try_from(history)?),
+                None => None,
+            },
+        })
+    }
+}
+
+#[wasm_bindgen(js_name = createCreature)]
+pub fn create_creature_wasm(species_id: String, options: JsValue) -> Result<JsValue, JsValue> {
+    let options: CreateCreatureOptionsWire = if options.is_undefined() || options.is_null() {
+        CreateCreatureOptionsWire::default()
+    } else {
+        serde_wasm_bindgen::from_value(options).map_err(js_err)?
+    };
+    let species = SPECIES_DB
+        .get(species_id.as_str())
+        .ok_or_else(|| js_err(format!("Unknown species id: {}", species_id)))?;
+
+    let requested_moves = options.moves.clone().unwrap_or_default();
+    let fallback_moves = default_moves(species_id.as_str());
+    let selected_moves = if requested_moves.is_empty() {
+        fallback_moves.clone()
+    } else {
+        requested_moves.clone()
+    };
+
+    let build_options = |moves: Vec<String>| CreateCreatureOptions {
+        moves: if moves.is_empty() { None } else { Some(moves) },
+        ability: options.ability.clone(),
+        name: options.name.clone(),
+        level: options.level,
+        item: options.item.clone(),
+    };
+
+    let creature = create_creature(
+        species,
+        build_options(selected_moves),
+        &LEARNSETS_DB,
+        &MOVE_DB,
+    )
+    .or_else(|_| {
+        create_creature(
+            species,
+            build_options(fallback_moves),
+            &LEARNSETS_DB,
+            &MOVE_DB,
+        )
+    })
+    .map_err(js_err)?;
+
+    serde_wasm_bindgen::to_value(&CreatureStateWire::from(creature)).map_err(js_err)
+}
+
+#[wasm_bindgen(js_name = createBattleState)]
+pub fn create_battle_state_wasm(players: JsValue) -> Result<JsValue, JsValue> {
+    let players_wire: Vec<PlayerStateWire> =
+        serde_wasm_bindgen::from_value(players).map_err(js_err)?;
+    let players: Vec<PlayerState> = players_wire.into_iter().map(PlayerState::from).collect();
+    let state = create_battle_state(players);
+    serde_wasm_bindgen::to_value(&BattleStateWire::from(state)).map_err(js_err)
+}
+
+#[wasm_bindgen(js_name = stepBattle)]
+pub fn step_battle_wasm(
+    state: JsValue,
+    actions: JsValue,
+    options: JsValue,
+) -> Result<JsValue, JsValue> {
+    let state_wire: BattleStateWire = serde_wasm_bindgen::from_value(state).map_err(js_err)?;
+    let actions_wire: Vec<ActionWire> = serde_wasm_bindgen::from_value(actions).map_err(js_err)?;
+    let options_wire: StepBattleOptionsWire = if options.is_undefined() || options.is_null() {
+        StepBattleOptionsWire::default()
+    } else {
+        serde_wasm_bindgen::from_value(options).map_err(js_err)?
+    };
+    let state = BattleState::try_from(state_wire).map_err(js_err)?;
+    let actions: Vec<Action> = actions_wire
+        .into_iter()
+        .map(Action::try_from)
+        .collect::<Result<_, _>>()
+        .map_err(js_err)?;
+    let mut rng = || Math::random();
+    let options = BattleOptions {
+        record_history: options_wire.record_history.unwrap_or(true),
+    };
+    let next_state = step_battle(&state, &actions, &mut rng, options);
+    serde_wasm_bindgen::to_value(&BattleStateWire::from(next_state)).map_err(js_err)
+}
+
+#[wasm_bindgen(js_name = isBattleOver)]
+pub fn is_battle_over_wasm(state: JsValue) -> Result<bool, JsValue> {
+    let state_wire: BattleStateWire = serde_wasm_bindgen::from_value(state).map_err(js_err)?;
+    let state = BattleState::try_from(state_wire).map_err(js_err)?;
+    Ok(is_battle_over(&state))
+}
+
+#[wasm_bindgen(js_name = getBestMoveMinimax)]
+pub fn get_best_move_minimax_wasm(
+    state: JsValue,
+    player_id: String,
+    depth: usize,
+) -> Result<JsValue, JsValue> {
+    let state_wire: BattleStateWire = serde_wasm_bindgen::from_value(state).map_err(js_err)?;
+    let state = BattleState::try_from(state_wire).map_err(js_err)?;
+    let action = get_best_move_minimax(&state, player_id.as_str(), depth);
+    serde_wasm_bindgen::to_value(&action.map(ActionWire::from)).map_err(js_err)
+}
+
+#[wasm_bindgen(js_name = getBestMoveMCTS)]
+pub fn get_best_move_mcts_wasm(
+    state: JsValue,
+    player_id: String,
+    iterations: usize,
+) -> Result<JsValue, JsValue> {
+    let state_wire: BattleStateWire = serde_wasm_bindgen::from_value(state).map_err(js_err)?;
+    let state = BattleState::try_from(state_wire).map_err(js_err)?;
+    let action = get_best_move_mcts(&state, player_id.as_str(), iterations);
+    serde_wasm_bindgen::to_value(&action.map(ActionWire::from)).map_err(js_err)
+}

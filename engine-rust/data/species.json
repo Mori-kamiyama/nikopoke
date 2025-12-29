@@ -1,0 +1,402 @@
+{
+  "eiraku": {
+    "id": "eiraku",
+    "name": "えいらく",
+    "type": [
+      "water",
+      "normal"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 115,
+      "def": 100,
+      "spa": 80,
+      "spd": 45,
+      "spe": 80
+    },
+    "abilities": [
+      "immunity",
+      "compound_eyes"
+    ]
+  },
+  "tatuta": {
+    "id": "tatuta",
+    "name": "たつた",
+    "type": [
+      "grass",
+      "dragon"
+    ],
+    "baseStats": {
+      "hp": 103,
+      "atk": 90,
+      "def": 75,
+      "spa": 107,
+      "spd": 78,
+      "spe": 107
+    },
+    "abilities": [
+      "cotton_down",
+      "chlorophyll"
+    ]
+  },
+  "morimitu": {
+    "id": "morimitu",
+    "name": "もりみつ",
+    "type": [
+      "fire",
+      "flying"
+    ],
+    "baseStats": {
+      "hp": 96,
+      "atk": 70,
+      "def": 70,
+      "spa": 110,
+      "spd": 95,
+      "spe": 80
+    },
+    "abilities": [
+      "swift_swim",
+      "contrary"
+    ]
+  },
+  "takaho": {
+    "id": "takaho",
+    "name": "たかほ",
+    "type": [
+      "grass",
+      "rock"
+    ],
+    "baseStats": {
+      "hp": 105,
+      "atk": 105,
+      "def": 110,
+      "spa": 60,
+      "spd": 55,
+      "spe": 80
+    },
+    "abilities": [
+      "libero",
+      "receiver"
+    ]
+  },
+  "ume": {
+    "id": "ume",
+    "name": "うめ",
+    "type": [
+      "electric",
+      "ghost"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 55,
+      "def": 45,
+      "spa": 110,
+      "spd": 75,
+      "spe": 60
+    },
+    "abilities": [
+      "prankster",
+      "klutz"
+    ]
+  },
+  "machida": {
+    "id": "machida",
+    "name": "まちだ",
+    "type": [
+      "ground",
+      "water"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 94,
+      "def": 100,
+      "spa": 56,
+      "spd": 56,
+      "spe": 120
+    },
+    "abilities": [
+      "stamina",
+      "guts"
+    ]
+  },
+  "touma": {
+    "id": "touma",
+    "name": "とうま",
+    "type": [
+      "dark",
+      "fighting"
+    ],
+    "baseStats": {
+      "hp": 75,
+      "atk": 120,
+      "def": 70,
+      "spa": 100,
+      "spd": 65,
+      "spe": 90
+    },
+    "abilities": [
+      "quick_feet",
+      "lightning_rod"
+    ]
+  },
+  "morimori": {
+    "id": "morimori",
+    "name": "もりもり",
+    "type": [
+      "ground",
+      "normal"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 95,
+      "def": 133,
+      "spa": 70,
+      "spd": 50,
+      "spe": 65
+    },
+    "abilities": [
+      "slow_start",
+      "hustle"
+    ]
+  },
+  "ayuma": {
+    "id": "ayuma",
+    "name": "あゆま",
+    "type": [
+      "dark",
+      "steel"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 80,
+      "def": 55,
+      "spa": 125,
+      "spd": 55,
+      "spe": 135
+    },
+    "abilities": [
+      "berserk",
+      "competitive"
+    ]
+  },
+  "buchii": {
+    "id": "buchii",
+    "name": "ぶっちー",
+    "type": [
+      "bug",
+      "fairy"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 45,
+      "def": 50,
+      "spa": 105,
+      "spd": 115,
+      "spe": 60
+    },
+    "abilities": [
+      "fur_coat",
+      "unaware"
+    ]
+  },
+  "tomoki": {
+    "id": "tomoki",
+    "name": "ともき",
+    "type": [
+      "ice",
+      "flying"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 110,
+      "def": 65,
+      "spa": 100,
+      "spd": 45,
+      "spe": 120
+    },
+    "abilities": [
+      "download",
+      "oppotunist"
+    ]
+  },
+  "haruta": {
+    "id": "haruta",
+    "name": "はるた",
+    "type": [
+      "ice",
+      "fairy"
+    ],
+    "baseStats": {
+      "hp": 88,
+      "atk": 100,
+      "def": 78,
+      "spa": 47,
+      "spd": 70,
+      "spe": 137
+    },
+    "abilities": [
+      "drought",
+      "parental_bond"
+    ]
+  },
+  "macchan": {
+    "id": "macchan",
+    "name": "まっちゃん",
+    "type": [
+      "fighting",
+      "dragon"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 135,
+      "def": 87,
+      "spa": 75,
+      "spd": 60,
+      "spe": 123
+    },
+    "abilities": [
+      "simple",
+      "intimidate"
+    ]
+  },
+  "michii": {
+    "id": "michii",
+    "name": "みっちー",
+    "type": [
+      "dark",
+      "psychic"
+    ],
+    "baseStats": {
+      "hp": 66,
+      "atk": 79,
+      "def": 55,
+      "spa": 130,
+      "spd": 70,
+      "spe": 120
+    },
+    "abilities": [
+      "shadow_tag",
+      "unnerve"
+    ]
+  },
+  "nisiki": {
+    "id": "nisiki",
+    "name": "にしき",
+    "type": [
+      "psychic",
+      "ghost"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 65,
+      "def": 45,
+      "spa": 90,
+      "spd": 55,
+      "spe": 60
+    },
+    "abilities": [
+      "magic_bounce",
+      "moody"
+    ]
+  },
+  "sena": {
+    "id": "sena",
+    "name": "せな",
+    "type": [
+      "electric",
+      "steel"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 105,
+      "def": 65,
+      "spa": 105,
+      "spd": 55,
+      "spe": 65
+    },
+    "abilities": [
+      "steelworker",
+      "technician"
+    ]
+  },
+  "ikkun": {
+    "id": "ikkun",
+    "name": "いっくん",
+    "type": [
+      "rock",
+      "poison"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 80,
+      "def": 52,
+      "spa": 85,
+      "spd": 133,
+      "spe": 65
+    },
+    "abilities": [
+      "thick_fat",
+      "merciless"
+    ]
+  },
+  "futo": {
+    "id": "futo",
+    "name": "ふうと",
+    "type": [
+      "fire",
+      "normal"
+    ],
+    "baseStats": {
+      "hp": 105,
+      "atk": 115,
+      "def": 90,
+      "spa": 70,
+      "spd": 60,
+      "spe": 80
+    },
+    "abilities": [
+      "insomnia",
+      "own_tempo"
+    ]
+  },
+  "makocchan": {
+    "id": "makocchan",
+    "name": "まこっちゃん",
+    "type": [
+      "poison",
+      "fairy"
+    ],
+    "baseStats": {
+      "hp": 85,
+      "atk": 50,
+      "def": 50,
+      "spa": 135,
+      "spd": 105,
+      "spe": 60
+    },
+    "abilities": [
+      "power_of_alchemy",
+      "sharpness"
+    ]
+  },
+  "reosan": {
+    "id": "reosan",
+    "name": "れおさん",
+    "type": [
+      "bug",
+      "ghost"
+    ],
+    "baseStats": {
+      "hp": 255,
+      "atk": 37,
+      "def": 37,
+      "spa": 37,
+      "spd": 108,
+      "spe": 7
+    },
+    "abilities": [
+      "pure_power",
+      "super_luck"
+    ]
+  }
+}
