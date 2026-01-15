@@ -160,10 +160,10 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                                     active.statuses[index]
                                         .data
                                         .insert("hp".to_string(), Value::Number(remaining.into()));
-                                    next.log.push(format!("{}'s substitute took the hit!", active.name));
+                                    next.log.push(format!("{}の みがわりが 攻撃を 受けた！", active.name));
                                 } else {
                                     active.statuses.remove(index);
-                                    next.log.push(format!("{}'s substitute broke!", active.name));
+                                    next.log.push(format!("{}の みがわりは 壊れてしまった！", active.name));
                                 }
                                 return next;
                             }
@@ -171,7 +171,15 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                     }
                     let new_hp = active.hp - *amount;
                     active.hp = new_hp.clamp(0, active.max_hp);
+                    if *amount > 0 {
+                        next.log.push(format!("{}は {}ダメージ 受けた！", active.name, amount));
+                    } else if *amount < 0 {
+                        next.log.push(format!("{}の HPが {}回復した！", active.name, -amount));
+                    } else {
+                        next.log.push(format!("{}には 効かないようだ……", active.name));
+                    }
                     if active.hp <= 0 {
+                        next.log.push(format!("{}は たおれた！", active.name));
                         player.last_fainted_ability = active.ability.clone();
                         if !active.statuses.iter().any(|s| s.id == "pending_switch") {
                             active.statuses.push(Status {
@@ -207,7 +215,7 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                 if let Some(player) = next.players.iter().find(|p| p.id == *target_id) {
                     if let Some(active) = player.team.get(player.active_slot) {
                         next.log
-                            .push(format!("{} is immune to {}.", active.name, status_id));
+                            .push(format!("{}には {}は 効かない！", active.name, status_id));
                     }
                 }
                 return next;
@@ -221,7 +229,7 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                     }
                     if !stack {
                         if let Some(_existing) = active.statuses.iter().find(|s| s.id == *status_id) {
-                            next.log.push(format!("{} already has {}.", active.name, status_id));
+                            next.log.push(format!("{}は すでに {}状態だ！", active.name, status_id));
                             return next;
                         }
                     }
@@ -344,7 +352,7 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                     if let Some(incoming) = player.team.get_mut(player.active_slot) {
                         incoming.statuses.retain(|s| s.id != "pending_switch");
                         next.log
-                            .push(format!("{} sent out {}!", player.name, incoming.name));
+                            .push(format!("{}は {}を 繰り出した！", player.name, incoming.name));
                     }
                 }
             }

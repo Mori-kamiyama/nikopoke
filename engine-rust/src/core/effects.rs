@@ -77,7 +77,7 @@ fn apply_effect(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         "ohko" => apply_ohko(state, effect, ctx),
         "cure_all_status" => apply_cure_all_status(effect, ctx),
         "self_switch" => apply_self_switch(ctx),
-        "force_switch" => apply_force_switch(effect, ctx),
+        "force_switch" => apply_force_switch(state, effect, ctx),
         "replace_pokemon" => apply_replace_pokemon(ctx),
         "lock_move" => apply_lock_move(effect, ctx),
         "run_away" => apply_run_away(),
@@ -125,7 +125,7 @@ fn apply_protect(state: &BattleState, _effect: &Effect, ctx: &mut EffectContext<
     if (ctx.rng)() > chance {
         return vec![
             BattleEvent::Log {
-                message: format!("{}'s protect failed!", attacker.name),
+                message: format!("{}の まもりは 失敗した！", attacker.name),
                 meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
             },
             BattleEvent::SetVolatile {
@@ -179,7 +179,7 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
 
     if (ctx.rng)() > accuracy {
         return vec![BattleEvent::Log {
-            message: format!("{}'s {} missed!", attacker.name, move_name(ctx.move_data, effect)),
+            message: format!("{}の {}は はずれた！", attacker.name, move_name(ctx.move_data, effect)),
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
         }];
     }
@@ -187,12 +187,40 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     let power = value_i32(effect.data.get("power")).unwrap_or(0);
     let attacker_id = ctx.attacker_player_id.clone();
     let target_id = ctx.target_player_id.clone();
-    let amount = calc_damage(power, state, &attacker_id, &target_id, ctx, false);
+    
+    // Pass false for is_secondary_hit, let calc_damage handle crit logic
+    let (amount, is_crit) = calc_damage(power, state, &attacker_id, &target_id, ctx, false);
+    
     let mut events = Vec::new();
     events.push(BattleEvent::Log {
-        message: format!("{} used {}!", attacker.name, move_name(ctx.move_data, effect)),
+        message: format!("{}の {}！", attacker.name, move_name(ctx.move_data, effect)),
         meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
     });
+
+    if amount > 0 {
+        if is_crit {
+            events.push(BattleEvent::Log {
+                message: "急所に あたった！".to_string(),
+                meta: Map::new(),
+            });
+        }
+
+        if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
+            let eff = ctx.type_chart.effectiveness(move_type, &target.types);
+            if eff > 1.0 {
+                events.push(BattleEvent::Log {
+                    message: "効果は 抜群だ！".to_string(),
+                    meta: Map::new(),
+                });
+            } else if eff > 0.0 && eff < 1.0 {
+                events.push(BattleEvent::Log {
+                    message: "効果は 今ひとつの ようだ……".to_string(),
+                    meta: Map::new(),
+                });
+            }
+        }
+    }
+
     let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
     meta.insert("target".to_string(), Value::String(ctx.target_player_id.clone()));
     meta.insert("cancellable".to_string(), Value::Bool(true));
@@ -204,7 +232,9 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
 
     if attacker.ability.as_deref() == Some("parental_bond") {
         let second_power = (power as f32 * 0.25).floor() as i32;
-        let second_amount = calc_damage(second_power, state, &attacker_id, &target_id, ctx, true);
+        // Pass true for is_secondary_hit, parental bond 2nd hit doesn't crit
+        let (second_amount, _) = calc_damage(second_power, state, &attacker_id, &target_id, ctx, true);
+        
         let mut second_meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
         second_meta.insert("target".to_string(), Value::String(ctx.target_player_id.clone()));
         second_meta.insert("cancellable".to_string(), Value::Bool(true));
@@ -267,8 +297,8 @@ fn apply_status(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     if let Some(chance) = value_f64(effect.data.get("chance")) {
         if (ctx.rng)() > chance {
             return vec![BattleEvent::Log {
-                message: format!("{}'s {} failed to apply.",
-                    get_active_creature(state, &ctx.attacker_player_id).map(|c| c.name.clone()).unwrap_or_else(|| "Someone".to_string()),
+                message: format!("{}の {}は 効かなかった！",
+                    get_active_creature(state, &ctx.attacker_player_id).map(|c| c.name.clone()).unwrap_or_else(|| "誰か".to_string()),
                     status_id),
                 meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
             }];
@@ -306,8 +336,8 @@ fn apply_status(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
 
     vec![BattleEvent::ApplyStatus {
         target_id,
-        status_id,
-        duration,
+        status_id: status_id.clone(),
+        duration: if status_id == "sleep" { None } else { duration },
         stack: effect.data.get("stack").and_then(|v| v.as_bool()).unwrap_or(false),
         data,
         meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
@@ -522,7 +552,7 @@ fn apply_repeat(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     }
     if times > 1 {
         collected.push(BattleEvent::Log {
-            message: format!("Hit {} time(s)!", times),
+            message: format!("{}回 あたった！", times),
             meta: Map::new(),
         });
     }
@@ -612,7 +642,7 @@ fn apply_apply_item(state: &BattleState, effect: &Effect, ctx: &mut EffectContex
         data,
         meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
     }, BattleEvent::Log {
-        message: format!("{} received {}.", target.name, item_id),
+        message: format!("{}は {}を 手に入れた！", target.name, item_id),
         meta: Map::new(),
     }]
 }
@@ -626,9 +656,9 @@ fn apply_remove_item(state: &BattleState, effect: &Effect, ctx: &mut EffectConte
     vec![
         BattleEvent::Log {
             message: if had_item {
-                format!("{}'s item was removed!", target.name)
+                format!("{}の 持っていた道具が なくなった！", target.name)
             } else {
-                format!("{} has no item.", target.name)
+                format!("{}は 道具を持っていない！", target.name)
             },
             meta: Map::new(),
         },
@@ -652,7 +682,7 @@ fn apply_consume_item(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
     };
     if !has_item(target) {
         return vec![BattleEvent::Log {
-            message: format!("{} has no item to consume.", target.name),
+            message: format!("{}は 道具を持っていない！", target.name),
             meta: Map::new(),
         }];
     }
@@ -682,7 +712,7 @@ fn apply_consume_item(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
         });
     }
     events.push(BattleEvent::Log {
-        message: format!("{} consumed its {}!", target.name, item_id),
+        message: format!("{}の {}が 発動した！", target.name, item_id),
         meta: Map::new(),
     });
     events
@@ -702,7 +732,7 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
         if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
             if ctx.type_chart.effectiveness(move_type, &target.types) == 0.0 {
                 return vec![BattleEvent::Log {
-                    message: format!("{} doesn't affect {}!", move_name(ctx.move_data, effect), target.name),
+                    message: format!("{}は {}には 効かないようだ……", target.name, move_name(ctx.move_data, effect)),
                     meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
                 }];
             }
@@ -712,7 +742,7 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
     if let Some(Value::Array(immune_types)) = effect.data.get("immuneTypes") {
         if immune_types.iter().any(|t| t.as_str().map(|s| target.types.iter().any(|ty| ty == s)).unwrap_or(false)) {
             return vec![BattleEvent::Log {
-                message: format!("{} doesn't affect {}!", move_name(ctx.move_data, effect), target.name),
+                message: format!("{}は {}には 効かないようだ……", target.name, move_name(ctx.move_data, effect)),
                 meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
             }];
         }
@@ -722,7 +752,7 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
         && attacker.level < target.level
     {
         return vec![BattleEvent::Log {
-            message: format!("{} failed against the higher-level target.", move_name(ctx.move_data, effect)),
+            message: format!("{}には 効かないようだ……", move_name(ctx.move_data, effect)),
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
         }];
     }
@@ -756,15 +786,19 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
 
     if (ctx.rng)() > accuracy {
         return vec![BattleEvent::Log {
-            message: format!("{}'s {} missed!", attacker.name, move_name(ctx.move_data, effect)),
+            message: format!("{}の {}は はずれた！", attacker.name, move_name(ctx.move_data, effect)),
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
         }];
     }
 
     vec![
         BattleEvent::Log {
-            message: format!("{} used {}!", attacker.name, move_name(ctx.move_data, effect)),
+            message: format!("{}の {}！", attacker.name, move_name(ctx.move_data, effect)),
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::Log {
+            message: format!("一撃必殺！"),
+            meta: Map::new(),
         },
         BattleEvent::Damage {
             target_id: ctx.target_player_id.clone(),
@@ -786,9 +820,36 @@ fn apply_self_switch(ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
     apply_pending_switch(&ctx.attacker_player_id, ctx)
 }
 
-fn apply_force_switch(effect: &Effect, ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
+fn apply_force_switch(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
     let target_id = resolve_target(effect.data.get("target"), ctx);
-    apply_pending_switch(&target_id, ctx)
+    
+    // Find the player being forced to switch
+    let Some(player) = state.players.iter().find(|p| p.id == target_id) else {
+        return Vec::new();
+    };
+    
+    // Collect available slots (not active, HP > 0)
+    let available_slots: Vec<usize> = player.team.iter().enumerate()
+        .filter(|(i, c)| *i != player.active_slot && c.hp > 0)
+        .map(|(i, _)| i)
+        .collect();
+    
+    if available_slots.is_empty() {
+        // No Pokémon to switch to
+        return vec![BattleEvent::Log {
+            message: format!("{} has no Pokémon to switch to!", player.name),
+            meta: Map::new(),
+        }];
+    }
+    
+    // Randomly select from available slots
+    let idx = ((ctx.rng)() * available_slots.len() as f64).floor() as usize;
+    let slot = available_slots[idx.min(available_slots.len() - 1)];
+    
+    vec![BattleEvent::Switch {
+        player_id: target_id.clone(),
+        slot,
+    }]
 }
 
 fn apply_replace_pokemon(ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
@@ -1090,16 +1151,16 @@ fn compute_speed(state: &BattleState, player_id: &str, turn: u32) -> f32 {
     speed
 }
 
-fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &str, ctx: &mut EffectContext<'_>, is_secondary_hit: bool) -> i32 {
+fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &str, ctx: &mut EffectContext<'_>, is_secondary_hit: bool) -> (i32, bool) {
     let Some(attacker) = get_active_creature(state, attacker_id) else {
-        return 0;
+        return (0, false);
     };
     let Some(target) = get_active_creature(state, target_id) else {
-        return 0;
+        return (0, false);
     };
     let power = power.max(0) as f32;
     if power <= 0.0 {
-        return 0;
+        return (0, false);
     }
 
     let category = get_move_category(ctx.move_data).unwrap_or_else(|| "physical".to_string());
@@ -1119,15 +1180,21 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
             stages: None,
         },
     );
+    // 急所ランクの確率設定
+    // ランク0: 1/24 (~4.17%)
+    // ランク1: 1/8 (12.5%)
+    // ランク2: 1/2 (50%)
+    // ランク3+: 100%
     let crit_chance = if crit_stage <= 0.0 {
-        0.0
+        1.0 / 24.0
     } else if crit_stage <= 1.0 {
-        0.125
+        1.0 / 8.0
     } else if crit_stage <= 2.0 {
-        0.5
+        1.0 / 2.0
     } else {
         1.0
     };
+    
     let is_crit = if is_secondary_hit {
         false
     } else if crit_chance >= 1.0 {
@@ -1135,6 +1202,7 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
     } else {
         (ctx.rng)() < crit_chance
     };
+
     let mut move_power = run_ability_value_hook(
         state,
         attacker_id,
@@ -1173,6 +1241,12 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
 
     let mut atk_stage = stage_key_offense;
     let mut def_stage = stage_key_defense;
+    
+    // 急所の場合、相手の防御・特防上昇ランクを無視（0として扱う）
+    if is_crit && def_stage > 0 {
+        def_stage = 0;
+    }
+
     if attacker.ability.as_deref() == Some("unaware") {
         def_stage = 0;
     }
@@ -1227,7 +1301,7 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
             if ctx.ignore_immunity {
                 effectiveness = 1.0;
             } else {
-                return 0;
+                return (0, false);
             }
         }
         modifier *= effectiveness;
@@ -1237,7 +1311,7 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
         modifier *= 1.5;
     }
     let damage = (base * roll * modifier).floor() as i32;
-    damage.max(1)
+    (damage.max(1), is_crit)
 }
 
 fn is_item_status(status_id: &str) -> bool {

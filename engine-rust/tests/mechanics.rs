@@ -118,7 +118,7 @@ fn test_apply_status_existing() {
     let next_state = apply_event(&state, &event);
     
     // Should verify log says already has status
-    assert!(next_state.log.last().unwrap().contains("already has burn"));
+    assert!(next_state.log.last().unwrap().contains("already has burn") || next_state.log.last().unwrap().contains("すでに burn状態だ"));
     // Status count should still be 1
     assert_eq!(next_state.players[0].team[0].statuses.len(), 1);
 }

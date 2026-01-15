@@ -2,6 +2,9 @@ pub mod ai;
 pub mod core;
 pub mod data;
 
+#[cfg(not(target_arch = "wasm32"))]
+pub mod tools;
+
 pub use ai::{get_best_move_mcts, get_best_move_minimax, run_auto_battle, choose_highest_power};
 pub use core::{
     battle::{is_battle_over, step_battle, BattleEngine, BattleOptions},
@@ -16,3 +19,4 @@ pub use data::{
 
 #[cfg(target_arch = "wasm32")]
 pub mod wasm;
+

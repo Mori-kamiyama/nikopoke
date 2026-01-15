@@ -277,7 +277,7 @@ pub fn run_ability_hooks(state: &BattleState, player_id: &str, hook: &str, ctx: 
             AbilityHookResult {
                 state: Some(next),
                 events: vec![BattleEvent::Log {
-                    message: "The sunlight turned harsh.".to_string(),
+                    message: "日差しが 強く なった！".to_string(),
                     meta: Map::new(),
                 }],
                 prevent_action: false,
@@ -312,6 +312,12 @@ pub fn run_ability_hooks(state: &BattleState, player_id: &str, hook: &str, ctx: 
             let Some(action) = ctx.action else { return AbilityHookResult::default(); };
             let move_id = action.move_id.as_deref();
             let Some(move_id) = move_id else { return AbilityHookResult::default(); };
+            
+            // 眠り・氷状態なら発動しない
+            if active.statuses.iter().any(|s| s.id == "sleep" || s.id == "freeze") {
+                return AbilityHookResult::default();
+            }
+
             if active.ability_data.get("liberoUsed").and_then(|v| v.as_bool()).unwrap_or(false) {
                 return AbilityHookResult::default();
             }
@@ -327,7 +333,7 @@ pub fn run_ability_hooks(state: &BattleState, player_id: &str, hook: &str, ctx: 
             AbilityHookResult {
                 state: Some(next),
                 events: vec![BattleEvent::Log {
-                    message: format!("{} transformed into {} type!", active.name, move_type),
+                    message: format!("{}は {}タイプに 変化した！", active.name, move_type),
                     meta: meta_with_move_source(Some(move_id), Some(player_id)),
                 }],
                 prevent_action: false,
@@ -397,7 +403,7 @@ pub fn apply_ability_event_modifiers(
                             .unwrap_or(false);
                         if is_sound {
                             output.push(BattleEvent::Log {
-                                message: format!("{} is immune to sound moves!", target.name),
+                                message: format!("{}は 音の技を 受けない！", target.name),
                                 meta: Map::new(),
                             });
                             continue;
@@ -515,7 +521,7 @@ fn copy_fainted_ability(state: &BattleState, player_id: &str, ability_id: &str) 
     AbilityHookResult {
         state: Some(next),
         events: vec![BattleEvent::Log {
-            message: format!("{} copied {}!", player.name, last),
+            message: format!("{}は {}を コピーした！", player.name, last),
             meta: Map::new(),
         }],
         prevent_action: false,
@@ -577,7 +583,7 @@ fn try_magic_bounce(
 
     Some(vec![
         BattleEvent::Log {
-            message: format!("{} bounced the move back!", target_id),
+            message: format!("{}は 技を 跳ね返した！", target_id),
             meta: Map::new(),
         },
         bounced_event,
@@ -607,7 +613,7 @@ fn try_lightning_rod(
             meta: Map::new(),
         },
         BattleEvent::Log {
-            message: format!("{} drew in the electricity!", target_id),
+            message: format!("{}が 電気の技を 吸い取った！", target_id),
             meta: Map::new(),
         },
     ])

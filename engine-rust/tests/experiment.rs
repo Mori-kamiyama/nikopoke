@@ -119,7 +119,7 @@ fn test_lightning_rod_immunity() {
             
             // Verify Log
             let log_str = next_state.log.join("\n");
-            assert!(log_str.contains("drew in the electricity"), "Log should mention Lightning Rod");
+            assert!(log_str.contains("drew in the electricity") || log_str.contains("電気の技を 吸い取った"), "Log should mention Lightning Rod");
         }
         
         #[test]
@@ -239,7 +239,7 @@ fn test_prankster_priority() {
 
     println!("Log:\n{}", log_str);
 
-    let self_hit = log_str.contains("hurt itself in its confusion") || log_str.contains("わけもわからず自分を攻撃した"); 
+    let self_hit = log_str.contains("hurt itself in its confusion") || log_str.contains("わけもわからず") || log_str.contains("自分を 攻撃した"); 
     
     // Check for "confused" message first. "FastMon became confused!" or similar might be missing as we discovered.
     // But the self-hit message should be there.
@@ -247,7 +247,7 @@ fn test_prankster_priority() {
     // If I don't know the exact message, checking that Tackle DID NOT happen is a good proxy, 
     // coupled with the fact that Murkrow's Swagger MUST have hit to cause confusion.
     
-    let tackle_used = log_str.contains("used Tackle") || log_str.contains("used たいあたり");
+    let tackle_used = log_str.contains("used Tackle") || log_str.contains("たいあたり！") || log_str.contains("たいあたり ！");
     
     // Also check that Opponent has Attack +2 (Swagger effect).
     let opp_stats = &next_state.players[1].team[0].stages;
@@ -298,5 +298,5 @@ fn test_skill_link_multi_hit() {
     // Count how many "hit" messages or damage events.
     // The log usually says "Hit 5 time(s)".
     
-    assert!(log_str.contains("Hit 5 time(s)"), "Skill Link should ensure 5 hits. Log: {}", log_str);
+    assert!(log_str.contains("Hit 5 time(s)") || log_str.contains("5回 あたった"), "Skill Link should ensure 5 hits. Log: {}", log_str);
 }

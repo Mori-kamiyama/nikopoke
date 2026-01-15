@@ -127,7 +127,7 @@ fn pending_switch_blocks_non_switch_action() {
 
     let next = engine.step_battle(&state, &actions, &mut rng, BattleOptions::default());
     assert_eq!(next.players[1].team[0].hp, 100);
-    assert!(next.log.iter().any(|line| line.contains("must switch out")));
+    assert!(next.log.iter().any(|line| line.contains("must switch out") || line.contains("交代しなければならない")));
 }
 
 #[test]

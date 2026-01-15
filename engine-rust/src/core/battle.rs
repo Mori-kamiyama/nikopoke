@@ -115,9 +115,7 @@ impl BattleEngine {
                     .move_id
                     .as_deref()
                     .and_then(|id| self.move_db.get(id));
-                let base_priority = action
-                    .priority
-                    .unwrap_or_else(|| move_data.and_then(|m| m.priority).unwrap_or(0)) as f32;
+                let base_priority = move_data.and_then(|m| m.priority).unwrap_or(0) as f32;
                 let priority = run_ability_value_hook(
                     &next,
                     &action.player_id,
@@ -162,7 +160,7 @@ impl BattleEngine {
             if action.action_type != ActionType::Switch {
                 if let Some(active) = get_active_creature(&next, &action.player_id) {
                     if active.statuses.iter().any(|s| s.id == "pending_switch") {
-                        next.log.push(format!("{} must switch out!", attacker_name));
+                        next.log.push(format!("{}は 交代しなければならない！", attacker_name));
                         continue;
                     }
                 }
@@ -212,7 +210,7 @@ impl BattleEngine {
                                     )
                             });
                             if trapper.is_some() {
-                                next.log.push(format!("{} couldn't switch out!", attacker_name));
+                                next.log.push(format!("{}は 交代できなかった！", attacker_name));
                                 continue;
                             }
                         }
@@ -258,17 +256,17 @@ impl BattleEngine {
                     true,
                 );
                 if !can_use {
-                    next.log.push(format!("{} cannot use items!", attacker_name));
+                    next.log.push(format!("{}は 道具を使えない！", attacker_name));
                     continue;
                 }
                 let Some(active) = get_active_creature(&next, &action.player_id) else {
                     continue;
                 };
                 if !has_item(active) {
-                    next.log.push(format!("{} has no item to use.", attacker_name));
+                    next.log.push(format!("{}は 使う道具を 持っていない！", attacker_name));
                     continue;
                 }
-                next.log.push(format!("{} used an item!", attacker_name));
+                next.log.push(format!("{}は 道具を使った！", attacker_name));
                 continue;
             }
 
@@ -409,7 +407,7 @@ impl BattleEngine {
             if let Some(active) = get_active_creature_mut(&mut next, &player_id) {
                 if !consume_move_pp(active, &move_id, move_data) {
                     let move_name = move_data.name.clone().unwrap_or_else(|| move_id.clone());
-                    next.log.push(format!("{} has no PP left for {}!", attacker_name, move_name));
+                    next.log.push(format!("{}の {}は PPが 足りない！", attacker_name, move_name));
                     continue;
                 }
                 active
@@ -465,6 +463,135 @@ impl BattleEngine {
             next = apply_event(&next, &event);
         }
 
+        // ターン終了時効果を順序通りに発動
+        // 1. 天気ダメージ
+        let weather_result = run_field_hooks(
+            &next,
+            "onWeatherEnd",
+            StatusHookContext {
+                rng: &mut rng_recorder,
+                action: None,
+                move_data: None,
+                type_chart: &self.type_chart,
+            },
+        );
+        next = weather_result.state.unwrap_or(next);
+        for event in weather_result.events {
+            next = apply_event(&next, &event);
+        }
+
+        // 2. ねがいごと
+        for player in next.players.clone() {
+            let wish_result = run_status_hooks(
+                &next,
+                &player.id,
+                "onWishResolve",
+                StatusHookContext {
+                    rng: &mut rng_recorder,
+                    action: None,
+                    move_data: None,
+                    type_chart: &self.type_chart,
+                },
+            );
+            next = wish_result.state.unwrap_or(next);
+            for event in wish_result.events {
+                next = apply_event(&next, &event);
+            }
+        }
+
+        // 3. グラスフィールド回復
+        let grassy_result = run_field_hooks(
+            &next,
+            "onGrassyTerrainHeal",
+            StatusHookContext {
+                rng: &mut rng_recorder,
+                action: None,
+                move_data: None,
+                type_chart: &self.type_chart,
+            },
+        );
+        next = grassy_result.state.unwrap_or(next);
+        for event in grassy_result.events {
+            next = apply_event(&next, &event);
+        }
+
+        // 4. 道具効果（たべのこし、くろいヘドロ）
+        for player in next.players.clone() {
+            let item_result = run_status_hooks(
+                &next,
+                &player.id,
+                "onItemEndTurn",
+                StatusHookContext {
+                    rng: &mut rng_recorder,
+                    action: None,
+                    move_data: None,
+                    type_chart: &self.type_chart,
+                },
+            );
+            next = item_result.state.unwrap_or(next);
+            for event in item_result.events {
+                next = apply_event(&next, &event);
+            }
+        }
+
+        // 5. やどりぎのタネ
+        for player in next.players.clone() {
+            let leech_result = run_status_hooks(
+                &next,
+                &player.id,
+                "onLeechSeed",
+                StatusHookContext {
+                    rng: &mut rng_recorder,
+                    action: None,
+                    move_data: None,
+                    type_chart: &self.type_chart,
+                },
+            );
+            next = leech_result.state.unwrap_or(next);
+            for event in leech_result.events {
+                next = apply_event(&next, &event);
+            }
+        }
+
+        // 6. 状態異常ダメージ（どく、やけど）
+        for player in next.players.clone() {
+            let status_result = run_status_hooks(
+                &next,
+                &player.id,
+                "onStatusDamage",
+                StatusHookContext {
+                    rng: &mut rng_recorder,
+                    action: None,
+                    move_data: None,
+                    type_chart: &self.type_chart,
+                },
+            );
+            next = status_result.state.unwrap_or(next);
+            for event in status_result.events {
+                next = apply_event(&next, &event);
+            }
+        }
+
+        // 7. バインドダメージ
+        for player in next.players.clone() {
+            let bind_result = run_status_hooks(
+                &next,
+                &player.id,
+                "onBindDamage",
+                StatusHookContext {
+                    rng: &mut rng_recorder,
+                    action: None,
+                    move_data: None,
+                    type_chart: &self.type_chart,
+                },
+            );
+            next = bind_result.state.unwrap_or(next);
+            for event in bind_result.events {
+                next = apply_event(&next, &event);
+            }
+        }
+
+        // その他のターン終了時効果（混乱解除など）
         for player in next.players.clone() {
             let result = run_status_hooks(
                 &next,
@@ -865,7 +992,7 @@ fn expand_random_moves(
                     choose_random_move(state, move_db, pool, rng, Some(attacker_id));
                 let Some(chosen_move_id) = chosen_move_id else {
                     expanded.push(BattleEvent::Log {
-                        message: format!("{} tried to use a random move but failed!", attacker_name),
+                        message: format!("{}は ランダムに 技を出そうとしたが 失敗した！", attacker_name),
                         meta: Map::new(),
                     });
                     continue;
@@ -880,7 +1007,7 @@ fn expand_random_moves(
                             .clone()
                             .unwrap_or_else(|| chosen_move_id.clone());
                         expanded.push(BattleEvent::Log {
-                            message: format!("{} has no PP left for {}!", attacker_name, move_name),
+                            message: format!("{}の {}は PPが 足りない！", attacker_name, move_name),
                             meta: Map::new(),
                         });
                         continue;

@@ -243,8 +243,33 @@ fn self_switch_marks_pending_switch() {
 }
 
 #[test]
-fn force_switch_marks_pending_switch_on_target() {
-    let mut state = make_state();
+fn force_switch_randomly_switches_target() {
+    // Create state with target having 2 Pokémon
+    let p1 = PlayerState {
+        id: "p1".to_string(),
+        name: "P1".to_string(),
+        team: vec![make_creature("c1", "Alpha")],
+        active_slot: 0,
+        last_fainted_ability: None,
+    };
+    let p2 = PlayerState {
+        id: "p2".to_string(),
+        name: "P2".to_string(),
+        team: vec![make_creature("c2", "Beta"), make_creature("c3", "Gamma")],
+        active_slot: 0,
+        last_fainted_ability: None,
+    };
+    let state = BattleState {
+        players: vec![p1, p2],
+        field: FieldState {
+            global: Vec::new(),
+            sides: HashMap::new(),
+        },
+        turn: 0,
+        log: Vec::new(),
+        history: None,
+    };
+
     let mut rng = || 0.0;
     let type_chart = TypeChart::new();
     let mut ctx = EffectContext {
@@ -263,7 +288,41 @@ fn force_switch_marks_pending_switch_on_target() {
 
     let effects = vec![effect("force_switch", json!({ "target": "target" }))];
     let events = apply_effects(&state, &effects, &mut ctx);
-    state = apply_events(&state, &events);
-    let statuses = &state.players[1].team[0].statuses;
-    assert!(statuses.iter().any(|s| s.id == "pending_switch"));
+    
+    // Should emit Switch event directly (not pending_switch)
+    let switch_event = events.iter().find(|e| matches!(e, engine_rust::core::events::BattleEvent::Switch { .. }));
+    assert!(switch_event.is_some(), "Expected Switch event to be emitted");
+    
+    // Apply and check active slot changed
+    let next_state = apply_events(&state, &events);
+    assert_eq!(next_state.players[1].active_slot, 1, "Target should switch to slot 1");
+}
+
+#[test]
+fn force_switch_with_only_one_pokemon_logs_failure() {
+    // State with only 1 Pokémon on target team
+    let state = make_state();
+    
+    let mut rng = || 0.0;
+    let type_chart = TypeChart::new();
+    let mut ctx = EffectContext {
+        attacker_player_id: "p1".to_string(),
+        target_player_id: "p2".to_string(),
+        move_data: None,
+        rng: &mut rng,
+        turn: 0,
+        type_chart: &type_chart,
+        bypass_protect: false,
+        ignore_immunity: false,
+        bypass_substitute: false,
+        ignore_substitute: false,
+        is_sound: false,
+    };
+
+    let effects = vec![effect("force_switch", json!({ "target": "target" }))];
+    let events = apply_effects(&state, &effects, &mut ctx);
+    
+    // Should emit Log event since no valid switch target
+    let log_event = events.iter().find(|e| matches!(e, engine_rust::core::events::BattleEvent::Log { .. }));
+    assert!(log_event.is_some(), "Expected Log event when no switch available");
 }
