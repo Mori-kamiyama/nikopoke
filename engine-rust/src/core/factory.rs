@@ -2,10 +2,28 @@ use crate::core::state::{CreatureState, StatStages};
 use crate::data::learnsets::LearnsetDatabase;
 use crate::data::moves::MoveDatabase;
 use crate::data::species::SpeciesData;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 static CREATURE_COUNTER: AtomicUsize = AtomicUsize::new(1);
+
+/// EVStats represents effort values for each stat (max 252 per stat, 510 total)
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+pub struct EVStats {
+    pub hp: i32,
+    pub atk: i32,
+    pub def: i32,
+    pub spa: i32,
+    pub spd: i32,
+    pub spe: i32,
+}
+
+impl EVStats {
+    pub fn total(&self) -> i32 {
+        self.hp + self.atk + self.def + self.spa + self.spd + self.spe
+    }
+}
 
 #[derive(Clone, Debug)]
 pub struct CreateCreatureOptions {
@@ -14,6 +32,7 @@ pub struct CreateCreatureOptions {
     pub name: Option<String>,
     pub level: Option<u32>,
     pub item: Option<String>,
+    pub evs: Option<EVStats>,
 }
 
 impl Default for CreateCreatureOptions {
@@ -24,6 +43,7 @@ impl Default for CreateCreatureOptions {
             name: None,
             level: None,
             item: None,
+            evs: None,
         }
     }
 }
@@ -87,15 +107,15 @@ pub fn create_creature(
 ) -> Result<CreatureState, String> {
     let level = options.level.unwrap_or(50);
     let iv = 31;
-    let ev = 0;
+    let evs = options.evs.unwrap_or_default();
     let stats = &species.base_stats;
 
-    let max_hp = calc_stat(stats.hp, true, level as i32, iv, ev);
-    let attack = calc_stat(stats.atk, false, level as i32, iv, ev);
-    let defense = calc_stat(stats.def, false, level as i32, iv, ev);
-    let sp_attack = calc_stat(stats.spa, false, level as i32, iv, ev);
-    let sp_defense = calc_stat(stats.spd, false, level as i32, iv, ev);
-    let speed = calc_stat(stats.spe, false, level as i32, iv, ev);
+    let max_hp = calc_stat(stats.hp, true, level as i32, iv, evs.hp);
+    let attack = calc_stat(stats.atk, false, level as i32, iv, evs.atk);
+    let defense = calc_stat(stats.def, false, level as i32, iv, evs.def);
+    let sp_attack = calc_stat(stats.spa, false, level as i32, iv, evs.spa);
+    let sp_defense = calc_stat(stats.spd, false, level as i32, iv, evs.spd);
+    let speed = calc_stat(stats.spe, false, level as i32, iv, evs.spe);
 
     let moves = validate_moves(
         species.id.as_str(),

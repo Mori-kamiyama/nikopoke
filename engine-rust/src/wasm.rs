@@ -1,6 +1,6 @@
 use crate::ai::{get_best_move_mcts, get_best_move_minimax};
 use crate::core::battle::{is_battle_over, step_battle, BattleOptions};
-use crate::core::factory::{create_creature, CreateCreatureOptions};
+use crate::core::factory::{create_creature, CreateCreatureOptions, EVStats};
 use crate::core::state::{
     Action, ActionType, BattleHistory, BattleState, BattleTurn, CreatureState, FieldEffect,
     FieldState, PlayerState, Status,
@@ -25,12 +25,43 @@ static MOVE_DB: Lazy<MoveDatabase> =
 
 #[derive(Clone, Debug, Default, Deserialize)]
 #[serde(rename_all = "camelCase")]
+struct EVStatsWire {
+    #[serde(default)]
+    hp: Option<i32>,
+    #[serde(default)]
+    atk: Option<i32>,
+    #[serde(default)]
+    def: Option<i32>,
+    #[serde(default)]
+    spa: Option<i32>,
+    #[serde(default)]
+    spd: Option<i32>,
+    #[serde(default)]
+    spe: Option<i32>,
+}
+
+impl From<EVStatsWire> for EVStats {
+    fn from(wire: EVStatsWire) -> Self {
+        Self {
+            hp: wire.hp.unwrap_or(0),
+            atk: wire.atk.unwrap_or(0),
+            def: wire.def.unwrap_or(0),
+            spa: wire.spa.unwrap_or(0),
+            spd: wire.spd.unwrap_or(0),
+            spe: wire.spe.unwrap_or(0),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct CreateCreatureOptionsWire {
     moves: Option<Vec<String>>,
     ability: Option<String>,
     name: Option<String>,
     level: Option<u32>,
     item: Option<String>,
+    evs: Option<EVStatsWire>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -448,12 +479,14 @@ pub fn create_creature_wasm(species_id: String, options: JsValue) -> Result<JsVa
         requested_moves.clone()
     };
 
+    let evs = options.evs.clone().map(EVStats::from);
     let build_options = |moves: Vec<String>| CreateCreatureOptions {
         moves: if moves.is_empty() { None } else { Some(moves) },
         ability: options.ability.clone(),
         name: options.name.clone(),
         level: options.level,
         item: options.item.clone(),
+        evs: evs.clone(),
     };
 
     let creature = create_creature(
