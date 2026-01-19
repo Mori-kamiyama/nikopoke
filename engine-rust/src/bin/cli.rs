@@ -1,6 +1,5 @@
 use engine_rust::ai::get_best_move_minimax;
-use inquire::{Select, MultiSelect};
-use inquire::list_option::ListOption;
+use inquire::Select;
 use engine_rust::core::battle::{is_battle_over, BattleEngine, BattleOptions};
 use engine_rust::core::factory::{create_creature, CreateCreatureOptions};
 use engine_rust::core::state::{create_battle_state, Action, ActionType, BattleState, PlayerState};
@@ -44,20 +43,49 @@ fn main() {
     }
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
+    // モード選択
+    println!();
+    println!("📝 設定を選択してください");
+    println!("  1. 通常バトル");
+    println!("  2. シミュレーションモード（自動対戦）");
+    print!("> ");
+    io::stdout().flush().ok();
+    let mut main_mode_input = String::new();
+    io::stdin().read_line(&mut main_mode_input).ok();
+    let is_simulation = main_mode_input.trim() == "2";
+
+    println!();
+    println!("🤖 AIの強さを選択してください");
+    println!("  1. Minimax (2手先読み)");
+    println!("  2. ランダム (とにかく技を出す)");
+    print!("> ");
+    io::stdout().flush().ok();
+    let mut ai_mode_input = String::new();
+    io::stdin().read_line(&mut ai_mode_input).ok();
+    let ai_is_random = ai_mode_input.trim() == "2";
+
+    // 相手の技構成は常にランダムにする
+    let randomize_ai_moves = true;
+
     // プレイヤーが3匹選択
+    println!();
     println!("🎮 チームに入れる3匹を選んでください（番号をスペース区切りで入力）:");
     let player_indices = read_numbers(3, species_list.len());
     
-    // モード選択
-    println!();
-    println!("📝 どのモードで選択しますか？");
-    println!("  1. 通常モード（自動で技を選択）");
-    println!("  2. 詳細モード（技を自分で選択）");
-    print!("> ");
-    io::stdout().flush().ok();
-    let mut mode_input = String::new();
-    io::stdin().read_line(&mut mode_input).ok();
-    let detailed_mode = mode_input.trim() == "2";
+    // プレイヤーの技選択モード
+    let detailed_mode = if !is_simulation {
+        println!();
+        println!("📝 技の選択方法:");
+        println!("  1. 通常モード（最初の4つ）");
+        println!("  2. 詳細モード（自分で1つずつ選択）");
+        print!("> ");
+        io::stdout().flush().ok();
+        let mut mode_input = String::new();
+        io::stdin().read_line(&mut mode_input).ok();
+        mode_input.trim() == "2"
+    } else {
+        false
+    };
     
     let mut player_team = Vec::new();
     for idx in &player_indices {
@@ -68,7 +96,7 @@ fn main() {
             .collect();
         
         let moves: Vec<String> = if detailed_mode {
-            // 詳細モード: 技を選択させる
+            // 詳細モード: 技を1つずつ選択させる
             let mut options = Vec::new();
             let mut move_ids = Vec::new();
             
@@ -99,41 +127,65 @@ fn main() {
             }
 
             if options.is_empty() {
-                 Vec::new()
+                Vec::new()
             } else {
-                let validator = |s: &[ListOption<&String>]| {
-                    if s.len() > 4 {
-                        Ok(inquire::validator::Validation::Invalid("4つまでしか選べません".into()))
-                    } else {
-                         Ok(inquire::validator::Validation::Valid)
-                    }
-                };
+                // 1つずつ選択（最大4つまで）
+                let mut selected_moves = Vec::new();
                 
-                // optionsのクローンを作成する
-                let ans = MultiSelect::new(
-                        &format!("{}の技を選んでください(スペースで選択/解除、Enterで決定):", species.name),
-                        options.clone(),
-                    )
-                    .with_page_size(10)
-                    .with_validator(validator)
-                    .prompt();
-
-                match ans {
-                    Ok(selected_strings) => {
-                        // 選択された文字列からIDを復元
-                        let mut selected_moves = Vec::new();
-                        for choice in selected_strings {
-                            if let Some(pos) = options.iter().position(|opt| opt == &choice) {
-                                selected_moves.push(move_ids[pos].clone());
+                for i in 1..=4 {
+                    if selected_moves.len() >= 4 {
+                        break;
+                    }
+                    
+                    // 既に選択した技を除外
+                    let available_options: Vec<String> = options.iter().enumerate()
+                        .filter(|(idx, _)| !selected_moves.contains(&move_ids[*idx]))
+                        .map(|(_, opt)| opt.clone())
+                        .collect();
+                    
+                    if available_options.is_empty() {
+                        break;
+                    }
+                    
+                    // 「選択完了」オプションを追加
+                    let mut selection_options = available_options.clone();
+                    if i > 1 {
+                        selection_options.push("✅ 選択完了（これ以上選ばない）".to_string());
+                    }
+                    
+                    let prompt = if i == 1 {
+                        format!("{}の技を選んでください [{}/4] (Enterで選択):", species.name, i)
+                    } else {
+                        format!("技を選んでください [{}/4] (Enterで選択):", i)
+                    };
+                    
+                    let ans = Select::new(&prompt, selection_options.clone())
+                        .with_page_size(10)
+                        .prompt();
+                    
+                    match ans {
+                        Ok(choice) => {
+                            if choice == "✅ 選択完了（これ以上選ばない）" {
+                                break;
                             }
+                            
+                            // 選択された技のIDを取得
+                            if let Some(original_idx) = options.iter().position(|opt| opt == &choice) {
+                                selected_moves.push(move_ids[original_idx].clone());
+                            }
+                        },
+                        Err(_) => {
+                            println!("選択がキャンセルされました。");
+                            if selected_moves.is_empty() {
+                                println!("自動選択します。");
+                                selected_moves = learnable.into_iter().take(4).collect();
+                            }
+                            break;
                         }
-                        selected_moves
-                    },
-                    Err(_) => {
-                        println!("選択がキャンセルされました。自動選択します。");
-                        learnable.into_iter().take(4).collect()
                     }
                 }
+                
+                selected_moves
             }
         } else {
             // 通常モード: 自動選択
@@ -169,13 +221,27 @@ fn main() {
     
     for idx in &ai_indices {
         let species = species_list[*idx];
-        let learnable = learnset_db.get(&species.id).cloned().unwrap_or_default();
-        let moves: Vec<String> = learnable.into_iter()
+        let learnable: Vec<String> = learnset_db.get(&species.id).cloned().unwrap_or_default()
+            .into_iter()
             .filter(|m_id| move_db.get(m_id).is_some())
-            .take(4)
             .collect();
+
+        let moves: Vec<String> = if randomize_ai_moves && learnable.len() > 4 {
+            let mut moves = learnable.clone();
+            // 簡易的なシャッフル（rand_f64を使用）
+            for i in (1..moves.len()).rev() {
+                let j = (rand_f64() * (i + 1) as f64) as usize;
+                if j <= i {
+                    moves.swap(i, j);
+                }
+            }
+            moves.into_iter().take(4).collect()
+        } else {
+            learnable.into_iter().take(4).collect()
+        };
         
-        if moves.len() < 4 {
+        if moves.len() < 4 && moves.len() > 0 {
+            // learnset_db.get 可能でも move_db にない場合があるので再度チェック
             println!("⚠️  警告: 相手の {} の技が不足しています（{}個のみロードされました）", species.name, moves.len());
         }
 
@@ -234,43 +300,69 @@ fn main() {
 
         // プレイヤーのアクション
         if player_needs_switch {
-            if let Some(active) = get_active_creature(&state, "player") {
-                if active.hp <= 0 {
-                    println!("💀 ポケモンが倒れた！交代するポケモンを選んでください:");
+            if is_simulation {
+                if let Some(action) = ai_switch_for_player(&state, "player") {
+                    actions.push(action);
                 } else {
-                    println!("🔄 交代するポケモンを選んでください:");
+                    break;
+                }
+            } else {
+                if let Some(active) = get_active_creature(&state, "player") {
+                    if active.hp <= 0 {
+                        println!("💀 ポケモンが倒れた！交代するポケモンを選んでください:");
+                    } else {
+                        println!("🔄 交代するポケモンを選んでください:");
+                    }
+                }
+                if let Some(action) = prompt_switch(&state, "player") {
+                    actions.push(action);
+                } else {
+                    break; // 残りポケモンなし
                 }
             }
-            if let Some(action) = prompt_switch(&state, "player") {
-                actions.push(action);
-            } else {
-                break; // 残りポケモンなし
-            }
         } else {
-            loop {
-                let input = prompt_action(&state, &move_db);
-                if let Some(action) = input {
+            if is_simulation {
+                // シミュレーション時はMinimaxを使用
+                if let Some(action) = get_best_move_minimax(&state, "player", 2) {
                     actions.push(action);
-                    break;
+                } else if let Some(action) = ai_choose_action_for_player(&state, &move_db, "player") {
+                    actions.push(action);
+                }
+            } else {
+                loop {
+                    let input = prompt_action(&state, &move_db);
+                    if let Some(action) = input {
+                        actions.push(action);
+                        break;
+                    }
                 }
             }
         }
 
-        // AIのアクション（Minimax AIを使用）
-        println!("🤖 AIは 考え中...");
+        // AIのアクション
         if ai_needs_switch {
-            // 交代が必要な場合もMinimaxで最適な交代先を選択
-            if let Some(action) = get_best_move_minimax(&state, "ai", 2) {
-                actions.push(action);
-            } else if let Some(action) = ai_switch(&state) {
-                actions.push(action);
+            if ai_is_random {
+                if let Some(action) = ai_switch(&state) {
+                    actions.push(action);
+                }
+            } else {
+                if let Some(action) = get_best_move_minimax(&state, "ai", 2) {
+                    actions.push(action);
+                } else if let Some(action) = ai_switch(&state) {
+                    actions.push(action);
+                }
             }
         } else {
-            // Minimax AIで技または交代を選択
-            if let Some(action) = get_best_move_minimax(&state, "ai", 2) {
-                actions.push(action);
-            } else if let Some(action) = ai_choose_action(&state, &move_db) {
-                actions.push(action);
+            if ai_is_random {
+                if let Some(action) = ai_random_move(&state, &move_db, "ai") {
+                    actions.push(action);
+                }
+            } else {
+                if let Some(action) = get_best_move_minimax(&state, "ai", 2) {
+                    actions.push(action);
+                } else if let Some(action) = ai_choose_action(&state, &move_db) {
+                    actions.push(action);
+                }
             }
         }
 
@@ -297,25 +389,39 @@ fn main() {
             let mut switch_actions = Vec::new();
             
             if player_switch_needed {
-                if let Some(active) = get_active_creature(&state, "player") {
-                    if active.hp <= 0 {
-                        println!("💀 ポケモンが倒れた！交代するポケモンを選んでください:");
+                if is_simulation {
+                    if let Some(action) = ai_switch_for_player(&state, "player") {
+                        switch_actions.push(action);
                     } else {
-                        println!("🔄 交代するポケモンを選んでください:");
+                        break;
                     }
-                }
-                if let Some(action) = prompt_switch(&state, "player") {
-                    switch_actions.push(action);
                 } else {
-                    break; // 残りポケモンなし
+                    if let Some(active) = get_active_creature(&state, "player") {
+                        if active.hp <= 0 {
+                            println!("💀 ポケモンが倒れた！交代するポケモンを選んでください:");
+                        } else {
+                            println!("🔄 交代するポケモンを選んでください:");
+                        }
+                    }
+                    if let Some(action) = prompt_switch(&state, "player") {
+                        switch_actions.push(action);
+                    } else {
+                        break; // 残りポケモンなし
+                    }
                 }
             }
             
             if ai_switch_needed {
-                if let Some(action) = get_best_move_minimax(&state, "ai", 2) {
-                    switch_actions.push(action);
-                } else if let Some(action) = ai_switch(&state) {
-                    switch_actions.push(action);
+                if ai_is_random {
+                    if let Some(action) = ai_switch(&state) {
+                        switch_actions.push(action);
+                    }
+                } else {
+                    if let Some(action) = get_best_move_minimax(&state, "ai", 2) {
+                        switch_actions.push(action);
+                    } else if let Some(action) = ai_switch(&state) {
+                        switch_actions.push(action);
+                    }
                 }
             }
 
@@ -735,6 +841,133 @@ fn ai_switch(state: &BattleState) -> Option<Action> {
         move_id: None,
         target_id: None,
         slot: Some(available[0]),
+        priority: None,
+    })
+}
+
+fn ai_random_move(state: &BattleState, move_db: &MoveDatabase, player_id: &str) -> Option<Action> {
+    let player = state.players.iter().find(|p| p.id == player_id)?;
+    let active = player.team.get(player.active_slot)?;
+    let opponent_id = if player_id == "player" { "ai" } else { "player" };
+    
+    if active.hp <= 0 {
+        return None;
+    }
+
+    let usable_moves: Vec<&String> = active.moves.iter()
+        .filter(|move_id| {
+            if let Some(move_data) = move_db.get(*move_id) {
+                let pp = move_data.pp.unwrap_or(10);
+                let current_pp = active.move_pp.get(*move_id).copied().unwrap_or(pp);
+                current_pp > 0
+            } else {
+                true
+            }
+        })
+        .collect();
+
+    if usable_moves.is_empty() {
+        return Some(Action {
+            player_id: player_id.to_string(),
+            action_type: ActionType::Move,
+            move_id: active.moves.first().cloned(),
+            target_id: Some(opponent_id.to_string()),
+            slot: None,
+            priority: None,
+        });
+    }
+
+    let idx = (rand_f64() * usable_moves.len() as f64) as usize;
+    let selected_move = usable_moves[idx.min(usable_moves.len() - 1)];
+
+    Some(Action {
+        player_id: player_id.to_string(),
+        action_type: ActionType::Move,
+        move_id: Some(selected_move.clone()),
+        target_id: Some(opponent_id.to_string()),
+        slot: None,
+        priority: None,
+    })
+}
+
+fn ai_switch_for_player(state: &BattleState, player_id: &str) -> Option<Action> {
+    let player = state.players.iter().find(|p| p.id == player_id)?;
+    let available: Vec<usize> = player.team.iter()
+        .enumerate()
+        .filter(|(i, c)| *i != player.active_slot && c.hp > 0)
+        .map(|(i, _)| i)
+        .collect();
+    
+    if available.is_empty() {
+        return None;
+    }
+    
+    Some(Action {
+        player_id: player_id.to_string(),
+        action_type: ActionType::Switch,
+        move_id: None,
+        target_id: None,
+        slot: Some(available[0]),
+        priority: None,
+    })
+}
+
+fn ai_choose_action_for_player(state: &BattleState, move_db: &MoveDatabase, player_id: &str) -> Option<Action> {
+    let player = state.players.iter().find(|p| p.id == player_id)?;
+    let active = player.team.get(player.active_slot)?;
+    let opponent_id = if player_id == "player" { "ai" } else { "player" };
+    
+    if active.hp <= 0 {
+        return ai_switch_for_player(state, player_id);
+    }
+
+    if active.moves.is_empty() {
+        return None;
+    }
+
+    let usable_moves: Vec<&String> = active.moves.iter()
+        .filter(|move_id| {
+            if let Some(move_data) = move_db.get(*move_id) {
+                let pp = move_data.pp.unwrap_or(10);
+                let current_pp = active.move_pp.get(*move_id).copied().unwrap_or(pp);
+                current_pp > 0
+            } else {
+                true
+            }
+        })
+        .collect();
+
+    if usable_moves.is_empty() {
+        return Some(Action {
+            player_id: player_id.to_string(),
+            action_type: ActionType::Move,
+            move_id: active.moves.first().cloned(),
+            target_id: Some(opponent_id.to_string()),
+            slot: None,
+            priority: None,
+        });
+    }
+
+    // シンプルAI: 威力が高い技を選ぶ（プレイヤー自動対戦用）
+    let mut best_move = usable_moves.first().map(|s| (*s).clone()).unwrap();
+    let mut best_power = 0;
+    
+    for move_id in &usable_moves {
+        if let Some(move_data) = move_db.get(*move_id) {
+            let power = move_data.power.unwrap_or(0);
+            if power > best_power {
+                best_power = power;
+                best_move = (*move_id).clone();
+            }
+        }
+    }
+
+    Some(Action {
+        player_id: player_id.to_string(),
+        action_type: ActionType::Move,
+        move_id: Some(best_move),
+        target_id: Some(opponent_id.to_string()),
+        slot: None,
         priority: None,
     })
 }
