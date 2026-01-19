@@ -10,7 +10,7 @@ use engine_rust::data::learnsets::LearnsetDatabase;
 use engine_rust::data::moves::MoveDatabase;
 use engine_rust::data::species::SpeciesDatabase;
 use engine_rust::data::type_chart::TypeChart;
-use inquire::{MultiSelect, Select, Text};
+use inquire::{Select, Text};
 use std::collections::HashMap;
 use wana_kana::ConvertJapanese;
 
@@ -227,7 +227,7 @@ fn select_pokemon(species_db: &SpeciesDatabase, move_db: &MoveDatabase, learnset
         selected.map(|s| s.to_string())
     };
 
-    // Select moves
+    // Select moves (one by one with Enter key)
     let moves = if let Some(learnable) = learnset_db.get(&species.id) {
         let move_options: Vec<String> = learnable.iter()
             .filter_map(|id| {
@@ -239,19 +239,67 @@ fn select_pokemon(species_db: &SpeciesDatabase, move_db: &MoveDatabase, learnset
                 Some(format!("{} | {} | 威力:{} | {} | ID:{}", name, mtype, power, romaji, id))
             })
             .collect();
+        
+        let move_ids: Vec<String> = learnable.iter()
+            .filter(|id| move_db.get(id).is_some())
+            .cloned()
+            .collect();
 
         if move_options.is_empty() {
             Vec::new()
         } else {
-            let selected = MultiSelect::new("技を選択 (最大4つ)", move_options)
-                .with_page_size(15)
-                .prompt()
-                .unwrap_or_default();
-
-            selected.into_iter()
-                .take(4)
-                .filter_map(|opt| opt.split(" | ID:").last().map(|s| s.to_string()))
-                .collect()
+            // 1つずつ選択（最大4つまで）
+            let mut selected_moves = Vec::new();
+            
+            for i in 1..=4 {
+                if selected_moves.len() >= 4 {
+                    break;
+                }
+                
+                // 既に選択した技を除外
+                let available_options: Vec<String> = move_options.iter().enumerate()
+                    .filter(|(idx, _)| !selected_moves.contains(&move_ids[*idx]))
+                    .map(|(_, opt)| opt.clone())
+                    .collect();
+                
+                if available_options.is_empty() {
+                    break;
+                }
+                
+                // 「選択完了」オプションを追加
+                let mut selection_options = available_options.clone();
+                if i > 1 {
+                    selection_options.push("✅ 選択完了（これ以上選ばない）".to_string());
+                }
+                
+                let prompt = format!("技を選択 [{}/4] (Enterで選択):", i);
+                
+                let ans = Select::new(&prompt, selection_options)
+                    .with_page_size(15)
+                    .prompt();
+                
+                match ans {
+                    Ok(choice) => {
+                        if choice == "✅ 選択完了（これ以上選ばない）" {
+                            break;
+                        }
+                        
+                        // 選択された技のIDを取得
+                        if let Some(move_id) = choice.split(" | ID:").last() {
+                            selected_moves.push(move_id.to_string());
+                        }
+                    },
+                    Err(_) => {
+                        println!("選択がキャンセルされました。");
+                        if selected_moves.is_empty() {
+                            println!("技なしで作成します。");
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            selected_moves
         }
     } else {
         Vec::new()
@@ -270,6 +318,7 @@ fn select_pokemon(species_db: &SpeciesDatabase, move_db: &MoveDatabase, learnset
         name: None,
         level: Some(50),
         item,
+        evs: None,
     };
 
     match create_creature(species, options, learnset_db, move_db) {
