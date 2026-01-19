@@ -428,6 +428,9 @@ impl BattleEngine {
                 ignore_substitute: false,
                 is_sound: false,
             };
+            let move_name = move_data.name.as_deref().unwrap_or(&move_id);
+            next.log.push(format!("{}の {}！", attacker_name, move_name));
+
             let mut events = apply_effects(&next, &move_data.effects, &mut effect_ctx);
 
             events = apply_ability_event_modifiers(&next, &events, self.move_db.as_map());

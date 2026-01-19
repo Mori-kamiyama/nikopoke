@@ -179,7 +179,7 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
 
     if (ctx.rng)() > accuracy {
         return vec![BattleEvent::Log {
-            message: format!("{}の {}は はずれた！", attacker.name, move_name(ctx.move_data, effect)),
+            message: "しかし はずれた！".to_string(),
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
         }];
     }
@@ -192,10 +192,6 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     let (amount, is_crit) = calc_damage(power, state, &attacker_id, &target_id, ctx, false);
     
     let mut events = Vec::new();
-    events.push(BattleEvent::Log {
-        message: format!("{}の {}！", attacker.name, move_name(ctx.move_data, effect)),
-        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
-    });
 
     if amount > 0 {
         if is_crit {
@@ -732,7 +728,7 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
         if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
             if ctx.type_chart.effectiveness(move_type, &target.types) == 0.0 {
                 return vec![BattleEvent::Log {
-                    message: format!("{}は {}には 効かないようだ……", target.name, move_name(ctx.move_data, effect)),
+                    message: "しかし 効かないようだ……".to_string(),
                     meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
                 }];
             }
@@ -786,18 +782,14 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
 
     if (ctx.rng)() > accuracy {
         return vec![BattleEvent::Log {
-            message: format!("{}の {}は はずれた！", attacker.name, move_name(ctx.move_data, effect)),
+            message: "しかし はずれた！".to_string(),
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
         }];
     }
 
     vec![
         BattleEvent::Log {
-            message: format!("{}の {}！", attacker.name, move_name(ctx.move_data, effect)),
-            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
-        },
-        BattleEvent::Log {
-            message: format!("一撃必殺！"),
+            message: "一撃必殺！".to_string(),
             meta: Map::new(),
         },
         BattleEvent::Damage {
