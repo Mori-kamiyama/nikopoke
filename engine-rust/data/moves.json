@@ -2952,7 +2952,7 @@
         "type": "damage"
       },
       {
-        "ratioMaxHp": -0.33,
+        "ratioMaxHp": 0.33,
         "target": "self",
         "type": "damage_ratio"
       },
@@ -5965,7 +5965,7 @@
     "effects": [
       {
         "stages": {
-          "spa": -2
+          "spd": -2
         },
         "target": "target",
         "type": "modify_stage"
@@ -6759,7 +6759,7 @@
     "effects": [
       {
         "stages": {
-          "spa": -2
+          "spd": -2
         },
         "target": "target",
         "type": "modify_stage"
@@ -8275,7 +8275,7 @@
     "description": "自分のHPを最大HPの1/4だけ減らして分身を作り、分身のHPが0になるまですべての攻撃を自分の代わりに分身が受ける。音系の技などはそのまま受ける。分身は状態異常にならない。",
     "effects": [
       {
-        "ratioMaxHp": -0.25,
+        "ratioMaxHp": 0.25,
         "target": "self",
         "type": "damage_ratio"
       },
@@ -11616,7 +11616,7 @@
         "type": "damage"
       },
       {
-        "ratioMaxHp": -0.33,
+        "ratioMaxHp": 0.33,
         "target": "self",
         "type": "damage_ratio"
       }
@@ -13164,7 +13164,7 @@
         "type": "damage"
       },
       {
-        "ratioMaxHp": -0.33,
+        "ratioMaxHp": 0.33,
         "target": "self",
         "type": "damage_ratio"
       },

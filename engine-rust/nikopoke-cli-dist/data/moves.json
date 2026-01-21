@@ -5965,7 +5965,7 @@
     "effects": [
       {
         "stages": {
-          "spa": -2
+          "spd": -2
         },
         "target": "target",
         "type": "modify_stage"
@@ -6759,7 +6759,7 @@
     "effects": [
       {
         "stages": {
-          "spa": -2
+          "spd": -2
         },
         "target": "target",
         "type": "modify_stage"
