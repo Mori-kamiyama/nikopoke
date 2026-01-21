@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  /* === Surface Layers (Depth Through Layers) === */
+  --surface-0: #0c0f14;
+  /* Deepest background */
+  --surface-1: #12161d;
+  /* Primary background */
+  --surface-2: #1a1f2a;
+  /* Card background */
+  --surface-3: #242a38;
+  /* Elevated elements */
+  --surface-4: #2e3545;
+  /* Hover states */
+
+  /* === Text Hierarchy === */
+  --text-primary: #f0f2f5;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* === Accent === */
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --accent-muted: rgba(99, 102, 241, 0.15);
+
+  /* === Borders === */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+
+  /* === Muted Type Colors (Sophisticated palette) === */
+  --type-normal: #8b8d94;
+  --type-fire: #b45c40;
+  --type-water: #4a7c9b;
+  --type-grass: #5a8a6a;
+  --type-electric: #c9a94d;
+  --type-ice: #6b9fa8;
+  --type-fighting: #8c5a5a;
+  --type-poison: #7a5c82;
+  --type-ground: #a08a6a;
+  --type-flying: #7a8ab0;
+  --type-psychic: #a86a85;
+  --type-bug: #7a8a40;
+  --type-rock: #8a7a5a;
+  --type-ghost: #5a5a7a;
+  --type-dragon: #5a5a9a;
+  --type-dark: #5a4a4a;
+  --type-steel: #7a8a8a;
+  --type-fairy: #a87a8a;
+}
+
+body {
+  background-color: var(--surface-1);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  margin: 0;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Utility for subtle grid pattern === */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* === Card hover effect === */
+.card-hover {
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
