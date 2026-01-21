@@ -9,11 +9,11 @@ DIST_DIR="nikopoke-cli-dist"
 rm -rf "$DIST_DIR"
 mkdir -p "$DIST_DIR"
 
-# リリースビルド（既にビルド済みの場合はスキップ）
-if [ ! -f "target/release/debug-cli" ] || [ ! -f "target/release/battle-cli" ]; then
-    echo "📦 リリースビルドを作成中..."
-    cargo build --release --bin debug-cli --bin battle-cli
-fi
+# リリースビルド（クリーンビルド）
+echo "🧹 クリーンビルド中..."
+cargo clean
+echo "📦 リリースビルドを作成中..."
+cargo build --release --bin debug-cli --bin battle-cli
 
 # 実行可能ファイルをコピー
 echo "📋 ファイルをコピー中..."
