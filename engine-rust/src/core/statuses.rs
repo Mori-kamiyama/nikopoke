@@ -890,14 +890,42 @@ pub fn tick_statuses(state: &BattleState) -> BattleState {
     let mut next = state.clone();
     for player in &mut next.players {
         if let Some(active) = player.team.get_mut(player.active_slot) {
+            // Track statuses that will expire and need special handling
+            let mut apply_confusion = false;
+            
             for status in &mut active.statuses {
                 if let Some(turns) = status.remaining_turns {
-                    status.remaining_turns = Some(turns - 1);
+                    let new_turns = turns - 1;
+                    status.remaining_turns = Some(new_turns);
+                    
+                    // Check if lock_move with confuseOnEnd is expiring
+                    if new_turns <= 0 && status.id == "lock_move" {
+                        if let Some(Value::Bool(true)) = status.data.get("confuseOnEnd") {
+                            apply_confusion = true;
+                        }
+                    }
                 }
             }
+            
             active
                 .statuses
                 .retain(|s| s.remaining_turns.map(|t| t > 0).unwrap_or(true));
+            
+            // Apply confusion if needed (from expiring lock_move with confuseOnEnd)
+            if apply_confusion && active.hp > 0 {
+                // Check if not already confused
+                if !active.statuses.iter().any(|s| s.id == "confusion") {
+                    let rng_data = HashMap::new();
+                    // Duration 2-4 turns (pseudo-random based on turn number)
+                    let duration = 2 + ((state.turn % 3) as i32);
+                    active.statuses.push(Status {
+                        id: "confusion".to_string(),
+                        remaining_turns: Some(duration),
+                        data: rng_data,
+                    });
+                    next.log.push(format!("{}は 混乱してしまった！", active.name));
+                }
+            }
         }
     }
     next

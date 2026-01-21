@@ -343,7 +343,8 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                 if *slot < player.team.len() {
                     if let Some(outgoing) = player.team.get_mut(player.active_slot) {
                         outgoing.stages = StatStages::default();
-                        let non_volatile = ["burn", "poison", "toxic", "paralysis", "sleep", "freeze"];
+                        // Non-volatile statuses that persist on switch (sleep is explicitly NOT included - cured on switch)
+                        let non_volatile = ["burn", "poison", "toxic", "paralysis", "freeze"];
                         outgoing.statuses.retain(|s| non_volatile.contains(&s.id.as_str()));
                         outgoing.ability_data.clear();
                         outgoing.volatile_data.clear();

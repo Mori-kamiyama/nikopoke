@@ -448,8 +448,16 @@ fn apply_damage_ratio(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
     let Some(target) = get_active_creature(state, &target_id) else {
         return Vec::new();
     };
-    let ratio = value_f64(effect.data.get("ratioMaxHp")).unwrap_or(0.0);
-    let mut amount = (target.max_hp as f64 * ratio).floor() as i32;
+    // Support both ratioMaxHp (based on max HP) and ratioCurrentHp (based on current HP)
+    let mut amount = if let Some(ratio) = value_f64(effect.data.get("ratioCurrentHp")) {
+        (target.hp as f64 * ratio).floor() as i32
+    } else {
+        let ratio = value_f64(effect.data.get("ratioMaxHp")).unwrap_or(0.0);
+        (target.max_hp as f64 * ratio).floor() as i32
+    };
+    let ratio = value_f64(effect.data.get("ratioCurrentHp"))
+        .or_else(|| value_f64(effect.data.get("ratioMaxHp")))
+        .unwrap_or(0.0);
     if amount == 0 && ratio != 0.0 {
         amount = if ratio > 0.0 { 1 } else { -1 };
     }
