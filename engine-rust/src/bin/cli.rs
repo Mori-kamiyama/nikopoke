@@ -76,7 +76,7 @@ fn main() {
     let detailed_mode = if !is_simulation {
         println!();
         println!("📝 技の選択方法:");
-        println!("  1. 通常モード（最初の4つ）");
+        println!("  1. 通常モード（ランダム4つ）");
         println!("  2. 詳細モード（自分で1つずつ選択）");
         print!("> ");
         io::stdout().flush().ok();
@@ -188,8 +188,8 @@ fn main() {
                 selected_moves
             }
         } else {
-            // 通常モード: 自動選択
-            learnable.into_iter().take(4).collect()
+            // 通常モード: ランダム選択
+            take_random_moves(learnable, 4)
         };
         
         if moves.len() < 4 {
@@ -226,16 +226,8 @@ fn main() {
             .filter(|m_id| move_db.get(m_id).is_some())
             .collect();
 
-        let moves: Vec<String> = if randomize_ai_moves && learnable.len() > 4 {
-            let mut moves = learnable.clone();
-            // 簡易的なシャッフル（rand_f64を使用）
-            for i in (1..moves.len()).rev() {
-                let j = (rand_f64() * (i + 1) as f64) as usize;
-                if j <= i {
-                    moves.swap(i, j);
-                }
-            }
-            moves.into_iter().take(4).collect()
+        let moves: Vec<String> = if randomize_ai_moves {
+            take_random_moves(learnable, 4)
         } else {
             learnable.into_iter().take(4).collect()
         };
@@ -1060,12 +1052,40 @@ fn read_numbers(count: usize, max: usize) -> Vec<usize> {
     }
 }
 
+fn take_random_moves(mut moves: Vec<String>, count: usize) -> Vec<String> {
+    if moves.len() <= count {
+        return moves;
+    }
+
+    // 簡易的なシャッフル（rand_f64を使用）
+    for i in (1..moves.len()).rev() {
+        let j = (rand_f64() * (i + 1) as f64) as usize;
+        if j <= i {
+            moves.swap(i, j);
+        }
+    }
+
+    moves.into_iter().take(count).collect()
+}
+
 fn rand_f64() -> f64 {
     use std::time::{SystemTime, UNIX_EPOCH};
-    static mut SEED: u64 = 12345;
-    unsafe {
+    use std::sync::atomic::{AtomicU64, Ordering};
+    
+    static SEED: AtomicU64 = AtomicU64::new(0);
+    
+    // Initialize seed from time if not yet initialized
+    let mut seed = SEED.load(Ordering::Relaxed);
+    if seed == 0 {
         let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos() as u64;
-        SEED = SEED.wrapping_mul(6364136223846793005).wrapping_add(now % 1000);
-        (SEED as f64) / (u64::MAX as f64)
+        seed = now;
+        SEED.store(seed, Ordering::Relaxed);
     }
+    
+    // LCG random number generator with time-based perturbation
+    let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos() as u64;
+    seed = seed.wrapping_mul(6364136223846793005).wrapping_add(now % 1000);
+    SEED.store(seed, Ordering::Relaxed);
+    
+    (seed as f64) / (u64::MAX as f64)
 }

@@ -449,13 +449,21 @@ fn apply_damage_ratio(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
         return Vec::new();
     };
     let ratio = value_f64(effect.data.get("ratioMaxHp")).unwrap_or(0.0);
-    let amount = (target.max_hp as f64 * ratio).floor() as i32;
+    let mut amount = (target.max_hp as f64 * ratio).floor() as i32;
+    if amount == 0 && ratio != 0.0 {
+        amount = if ratio > 0.0 { 1 } else { -1 };
+    }
+    if amount > 0 {
+        amount = amount.max(1);
+    } else if amount < 0 {
+        amount = amount.min(-1);
+    }
     let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
     meta.insert("target".to_string(), Value::String(target_id.clone()));
     meta.insert("cancellable".to_string(), Value::Bool(true));
     vec![BattleEvent::Damage {
         target_id,
-        amount: amount.max(1),
+        amount,
         meta,
     }]
 }
@@ -543,12 +551,22 @@ fn apply_repeat(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
 
     let effects = effects_from_value(effect.data.get("effects"));
     let mut collected = Vec::new();
+    let mut working_state = state.clone();
+    let mut hits = 0;
     for _ in 0..times {
-        collected.extend(apply_effects(state, &effects, ctx));
+        if let Some(target) = get_active_creature(&working_state, &ctx.target_player_id) {
+            if target.hp <= 0 {
+                break;
+            }
+        }
+        let events = apply_effects(&working_state, &effects, ctx);
+        working_state = apply_events(&working_state, &events);
+        collected.extend(events);
+        hits += 1;
     }
-    if times > 1 {
+    if hits > 1 {
         collected.push(BattleEvent::Log {
-            message: format!("{}回 あたった！", times),
+            message: format!("{}回 あたった！", hits),
             meta: Map::new(),
         });
     }

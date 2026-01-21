@@ -793,6 +793,13 @@ fn handle_delayed(
 
     let target_id = status.data.get("targetId").and_then(|v| v.as_str()).unwrap_or(player_id);
     let attacker_id = status.data.get("sourceId").and_then(|v| v.as_str()).unwrap_or(player_id);
+    if let Some(target) = get_active_creature(state, target_id) {
+        if target.hp <= 0 {
+            return StatusHookResult::default();
+        }
+    } else {
+        return StatusHookResult::default();
+    }
 
     let effects = effects_from_status(status);
     let mut effect_ctx = crate::core::effects::EffectContext {
@@ -831,6 +838,13 @@ fn handle_over_time(
 
     let target_id = status.data.get("targetId").and_then(|v| v.as_str()).unwrap_or(player_id);
     let attacker_id = status.data.get("sourceId").and_then(|v| v.as_str()).unwrap_or(player_id);
+    if let Some(target) = get_active_creature(state, target_id) {
+        if target.hp <= 0 {
+            return StatusHookResult::default();
+        }
+    } else {
+        return StatusHookResult::default();
+    }
     let effects = effects_from_status(status);
     let mut effect_ctx = crate::core::effects::EffectContext {
         attacker_player_id: attacker_id.to_string(),
