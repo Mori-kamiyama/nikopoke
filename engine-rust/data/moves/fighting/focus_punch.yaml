@@ -1,0 +1,18 @@
+id: focus_punch
+name: きあいパンチ
+type: fighting
+category: physical
+pp: 20
+priority: -3
+steps:
+- type: damage
+  power: 150
+  accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: flinch
+  then: []
+  else: []
+tags:
+- punch

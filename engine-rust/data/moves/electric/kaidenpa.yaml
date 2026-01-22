@@ -1,0 +1,10 @@
+id: kaidenpa
+name: かいでんぱ
+type: electric
+category: status
+pp: 15
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spa: -2

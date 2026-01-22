@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Map;
 use std::collections::HashMap;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct MoveData {
@@ -17,7 +17,7 @@ pub struct MoveData {
     pub accuracy: Option<f32>,
     pub priority: Option<i32>,
     #[serde(default)]
-    pub effects: Vec<Effect>,
+    pub steps: Vec<Effect>,
     #[serde(default)]
     pub tags: Vec<String>,
     #[serde(rename = "critRate")]
@@ -55,7 +55,7 @@ impl MoveDatabase {
             power: Some(40),
             accuracy: Some(1.0),
             priority: Some(0),
-            effects: Vec::new(),
+            steps: Vec::new(),
             tags: Vec::new(),
             crit_rate: None,
         });
@@ -68,7 +68,7 @@ impl MoveDatabase {
             power: Some(40),
             accuracy: Some(1.0),
             priority: Some(0),
-            effects: Vec::new(),
+            steps: Vec::new(),
             tags: Vec::new(),
             crit_rate: None,
         });
@@ -81,7 +81,7 @@ impl MoveDatabase {
             power: Some(40),
             accuracy: Some(1.0),
             priority: Some(0),
-            effects: Vec::new(),
+            steps: Vec::new(),
             tags: Vec::new(),
             crit_rate: None,
         });
@@ -94,7 +94,7 @@ impl MoveDatabase {
             power: Some(45),
             accuracy: Some(1.0),
             priority: Some(0),
-            effects: Vec::new(),
+            steps: Vec::new(),
             tags: Vec::new(),
             crit_rate: None,
         });
@@ -107,7 +107,7 @@ impl MoveDatabase {
             power: Some(40),
             accuracy: Some(1.0),
             priority: Some(0),
-            effects: Vec::new(),
+            steps: Vec::new(),
             tags: Vec::new(),
             crit_rate: None,
         });
@@ -120,7 +120,7 @@ impl MoveDatabase {
             power: Some(0),
             accuracy: Some(1.0),
             priority: Some(0),
-            effects: Vec::new(),
+            steps: Vec::new(),
             tags: Vec::new(),
             crit_rate: None,
         });
@@ -128,6 +128,15 @@ impl MoveDatabase {
     }
 
     pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            let dir = Path::new("data/moves");
+            if dir.exists() {
+                if let Ok(db) = Self::load_from_yaml_dir(dir) {
+                    return Ok(db);
+                }
+            }
+        }
         const DEFAULT_MOVES_YAML: &str = include_str!("../../data/moves.yaml");
         Self::load_from_yaml_str(DEFAULT_MOVES_YAML)
     }
@@ -148,9 +157,8 @@ impl MoveDatabase {
         // Parse YAML, convert to JSON, then deserialize to maintain serde_json types
         let yaml_value: serde_yaml::Value = serde_yaml::from_str(yaml)?;
         let json_value = yaml_to_json(yaml_value);
-        
-        let map_result: Result<HashMap<String, MoveData>, _> = serde_json::from_value(json_value.clone());
-        if let Ok(map) = map_result {
+
+        if let Ok(map) = serde_json::from_value::<HashMap<String, MoveData>>(json_value.clone()) {
             let mut db = Self::new();
             for (_, move_data) in map {
                 db.insert(move_data);
@@ -158,17 +166,39 @@ impl MoveDatabase {
             return Ok(db);
         }
 
-        let vec_result: Result<Vec<MoveData>, _> = serde_json::from_value(json_value);
-        let mut db = Self::new();
-        for move_data in vec_result? {
-            db.insert(move_data);
+        if let Ok(vec_result) = serde_json::from_value::<Vec<MoveData>>(json_value.clone()) {
+            let mut db = Self::new();
+            for move_data in vec_result {
+                db.insert(move_data);
+            }
+            return Ok(db);
         }
+
+        let move_data: MoveData = serde_json::from_value(json_value)?;
+        let mut db = Self::new();
+        db.insert(move_data);
         Ok(db)
     }
 
     pub fn load_from_yaml_file(path: &Path) -> Result<Self, Box<dyn std::error::Error>> {
         let content = fs::read_to_string(path)?;
         let db = Self::load_from_yaml_str(&content)?;
+        Ok(db)
+    }
+
+    pub fn load_from_yaml_dir(dir: &Path) -> Result<Self, Box<dyn std::error::Error>> {
+        let mut files = Vec::new();
+        collect_yaml_files(dir, &mut files)?;
+        files.sort();
+
+        let mut db = Self::new();
+        for path in files {
+            let content = fs::read_to_string(&path)?;
+            let file_db = Self::load_from_yaml_str(&content)?;
+            for (_, move_data) in file_db.moves {
+                db.insert(move_data);
+            }
+        }
         Ok(db)
     }
 }
@@ -214,4 +244,24 @@ fn yaml_to_json(yaml: serde_yaml::Value) -> serde_json::Value {
         }
         serde_yaml::Value::Tagged(tagged) => yaml_to_json(tagged.value),
     }
+}
+
+fn collect_yaml_files(dir: &Path, files: &mut Vec<PathBuf>) -> Result<(), Box<dyn std::error::Error>> {
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_dir() {
+            collect_yaml_files(&path, files)?;
+            continue;
+        }
+        let is_yaml = path
+            .extension()
+            .and_then(|ext| ext.to_str())
+            .map(|ext| matches!(ext, "yaml" | "yml"))
+            .unwrap_or(false);
+        if is_yaml {
+            files.push(path);
+        }
+    }
+    Ok(())
 }

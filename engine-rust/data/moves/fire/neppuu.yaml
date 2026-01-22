@@ -1,0 +1,14 @@
+id: neppuu
+name: ねっぷう
+type: fire
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 95
+  accuracy: 0.9
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: burn

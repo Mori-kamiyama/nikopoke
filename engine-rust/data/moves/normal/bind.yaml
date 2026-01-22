@@ -1,0 +1,21 @@
+id: bind
+name: しめつける
+type: normal
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 15
+  accuracy: 0.85
+- type: over_time
+  steps:
+  - type: damage_ratio
+    ratioMaxHp: 0.125
+- type: apply_status
+  statusId: lock_move
+  duration:
+    min: 4
+    max: 5
+  data:
+    immuneTypes:
+    - ghost

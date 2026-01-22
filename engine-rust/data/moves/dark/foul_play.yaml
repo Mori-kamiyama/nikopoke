@@ -1,0 +1,9 @@
+id: foul_play
+name: イカサマ
+type: dark
+category: physical
+steps:
+- type: damage
+  power: null
+  accuracy: null
+  useTargetAttack: true

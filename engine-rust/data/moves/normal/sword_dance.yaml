@@ -1,0 +1,10 @@
+id: sword_dance
+name: つるぎのまい
+type: normal
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 2

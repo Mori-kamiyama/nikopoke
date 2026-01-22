@@ -1,0 +1,8 @@
+id: protect
+name: まもる
+type: normal
+category: status
+pp: 10
+priority: 4
+steps:
+- type: protect

@@ -1,0 +1,9 @@
+id: acid
+name: いえき
+type: poison
+category: status
+pp: 10
+steps:
+- type: remove_status
+  statusId: ability
+  target: target

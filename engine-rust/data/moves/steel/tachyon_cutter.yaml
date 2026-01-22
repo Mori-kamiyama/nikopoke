@@ -1,0 +1,11 @@
+id: tachyon_cutter
+name: タキオンカッター
+type: steel
+category: special
+pp: 10
+steps:
+- type: repeat
+  times: 2
+  steps:
+  - type: damage
+    power: 50

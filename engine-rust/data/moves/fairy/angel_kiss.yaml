@@ -1,0 +1,13 @@
+id: angel_kiss
+name: てんしのキッス
+type: fairy
+category: status
+pp: 20
+accuracy: 0.75
+steps:
+- type: apply_status
+  statusId: confusion
+  duration:
+    min: 1
+    max: 4
+  chance: 1

@@ -1,0 +1,14 @@
+id: parting_shot
+name: すてゼリフ
+type: dark
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+    spa: -1
+- type: replace_status
+  from: always
+  to: parting_shot_switch

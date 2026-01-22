@@ -1,0 +1,20 @@
+id: ancient_power
+name: げんしのちから
+type: rock
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 60
+  accuracy: 1
+- type: chance
+  p: 0.1
+  then:
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1
+      def: 1
+      spa: 1
+      spd: 1
+      spe: 1

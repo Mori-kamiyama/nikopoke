@@ -1,0 +1,11 @@
+id: jet_punch
+name: ジェットパンチ
+type: water
+category: physical
+pp: 15
+priority: 1
+steps:
+- type: damage
+  power: 60
+tags:
+- punch

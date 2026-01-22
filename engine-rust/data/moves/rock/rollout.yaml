@@ -1,0 +1,21 @@
+id: rollout
+name: ころがる
+type: rock
+category: physical
+pp: 20
+accuracy: 0.9
+steps:
+- type: damage
+  power: 30
+- type: repeat
+  times: 5
+  steps:
+  - type: damage
+    power: 30
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: defense_curl
+  then:
+  - type: damage
+    power: 60

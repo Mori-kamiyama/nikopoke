@@ -1,0 +1,9 @@
+id: shiroi_kiri
+name: しろいきり
+type: ice
+category: status
+pp: 30
+steps:
+- type: apply_field_status
+  statusId: mist
+  duration: 5

@@ -1,0 +1,23 @@
+id: netsu_no_daichi
+name: ねっさのだいち
+type: ground
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 70
+  accuracy: 1
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: freeze
+  then:
+  - type: remove_status
+    statusId: freeze
+    target: self

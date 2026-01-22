@@ -1,0 +1,41 @@
+id: moonlight
+name: つきのひかり
+type: fairy
+category: status
+pp: 5
+steps:
+- type: conditional
+  if:
+    type: weather_is_sunny
+  then:
+  - type: damage_ratio
+    ratioMaxHp: -0.6666666666666666
+    target: self
+  else:
+  - type: conditional
+    if:
+      type: weather_is_raining
+    then:
+    - type: damage_ratio
+      ratioMaxHp: -0.25
+      target: self
+    else:
+    - type: conditional
+      if:
+        type: weather_is_hail
+      then:
+      - type: damage_ratio
+        ratioMaxHp: -0.25
+        target: self
+      else:
+      - type: conditional
+        if:
+          type: weather_is_sandstorm
+        then:
+        - type: damage_ratio
+          ratioMaxHp: -0.25
+          target: self
+        else:
+        - type: damage_ratio
+          ratioMaxHp: -0.5
+          target: self

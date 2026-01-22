@@ -15,7 +15,7 @@ pub fn is_status_move(move_data: &MoveData) -> bool {
         Some("status") => true,
         Some("physical") | Some("special") => false,
         _ => !move_data
-            .effects
+            .steps
             .iter()
             .any(|effect| effect.effect_type == "damage"),
     }

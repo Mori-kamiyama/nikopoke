@@ -1,0 +1,12 @@
+id: rain_dance
+name: あまごい
+type: water
+category: status
+pp: 5
+steps:
+- type: apply_field_status
+  statusId: rain
+  duration: 5
+  data:
+    water_power_boost: 1.5
+    fire_power_reduction: 0.5

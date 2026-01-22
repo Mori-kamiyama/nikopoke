@@ -1,0 +1,13 @@
+id: shadow_claw
+name: シャドークロー
+type: ghost
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 70
+  accuracy: 1
+- type: modify_stage
+  target: self
+  stages:
+    crit: 1

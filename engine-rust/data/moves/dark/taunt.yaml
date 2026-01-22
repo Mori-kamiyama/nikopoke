@@ -1,0 +1,12 @@
+id: taunt
+name: ちょうはつ
+type: dark
+category: status
+pp: 20
+steps:
+- type: apply_status
+  statusId: lock_move
+  duration: 3
+  data:
+    moveType: damage
+  target: target

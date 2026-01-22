@@ -1,0 +1,10 @@
+id: aqua_jet
+name: アクアジェット
+type: water
+category: physical
+pp: 20
+priority: 1
+steps:
+- type: damage
+  power: 40
+  accuracy: 1

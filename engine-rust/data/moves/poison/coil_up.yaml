@@ -1,0 +1,15 @@
+id: coil_up
+name: とぐろをまく
+type: poison
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    def: 1
+- type: modify_stage
+  target: self
+  stages:
+    accuracy: 1

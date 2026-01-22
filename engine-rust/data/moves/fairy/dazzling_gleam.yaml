@@ -1,0 +1,18 @@
+id: dazzling_gleam
+name: みわくのボイス
+type: fairy
+category: special
+steps:
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: stat_boost
+  then:
+  - type: apply_status
+    statusId: confusion
+    chance: 1
+    duration:
+      min: 1
+      max: 4
+tags:
+- sound

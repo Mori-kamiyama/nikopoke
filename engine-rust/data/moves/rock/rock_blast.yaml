@@ -1,0 +1,14 @@
+id: rock_blast
+name: ロックブラスト
+type: rock
+category: physical
+pp: 10
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage
+    power: 25
+    accuracy: 0.9

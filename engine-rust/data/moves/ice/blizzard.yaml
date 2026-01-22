@@ -1,0 +1,23 @@
+id: blizzard
+name: ふぶき
+type: ice
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 110
+  accuracy: 0.7
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: freeze
+    target: target
+- type: conditional
+  if:
+    type: field_has_status
+    statusId: snow
+  then:
+  - type: damage
+    power: 110
+    accuracy: 1

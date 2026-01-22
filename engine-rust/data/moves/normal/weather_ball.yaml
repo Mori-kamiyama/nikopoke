@@ -1,0 +1,45 @@
+id: weather_ball
+name: ウェザーボール
+type: normal
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 50
+  accuracy: 1
+- type: conditional
+  if:
+    type: weather_is_sunny
+  then:
+  - type: damage
+    power: 100
+  - type: replace_status
+    from: normal
+    to: fire
+- type: conditional
+  if:
+    type: weather_is_raining
+  then:
+  - type: damage
+    power: 100
+  - type: replace_status
+    from: normal
+    to: water
+- type: conditional
+  if:
+    type: weather_is_hail
+  then:
+  - type: damage
+    power: 100
+  - type: replace_status
+    from: normal
+    to: ice
+- type: conditional
+  if:
+    type: weather_is_sandstorm
+  then:
+  - type: damage
+    power: 100
+  - type: replace_status
+    from: normal
+    to: rock

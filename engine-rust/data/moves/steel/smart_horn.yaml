@@ -1,0 +1,8 @@
+id: smart_horn
+name: スマートホーン
+type: steel
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 70

@@ -1,0 +1,13 @@
+id: swagger
+name: いばる
+type: normal
+category: status
+pp: 15
+steps:
+- type: apply_status
+  statusId: confusion
+  chance: 0.85
+- type: modify_stage
+  target: target
+  stages:
+    atk: 2

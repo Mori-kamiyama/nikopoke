@@ -1,0 +1,15 @@
+id: ice_hammer
+name: アイスハンマー
+type: ice
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.9
+- type: modify_stage
+  target: self
+  stages:
+    spe: -1
+tags:
+- contact

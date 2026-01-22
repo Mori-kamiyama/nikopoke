@@ -1,0 +1,10 @@
+id: safeguard
+name: しんぴのまもり
+type: normal
+category: status
+pp: 25
+steps:
+- type: apply_status
+  statusId: safeguard
+  target: all
+  duration: 5

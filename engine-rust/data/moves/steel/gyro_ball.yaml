@@ -1,0 +1,12 @@
+id: gyro_ball
+name: ジャイロボール
+type: steel
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 1
+  accuracy: 1
+  data:
+    scaling: speed
+    maxPower: 150

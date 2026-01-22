@@ -1,0 +1,13 @@
+id: bite
+name: かみつく
+type: dark
+category: physical
+steps:
+- type: damage
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+    duration: 1

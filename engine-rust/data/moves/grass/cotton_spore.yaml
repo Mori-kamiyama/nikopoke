@@ -1,0 +1,10 @@
+id: cotton_spore
+name: わたほうし
+type: grass
+category: status
+pp: 40
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spe: -2

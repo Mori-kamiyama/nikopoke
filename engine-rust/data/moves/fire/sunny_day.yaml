@@ -1,0 +1,12 @@
+id: sunny_day
+name: にほんばれ
+type: fire
+category: status
+pp: 5
+steps:
+- type: apply_field_status
+  statusId: sunny_weather
+  duration: 5
+  data:
+    fire_boost: 1.5
+    water_reduce: 0.5

@@ -1,0 +1,12 @@
+id: substitute
+name: みがわり
+type: normal
+category: status
+pp: 10
+steps:
+- type: damage_ratio
+  ratioMaxHp: 0.25
+  target: self
+- type: apply_status
+  statusId: substitute
+  target: self

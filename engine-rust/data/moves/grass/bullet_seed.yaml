@@ -1,0 +1,14 @@
+id: bullet_seed
+name: タネマシンガン
+type: grass
+category: physical
+pp: 30
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage
+    power: 25
+    accuracy: 1

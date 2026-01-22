@@ -1,0 +1,16 @@
+id: play_rough
+name: じゃれつく
+type: fairy
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 0.9
+- type: chance
+  p: 0.1
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      atk: -1

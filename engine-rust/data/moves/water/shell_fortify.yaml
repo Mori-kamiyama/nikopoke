@@ -1,0 +1,10 @@
+id: shell_fortify
+name: からにこもる
+type: water
+category: status
+pp: 15
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 1

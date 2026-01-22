@@ -1,0 +1,11 @@
+id: string_shot
+name: いとをはく
+type: bug
+category: status
+pp: 40
+accuracy: 0.95
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spe: -2

@@ -1,0 +1,25 @@
+id: sandstorm
+name: すなあらし
+type: rock
+category: status
+pp: 10
+steps:
+- type: apply_field_status
+  statusId: sandstorm
+  duration: 5
+- type: over_time
+  timing: turn_end
+  steps:
+  - type: damage_ratio
+    ratioMaxHp: 0.0625
+  target: all
+- type: conditional
+  if:
+    type: field_has_status
+    statusId: sandstorm
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      spd: 1
+    chance: 1

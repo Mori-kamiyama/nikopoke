@@ -1,0 +1,19 @@
+id: thunder_fang
+name: かみなりのキバ
+type: electric
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 65
+  accuracy: 0.95
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: paralysis
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: flinch

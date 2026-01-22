@@ -1,0 +1,18 @@
+id: god_bird
+name: ゴットバード
+type: flying
+category: physical
+pp: 5
+steps:
+- type: wait
+  turns: 1
+  steps:
+  - type: damage
+    power: 140
+    accuracy: 0.9
+  - type: chance
+    p: 0.3
+    then:
+    - type: apply_status
+      statusId: flinch
+critRate: 1

@@ -1,0 +1,10 @@
+id: metal_sound
+name: きんぞくおん
+type: steel
+category: status
+pp: 40
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spd: -2

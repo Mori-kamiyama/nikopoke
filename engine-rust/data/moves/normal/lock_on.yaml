@@ -1,0 +1,9 @@
+id: lock_on
+name: ロックオン
+type: normal
+category: status
+pp: 5
+steps:
+- type: apply_status
+  statusId: lock_move
+  target: self

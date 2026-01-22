@@ -1,0 +1,14 @@
+id: headbutt
+name: ぶちかまし
+type: normal
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 120
+  accuracy: 1
+- type: modify_stage
+  target: self
+  stages:
+    def: -1
+    spd: -1

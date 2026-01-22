@@ -1,0 +1,26 @@
+id: power_swap
+name: パワースワップ
+type: psychic
+category: status
+pp: 10
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: null
+    spa: null
+- type: modify_stage
+  target: target
+  stages:
+    atk: null
+    spa: null
+- type: modify_stage
+  target: self
+  stages:
+    atk: 100
+    spa: 100
+- type: modify_stage
+  target: target
+  stages:
+    atk: -100
+    spa: -100

@@ -1,0 +1,14 @@
+id: missile_needle
+name: ミサイルばり
+type: bug
+category: physical
+pp: 20
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage
+    power: 25
+    accuracy: 0.95

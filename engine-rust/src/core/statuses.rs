@@ -814,6 +814,7 @@ fn handle_delayed(
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+        last_damage: None,
     };
     let events = apply_effects(state, &effects, &mut effect_ctx);
     let new_state = apply_events(state, &events);
@@ -858,6 +859,7 @@ fn handle_over_time(
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+        last_damage: None,
     };
     let events = apply_effects(state, &effects, &mut effect_ctx);
     let new_state = apply_events(state, &events);

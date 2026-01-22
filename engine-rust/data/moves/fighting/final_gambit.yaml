@@ -1,0 +1,12 @@
+id: final_gambit
+name: いのちがけ
+type: fighting
+category: special
+pp: 5
+steps:
+- type: damage_ratio
+  ratioMaxHp: 1
+  target: target
+- type: damage_ratio
+  ratioMaxHp: 1
+  target: self

@@ -1,0 +1,19 @@
+id: electric_ball
+name: エレキボール
+type: electric
+category: special
+pp: 10
+steps:
+- type: speed_based_damage
+  accuracy: 1
+  thresholds:
+  - ratio: 4
+    power: 150
+  - ratio: 3
+    power: 120
+  - ratio: 2
+    power: 80
+  - ratio: 1
+    power: 60
+  - ratio: 0
+    power: 40

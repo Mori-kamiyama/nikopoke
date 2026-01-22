@@ -1,0 +1,7 @@
+id: fling
+name: なげつける
+type: dark
+category: physical
+steps:
+- type: manual
+  manualReason: Effect varies depending on the held item.

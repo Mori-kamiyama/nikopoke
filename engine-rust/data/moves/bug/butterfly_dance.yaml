@@ -1,0 +1,12 @@
+id: butterfly_dance
+name: ちょうのまい
+type: bug
+category: status
+pp: 10
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 1
+    spd: 1
+    spe: 1

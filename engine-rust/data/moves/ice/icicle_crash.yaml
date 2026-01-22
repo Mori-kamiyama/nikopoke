@@ -1,0 +1,12 @@
+id: icicle_crash
+name: つららおとし
+type: ice
+category: physical
+pp: 30
+steps:
+- type: damage
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch

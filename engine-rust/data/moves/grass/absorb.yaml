@@ -1,0 +1,12 @@
+id: absorb
+name: すいとる
+type: grass
+category: special
+pp: 25
+steps:
+- type: damage
+  power: 20
+  accuracy: 1
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self

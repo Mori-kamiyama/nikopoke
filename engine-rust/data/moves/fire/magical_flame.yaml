@@ -1,0 +1,14 @@
+id: magical_flame
+name: マジカルフレイム
+type: fire
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 75
+  accuracy: 1
+- type: modify_stage
+  target: target
+  stages:
+    spa: -1
+  chance: 1

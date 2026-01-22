@@ -1,0 +1,16 @@
+id: stomping_tantrum
+name: じだんだ
+type: ground
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 75
+  accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: flinch
+  then:
+  - type: damage
+    power: 150

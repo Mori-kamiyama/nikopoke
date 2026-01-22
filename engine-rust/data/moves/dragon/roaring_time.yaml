@@ -1,0 +1,12 @@
+id: roaring_time
+name: ときのほうこう
+type: dragon
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 150
+  accuracy: 0.9
+- type: wait
+  turns: 1
+  steps: []

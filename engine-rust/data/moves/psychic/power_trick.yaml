@@ -1,0 +1,16 @@
+id: power_trick
+name: パワートリック
+type: psychic
+category: status
+pp: 10
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: -99
+    def: 99
+- type: modify_stage
+  target: self
+  stages:
+    atk: 99
+    def: -99

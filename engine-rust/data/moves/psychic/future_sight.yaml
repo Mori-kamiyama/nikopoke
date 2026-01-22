@@ -1,0 +1,12 @@
+id: future_sight
+name: みらいよち
+type: psychic
+category: special
+pp: 10
+steps:
+- type: wait
+  turns: 2
+  steps:
+  - type: damage
+    power: 120
+    accuracy: 1

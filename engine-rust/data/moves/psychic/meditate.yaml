@@ -1,0 +1,11 @@
+id: meditate
+name: めいそう
+type: psychic
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 1
+    spd: 1

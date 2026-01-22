@@ -1,0 +1,11 @@
+id: bullet_punch
+name: バレットパンチ
+type: steel
+category: physical
+pp: 30
+priority: 1
+steps:
+- type: damage
+  power: 40
+tags:
+- punch

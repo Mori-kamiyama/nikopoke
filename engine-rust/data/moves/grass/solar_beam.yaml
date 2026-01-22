@@ -1,0 +1,27 @@
+id: solar_beam
+name: Solar Beam
+type: grass
+category: special
+pp: 10
+steps:
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: charging_solar_beam
+  then:
+  - type: remove_status
+    statusId: charging_solar_beam
+    target: self
+  - type: damage
+    power: 120
+    accuracy: 1
+  else:
+  - type: log
+    message: absorbed light!
+  - type: apply_status
+    statusId: charging_solar_beam
+    target: self
+    duration: 2
+    data:
+      moveId: solar_beam
+      mode: force_specific

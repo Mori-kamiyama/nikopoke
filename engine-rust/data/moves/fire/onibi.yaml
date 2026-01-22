@@ -1,0 +1,9 @@
+id: onibi
+name: おにび
+type: fire
+category: status
+pp: 15
+steps:
+- type: apply_status
+  statusId: burn
+  chance: 0.85

@@ -1,0 +1,10 @@
+id: grass_slider
+name: グラススライダー
+type: grass
+category: physical
+pp: 20
+priority: 1
+steps:
+- type: damage
+  power: 55
+  accuracy: 1

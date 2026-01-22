@@ -1,0 +1,8 @@
+id: acupressure
+name: つぼをつく
+type: normal
+category: status
+pp: 30
+steps:
+- type: random_move
+  pool: status

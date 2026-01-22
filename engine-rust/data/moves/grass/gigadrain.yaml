@@ -1,0 +1,12 @@
+id: gigadrain
+name: ギガドレイン
+type: grass
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 75
+  accuracy: 1
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self

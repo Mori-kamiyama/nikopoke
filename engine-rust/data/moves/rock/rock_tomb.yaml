@@ -1,0 +1,14 @@
+id: rock_tomb
+name: がんせきふうじ
+type: rock
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 60
+  accuracy: 0.95
+- type: modify_stage
+  target: target
+  stages:
+    spe: -1
+  chance: 1

@@ -1,0 +1,22 @@
+id: earth_power
+name: ねっさのあらし
+type: ground
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.8
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
+- type: conditional
+  if:
+    type: weather_is_raining
+  then:
+  - type: damage
+    power: 100
+    accuracy: 1

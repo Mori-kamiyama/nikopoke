@@ -1,0 +1,8 @@
+id: happy_hour
+name: ハッピータイム
+type: normal
+category: status
+pp: 30
+steps:
+- type: manual
+  manualReason: Doubles prize money after battle, which is not a battle effect.

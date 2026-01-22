@@ -1,0 +1,14 @@
+id: mud_slap
+name: どろかけ
+type: ground
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 20
+  accuracy: 1
+- type: modify_stage
+  target: target
+  stages:
+    accuracy: -1
+  chance: 1

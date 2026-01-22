@@ -1,0 +1,17 @@
+id: poltergeist
+name: ポルターガイスト
+type: ghost
+category: physical
+pp: 5
+steps:
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: item
+  then:
+  - type: damage
+    power: 110
+    accuracy: 0.9
+  else:
+  - type: log
+    message: But it failed! (target has no item)

@@ -1,0 +1,11 @@
+id: electric_terrain
+name: エレキフィールド
+type: electric
+category: status
+pp: 10
+steps:
+- type: apply_field_status
+  statusId: electric_terrain
+  duration: 5
+  data:
+    boost_type: electric

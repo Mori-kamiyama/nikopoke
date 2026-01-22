@@ -1,0 +1,18 @@
+id: dragon_tail
+name: ドラゴンテール
+type: dragon
+category: physical
+pp: 10
+priority: -6
+steps:
+- type: damage
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: ダイマックス
+  then: []
+  else:
+  - type: replace_status
+    from: active
+    to: next
+    target: target

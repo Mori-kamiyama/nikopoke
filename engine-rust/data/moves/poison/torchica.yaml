@@ -1,0 +1,11 @@
+id: torchica
+name: トーチカ
+type: poison
+category: status
+pp: 10
+priority: 4
+steps:
+- type: protect
+- type: apply_status
+  statusId: poison
+  chance: 1

@@ -1,0 +1,17 @@
+id: shadow_punch
+name: シャドーパンチ
+type: ghost
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 60
+- type: modify_stage
+  target: target
+  stages:
+    atk: 0
+    def: 0
+    spa: 0
+    spd: 0
+    spe: 0
+  accuracy: 1

@@ -1,0 +1,12 @@
+id: jaw_lock
+name: くらいつく
+type: dark
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: apply_status
+  statusId: lock_move
+  target: all

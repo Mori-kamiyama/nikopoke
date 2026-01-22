@@ -1,0 +1,10 @@
+id: helping_hand
+name: おさきにどうぞ
+type: normal
+category: status
+pp: 15
+steps:
+- type: wait
+  turns: 0
+  timing: turn_start
+  steps: []

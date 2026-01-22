@@ -1,0 +1,42 @@
+id: hell_blow
+name: じごくづき
+type: dark
+category: physical
+steps:
+- type: apply_status
+  statusId: disable_move
+  duration: 2
+  data:
+    moves:
+    - ancient_song
+    - snore
+    - heal_bell
+    - growl
+    - sing
+    - bubble_beam
+    - echoed_voice
+    - chatter
+    - uproar
+    - metal_sound
+    - grass_whistle
+    - round
+    - scale_noise
+    - parting_shot
+    - charm_voice
+    - supersonic
+    - howl
+    - baby_doll_eyes
+    - cry
+    - bark_out
+    - hyper_voice
+    - boomburst
+    - roar
+    - perish_song
+    - bug_buzz
+    - synchronoise
+    - soul_beat
+    - overdrive
+    - ominous_chant
+    - flare_song
+    - captivate
+    - psycho_noise

@@ -1,0 +1,17 @@
+id: fly
+name: とびはねる
+type: flying
+category: physical
+pp: 5
+accuracy: 0.85
+steps:
+- type: wait
+  turns: 1
+  steps:
+  - type: damage
+    power: 85
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: paralysis

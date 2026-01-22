@@ -1,0 +1,14 @@
+id: dig
+name: あなをほる
+type: ground
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: wait
+  turns: 1
+  steps: []
+  target: self
+- type: protect

@@ -1,0 +1,7 @@
+id: baton_pass
+name: バトンタッチ
+type: normal
+category: status
+pp: 40
+steps:
+- type: self_switch

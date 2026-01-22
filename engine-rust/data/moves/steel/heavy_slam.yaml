@@ -1,0 +1,16 @@
+id: heavy_slam
+name: ヘビーボンバー
+type: steel
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 40
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: minimize
+  then:
+  - type: damage
+    power: 240
+    accuracy: 1

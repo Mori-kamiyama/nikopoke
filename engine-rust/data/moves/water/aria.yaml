@@ -1,0 +1,14 @@
+id: aria
+name: うたかたのアリア
+type: water
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 1
+- type: remove_status
+  statusId: burn
+  target: target
+tags:
+- sound

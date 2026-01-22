@@ -1,0 +1,9 @@
+id: tackle
+name: たいあたり
+type: normal
+category: physical
+pp: 35
+steps:
+- type: damage
+  power: 40
+  accuracy: 1

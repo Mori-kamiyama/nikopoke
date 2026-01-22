@@ -1,0 +1,7 @@
+id: ice_shard
+name: こおりのつぶて
+type: ice
+category: physical
+priority: 1
+steps:
+- type: damage

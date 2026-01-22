@@ -1,0 +1,11 @@
+id: hard_press
+name: ハードプレス
+type: steel
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 100
+  accuracy: 1
+  data:
+    scaling_hp: true

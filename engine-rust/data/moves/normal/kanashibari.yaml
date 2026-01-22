@@ -1,0 +1,9 @@
+id: kanashibari
+name: かなしばり
+type: normal
+category: status
+pp: 20
+steps:
+- type: disable_move
+  duration: 4
+  target: target

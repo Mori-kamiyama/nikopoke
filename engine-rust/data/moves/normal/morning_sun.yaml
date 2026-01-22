@@ -1,0 +1,37 @@
+id: morning_sun
+name: あさのひざし
+type: normal
+category: status
+pp: 5
+steps:
+- type: conditional
+  if:
+    type: weather_is_sunny
+  then:
+  - type: damage_ratio
+    ratioMaxHp: -0.6666666666666666
+    target: self
+- type: conditional
+  if:
+    type: weather_is_raining
+  then:
+  - type: damage_ratio
+    ratioMaxHp: -0.25
+    target: self
+- type: conditional
+  if:
+    type: weather_is_hail
+  then:
+  - type: damage_ratio
+    ratioMaxHp: -0.25
+    target: self
+- type: conditional
+  if:
+    type: weather_is_sandstorm
+  then:
+  - type: damage_ratio
+    ratioMaxHp: -0.25
+    target: self
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self

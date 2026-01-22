@@ -1,0 +1,8 @@
+id: fairy_wind
+name: ようせいのかぜ
+type: fairy
+category: special
+steps:
+- type: damage
+  power: 40
+  accuracy: 1

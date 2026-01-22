@@ -1,0 +1,9 @@
+id: teleport
+name: テレポート
+type: psychic
+category: status
+pp: 20
+priority: -6
+steps:
+- type: manual
+  manualReason: Switching Pokemon is not supported in DSL

@@ -1,0 +1,63 @@
+id: payback
+name: つけあがる
+type: dark
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 50
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+- type: modify_stage
+  target: self
+  stages:
+    def: 1
+- type: modify_stage
+  target: self
+  stages:
+    spa: 1
+- type: modify_stage
+  target: self
+  stages:
+    spd: 1
+- type: modify_stage
+  target: self
+  stages:
+    spe: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: atk_boost
+  then:
+  - type: damage
+    power: 70
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: def_boost
+  then:
+  - type: damage
+    power: 70
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: spa_boost
+  then:
+  - type: damage
+    power: 70
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: spd_boost
+  then:
+  - type: damage
+    power: 70
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: spe_boost
+  then:
+  - type: damage
+    power: 70

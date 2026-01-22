@@ -1,0 +1,8 @@
+id: guard_share
+name: ガードシェア
+type: psychic
+category: status
+pp: 10
+steps:
+- type: manual
+  manualReason: 自分と相手の『ぼうぎょ』と『とくぼう』を足して半分に分ける効果はDSLで表現できないため

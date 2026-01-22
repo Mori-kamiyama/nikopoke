@@ -1,0 +1,9 @@
+id: hyper_voice
+name: ハイパーボイス
+type: normal
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 1

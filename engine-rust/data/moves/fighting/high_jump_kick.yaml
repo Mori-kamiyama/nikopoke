@@ -1,0 +1,24 @@
+id: high_jump_kick
+name: かかとおとし
+type: fighting
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.9
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: confusion
+    duration:
+      min: 1
+      max: 4
+- type: conditional
+  if:
+    type: move_failed
+  then:
+  - type: damage_ratio
+    ratioMaxHp: 0.5
+    target: self

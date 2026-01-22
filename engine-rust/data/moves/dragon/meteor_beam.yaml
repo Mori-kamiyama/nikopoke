@@ -1,0 +1,10 @@
+id: meteor_beam
+name: りゅうせいぐん
+type: dragon
+category: special
+steps:
+- type: damage
+- type: modify_stage
+  target: self
+  stages:
+    spa: -2

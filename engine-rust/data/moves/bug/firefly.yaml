@@ -1,0 +1,10 @@
+id: firefly
+name: ほたるび
+type: bug
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 3

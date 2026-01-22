@@ -1,0 +1,8 @@
+id: copycat
+name: まねっこ
+type: normal
+category: status
+pp: 20
+steps:
+- type: manual
+  manualReason: Copies the last move used by the opponent.  Need custom engine logic to handle move selection.

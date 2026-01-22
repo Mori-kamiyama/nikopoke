@@ -1,0 +1,14 @@
+id: zen_headbutt
+name: しねんのずつき
+type: psychic
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 0.9
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: flinch

@@ -1,0 +1,11 @@
+id: ice_wind
+name: こごえるかぜ
+type: ice
+category: special
+pp: 15
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spe: -1
+  chance: 1

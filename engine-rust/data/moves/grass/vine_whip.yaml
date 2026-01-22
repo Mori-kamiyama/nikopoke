@@ -1,0 +1,9 @@
+id: vine_whip
+name: つるのムチ
+type: grass
+category: physical
+pp: 25
+steps:
+- type: damage
+  power: 45
+  accuracy: 1

@@ -1,0 +1,13 @@
+id: psycho_cut
+name: サイコカッター
+type: psychic
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 70
+  accuracy: 1
+- type: modify_stage
+  target: self
+  stages:
+    crit: 1

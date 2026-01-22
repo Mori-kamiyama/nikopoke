@@ -1,0 +1,12 @@
+id: wild_charge
+name: ワイルドボルト
+type: electric
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 90
+  accuracy: 1
+- type: damage_ratio
+  ratioMaxHp: 0.25
+  target: self

@@ -1,0 +1,19 @@
+id: fury_cutter
+name: れんぞくぎり
+type: bug
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 40
+  accuracy: 0.95
+- type: over_time
+  timing: turn_end
+  steps:
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1
+  data:
+    consecutiveHits: 0
+    maxPower: 160

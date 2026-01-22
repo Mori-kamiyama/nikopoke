@@ -1,0 +1,9 @@
+id: sweet_kiss
+name: あまえる
+type: fairy
+category: status
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -2

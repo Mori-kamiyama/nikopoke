@@ -1,0 +1,11 @@
+id: charm_voice
+name: チャームボイス
+type: fairy
+category: special
+steps:
+- type: damage
+  power: 0
+  accuracy: 1
+- type: ignore_immunity
+- type: bypass_substitute
+- type: sound

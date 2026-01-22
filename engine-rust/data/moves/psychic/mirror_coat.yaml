@@ -1,0 +1,17 @@
+id: mirror_coat
+name: ミラーコート
+type: psychic
+category: special
+pp: 20
+priority: -5
+steps:
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: protect
+  then: []
+- type: damage_ratio
+  ratioMaxHp: 2
+  target: target
+  data:
+    damage_type: special

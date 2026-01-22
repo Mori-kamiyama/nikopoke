@@ -1,0 +1,51 @@
+id: rapid_spin
+name: こうそくスピン
+type: normal
+category: physical
+pp: 40
+steps:
+- type: damage
+  power: 50
+  accuracy: 1
+- type: remove_status
+  statusId: wrap
+  target: self
+- type: remove_status
+  statusId: bind
+  target: self
+- type: remove_status
+  statusId: sand_tomb
+  target: self
+- type: remove_status
+  statusId: fire_spin
+  target: self
+- type: remove_status
+  statusId: whirlpool
+  target: self
+- type: remove_status
+  statusId: magma_storm
+  target: self
+- type: remove_status
+  statusId: clamp
+  target: self
+- type: remove_status
+  statusId: thunder
+  target: self
+- type: remove_status
+  statusId: leech_seed
+  target: self
+- type: remove_field_status
+  statusId: stealth_rock
+- type: remove_field_status
+  statusId: toxic_spikes
+- type: remove_field_status
+  statusId: spikes
+- type: remove_field_status
+  statusId: sticky_web
+- type: chance
+  p: 1
+  then:
+  - type: modify_stage
+    target: self
+    stages:
+      spe: 1

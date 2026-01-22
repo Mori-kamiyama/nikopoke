@@ -1,0 +1,12 @@
+id: toxic
+name: どくどく
+type: poison
+category: status
+pp: 10
+accuracy: 0.9
+steps:
+- type: apply_status
+  statusId: poison
+  chance: 1
+  data:
+    toxic: true

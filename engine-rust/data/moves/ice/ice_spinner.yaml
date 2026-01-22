@@ -1,0 +1,13 @@
+id: ice_spinner
+name: アイススピナー
+type: ice
+category: physical
+steps:
+- type: remove_field_status
+  statusId: grass_terrain
+- type: remove_field_status
+  statusId: mist_terrain
+- type: remove_field_status
+  statusId: electric_terrain
+- type: remove_field_status
+  statusId: psychic_terrain

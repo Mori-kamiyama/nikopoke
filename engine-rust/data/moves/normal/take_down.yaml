@@ -1,0 +1,12 @@
+id: take_down
+name: とっしん
+type: normal
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 90
+  accuracy: 0.85
+- type: damage_ratio
+  ratioMaxHp: 0.25
+  target: self

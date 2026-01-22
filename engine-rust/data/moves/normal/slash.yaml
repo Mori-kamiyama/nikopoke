@@ -1,0 +1,13 @@
+id: slash
+name: きりさく
+type: normal
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 70
+  accuracy: 1
+- type: modify_stage
+  target: target
+  stages:
+    crit: 1

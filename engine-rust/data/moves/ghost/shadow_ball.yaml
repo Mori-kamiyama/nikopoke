@@ -1,0 +1,16 @@
+id: shadow_ball
+name: シャドーボール
+type: ghost
+category: special
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: chance
+  p: 0.2
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      spd: -1

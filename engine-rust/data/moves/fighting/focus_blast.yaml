@@ -1,0 +1,16 @@
+id: focus_blast
+name: きあいだま
+type: fighting
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.7
+- type: chance
+  p: 0.1
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      spd: -1

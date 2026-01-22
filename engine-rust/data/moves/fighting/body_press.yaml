@@ -1,0 +1,10 @@
+id: body_press
+name: ボディプレス
+type: fighting
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+  basedOn: user_def

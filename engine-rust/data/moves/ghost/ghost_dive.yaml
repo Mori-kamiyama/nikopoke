@@ -1,0 +1,12 @@
+id: ghost_dive
+name: ゴーストダイブ
+type: ghost
+category: physical
+pp: 10
+steps:
+- type: wait
+  turns: 1
+  steps:
+  - type: damage
+    power: 90
+    accuracy: 1

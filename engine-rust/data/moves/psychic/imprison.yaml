@@ -1,0 +1,12 @@
+id: imprison
+name: ふういん
+type: psychic
+category: status
+pp: 10
+steps:
+- type: disable_move
+  moveId: target_move
+  target: target
+  duration: null
+  data:
+    basedOnUserMoves: true

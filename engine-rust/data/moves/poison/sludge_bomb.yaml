@@ -1,0 +1,16 @@
+id: sludge_bomb
+name: ようかいえき
+type: poison
+category: special
+pp: 30
+steps:
+- type: damage
+  power: 40
+  accuracy: 1
+- type: chance
+  p: 0.1
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      spd: -1

@@ -1,0 +1,9 @@
+id: rock_throw
+name: いわおとし
+type: rock
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 50
+  accuracy: 0.95

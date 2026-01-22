@@ -1,0 +1,9 @@
+id: destiny_bond
+name: みちづれ
+type: ghost
+category: status
+pp: 5
+steps:
+- type: apply_status
+  statusId: destiny_bond
+  target: self

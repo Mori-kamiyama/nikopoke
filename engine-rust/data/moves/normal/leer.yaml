@@ -1,0 +1,10 @@
+id: leer
+name: にらみつける
+type: normal
+category: status
+pp: 30
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    def: -1

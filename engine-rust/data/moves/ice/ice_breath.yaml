@@ -1,0 +1,9 @@
+id: ice_breath
+name: こおりのいぶき
+type: ice
+category: special
+steps:
+- type: damage
+  power: 60
+  accuracy: 0.9
+critRate: 3

@@ -1,0 +1,6 @@
+id: dragon_pulse
+name: りゅうのはどう
+type: dragon
+category: special
+steps:
+- type: damage

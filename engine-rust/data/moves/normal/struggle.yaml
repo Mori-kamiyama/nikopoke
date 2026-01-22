@@ -1,0 +1,11 @@
+id: struggle
+name: わるあがき
+type: normal
+category: physical
+pp: 1
+steps:
+- type: damage
+  power: 50
+- type: damage_ratio
+  ratioMaxHp: 0.25
+  target: self

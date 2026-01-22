@@ -927,10 +927,10 @@ fn inspect_move(move_db: &MoveDatabase) {
             if !m.tags.is_empty() {
                 println!("│ タグ: {}                                          ", m.tags.join(", "));
             }
-            if !m.effects.is_empty() {
+            if !m.steps.is_empty() {
                 println!("├─────────────────────────────────────────────────────────┤");
                 println!("│ 効果:                                                   ");
-                for effect in &m.effects {
+                for effect in &m.steps {
                     println!("│   {}: {:?}                             ", effect.effect_type, effect.data);
                 }
             }

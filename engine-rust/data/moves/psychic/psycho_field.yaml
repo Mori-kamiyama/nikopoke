@@ -1,0 +1,11 @@
+id: psycho_field
+name: サイコフィールド
+type: psychic
+category: status
+pp: 10
+steps:
+- type: apply_field_status
+  statusId: psycho_terrain
+  duration: 5
+  data:
+    psychic_boost: 1.3

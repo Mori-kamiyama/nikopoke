@@ -1,0 +1,10 @@
+id: baby_doll_eyes
+name: つぶらなひとみ
+type: fairy
+category: status
+priority: 1
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1

@@ -391,7 +391,7 @@ impl BattleEngine {
                 next = apply_event(&next, &event);
             }
 
-            if !move_data.effects.iter().any(|e| e.effect_type == "protect") {
+            if !move_data.steps.iter().any(|e| e.effect_type == "protect") {
                 if let Some(active) = get_active_creature(&next, &player_id) {
                     if active.volatile_data.get("protectSuccessCount").is_some() {
                         let event = BattleEvent::SetVolatile {
@@ -427,11 +427,12 @@ impl BattleEngine {
                 bypass_substitute: false,
                 ignore_substitute: false,
                 is_sound: false,
+                last_damage: None,
             };
             let move_name = move_data.name.as_deref().unwrap_or(&move_id);
             next.log.push(format!("{}の {}！", attacker_name, move_name));
 
-            let mut events = apply_effects(&next, &move_data.effects, &mut effect_ctx);
+            let mut events = apply_effects(&next, &move_data.steps, &mut effect_ctx);
 
             events = apply_ability_event_modifiers(&next, &events, self.move_db.as_map());
 
@@ -1037,8 +1038,9 @@ fn expand_random_moves(
                     bypass_substitute: false,
                     ignore_substitute: false,
                     is_sound: false,
+                    last_damage: None,
                 };
-                let mut sub_events = apply_effects(state, &chosen_move.effects, &mut effect_ctx);
+                let mut sub_events = apply_effects(state, &chosen_move.steps, &mut effect_ctx);
                 sub_events = apply_ability_event_modifiers(state, &sub_events, move_db.as_map());
                 let transforms = collect_event_transforms(state, rng, type_chart);
                 sub_events = apply_event_transforms(&sub_events, &transforms);

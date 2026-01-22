@@ -1,0 +1,9 @@
+id: drill_peck
+name: ドリルくちばし
+type: flying
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 80
+  accuracy: 1

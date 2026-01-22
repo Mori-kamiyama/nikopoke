@@ -1,0 +1,11 @@
+id: gravity
+name: じゅうりょく
+type: psychic
+category: status
+pp: 5
+steps:
+- type: apply_field_status
+  statusId: gravity
+  duration: 5
+  data:
+    accuracy_multiplier: 1.6666666666666667

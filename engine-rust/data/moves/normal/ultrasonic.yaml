@@ -1,0 +1,9 @@
+id: ultrasonic
+name: ちょうおんぱ
+type: normal
+category: status
+pp: 20
+steps:
+- type: apply_status
+  statusId: confusion
+  chance: 0.55

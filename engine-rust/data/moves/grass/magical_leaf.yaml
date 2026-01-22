@@ -1,0 +1,8 @@
+id: magical_leaf
+name: マジカルリーフ
+type: grass
+category: special
+pp: 20
+steps:
+- type: damage
+  power: 60

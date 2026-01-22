@@ -1,0 +1,12 @@
+id: night_burst
+name: ナイトバースト
+type: dark
+category: special
+steps:
+- type: chance
+  p: 0.4
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      accuracy: -1

@@ -1,0 +1,15 @@
+id: desperate
+name: がむしゃら
+type: normal
+category: physical
+pp: 5
+steps:
+- type: damage_ratio
+  ratioMaxHp: 1
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: ghost
+  else:
+  - type: damage_ratio
+    ratioMaxHp: 0

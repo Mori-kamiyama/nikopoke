@@ -1,0 +1,13 @@
+id: snipe_shot
+name: ねらいうち
+type: water
+category: special
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: modify_stage
+  target: self
+  stages:
+    crit: 1

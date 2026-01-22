@@ -1,0 +1,7 @@
+id: crunch
+name: くらいつく
+type: dark
+category: physical
+pp: 10
+steps:
+- type: lock_move

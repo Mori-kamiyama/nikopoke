@@ -1,0 +1,8 @@
+id: black_fog
+name: くろいきり
+type: ice
+category: status
+pp: 30
+steps:
+- type: reset_stages
+  target: all

@@ -1,0 +1,16 @@
+id: comet_punch
+name: コメットパンチ
+type: steel
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 0.9
+- type: chance
+  p: 0.2
+  then:
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1

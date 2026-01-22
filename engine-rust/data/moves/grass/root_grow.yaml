@@ -1,0 +1,14 @@
+id: root_grow
+name: ねをはる
+type: grass
+category: status
+pp: 20
+steps:
+- type: over_time
+  steps:
+  - type: damage_ratio
+    ratioMaxHp: -0.0625
+    target: self
+- type: apply_status
+  statusId: lock_move
+  target: self

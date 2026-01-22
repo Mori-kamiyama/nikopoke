@@ -1,0 +1,9 @@
+id: sucker_punch
+name: ふいうち
+type: dark
+category: physical
+pp: 5
+priority: 1
+steps:
+- type: manual
+  manualReason: Conditional success based on opponent's move choice.

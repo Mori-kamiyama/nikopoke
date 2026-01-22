@@ -1,0 +1,11 @@
+id: feather_dance
+name: フェザーダンス
+type: flying
+category: status
+pp: 15
+accuracy: 1
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -2

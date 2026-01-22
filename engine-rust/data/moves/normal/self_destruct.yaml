@@ -1,0 +1,12 @@
+id: self_destruct
+name: じばく
+type: normal
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 200
+  accuracy: 1
+- type: apply_status
+  statusId: fainted
+  target: self

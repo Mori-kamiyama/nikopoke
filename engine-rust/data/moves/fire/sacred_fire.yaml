@@ -1,0 +1,22 @@
+id: sacred_fire
+name: せいなるほのお
+type: fire
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.95
+- type: chance
+  p: 0.5
+  then:
+  - type: apply_status
+    statusId: burn
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: freeze
+  then:
+  - type: remove_status
+    statusId: freeze
+    target: self

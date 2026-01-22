@@ -1,0 +1,9 @@
+id: scissor_cross
+name: シザークロス
+type: bug
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 1

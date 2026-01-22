@@ -1,0 +1,14 @@
+id: memento
+name: おきみやげ
+type: dark
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -2
+    spa: -2
+- type: damage_ratio
+  ratioMaxHp: 1
+  target: self

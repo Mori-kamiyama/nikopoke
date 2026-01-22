@@ -1,0 +1,15 @@
+id: reversal
+name: きしかいせい
+type: fighting
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 20
+- type: conditional
+  if:
+    type: target_hp_lt
+    value: 0.1
+  then:
+  - type: damage
+    power: 200

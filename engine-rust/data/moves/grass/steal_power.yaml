@@ -1,0 +1,14 @@
+id: steal_power
+name: ちからをすいとる
+type: grass
+category: status
+pp: 10
+steps:
+- type: damage_ratio
+  ratioMaxHp: 1
+  target: self
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+  chance: 1

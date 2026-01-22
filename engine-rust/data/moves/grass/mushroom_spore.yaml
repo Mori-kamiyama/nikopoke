@@ -1,0 +1,15 @@
+id: mushroom_spore
+name: キノコのほうし
+type: grass
+category: status
+pp: 15
+steps:
+- type: chance
+  p: 1
+  then:
+  - type: apply_status
+    statusId: sleep
+    duration:
+      min: 2
+      max: 4
+    chance: 1

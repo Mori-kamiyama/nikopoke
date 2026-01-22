@@ -1,0 +1,14 @@
+id: lunge
+name: とびかかる
+type: bug
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+  chance: 1

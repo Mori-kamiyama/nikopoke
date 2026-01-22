@@ -1,0 +1,31 @@
+id: thunder_dive
+name: サンダーダイブ
+type: electric
+category: physical
+pp: 15
+accuracy: 0.95
+steps:
+- type: damage
+  power: 100
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: protect
+  then:
+  - type: damage_ratio
+    ratioMaxHp: 0.5
+    target: self
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: minimize
+  then:
+  - type: damage
+    power: 200
+    accuracy: 1
+- type: chance
+  p: 0.05
+  then:
+  - type: damage_ratio
+    ratioMaxHp: 0.5
+    target: self

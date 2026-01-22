@@ -1,0 +1,21 @@
+id: uproar
+name: さわぐ
+type: normal
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 1
+- type: apply_status
+  statusId: lock_move
+  target: self
+  duration: 3
+- type: apply_field_status
+  statusId: uproar
+  duration: 3
+  data:
+    prevent_sleep: true
+tags:
+- sound
+- bypass-substitute

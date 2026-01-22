@@ -1,0 +1,7 @@
+id: thief
+name: どろぼう
+type: dark
+category: physical
+steps:
+- type: manual
+  manualReason: Steals the opponent's held item if the user is not holding one. Fails if the user is already holding an item, unless Knock Off has removed the user's item.

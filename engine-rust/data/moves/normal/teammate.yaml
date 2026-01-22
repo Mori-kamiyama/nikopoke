@@ -1,0 +1,10 @@
+id: teammate
+name: なかまづくり
+type: normal
+category: status
+pp: 15
+steps:
+- type: replace_status
+  from: ability
+  to: ability
+  target: target

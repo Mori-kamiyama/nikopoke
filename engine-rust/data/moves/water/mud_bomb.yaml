@@ -1,0 +1,16 @@
+id: mud_bomb
+name: だくりゅう
+type: water
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 0.85
+- type: chance
+  p: 0.3
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      accuracy: -1

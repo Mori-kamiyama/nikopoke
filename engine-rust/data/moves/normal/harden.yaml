@@ -1,0 +1,10 @@
+id: harden
+name: かたくなる
+type: normal
+category: status
+pp: 30
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 1

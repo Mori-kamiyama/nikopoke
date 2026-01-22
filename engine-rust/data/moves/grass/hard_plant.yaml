@@ -1,0 +1,13 @@
+id: hard_plant
+name: ハードプラント
+type: grass
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 150
+  accuracy: 0.9
+- type: wait
+  turns: 1
+  timing: turn_start
+  steps: []

@@ -1,0 +1,9 @@
+id: hydro_pump
+name: ハイドロポンプ
+type: water
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 110
+  accuracy: 0.8

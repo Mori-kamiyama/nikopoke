@@ -1,0 +1,11 @@
+id: dragon_dance
+name: りゅうのまい
+type: dragon
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    spe: 1

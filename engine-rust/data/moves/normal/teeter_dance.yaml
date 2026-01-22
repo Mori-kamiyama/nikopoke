@@ -1,0 +1,13 @@
+id: teeter_dance
+name: フラフラダンス
+type: normal
+category: status
+pp: 20
+steps:
+- type: apply_status
+  statusId: confusion
+  target: all
+  duration:
+    min: 1
+    max: 4
+  chance: 1

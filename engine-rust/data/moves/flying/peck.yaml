@@ -1,0 +1,9 @@
+id: peck
+name: つつく
+type: flying
+category: physical
+pp: 35
+steps:
+- type: damage
+  power: 35
+  accuracy: 1

@@ -1,0 +1,12 @@
+id: diving
+name: ダイビング
+type: water
+category: physical
+pp: 10
+steps:
+- type: wait
+  turns: 1
+  steps:
+  - type: damage
+    power: 80
+    accuracy: 1

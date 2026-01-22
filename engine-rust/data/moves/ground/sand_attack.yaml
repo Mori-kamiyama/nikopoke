@@ -1,0 +1,10 @@
+id: sand_attack
+name: すなかけ
+type: ground
+category: status
+pp: 15
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    accuracy: -1

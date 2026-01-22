@@ -1,0 +1,9 @@
+id: power_whip
+name: パワーウィップ
+type: grass
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.85

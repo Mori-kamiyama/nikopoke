@@ -1,0 +1,7 @@
+id: swing
+name: ぶんまわす
+type: dark
+category: physical
+steps:
+- type: damage
+  power: 60

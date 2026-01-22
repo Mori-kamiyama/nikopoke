@@ -1,0 +1,9 @@
+id: revival_blessing
+name: さいきのいのり
+type: normal
+category: status
+pp: 1
+steps:
+- type: damage_ratio
+  ratioMaxHp: 0.5
+  target: all

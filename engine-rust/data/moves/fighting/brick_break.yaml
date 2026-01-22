@@ -1,0 +1,15 @@
+id: brick_break
+name: かわらわり
+type: fighting
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 75
+  accuracy: 1
+- type: remove_field_status
+  statusId: reflect
+- type: remove_field_status
+  statusId: light_screen
+- type: remove_field_status
+  statusId: aurora_veil

@@ -1,0 +1,10 @@
+id: dragon_breath
+name: りゅうのいぶき
+type: dragon
+category: special
+steps:
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: paralysis

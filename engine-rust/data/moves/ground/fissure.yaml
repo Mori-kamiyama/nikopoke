@@ -1,0 +1,10 @@
+id: fissure
+name: じわれ
+type: ground
+category: physical
+pp: 5
+steps:
+- type: ohko
+  baseAccuracy: 0.3
+  levelScaling: true
+  respectTypeImmunity: true

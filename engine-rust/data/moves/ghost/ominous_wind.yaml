@@ -1,0 +1,15 @@
+id: ominous_wind
+name: たたりめ
+type: ghost
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 65
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: poison
+  then:
+  - type: damage
+    power: 65

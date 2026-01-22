@@ -1,0 +1,16 @@
+id: avalanche
+name: ゆきなだれ
+type: ice
+category: physical
+priority: -4
+steps:
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: flinch
+  then:
+  - type: damage
+    power: 120
+  else:
+  - type: damage
+    power: 60

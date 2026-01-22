@@ -1,0 +1,21 @@
+id: dragon_dive
+name: ドラゴンダイブ
+type: dragon
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.75
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: flinch
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: minimize
+  then:
+  - type: damage
+    power: 200

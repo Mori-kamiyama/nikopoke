@@ -1,0 +1,16 @@
+id: cross_poison
+name: クロスポイズン
+type: poison
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 70
+  accuracy: 1
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: poison
+    target: target
+critRate: 1

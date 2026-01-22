@@ -1,0 +1,12 @@
+id: aurora_veil
+name: オーロラベール
+type: ice
+category: status
+pp: 20
+steps:
+- type: conditional
+  if:
+    type: weather_is_hail
+  then:
+  - type: apply_field_status
+    statusId: aurora_veil

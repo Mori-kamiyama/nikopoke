@@ -1,0 +1,8 @@
+id: magical_shine
+name: マジカルシャイン
+type: fairy
+category: special
+steps:
+- type: damage
+  power: 80
+  accuracy: 1

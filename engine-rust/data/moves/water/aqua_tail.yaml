@@ -1,0 +1,9 @@
+id: aqua_tail
+name: アクアテール
+type: water
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 90
+  accuracy: 0.9

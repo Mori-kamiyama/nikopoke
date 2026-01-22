@@ -1,0 +1,10 @@
+id: fake_tears
+name: うそなき
+type: dark
+category: status
+pp: 30
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spd: -2

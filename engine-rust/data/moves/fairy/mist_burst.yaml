@@ -1,0 +1,17 @@
+id: mist_burst
+name: ミストバースト
+type: fairy
+category: special
+steps:
+- type: damage
+  power: 100
+- type: apply_status
+  statusId: fainted
+  target: self
+- type: conditional
+  if:
+    type: field_has_status
+    statusId: misty_terrain
+  then:
+  - type: damage
+    power: 150

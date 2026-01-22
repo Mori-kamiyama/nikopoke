@@ -1,0 +1,10 @@
+id: stone_edge
+name: ストーンエッジ
+type: rock
+category: physical
+pp: 5
+accuracy: 0.8
+steps:
+- type: damage
+  power: 100
+critRate: 1

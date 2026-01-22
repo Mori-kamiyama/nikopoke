@@ -1,0 +1,10 @@
+id: air_cutter
+name: エアカッター
+type: flying
+category: special
+pp: 25
+steps:
+- type: damage
+  power: 60
+  accuracy: 0.95
+critRate: 1

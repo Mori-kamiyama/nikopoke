@@ -1,0 +1,11 @@
+id: snowscape
+name: ゆきげしき
+type: ice
+category: status
+pp: 10
+steps:
+- type: apply_field_status
+  statusId: snow
+  duration: 5
+  data:
+    boost_def_ice: true

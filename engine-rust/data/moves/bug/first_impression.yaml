@@ -1,0 +1,18 @@
+id: first_impression
+name: とどめばり
+type: bug
+category: physical
+pp: 25
+steps:
+- type: damage
+  power: 50
+  accuracy: 1
+- type: conditional
+  if:
+    type: target_hp_lt
+    value: 0
+  then:
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 3

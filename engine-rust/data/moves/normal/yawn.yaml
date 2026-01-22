@@ -1,0 +1,12 @@
+id: yawn
+name: あくび
+type: normal
+category: status
+pp: 10
+steps:
+- type: wait
+  turns: 1
+  steps:
+  - type: apply_status
+    statusId: sleep
+    chance: 1

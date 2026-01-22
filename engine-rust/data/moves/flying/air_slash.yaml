@@ -1,0 +1,14 @@
+id: air_slash
+name: エアスラッシュ
+type: flying
+category: special
+pp: 15
+steps:
+- type: damage
+  power: 75
+  accuracy: 0.95
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch

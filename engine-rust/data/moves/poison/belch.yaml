@@ -1,0 +1,17 @@
+id: belch
+name: ゲップ
+type: poison
+category: special
+pp: 10
+steps:
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: berry_consumed
+  then:
+  - type: damage
+    power: 120
+    accuracy: 0.9
+  else:
+  - type: log
+    message: But it failed! (no berry consumed)

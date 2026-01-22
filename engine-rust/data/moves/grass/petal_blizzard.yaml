@@ -1,0 +1,9 @@
+id: petal_blizzard
+name: はなふぶき
+type: grass
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 90
+  accuracy: 1

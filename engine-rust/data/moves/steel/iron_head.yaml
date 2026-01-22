@@ -1,0 +1,15 @@
+id: iron_head
+name: アイアンヘッド
+type: steel
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target

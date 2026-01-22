@@ -1,0 +1,17 @@
+id: psybeam
+name: サイケこうせん
+type: psychic
+category: special
+pp: 20
+steps:
+- type: damage
+  power: 65
+  accuracy: 1
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: confusion
+    duration:
+      min: 1
+      max: 4

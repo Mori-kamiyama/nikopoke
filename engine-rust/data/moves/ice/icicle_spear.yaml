@@ -1,0 +1,11 @@
+id: icicle_spear
+name: つららばり
+type: ice
+category: physical
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage

@@ -1,0 +1,9 @@
+id: eda_zuki
+name: えだづき
+type: grass
+category: physical
+pp: 40
+steps:
+- type: damage
+  power: 40
+  accuracy: 1

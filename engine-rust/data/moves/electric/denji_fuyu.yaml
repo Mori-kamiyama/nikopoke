@@ -1,0 +1,10 @@
+id: denji_fuyu
+name: でんじふゆう
+type: electric
+category: status
+pp: 10
+steps:
+- type: apply_status
+  statusId: telekinesis
+  target: self
+  duration: 5

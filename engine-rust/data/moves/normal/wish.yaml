@@ -1,0 +1,13 @@
+id: wish
+name: ねがいごと
+type: normal
+category: status
+pp: 10
+steps:
+- type: wait
+  turns: 1
+  timing: turn_end
+  steps:
+  - type: damage_ratio
+    ratioMaxHp: 0.5
+    target: self

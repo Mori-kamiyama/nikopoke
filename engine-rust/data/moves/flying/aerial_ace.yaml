@@ -1,0 +1,9 @@
+id: aerial_ace
+name: つばめがえし
+type: flying
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 60
+- type: self_switch

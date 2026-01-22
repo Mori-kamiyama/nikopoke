@@ -1,0 +1,10 @@
+id: vacuum_wave
+name: しんくうは
+type: fighting
+category: special
+pp: 30
+priority: 1
+steps:
+- type: damage
+  power: 40
+  accuracy: 1

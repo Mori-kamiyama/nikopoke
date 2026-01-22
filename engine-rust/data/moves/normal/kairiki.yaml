@@ -1,0 +1,9 @@
+id: kairiki
+name: かいりき
+type: normal
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 80
+  accuracy: 1

@@ -1,0 +1,9 @@
+id: shadow_ray
+name: シャドーレイ
+type: ghost
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 100
+  accuracy: 1

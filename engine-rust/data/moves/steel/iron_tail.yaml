@@ -1,0 +1,16 @@
+id: iron_tail
+name: アイアンテール
+type: steel
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.75
+- type: chance
+  p: 0.3
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      def: -1

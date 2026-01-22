@@ -1,0 +1,10 @@
+id: poison_powder
+name: どくのこな
+type: poison
+category: status
+pp: 35
+accuracy: 0.75
+steps:
+- type: apply_status
+  statusId: poison
+  chance: 1

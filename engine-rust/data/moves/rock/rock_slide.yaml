@@ -1,0 +1,15 @@
+id: rock_slide
+name: いわなだれ
+type: rock
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 75
+  accuracy: 0.9
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target

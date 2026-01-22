@@ -1,0 +1,13 @@
+id: leaf_storm
+name: リーフストーム
+type: grass
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 130
+  accuracy: 0.9
+- type: modify_stage
+  target: self
+  stages:
+    spa: -2

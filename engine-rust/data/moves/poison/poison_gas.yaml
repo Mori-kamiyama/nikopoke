@@ -1,0 +1,9 @@
+id: poison_gas
+name: どくガス
+type: poison
+category: status
+pp: 40
+steps:
+- type: apply_status
+  statusId: poison
+  chance: 0.9

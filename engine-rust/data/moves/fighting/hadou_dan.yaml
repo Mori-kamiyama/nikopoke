@@ -1,0 +1,8 @@
+id: hadou_dan
+name: はどうだん
+type: fighting
+category: special
+pp: 20
+steps:
+- type: damage
+  power: 80

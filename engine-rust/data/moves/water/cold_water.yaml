@@ -1,0 +1,14 @@
+id: cold_water
+name: ひやみず
+type: water
+category: special
+pp: 20
+steps:
+- type: damage
+  power: 50
+  accuracy: 1
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+  chance: 1

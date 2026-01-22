@@ -1,0 +1,12 @@
+id: leech_life
+name: きゅうけつ
+type: bug
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self

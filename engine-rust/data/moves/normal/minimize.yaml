@@ -1,0 +1,10 @@
+id: minimize
+name: ちいさくなる
+type: normal
+category: status
+pp: 10
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    evasion: 2

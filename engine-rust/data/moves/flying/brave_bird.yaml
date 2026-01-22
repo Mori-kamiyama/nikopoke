@@ -1,0 +1,12 @@
+id: brave_bird
+name: ブレイブバード
+type: flying
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 120
+  accuracy: 1
+- type: damage_ratio
+  ratioMaxHp: 0.33
+  target: self

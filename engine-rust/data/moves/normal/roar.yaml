@@ -1,0 +1,18 @@
+id: roar
+name: ほえる
+type: normal
+category: status
+pp: 30
+priority: -6
+steps:
+- type: conditional
+  if:
+    type: field_has_status
+    statusId: trainer_battle
+  then:
+  - type: force_switch
+    target: target
+  else:
+  - type: run_away
+    chance: 1
+- type: bypass_protect

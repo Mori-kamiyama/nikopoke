@@ -1,0 +1,8 @@
+id: trick_exchange
+name: すりかえ
+type: dark
+category: status
+pp: 10
+steps:
+- type: manual
+  manualReason: 道具の交換はDSLで表現できないため

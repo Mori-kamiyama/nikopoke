@@ -1,0 +1,12 @@
+id: double_wing
+name: ダブルウイング
+type: flying
+category: physical
+pp: 10
+steps:
+- type: repeat
+  times: 2
+  steps:
+  - type: damage
+    power: 40
+    accuracy: 0.9

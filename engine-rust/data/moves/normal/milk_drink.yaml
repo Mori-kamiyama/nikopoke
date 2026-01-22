@@ -1,0 +1,9 @@
+id: milk_drink
+name: ミルクのみ
+type: normal
+category: status
+pp: 5
+steps:
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self

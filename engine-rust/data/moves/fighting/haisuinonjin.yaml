@@ -1,0 +1,25 @@
+id: haisuinonjin
+name: はいすいのじん
+type: fighting
+category: status
+pp: 5
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    def: 1
+    spa: 1
+    spd: 1
+    spe: 1
+- type: apply_status
+  statusId: lock_move
+  target: self
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: ghost
+  then:
+  - type: remove_status
+    statusId: lock_move
+    target: self

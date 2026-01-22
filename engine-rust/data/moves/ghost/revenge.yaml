@@ -1,0 +1,57 @@
+id: revenge
+name: ふんどのこぶし
+type: ghost
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 50
+  accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: revenge_boost
+  then:
+  - type: damage
+    power: 100
+    accuracy: 1
+  - type: conditional
+    if:
+      type: user_has_status
+      statusId: revenge_boost_2
+    then:
+    - type: damage
+      power: 150
+      accuracy: 1
+    - type: conditional
+      if:
+        type: user_has_status
+        statusId: revenge_boost_3
+      then:
+      - type: damage
+        power: 200
+        accuracy: 1
+      - type: conditional
+        if:
+          type: user_has_status
+          statusId: revenge_boost_4
+        then:
+        - type: damage
+          power: 250
+          accuracy: 1
+        - type: conditional
+          if:
+            type: user_has_status
+            statusId: revenge_boost_5
+          then:
+          - type: damage
+            power: 300
+            accuracy: 1
+          - type: conditional
+            if:
+              type: user_has_status
+              statusId: revenge_boost_6
+            then:
+            - type: damage
+              power: 350
+              accuracy: 1

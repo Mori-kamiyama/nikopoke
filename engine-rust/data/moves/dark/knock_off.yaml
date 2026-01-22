@@ -1,0 +1,16 @@
+id: knock_off
+name: はたきおとす
+type: dark
+category: physical
+steps:
+- type: conditional
+  if:
+    type: target_has_item
+  then:
+  - type: damage
+    power: 65
+  - type: remove_item
+  else:
+  - type: damage
+    power: 65
+contact: true

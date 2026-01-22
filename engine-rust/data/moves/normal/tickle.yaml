@@ -1,0 +1,11 @@
+id: tickle
+name: くすぐる
+type: normal
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+    def: -1

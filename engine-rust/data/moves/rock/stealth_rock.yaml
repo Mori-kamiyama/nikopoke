@@ -1,0 +1,8 @@
+id: stealth_rock
+name: ステルスロック
+type: rock
+category: status
+pp: 20
+steps:
+- type: apply_field_status
+  statusId: stealth_rock

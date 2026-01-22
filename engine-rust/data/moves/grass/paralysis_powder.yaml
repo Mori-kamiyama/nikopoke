@@ -1,0 +1,9 @@
+id: paralysis_powder
+name: しびれごな
+type: grass
+category: status
+pp: 30
+steps:
+- type: apply_status
+  statusId: paralysis
+  chance: 0.75

@@ -1,0 +1,16 @@
+id: psychic_noise
+name: サイコノイズ
+type: psychic
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 75
+  accuracy: 1
+- type: apply_status
+  statusId: heal_block
+  target: target
+  duration: 2
+  chance: 1
+tags:
+- sound

@@ -1,0 +1,13 @@
+id: cross_chop
+name: クロスチョップ
+type: fighting
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.8
+- type: modify_stage
+  target: target
+  stages:
+    crit: 1

@@ -1,0 +1,17 @@
+id: dynamic_punch
+name: ばくれつパンチ
+type: fighting
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.5
+- type: chance
+  p: 1
+  then:
+  - type: apply_status
+    statusId: confusion
+    duration:
+      min: 1
+      max: 4

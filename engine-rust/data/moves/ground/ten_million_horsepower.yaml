@@ -1,0 +1,9 @@
+id: ten_million_horsepower
+name: 10まんばりき
+type: ground
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 95
+  accuracy: 0.95

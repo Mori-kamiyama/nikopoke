@@ -1,0 +1,10 @@
+id: wide_breaker
+name: ワイドブレイカー
+type: dragon
+category: physical
+pp: 15
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1

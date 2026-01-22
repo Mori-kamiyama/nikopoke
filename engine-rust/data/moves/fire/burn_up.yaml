@@ -1,0 +1,23 @@
+id: burn_up
+name: もえつきる
+type: fire
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 130
+  accuracy: 1
+- type: remove_status
+  statusId: freeze
+  target: self
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: freeze
+  then:
+  - type: cure_all_status
+    target: self
+- type: replace_status
+  from: fire
+  to: normal
+  target: self

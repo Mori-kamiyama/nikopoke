@@ -1,0 +1,19 @@
+id: scale_shot
+name: スケイルショット
+type: dragon
+category: physical
+pp: 20
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage
+    power: 25
+    accuracy: 0.9
+- type: modify_stage
+  target: self
+  stages:
+    def: -1
+    spe: 1

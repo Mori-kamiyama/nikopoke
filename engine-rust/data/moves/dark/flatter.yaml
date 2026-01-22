@@ -1,0 +1,16 @@
+id: flatter
+name: おだてる
+type: dark
+category: status
+pp: 15
+steps:
+- type: apply_status
+  statusId: confusion
+  chance: 1
+  duration:
+    min: 1
+    max: 4
+- type: modify_stage
+  target: target
+  stages:
+    spa: 1

@@ -1,0 +1,17 @@
+id: acrobatics
+name: アクロバット
+type: flying
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 55
+  accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: item
+  else:
+  - type: damage
+    power: 110
+    accuracy: 1

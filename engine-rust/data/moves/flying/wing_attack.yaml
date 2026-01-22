@@ -1,0 +1,9 @@
+id: wing_attack
+name: つばさでうつ
+type: flying
+category: physical
+pp: 35
+steps:
+- type: damage
+  power: 60
+  accuracy: 1

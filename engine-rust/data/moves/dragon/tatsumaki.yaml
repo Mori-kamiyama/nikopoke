@@ -1,0 +1,21 @@
+id: tatsumaki
+name: たつまき
+type: dragon
+category: special
+pp: 15
+steps:
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: flying
+  then:
+  - type: damage
+    power: 40
+- type: damage
+  power: 40

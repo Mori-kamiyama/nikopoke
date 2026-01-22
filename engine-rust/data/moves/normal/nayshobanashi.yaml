@@ -1,0 +1,10 @@
+id: nayshobanashi
+name: ないしょばなし
+type: normal
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spa: -1

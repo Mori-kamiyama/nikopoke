@@ -1,0 +1,14 @@
+id: grudge_hatred
+name: うらみつらみ
+type: ghost
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 75
+  accuracy: 1
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+  chance: 1

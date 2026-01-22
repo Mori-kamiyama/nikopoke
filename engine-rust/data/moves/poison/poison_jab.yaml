@@ -1,0 +1,14 @@
+id: poison_jab
+name: どくづき
+type: poison
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: poison

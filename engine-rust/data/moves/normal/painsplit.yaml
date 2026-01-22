@@ -1,0 +1,12 @@
+id: painsplit
+name: いたみわけ
+type: normal
+category: status
+pp: 20
+steps:
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: target

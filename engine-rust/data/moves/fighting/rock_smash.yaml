@@ -1,0 +1,16 @@
+id: rock_smash
+name: いわくだき
+type: fighting
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 40
+  accuracy: 1
+- type: chance
+  p: 0.5
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      def: -1

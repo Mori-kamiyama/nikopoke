@@ -1,0 +1,12 @@
+id: ryuseigun
+name: りゅうせいぐん
+type: dragon
+category: special
+steps:
+- type: damage
+  power: 130
+  accuracy: 0.9
+- type: modify_stage
+  target: self
+  stages:
+    spa: -2

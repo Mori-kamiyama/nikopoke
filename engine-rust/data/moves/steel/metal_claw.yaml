@@ -1,0 +1,16 @@
+id: metal_claw
+name: メタルクロー
+type: steel
+category: physical
+pp: 35
+steps:
+- type: damage
+  power: 50
+  accuracy: 0.95
+- type: chance
+  p: 0.1
+  then:
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1

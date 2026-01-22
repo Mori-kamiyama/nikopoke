@@ -1,0 +1,15 @@
+id: self_suggestion
+name: じこあんじ
+type: normal
+category: status
+pp: 10
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 0
+    def: 0
+    spa: 0
+    spd: 0
+    spe: 0
+  copy_stages: true

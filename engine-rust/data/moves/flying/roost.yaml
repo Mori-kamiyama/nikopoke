@@ -1,0 +1,15 @@
+id: roost
+name: はねやすめ
+type: flying
+category: status
+pp: 5
+steps:
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self
+- type: apply_status
+  statusId: roost_effect
+  target: self
+  duration: 1
+  data:
+    typeChange: normal

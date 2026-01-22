@@ -1,0 +1,10 @@
+id: focus_energy
+name: きあいだめ
+type: normal
+category: status
+pp: 30
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    crit: 2

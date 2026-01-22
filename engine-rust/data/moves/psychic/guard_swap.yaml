@@ -1,0 +1,12 @@
+id: guard_swap
+name: ガードスワップ
+type: psychic
+category: status
+pp: 10
+steps:
+- type: modify_stage
+  target: all
+  stages:
+    def: 0
+    spd: 0
+  swap: true

@@ -1,0 +1,13 @@
+id: aqua_step
+name: アクアステップ
+type: water
+category: physical
+pp: 10
+steps:
+- type: damage
+  power: 80
+  accuracy: 1
+- type: modify_stage
+  target: self
+  stages:
+    spe: 1

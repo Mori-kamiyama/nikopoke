@@ -1,0 +1,13 @@
+id: drill_run
+name: ドリルライナー
+type: ground
+category: physical
+pp: 10
+accuracy: 0.95
+steps:
+- type: damage
+  power: 80
+- type: modify_stage
+  target: self
+  stages:
+    crit: 1

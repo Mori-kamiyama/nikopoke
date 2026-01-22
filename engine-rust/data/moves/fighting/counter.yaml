@@ -1,0 +1,9 @@
+id: counter
+name: カウンター
+type: fighting
+category: physical
+pp: 20
+priority: -5
+steps:
+- type: damage_ratio
+  ratioMaxHp: 2

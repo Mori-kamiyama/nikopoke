@@ -1,0 +1,10 @@
+id: iron_defense
+name: てっぺき
+type: steel
+category: status
+pp: 15
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 2

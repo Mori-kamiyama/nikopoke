@@ -1,0 +1,13 @@
+id: quick_turn
+name: クイックターン
+type: water
+category: physical
+pp: 20
+steps:
+- type: damage
+  power: 60
+  accuracy: 1
+- type: replace_status
+  from: active
+  to: pending_switch
+  target: self

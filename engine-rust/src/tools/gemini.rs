@@ -187,7 +187,7 @@ pub fn build_move_prompt(
   "accuracy": 命中率（0.0-1.0）またはnull,
   "priority": 優先度（通常は0）,
   "description": "技の説明文",
-  "effects": [
+  "steps": [
     {{
       "type": "damage",
       "power": 威力,
@@ -219,18 +219,18 @@ pub fn build_move_prompt(
 
 ### 条件分岐系
 - `"type": "chance"` - 確率で効果発動
-  - `p`: 確率(0.0-1.0), `then`: [効果配列], `else`: [効果配列]（省略可）
+  - `p`: 確率(0.0-1.0), `then`: [手順配列], `else`: [手順配列]（省略可）
 - `"type": "conditional"` - 条件分岐
-  - `if`: {{ "type": "condition_type", ... }}, `then`: [効果配列], `else`: [効果配列]
+  - `if`: {{ "type": "condition_type", ... }}, `then`: [手順配列], `else`: [手順配列]
 - `"type": "repeat"` - 連続攻撃
-  - `times`: {{ "min": 2, "max": 5 }} または固定数, `effects`: [効果配列]
+  - `times`: {{ "min": 2, "max": 5 }} または固定数, `steps`: [手順配列]
 
 ### その他
 - `"type": "protect"` - まもる系
-- `"type": "delay"` - 遅延効果
-  - `afterTurns`: ターン数, `effects`: [効果配列]
+- `"type": "wait"` - 遅延効果
+  - `turns`: ターン数, `steps`: [手順配列]
 - `"type": "over_time"` - 継続効果
-  - `duration`: ターン数, `effects`: [効果配列]
+  - `duration`: ターン数, `steps`: [手順配列]
 - `"type": "force_switch"` - 強制交代
 - `"type": "apply_field_status"` - フィールド状態付与
 - `"type": "self_switch"` - 自分交代
@@ -267,18 +267,19 @@ pub fn build_move_prompt(
 1. JSONのみを出力してください。説明文は不要です。
 2. "-" は null として扱ってください
 3. 命中率は百分率から小数に変換してください（100 → 1.0, 85 → 0.85）
-4. 攻撃技（威力がある技）には必ず `effects` 配列の最初に `"type": "damage"` を含めてください。
-5. `conditional` や `if` に使用する条件は、必ず以下の形式のオブジェクトにしてください：
+4. 基本項目（id/name/type/category/pp/power/accuracy/priority/description/steps/tags/critRate）はこの順序で並べてください。
+5. 攻撃技（威力がある技）には必ず `steps` 配列の最初に `"type": "damage"` を含めてください。
+6. `conditional` や `if` に使用する条件は、必ず以下の形式のオブジェクトにしてください：
    - {{ "type": "target_has_status", "statusId": "..." }}
    - {{ "type": "user_has_status", "statusId": "..." }}
    - {{ "type": "field_has_status", "statusId": "..." }}
    - {{ "type": "target_hp_lt", "value": 0.5 }}
    - {{ "type": "weather_is_sunny" }} / `weather_is_raining` / `weather_is_hail` / `weather_is_sandstorm`
    - {{ "type": "user_type", "typeId": "..." }}
-6. まだエンジンでサポートされていない `first_turn` や `weight` などの複雑な条件は、可能な限り `"type": "log"` などで説明を記述するか、将来の拡張のために独自の `type` 名を持つオブジェクトにしてください（文字列は不可）。
-7. 接触技には tags に "contact" を追加してください
-8. 音系の技には tags に "sound" を追加してください
-9. critRate（急所ランク）が高い技は "critRate": 1 などを追加してください
+7. まだエンジンでサポートされていない `first_turn` や `weight` などの複雑な条件は、可能な限り `"type": "log"` などで説明を記述するか、将来の拡張のために独自の `type` 名を持つオブジェクトにしてください（文字列は不可）。
+8. 接触技には tags に "contact" を追加してください
+9. 音系の技には tags に "sound" を追加してください
+10. critRate（急所ランク）が高い技は "critRate": 1 などを追加してください
 
 出力:"#,
         name = name,
@@ -307,9 +308,9 @@ pub fn find_similar_moves(
                 break;
             }
 
-            // Check if the move has effects that match keywords
-            if let Some(effects) = move_data.get("effects").and_then(|e| e.as_array()) {
-                for effect in effects {
+            // Check if the move has steps that match keywords
+            if let Some(steps) = move_data.get("steps").and_then(|e| e.as_array()) {
+                for effect in steps {
                     if let Some(effect_type) = effect.get("type").and_then(|t| t.as_str()) {
                         if keywords.iter().any(|k| effect_type.contains(k)) {
                             examples.push(format!(

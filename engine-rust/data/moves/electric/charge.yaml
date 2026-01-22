@@ -1,0 +1,13 @@
+id: charge
+name: じゅうでん
+type: electric
+category: status
+pp: 20
+steps:
+- type: apply_status
+  statusId: charge
+  target: self
+- type: modify_stage
+  target: self
+  stages:
+    spd: 1

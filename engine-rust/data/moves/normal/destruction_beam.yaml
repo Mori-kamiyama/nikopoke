@@ -1,0 +1,12 @@
+id: destruction_beam
+name: はかいこうせん
+type: normal
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 150
+  accuracy: 0.9
+- type: wait
+  turns: 1
+  steps: []

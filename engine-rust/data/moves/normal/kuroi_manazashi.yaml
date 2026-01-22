@@ -1,0 +1,12 @@
+id: kuroi_manazashi
+name: くろいまなざし
+type: normal
+category: status
+pp: 5
+steps:
+- type: apply_status
+  statusId: lock_move
+  chance: 1
+  data:
+    immuneTypes:
+    - ghost

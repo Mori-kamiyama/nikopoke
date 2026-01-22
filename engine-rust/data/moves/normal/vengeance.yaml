@@ -1,0 +1,15 @@
+id: vengeance
+name: かたきうち
+type: normal
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 70
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: fainted_ally_last_turn
+  then:
+  - type: damage
+    power: 140

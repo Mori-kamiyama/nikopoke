@@ -1,0 +1,11 @@
+id: cosmic_power
+name: コスモパワー
+type: psychic
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 1
+    spd: 1

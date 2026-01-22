@@ -1,0 +1,10 @@
+id: amnesia
+name: ドわすれ
+type: psychic
+category: status
+pp: 20
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spd: 2

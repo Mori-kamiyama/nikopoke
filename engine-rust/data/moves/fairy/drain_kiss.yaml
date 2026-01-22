@@ -1,0 +1,10 @@
+id: drain_kiss
+name: ドレインキッス
+type: fairy
+category: special
+pp: 10
+steps:
+- type: damage
+- type: damage_ratio
+  ratioMaxHp: 0.75
+  target: self

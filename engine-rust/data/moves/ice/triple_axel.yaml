@@ -1,0 +1,15 @@
+id: triple_axel
+name: トリプルアクセル
+type: ice
+category: physical
+pp: 10
+steps:
+- type: repeat
+  times: 3
+  steps:
+  - type: damage
+    power: 20
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1

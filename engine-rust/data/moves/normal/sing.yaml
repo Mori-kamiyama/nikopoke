@@ -1,0 +1,11 @@
+id: sing
+name: うたう
+type: normal
+category: status
+pp: 15
+steps:
+- type: apply_status
+  statusId: sleep
+  chance: 0.55
+  data:
+    bypassSubstitute: true

@@ -1,0 +1,49 @@
+id: assist_power
+name: アシストパワー
+type: psychic
+category: special
+pp: 10
+steps:
+- type: damage
+  power: 20
+  accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: atk_stage_up
+  then:
+  - type: damage
+    power: 40
+    accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: def_stage_up
+  then:
+  - type: damage
+    power: 40
+    accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: spa_stage_up
+  then:
+  - type: damage
+    power: 40
+    accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: spd_stage_up
+  then:
+  - type: damage
+    power: 40
+    accuracy: 1
+- type: conditional
+  if:
+    type: user_has_status
+    statusId: spe_stage_up
+  then:
+  - type: damage
+    power: 40
+    accuracy: 1

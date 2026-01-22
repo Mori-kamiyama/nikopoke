@@ -1,0 +1,16 @@
+id: triple_kick
+name: トリプルキック
+type: fighting
+category: physical
+pp: 10
+steps:
+- type: repeat
+  times: 3
+  steps:
+  - type: damage
+    power: 10
+    accuracy: 0.9
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1

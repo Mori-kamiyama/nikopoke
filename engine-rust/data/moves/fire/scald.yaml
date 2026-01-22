@@ -1,0 +1,18 @@
+id: scald
+name: しっとのほのお
+type: fire
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 70
+  accuracy: 1
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: stat_boost
+  then:
+  - type: apply_status
+    statusId: burn
+    chance: 1
+tags: []

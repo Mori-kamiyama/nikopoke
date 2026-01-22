@@ -1,0 +1,12 @@
+id: electroweb
+name: でんじほう
+type: electric
+category: special
+pp: 5
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.5
+- type: apply_status
+  statusId: paralysis
+  chance: 1

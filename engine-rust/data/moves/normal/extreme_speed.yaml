@@ -1,0 +1,10 @@
+id: extreme_speed
+name: しんそく
+type: normal
+category: physical
+pp: 5
+priority: 2
+steps:
+- type: damage
+  power: 80
+  accuracy: 1

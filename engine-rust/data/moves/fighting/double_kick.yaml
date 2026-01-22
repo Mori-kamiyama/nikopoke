@@ -1,0 +1,12 @@
+id: double_kick
+name: にどげり
+type: fighting
+category: physical
+pp: 30
+steps:
+- type: repeat
+  times: 2
+  steps:
+  - type: damage
+    power: 30
+    accuracy: 1

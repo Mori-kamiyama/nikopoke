@@ -1,0 +1,10 @@
+id: feint
+name: フェイント
+type: normal
+category: physical
+pp: 10
+priority: 2
+steps:
+- type: damage
+  power: 30
+  accuracy: 1

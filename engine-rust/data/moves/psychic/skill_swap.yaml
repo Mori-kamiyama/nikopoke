@@ -1,0 +1,10 @@
+id: skill_swap
+name: スキルスワップ
+type: psychic
+category: status
+pp: 10
+steps:
+- type: replace_status
+  from: ability
+  to: ability
+  target: all

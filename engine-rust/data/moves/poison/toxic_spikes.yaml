@@ -1,0 +1,8 @@
+id: toxic_spikes
+name: どくびし
+type: poison
+category: status
+pp: 20
+steps:
+- type: apply_field_status
+  statusId: toxic_spikes

@@ -4,10 +4,10 @@ yawn:
   type: normal
   category: status
   pp: 10
-  effects:
-    - type: delay
-      afterTurns: 1
-      effects:
+  steps:
+    - type: wait
+      turns: 1
+      steps:
         - type: apply_status
           statusId: sleep
           chance: 1
@@ -17,7 +17,7 @@ morning_sun:
   type: normal
   category: status
   pp: 5
-  effects:
+  steps:
     - type: conditional
       if:
         type: weather_is_sunny
@@ -56,7 +56,7 @@ encore:
   category: status
   pp: 5
   accuracy: 1
-  effects:
+  steps:
     - type: apply_status
       statusId: lock_move
       duration: 3
@@ -67,7 +67,7 @@ painsplit:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: self
@@ -80,7 +80,7 @@ swagger:
   type: normal
   category: status
   pp: 15
-  effects:
+  steps:
     - type: apply_status
       statusId: confusion
       chance: 0.85
@@ -94,7 +94,7 @@ leer:
   type: normal
   category: status
   pp: 30
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -105,7 +105,7 @@ sing:
   type: normal
   category: status
   pp: 15
-  effects:
+  steps:
     - type: apply_status
       statusId: sleep
       chance: 0.55
@@ -117,7 +117,7 @@ smokescreen:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -133,11 +133,11 @@ helping_hand:
   type: normal
   category: status
   pp: 15
-  effects:
-    - type: delay
-      afterTurns: 0
+  steps:
+    - type: wait
+      turns: 0
       timing: turn_start
-      effects: []
+      steps: []
 roar:
   id: roar
   name: ほえる
@@ -145,7 +145,7 @@ roar:
   category: status
   pp: 30
   priority: -6
-  effects:
+  steps:
     - type: conditional
       if:
         type: field_has_status
@@ -162,7 +162,7 @@ kage_bunshin:
   type: normal
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -173,7 +173,7 @@ harden:
   type: normal
   category: status
   pp: 30
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -184,7 +184,7 @@ kanashibari:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: disable_move
       duration: 4
       target: target
@@ -194,7 +194,7 @@ shell_smash:
   type: water
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -205,7 +205,7 @@ focus_energy:
   type: normal
   category: status
   pp: 30
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -216,7 +216,7 @@ tickle:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -228,7 +228,7 @@ kuroi_manazashi:
   type: normal
   category: status
   pp: 5
-  effects:
+  steps:
     - type: apply_status
       statusId: lock_move
       chance: 1
@@ -242,7 +242,7 @@ endure:
   category: status
   pp: 10
   priority: 4
-  effects:
+  steps:
     - type: protect
     - type: apply_status
       statusId: protect
@@ -253,7 +253,7 @@ scary_face:
   type: ghost
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 30
       accuracy: 1
@@ -269,7 +269,7 @@ revival_blessing:
   type: normal
   category: status
   pp: 1
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: all
@@ -279,7 +279,7 @@ tail_whip:
   type: normal
   category: status
   pp: 30
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -290,7 +290,7 @@ safeguard:
   type: normal
   category: status
   pp: 25
-  effects:
+  steps:
     - type: apply_status
       statusId: safeguard
       target: all
@@ -301,7 +301,7 @@ self_suggestion:
   type: normal
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -317,7 +317,7 @@ self_destruct:
   type: normal
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 200
       accuracy: 1
@@ -330,7 +330,7 @@ growth:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -354,7 +354,7 @@ takuwaeru:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -366,7 +366,7 @@ minimize:
   type: normal
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -377,7 +377,7 @@ ultrasonic:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_status
       statusId: confusion
       chance: 0.55
@@ -387,7 +387,7 @@ acupressure:
   type: normal
   category: status
   pp: 30
-  effects:
+  steps:
     - type: random_move
       pool: status
 sword_dance:
@@ -396,7 +396,7 @@ sword_dance:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -407,7 +407,7 @@ nayshobanashi:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -418,7 +418,7 @@ teammate:
   type: normal
   category: status
   pp: 15
-  effects:
+  steps:
     - type: replace_status
       from: ability
       to: ability
@@ -429,7 +429,7 @@ slack_off:
   type: normal
   category: status
   pp: 5
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: self
@@ -439,11 +439,11 @@ wish:
   type: normal
   category: status
   pp: 10
-  effects:
-    - type: delay
-      afterTurns: 1
+  steps:
+    - type: wait
+      turns: 1
       timing: turn_end
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.5
           target: self
@@ -453,7 +453,7 @@ snore:
   type: normal
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -470,7 +470,7 @@ happy_hour:
   type: normal
   category: status
   pp: 30
-  effects:
+  steps:
     - type: manual
       manualReason: Doubles prize money after battle, which is not a battle effect.
 hazure:
@@ -479,14 +479,14 @@ hazure:
   type: normal
   category: status
   pp: 40
-  effects: []
+  steps: []
 belly_drum:
   id: belly_drum
   name: ほおばる
   type: normal
   category: status
   pp: 10
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: self
@@ -500,7 +500,7 @@ baton_pass:
   type: normal
   category: status
   pp: 40
-  effects:
+  steps:
     - type: replace_status
       from: confusion
       to: confusion
@@ -531,7 +531,7 @@ teeter_dance:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_status
       statusId: confusion
       target: all
@@ -545,7 +545,7 @@ bulk_up:
   type: fighting
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -560,7 +560,7 @@ copycat:
   type: normal
   category: status
   pp: 20
-  effects:
+  steps:
     - type: manual
       manualReason: Copies the last move used by the opponent.  Need custom engine logic to handle move selection.
 protect:
@@ -570,7 +570,7 @@ protect:
   category: status
   pp: 5
   priority: 4
-  effects:
+  steps:
     - type: protect
 substitute:
   id: substitute
@@ -578,7 +578,7 @@ substitute:
   type: normal
   category: status
   pp: 10
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.25
       target: self
@@ -591,7 +591,7 @@ milk_drink:
   type: normal
   category: status
   pp: 5
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: self
@@ -601,7 +601,7 @@ body_slam:
   type: normal
   category: status
   pp: 10
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: self
@@ -617,7 +617,7 @@ yubi_o_furu:
   type: normal
   category: status
   pp: 10
-  effects:
+  steps:
     - type: random_move
       pool: all
 lock_on:
@@ -626,7 +626,7 @@ lock_on:
   type: normal
   category: status
   pp: 5
-  effects:
+  steps:
     - type: apply_status
       statusId: lock_move
       target: self
@@ -636,12 +636,12 @@ rampage:
   type: normal
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 3
-      effects:
+      steps:
         - type: damage
           power: 120
           accuracy: 1
@@ -657,12 +657,12 @@ fury_swipes:
   type: normal
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 15
           accuracy: 0.85
@@ -672,7 +672,7 @@ kairiki:
   type: normal
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -682,7 +682,7 @@ vengeance:
   type: normal
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 70
     - type: conditional
@@ -698,7 +698,7 @@ karagenki:
   type: normal
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -732,7 +732,7 @@ desperate:
   type: normal
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 1
     - type: conditional
@@ -748,7 +748,7 @@ slash:
   type: normal
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -762,7 +762,7 @@ gigaimpact:
   type: normal
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 0.9
@@ -776,7 +776,7 @@ rapid_spin:
   type: normal
   category: physical
   pp: 40
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -828,12 +828,12 @@ bind:
   type: normal
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 15
       accuracy: 0.85
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.125
     - type: apply_status
@@ -851,7 +851,7 @@ extreme_speed:
   category: physical
   pp: 5
   priority: 2
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -861,7 +861,7 @@ struggle:
   type: normal
   category: physical
   pp: 1
-  effects:
+  steps:
     - type: damage
       power: 50
     - type: damage_ratio
@@ -873,7 +873,7 @@ double_edge:
   type: normal
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -886,7 +886,7 @@ headbutt:
   type: normal
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -901,7 +901,7 @@ tackle:
   type: normal
   category: physical
   pp: 35
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -911,10 +911,10 @@ double_attack:
   type: normal
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times: 2
-      effects:
+      steps:
         - type: damage
           power: 35
           accuracy: 0.9
@@ -925,7 +925,7 @@ quick_attack:
   category: physical
   pp: 30
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -935,7 +935,7 @@ take_down:
   type: normal
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 0.85
@@ -948,7 +948,7 @@ fake_out:
   type: dark
   category: status
   pp: 30
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -959,7 +959,7 @@ bodyslam:
   type: normal
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 85
       accuracy: 1
@@ -983,7 +983,7 @@ guillotine:
   type: normal
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: ohko
       baseAccuracy: 0.3
       levelScaling: true
@@ -995,7 +995,7 @@ feint:
   category: physical
   pp: 10
   priority: 2
-  effects:
+  steps:
     - type: damage
       power: 30
       accuracy: 1
@@ -1005,7 +1005,7 @@ stomp:
   type: normal
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -1029,7 +1029,7 @@ covet:
   type: normal
   category: physical
   pp: 25
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -1050,7 +1050,7 @@ weather_ball:
   type: normal
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -1096,7 +1096,7 @@ echo_voice:
   type: normal
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 40
     - type: apply_field_status
@@ -1107,7 +1107,7 @@ uproar:
   type: normal
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -1129,7 +1129,7 @@ speed_star:
   type: normal
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
 hyper_voice:
@@ -1138,7 +1138,7 @@ hyper_voice:
   type: normal
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -1148,20 +1148,20 @@ destruction_beam:
   type: normal
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 0.9
-    - type: delay
-      afterTurns: 1
-      effects: []
+    - type: wait
+      turns: 1
+      steps: []
 boom_burst:
   id: boom_burst
   name: ばくおんぱ
   type: normal
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 140
       accuracy: 1
@@ -1172,7 +1172,7 @@ haisuinonjin:
   type: fighting
   category: status
   pp: 5
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -1198,7 +1198,7 @@ build_up:
   type: fighting
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -1210,7 +1210,7 @@ arm_hammer:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.9
@@ -1224,7 +1224,7 @@ rock_smash:
   type: fighting
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -1241,7 +1241,7 @@ infight:
   type: fighting
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -1257,7 +1257,7 @@ counter:
   category: physical
   pp: 20
   priority: -5
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 2
 high_jump_kick:
@@ -1266,7 +1266,7 @@ high_jump_kick:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.9
@@ -1291,7 +1291,7 @@ brick_break:
   type: fighting
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -1308,7 +1308,7 @@ focus_punch:
   category: physical
   pp: 20
   priority: -3
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 1
@@ -1326,7 +1326,7 @@ reversal:
   type: fighting
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 20
     - type: conditional
@@ -1342,7 +1342,7 @@ cross_chop:
   type: fighting
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.8
@@ -1356,7 +1356,7 @@ grass_knot:
   type: grass
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 0
       accuracy: 1
@@ -1379,12 +1379,12 @@ tsuppari:
   type: fighting
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 15
           accuracy: 1
@@ -1394,7 +1394,7 @@ flying_kick:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 130
       accuracy: 0.9
@@ -1421,7 +1421,7 @@ circle_throw:
   category: physical
   pp: 10
   priority: -6
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 0.9
@@ -1441,10 +1441,10 @@ triple_kick:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times: 3
-      effects:
+      steps:
         - type: damage
           power: 10
           accuracy: 0.9
@@ -1458,7 +1458,7 @@ drain_punch:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -1471,10 +1471,10 @@ double_kick:
   type: fighting
   category: physical
   pp: 30
-  effects:
+  steps:
     - type: repeat
       times: 2
-      effects:
+      steps:
         - type: damage
           power: 30
           accuracy: 1
@@ -1484,7 +1484,7 @@ hakkei:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -1501,7 +1501,7 @@ quick_guard:
   category: physical
   pp: 15
   priority: 3
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -1514,7 +1514,7 @@ dynamic_punch:
   type: fighting
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.5
@@ -1532,7 +1532,7 @@ body_press:
   type: fighting
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -1544,7 +1544,7 @@ mach_punch:
   category: physical
   pp: 30
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -1561,7 +1561,7 @@ low_kick:
   type: fighting
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -1576,7 +1576,7 @@ final_gambit:
   type: fighting
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 1
       target: target
@@ -1589,7 +1589,7 @@ focus_blast:
   type: fighting
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.7
@@ -1607,7 +1607,7 @@ vacuum_wave:
   category: special
   pp: 30
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -1617,7 +1617,7 @@ hadou_dan:
   type: fighting
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 80
 tailwind:
@@ -1626,7 +1626,7 @@ tailwind:
   type: flying
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -1637,7 +1637,7 @@ clear_smog:
   type: poison
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 50
     - type: clear_stages
@@ -1648,7 +1648,7 @@ roost:
   type: flying
   category: status
   pp: 5
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: self
@@ -1664,7 +1664,7 @@ feather_dance:
   type: flying
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -1676,7 +1676,7 @@ acrobatics:
   type: flying
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 55
       accuracy: 1
@@ -1694,10 +1694,10 @@ god_bird:
   type: flying
   category: physical
   pp: 5
-  effects:
-    - type: delay
-      afterTurns: 1
-      effects:
+  steps:
+    - type: wait
+      turns: 1
+      steps:
         - type: damage
           power: 140
           accuracy: 0.9
@@ -1714,10 +1714,10 @@ fly:
   category: physical
   pp: 5
   accuracy: 0.85
-  effects:
-    - type: delay
-      afterTurns: 1
-      effects:
+  steps:
+    - type: wait
+      turns: 1
+      steps:
         - type: damage
           power: 85
     - type: chance
@@ -1731,10 +1731,10 @@ double_wing:
   type: flying
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times: 2
-      effects:
+      steps:
         - type: damage
           power: 40
           accuracy: 0.9
@@ -1744,7 +1744,7 @@ peck:
   type: flying
   category: physical
   pp: 35
-  effects:
+  steps:
     - type: damage
       power: 35
       accuracy: 1
@@ -1754,7 +1754,7 @@ wing_attack:
   type: flying
   category: physical
   pp: 35
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -1764,7 +1764,7 @@ aerial_ace:
   type: flying
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
 drill_peck:
@@ -1773,7 +1773,7 @@ drill_peck:
   type: flying
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -1783,7 +1783,7 @@ brave_bird:
   type: flying
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -1797,7 +1797,7 @@ air_cutter:
   category: special
   pp: 25
   critRate: 1
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 0.95
@@ -1807,7 +1807,7 @@ air_slash:
   type: flying
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 0.95
@@ -1822,7 +1822,7 @@ gust:
   type: flying
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 110
       accuracy: 0.7
@@ -1854,7 +1854,7 @@ acid:
   type: poison
   category: status
   pp: 10
-  effects:
+  steps:
     - type: remove_status
       statusId: ability
       target: target
@@ -1865,7 +1865,7 @@ torchica:
   category: status
   pp: 10
   priority: 4
-  effects:
+  steps:
     - type: protect
     - type: apply_status
       statusId: poison
@@ -1876,7 +1876,7 @@ coil_up:
   type: poison
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -1892,7 +1892,7 @@ amnesia:
   type: psychic
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -1903,7 +1903,7 @@ poison_gas:
   type: poison
   category: status
   pp: 40
-  effects:
+  steps:
     - type: apply_status
       statusId: poison
       chance: 0.9
@@ -1914,7 +1914,7 @@ toxic:
   category: status
   pp: 10
   accuracy: 0.9
-  effects:
+  steps:
     - type: apply_status
       statusId: poison
       chance: 1
@@ -1927,7 +1927,7 @@ poison_powder:
   category: status
   pp: 35
   accuracy: 0.75
-  effects:
+  steps:
     - type: apply_status
       statusId: poison
       chance: 1
@@ -1937,7 +1937,7 @@ toxic_spikes:
   type: poison
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_field_status
       statusId: toxic_spikes
 cross_poison:
@@ -1946,7 +1946,7 @@ cross_poison:
   type: poison
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -1963,7 +1963,7 @@ dust_shoot:
   type: poison
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.8
@@ -1978,7 +1978,7 @@ poison_jab:
   type: poison
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -1993,7 +1993,7 @@ poison_fang:
   type: poison
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2008,7 +2008,7 @@ acid_bomb:
   type: poison
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -2022,7 +2022,7 @@ belch:
   type: poison
   category: special
   pp: 10
-  effects:
+  steps:
     - type: conditional
       if:
         type: user_has_status
@@ -2040,7 +2040,7 @@ sludge_bomb:
   type: poison
   category: special
   pp: 30
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -2057,7 +2057,7 @@ venom_shock:
   type: poison
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 65
     - type: conditional
@@ -2074,7 +2074,7 @@ sand_attack:
   type: ground
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -2085,12 +2085,12 @@ sand_tomb:
   type: ground
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 35
       accuracy: 0.85
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.125
       target: target
@@ -2106,13 +2106,13 @@ dig:
   type: ground
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
-    - type: delay
-      afterTurns: 1
-      effects: []
+    - type: wait
+      turns: 1
+      steps: []
       target: self
     - type: protect
 earthquake:
@@ -2121,7 +2121,7 @@ earthquake:
   type: ground
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 1
@@ -2138,7 +2138,7 @@ stomping_tantrum:
   type: ground
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -2155,7 +2155,7 @@ bulldoze:
   type: ground
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -2170,7 +2170,7 @@ ten_million_horsepower:
   type: ground
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 95
       accuracy: 0.95
@@ -2180,7 +2180,7 @@ fissure:
   type: ground
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: ohko
       baseAccuracy: 0.3
       levelScaling: true
@@ -2192,7 +2192,7 @@ drill_run:
   category: physical
   pp: 10
   accuracy: 0.95
-  effects:
+  steps:
     - type: damage
       power: 80
     - type: modify_stage
@@ -2205,12 +2205,12 @@ bone_rush:
   type: ground
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 25
           accuracy: 0.9
@@ -2220,7 +2220,7 @@ earth_power:
   type: ground
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.8
@@ -2243,7 +2243,7 @@ mud_slap:
   type: ground
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 20
       accuracy: 1
@@ -2258,7 +2258,7 @@ netsu_no_daichi:
   type: ground
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -2282,7 +2282,7 @@ mud_shot:
   type: ground
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 55
       accuracy: 0.95
@@ -2297,7 +2297,7 @@ stealth_rock:
   type: rock
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_field_status
       statusId: stealth_rock
 sandstorm:
@@ -2306,13 +2306,13 @@ sandstorm:
   type: rock
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_field_status
       statusId: sandstorm
       duration: 5
     - type: over_time
       timing: turn_end
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.0625
       target: all
@@ -2332,7 +2332,7 @@ rock_polish:
   type: rock
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -2344,7 +2344,7 @@ accel_rock:
   category: physical
   pp: 20
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -2354,7 +2354,7 @@ rock_throw:
   type: rock
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 0.95
@@ -2364,7 +2364,7 @@ rock_slide:
   type: rock
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 0.9
@@ -2380,7 +2380,7 @@ rock_tomb:
   type: rock
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 0.95
@@ -2396,12 +2396,12 @@ rollout:
   category: physical
   pp: 20
   accuracy: 0.9
-  effects:
+  steps:
     - type: damage
       power: 30
     - type: repeat
       times: 5
-      effects:
+      steps:
         - type: damage
           power: 30
     - type: conditional
@@ -2419,7 +2419,7 @@ stone_edge:
   pp: 5
   accuracy: 0.8
   critRate: 1
-  effects:
+  steps:
     - type: damage
       power: 100
 rock_blast:
@@ -2428,12 +2428,12 @@ rock_blast:
   type: rock
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 25
           accuracy: 0.9
@@ -2443,7 +2443,7 @@ ancient_power:
   type: rock
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -2464,7 +2464,7 @@ power_gem:
   type: rock
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2473,7 +2473,7 @@ meteor_beam:
   name: りゅうせいぐん
   type: dragon
   category: special
-  effects:
+  steps:
     - type: damage
     - type: modify_stage
       target: self
@@ -2486,7 +2486,7 @@ string_shot:
   category: status
   pp: 40
   accuracy: 0.95
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -2497,7 +2497,7 @@ butterfly_dance:
   type: bug
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -2510,7 +2510,7 @@ sticky_web:
   type: bug
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_field_status
       statusId: sticky_web
 firefly:
@@ -2519,7 +2519,7 @@ firefly:
   type: bug
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -2530,7 +2530,7 @@ leech_life:
   type: bug
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2543,7 +2543,7 @@ scissor_cross:
   type: bug
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2553,7 +2553,7 @@ first_impression:
   type: bug
   category: physical
   pp: 25
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -2572,7 +2572,7 @@ lunge:
   type: bug
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2587,7 +2587,7 @@ u_turn:
   type: bug
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -2598,12 +2598,12 @@ missile_needle:
   type: bug
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 25
           accuracy: 0.95
@@ -2613,7 +2613,7 @@ megahorn:
   type: bug
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.85
@@ -2623,13 +2623,13 @@ fury_cutter:
   type: bug
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 0.95
     - type: over_time
       timing: turn_end
-      effects:
+      steps:
         - type: modify_stage
           target: self
           stages:
@@ -2643,7 +2643,7 @@ kafun_dango:
   type: bug
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -2661,12 +2661,12 @@ infestation:
   type: bug
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 20
       accuracy: 1
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.125
       target: target
@@ -2685,7 +2685,7 @@ bug_buzz:
   type: bug
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -2704,7 +2704,7 @@ confuse_ray:
   type: ghost
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_status
       statusId: confusion
       target: target
@@ -2718,7 +2718,7 @@ curse:
   type: ghost
   category: status
   pp: 10
-  effects:
+  steps:
     - type: conditional
       if:
         type: user_has_status
@@ -2745,7 +2745,7 @@ destiny_bond:
   type: ghost
   category: status
   pp: 5
-  effects:
+  steps:
     - type: apply_status
       statusId: destiny_bond
       target: self
@@ -2756,7 +2756,7 @@ shadow_sneak:
   category: physical
   pp: 30
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -2766,7 +2766,7 @@ shadow_stitch:
   type: ghost
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2783,10 +2783,10 @@ ghost_dive:
   type: ghost
   category: physical
   pp: 10
-  effects:
-    - type: delay
-      afterTurns: 1
-      effects:
+  steps:
+    - type: wait
+      turns: 1
+      steps:
         - type: damage
           power: 90
           accuracy: 1
@@ -2796,7 +2796,7 @@ lick:
   type: ghost
   category: physical
   pp: 30
-  effects:
+  steps:
     - type: damage
       power: 30
       accuracy: 1
@@ -2812,7 +2812,7 @@ shadow_claw:
   type: ghost
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -2826,7 +2826,7 @@ shadow_punch:
   type: ghost
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
     - type: modify_stage
@@ -2844,7 +2844,7 @@ revenge:
   type: ghost
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -2902,7 +2902,7 @@ poltergeist:
   type: ghost
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: conditional
       if:
         type: target_has_status
@@ -2920,7 +2920,7 @@ grudge_hatred:
   type: ghost
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -2935,7 +2935,7 @@ shadow_ball:
   type: ghost
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -2952,7 +2952,7 @@ shadow_ray:
   type: ghost
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 1
@@ -2962,7 +2962,7 @@ ominous_wind:
   type: ghost
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 65
     - type: conditional
@@ -2978,7 +2978,7 @@ metal_sound:
   type: steel
   category: status
   pp: 40
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -2989,7 +2989,7 @@ gear_change:
   type: steel
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -3001,7 +3001,7 @@ iron_defense:
   type: steel
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -3012,7 +3012,7 @@ iron_tail:
   type: steel
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.75
@@ -3029,7 +3029,7 @@ iron_head:
   type: steel
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3045,7 +3045,7 @@ comet_punch:
   type: steel
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 0.9
@@ -3062,7 +3062,7 @@ gyro_ball:
   type: steel
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 1
       accuracy: 1
@@ -3075,7 +3075,7 @@ smart_horn:
   type: steel
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 70
 hard_press:
@@ -3084,7 +3084,7 @@ hard_press:
   type: steel
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 1
@@ -3097,7 +3097,7 @@ bullet_punch:
   category: physical
   pp: 30
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
   tags:
@@ -3108,7 +3108,7 @@ heavy_slam:
   type: steel
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 40
     - type: conditional
@@ -3125,7 +3125,7 @@ metal_claw:
   type: steel
   category: physical
   pp: 35
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 0.95
@@ -3142,7 +3142,7 @@ gold_rush:
   type: steel
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -3156,10 +3156,10 @@ tachyon_cutter:
   type: steel
   category: special
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times: 2
-      effects:
+      steps:
         - type: damage
           power: 50
 blast_burn:
@@ -3168,7 +3168,7 @@ blast_burn:
   type: steel
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 140
       accuracy: 0.95
@@ -3181,10 +3181,10 @@ ruin_sting:
   type: steel
   category: special
   pp: 5
-  effects:
-    - type: delay
-      afterTurns: 2
-      effects:
+  steps:
+    - type: wait
+      turns: 2
+      steps:
         - type: damage
           power: 140
           accuracy: 1
@@ -3194,7 +3194,7 @@ luster_cannon:
   type: steel
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3211,7 +3211,7 @@ onibi:
   type: fire
   category: status
   pp: 15
-  effects:
+  steps:
     - type: apply_status
       statusId: burn
       chance: 0.85
@@ -3221,7 +3221,7 @@ sunny_day:
   type: fire
   category: status
   pp: 5
-  effects:
+  steps:
     - type: apply_field_status
       statusId: sunny_weather
       duration: 5
@@ -3234,12 +3234,12 @@ flame_wheel:
   type: fire
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 35
       accuracy: 0.85
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.125
       target: target
@@ -3256,7 +3256,7 @@ flame_ball:
   type: fire
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.9
@@ -3275,7 +3275,7 @@ sacred_fire:
   type: fire
   category: physical
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.95
@@ -3298,7 +3298,7 @@ nitro_charge:
   type: fire
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -3312,7 +3312,7 @@ flare_drive:
   type: fire
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -3339,7 +3339,7 @@ blaze_kick:
   type: fire
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 85
       accuracy: 0.9
@@ -3356,7 +3356,7 @@ fire_fang:
   type: fire
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 0.95
@@ -3379,7 +3379,7 @@ fire_punch:
   type: fire
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -3395,7 +3395,7 @@ desperation:
   type: fire
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -3431,7 +3431,7 @@ overheat:
   type: fire
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 130
       accuracy: 0.9
@@ -3445,7 +3445,7 @@ flamethrower:
   type: fire
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -3460,7 +3460,7 @@ scald:
   type: fire
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -3479,7 +3479,7 @@ daimonji:
   type: fire
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 110
       accuracy: 0.85
@@ -3495,7 +3495,7 @@ neppuu:
   type: fire
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 95
       accuracy: 0.9
@@ -3510,7 +3510,7 @@ flare_song:
   type: fire
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3527,7 +3527,7 @@ eruption:
   type: fire
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 1
@@ -3542,7 +3542,7 @@ flame_dance:
   type: fire
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3559,7 +3559,7 @@ magical_flame:
   type: fire
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -3574,7 +3574,7 @@ burn_up:
   type: fire
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 130
       accuracy: 1
@@ -3598,7 +3598,7 @@ hell_fire:
   type: fire
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.5
@@ -3611,9 +3611,9 @@ aqua_ring:
   type: water
   category: status
   pp: 20
-  effects:
+  steps:
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: -0.0625
           target: self
@@ -3624,7 +3624,7 @@ rain_dance:
   type: water
   category: status
   pp: 5
-  effects:
+  steps:
     - type: apply_field_status
       statusId: rain
       duration: 5
@@ -3637,7 +3637,7 @@ aqua_cutter:
   type: water
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -3654,7 +3654,7 @@ aqua_jet:
   category: physical
   pp: 20
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -3664,7 +3664,7 @@ aqua_step:
   type: water
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3678,7 +3678,7 @@ aqua_tail:
   type: water
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 0.9
@@ -3688,7 +3688,7 @@ aqua_break:
   type: water
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 85
       accuracy: 1
@@ -3705,7 +3705,7 @@ quick_turn:
   type: water
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -3720,7 +3720,7 @@ jet_punch:
   category: physical
   pp: 15
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 60
   tags:
@@ -3731,7 +3731,7 @@ waterfall:
   type: water
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3746,10 +3746,10 @@ diving:
   type: water
   category: physical
   pp: 10
-  effects:
-    - type: delay
-      afterTurns: 1
-      effects:
+  steps:
+    - type: wait
+      turns: 1
+      steps:
         - type: damage
           power: 80
           accuracy: 1
@@ -3760,11 +3760,11 @@ whirlpool:
   category: special
   pp: 15
   accuracy: 0.85
-  effects:
+  steps:
     - type: damage
       power: 35
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: 0.125
       target: target
@@ -3789,7 +3789,7 @@ aria:
   type: water
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -3804,7 +3804,7 @@ water_spout:
   type: water
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 1
@@ -3821,7 +3821,7 @@ mud_bomb:
   type: water
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 0.85
@@ -3838,7 +3838,7 @@ wave:
   type: water
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -3856,7 +3856,7 @@ nettou:
   type: water
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3878,7 +3878,7 @@ snipe_shot:
   type: water
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -3892,7 +3892,7 @@ hydro_pump:
   type: water
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 110
       accuracy: 0.8
@@ -3902,7 +3902,7 @@ bubble_beam:
   type: water
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -3919,7 +3919,7 @@ cold_water:
   type: water
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -3934,7 +3934,7 @@ water_pulse:
   type: water
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 1
@@ -3952,7 +3952,7 @@ mushroom_spore:
   type: grass
   category: status
   pp: 15
-  effects:
+  steps:
     - type: chance
       p: 1
       then:
@@ -3968,7 +3968,7 @@ grass_field:
   type: grass
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_field_status
       statusId: grass_field
       duration: 5
@@ -3981,7 +3981,7 @@ synthesis:
   type: grass
   category: status
   pp: 5
-  effects:
+  steps:
     - type: conditional
       if:
         type: weather_is_sunny
@@ -4023,7 +4023,7 @@ cotton_guard:
   type: grass
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -4034,7 +4034,7 @@ paralysis_powder:
   type: grass
   category: status
   pp: 30
-  effects:
+  steps:
     - type: apply_status
       statusId: paralysis
       chance: 0.75
@@ -4044,7 +4044,7 @@ steal_power:
   type: grass
   category: status
   pp: 10
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 1
       target: self
@@ -4059,7 +4059,7 @@ nayanomi_tane:
   type: grass
   category: status
   pp: 10
-  effects:
+  steps:
     - type: chance
       p: 1
       then:
@@ -4072,9 +4072,9 @@ root_grow:
   type: grass
   category: status
   pp: 20
-  effects:
+  steps:
     - type: over_time
-      effects:
+      steps:
         - type: damage_ratio
           ratioMaxHp: -0.0625
           target: self
@@ -4088,7 +4088,7 @@ leech_seed:
   category: status
   pp: 10
   accuracy: 0.9
-  effects:
+  steps:
     - type: conditional
       if:
         type: target_has_status
@@ -4098,7 +4098,7 @@ leech_seed:
       p: 1
       then:
         - type: over_time
-          effects:
+          steps:
             - type: damage_ratio
               ratioMaxHp: 0.125
               target: target
@@ -4111,7 +4111,7 @@ cotton_spore:
   type: grass
   category: status
   pp: 40
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -4122,7 +4122,7 @@ wood_hammer:
   type: grass
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -4135,7 +4135,7 @@ wood_horn:
   type: grass
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -4148,7 +4148,7 @@ eda_zuki:
   type: grass
   category: physical
   pp: 40
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -4159,7 +4159,7 @@ grass_slider:
   category: physical
   pp: 20
   priority: 1
-  effects:
+  steps:
     - type: damage
       power: 55
       accuracy: 1
@@ -4169,10 +4169,10 @@ solar_blade:
   type: grass
   category: physical
   pp: 10
-  effects:
-    - type: delay
-      afterTurns: 1
-      effects:
+  steps:
+    - type: wait
+      turns: 1
+      steps:
         - type: damage
           power: 125
           accuracy: 1
@@ -4213,7 +4213,7 @@ seed_bomb:
   type: grass
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -4223,12 +4223,12 @@ bullet_seed:
   type: grass
   category: physical
   pp: 30
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 25
           accuracy: 1
@@ -4238,12 +4238,12 @@ seed_machine_gun:
   type: grass
   category: physical
   pp: 30
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 25
           accuracy: 1
@@ -4253,7 +4253,7 @@ vine_whip:
   type: grass
   category: physical
   pp: 25
-  effects:
+  steps:
     - type: damage
       power: 45
       accuracy: 1
@@ -4263,7 +4263,7 @@ leaf_blade:
   type: grass
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -4280,7 +4280,7 @@ petal_blizzard:
   type: grass
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -4290,7 +4290,7 @@ power_whip:
   type: grass
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.85
@@ -4300,7 +4300,7 @@ energy_ball:
   type: grass
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -4317,7 +4317,7 @@ gigadrain:
   type: grass
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -4330,7 +4330,7 @@ absorb:
   type: grass
   category: special
   pp: 25
-  effects:
+  steps:
     - type: damage
       power: 20
       accuracy: 1
@@ -4343,7 +4343,7 @@ solar_beam:
   type: grass
   category: special
   pp: 10
-  effects:
+  steps:
     - type: conditional
       if:
         type: user_has_status
@@ -4371,26 +4371,26 @@ hard_plant:
   type: grass
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 0.9
-    - type: delay
-      afterTurns: 1
+    - type: wait
+      turns: 1
       timing: turn_start
-      effects: []
+      steps: []
 petals_dance:
   id: petals_dance
   name: はなびらのまい
   type: grass
   category: special
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 3
-      effects:
+      steps:
         - type: damage
           power: 120
           accuracy: 1
@@ -4406,7 +4406,7 @@ magical_leaf:
   type: grass
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
 mega_drain:
@@ -4415,7 +4415,7 @@ mega_drain:
   type: grass
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -4428,7 +4428,7 @@ leaf_storm:
   type: grass
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 130
       accuracy: 0.9
@@ -4442,7 +4442,7 @@ electric_terrain:
   type: electric
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_field_status
       statusId: electric_terrain
       duration: 5
@@ -4454,7 +4454,7 @@ kaidenpa:
   type: electric
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -4465,7 +4465,7 @@ charge:
   type: electric
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_status
       statusId: charge
       target: self
@@ -4479,7 +4479,7 @@ denji_fuyu:
   type: electric
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_status
       statusId: telekinesis
       target: self
@@ -4490,7 +4490,7 @@ thunder_fang:
   type: electric
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 0.95
@@ -4510,7 +4510,7 @@ thunder_punch:
   type: electric
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -4527,7 +4527,7 @@ thunder_dive:
   category: physical
   pp: 15
   accuracy: 0.95
-  effects:
+  steps:
     - type: damage
       power: 100
     - type: conditional
@@ -4558,7 +4558,7 @@ spark:
   type: electric
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -4573,7 +4573,7 @@ cheek_pouch:
   type: electric
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 20
       accuracy: 1
@@ -4586,7 +4586,7 @@ volttackle:
   type: electric
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -4605,7 +4605,7 @@ wild_charge:
   type: electric
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -4618,7 +4618,7 @@ electric_net:
   type: electric
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 55
       accuracy: 0.95
@@ -4633,7 +4633,7 @@ electric_ball:
   type: electric
   category: special
   pp: 10
-  effects:
+  steps:
     - type: speed_based_damage
       accuracy: 1
       thresholds:
@@ -4653,7 +4653,7 @@ thunder:
   type: electric
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 110
       accuracy: 0.7
@@ -4683,7 +4683,7 @@ thunderbolt:
   type: electric
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -4698,7 +4698,7 @@ charge_beam:
   type: electric
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 0.9
@@ -4715,7 +4715,7 @@ electric_shock:
   type: electric
   category: special
   pp: 30
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -4730,7 +4730,7 @@ thunder_shock:
   type: electric
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 60
 electroweb:
@@ -4739,7 +4739,7 @@ electroweb:
   type: electric
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 0.5
@@ -4752,7 +4752,7 @@ parabola_charge:
   type: electric
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -4765,7 +4765,7 @@ discharge:
   type: electric
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -4781,7 +4781,7 @@ bolt_change:
   type: electric
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -4792,14 +4792,14 @@ healing_wish:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 1
       target: self
-    - type: delay
-      afterTurns: 1
+    - type: wait
+      turns: 1
       timing: turn_start
-      effects:
+      steps:
         - type: cure_all_status
           target: self
         - type: damage_ratio
@@ -4811,7 +4811,7 @@ guard_share:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: manual
       manualReason: 自分と相手の『ぼうぎょ』と『とくぼう』を足して半分に分ける効果はDSLで表現できないため
 guard_swap:
@@ -4820,7 +4820,7 @@ guard_swap:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: all
       stages:
@@ -4833,7 +4833,7 @@ agility:
   type: psychic
   category: status
   pp: 30
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -4844,7 +4844,7 @@ cosmic_power:
   type: psychic
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -4856,7 +4856,7 @@ psycho_field:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_field_status
       statusId: psycho_terrain
       duration: 5
@@ -4868,7 +4868,7 @@ hypnosis:
   type: psychic
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_status
       statusId: sleep
       target: target
@@ -4882,7 +4882,7 @@ gravity:
   type: psychic
   category: status
   pp: 5
-  effects:
+  steps:
     - type: apply_field_status
       statusId: gravity
       duration: 5
@@ -4894,7 +4894,7 @@ skill_swap:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: replace_status
       from: ability
       to: ability
@@ -4906,7 +4906,7 @@ teleport:
   category: status
   pp: 20
   priority: -6
-  effects:
+  steps:
     - type: manual
       manualReason: Switching Pokemon is not supported in DSL
 trick:
@@ -4915,7 +4915,7 @@ trick:
   type: dark
   category: status
   pp: 10
-  effects:
+  steps:
     - type: manual
       manualReason: 道具の交換はDSLで表現できないため
 trick_room:
@@ -4925,7 +4925,7 @@ trick_room:
   category: status
   pp: 5
   priority: -7
-  effects:
+  steps:
     - type: apply_field_status
       statusId: trick_room
       duration: 5
@@ -4935,7 +4935,7 @@ sleep:
   type: psychic
   category: status
   pp: 5
-  effects:
+  steps:
     - type: cure_all_status
       target: self
     - type: damage_ratio
@@ -4951,7 +4951,7 @@ power_split:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: manual
       manualReason: 自分と相手の『こうげき』と『とくこう』を足して半分に分ける効果はDSLで表現できないため
 power_swap:
@@ -4960,7 +4960,7 @@ power_swap:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -4987,7 +4987,7 @@ power_trick:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -5004,7 +5004,7 @@ light_screen:
   type: psychic
   category: status
   pp: 30
-  effects:
+  steps:
     - type: apply_field_status
       statusId: light_screen
       duration: 5
@@ -5014,7 +5014,7 @@ imprison:
   type: psychic
   category: status
   pp: 10
-  effects:
+  steps:
     - type: disable_move
       moveId: target_move
       target: target
@@ -5027,7 +5027,7 @@ meditate:
   type: psychic
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -5039,7 +5039,7 @@ reflect:
   type: psychic
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_field_status
       statusId: reflect
       duration: 5
@@ -5052,7 +5052,7 @@ psycho_cut:
   type: psychic
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -5066,7 +5066,7 @@ psycho_fang:
   type: psychic
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 85
       accuracy: 1
@@ -5082,7 +5082,7 @@ zen_headbutt:
   type: psychic
   category: physical
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 0.9
@@ -5097,7 +5097,7 @@ assist_power:
   type: psychic
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 20
       accuracy: 1
@@ -5147,7 +5147,7 @@ psybeam:
   type: psychic
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -5165,7 +5165,7 @@ psychic:
   type: psychic
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -5182,7 +5182,7 @@ psycho_shock:
   type: psychic
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -5193,7 +5193,7 @@ psychic_noise:
   type: psychic
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -5210,7 +5210,7 @@ jin_tsu_riki:
   type: psychic
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -5225,7 +5225,7 @@ telekinesis:
   type: psychic
   category: special
   pp: 25
-  effects:
+  steps:
     - type: damage
       power: 50
       accuracy: 1
@@ -5244,7 +5244,7 @@ mirror_coat:
   category: special
   pp: 20
   priority: -5
-  effects:
+  steps:
     - type: conditional
       if:
         type: target_has_status
@@ -5261,10 +5261,10 @@ future_sight:
   type: psychic
   category: special
   pp: 10
-  effects:
-    - type: delay
-      afterTurns: 2
-      effects:
+  steps:
+    - type: wait
+      turns: 2
+      steps:
         - type: damage
           power: 120
           accuracy: 1
@@ -5274,7 +5274,7 @@ dream_eater:
   type: psychic
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 1
@@ -5292,7 +5292,7 @@ aurora_veil:
   type: ice
   category: status
   pp: 20
-  effects:
+  steps:
     - type: conditional
       if:
         type: weather_is_hail
@@ -5305,7 +5305,7 @@ black_fog:
   type: ice
   category: status
   pp: 30
-  effects:
+  steps:
     - type: reset_stages
       target: all
 samui_gag:
@@ -5313,7 +5313,7 @@ samui_gag:
   name: さむいギャグ
   type: ice
   category: status
-  effects:
+  steps:
     - type: replace_pokemon
     - type: apply_field_status
       statusId: snow
@@ -5326,7 +5326,7 @@ shiroi_kiri:
   type: ice
   category: status
   pp: 30
-  effects:
+  steps:
     - type: apply_field_status
       statusId: mist
       duration: 5
@@ -5336,7 +5336,7 @@ snowscape:
   type: ice
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_field_status
       statusId: snow
       duration: 5
@@ -5347,7 +5347,7 @@ ice_spinner:
   name: アイススピナー
   type: ice
   category: physical
-  effects:
+  steps:
     - type: remove_field_status
       statusId: grass_terrain
     - type: remove_field_status
@@ -5362,7 +5362,7 @@ ice_hammer:
   type: ice
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.9
@@ -5377,7 +5377,7 @@ ice_fang:
   name: こおりのキバ
   type: ice
   category: physical
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 0.95
@@ -5397,7 +5397,7 @@ ice_shard:
   type: ice
   category: physical
   priority: 1
-  effects:
+  steps:
     - type: damage
 icicle_crash:
   id: icicle_crash
@@ -5405,7 +5405,7 @@ icicle_crash:
   type: ice
   category: physical
   pp: 30
-  effects:
+  steps:
     - type: damage
     - type: chance
       p: 0.3
@@ -5417,12 +5417,12 @@ icicle_spear:
   name: つららばり
   type: ice
   category: physical
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
 triple_axel:
   id: triple_axel
@@ -5430,10 +5430,10 @@ triple_axel:
   type: ice
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: repeat
       times: 3
-      effects:
+      steps:
         - type: damage
           power: 20
         - type: modify_stage
@@ -5447,7 +5447,7 @@ avalanche:
   category: physical
   pp: 10
   priority: -4
-  effects:
+  steps:
     - type: conditional
       if:
         type: target_has_status
@@ -5464,7 +5464,7 @@ freezing_punch:
   type: ice
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 75
       accuracy: 1
@@ -5479,7 +5479,7 @@ aurora_beam:
   name: オーロラビーム
   type: ice
   category: special
-  effects:
+  steps:
     - type: damage
       power: 65
       accuracy: 1
@@ -5495,7 +5495,7 @@ ice_breath:
   name: こおりのいぶき
   type: ice
   category: special
-  effects:
+  steps:
     - type: damage
       power: 60
       accuracy: 0.9
@@ -5507,7 +5507,7 @@ ice_wind:
   type: ice
   category: special
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -5518,7 +5518,7 @@ snow_powder:
   name: こなゆき
   type: ice
   category: special
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1
@@ -5534,7 +5534,7 @@ absolute_zero:
   type: ice
   category: special
   pp: 5
-  effects:
+  steps:
     - type: ohko
       baseAccuracy: 0.3
       nonMatchingTypeAccuracy: 0.2
@@ -5549,7 +5549,7 @@ blizzard:
   type: ice
   category: special
   pp: 5
-  effects:
+  steps:
     - type: damage
       power: 110
       accuracy: 0.7
@@ -5573,7 +5573,7 @@ freeze_dry:
   type: ice
   category: special
   pp: 20
-  effects:
+  steps:
     - type: damage
       power: 70
       accuracy: 1
@@ -5594,7 +5594,7 @@ freezing_beam:
   name: れいとうビーム
   type: ice
   category: special
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 1
@@ -5610,7 +5610,7 @@ dragon_dance:
   type: dragon
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -5622,7 +5622,7 @@ outrage:
   type: dragon
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 120
       accuracy: 1
@@ -5630,7 +5630,7 @@ outrage:
       times:
         min: 2
         max: 3
-      effects: []
+      steps: []
     - type: apply_status
       statusId: confusion
       target: self
@@ -5643,12 +5643,12 @@ scale_shot:
   type: dragon
   category: physical
   pp: 20
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 5
-      effects:
+      steps:
         - type: damage
           power: 25
           accuracy: 0.9
@@ -5662,7 +5662,7 @@ dragon_claw:
   name: ドラゴンクロー
   type: dragon
   category: physical
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -5672,7 +5672,7 @@ dragon_dive:
   type: dragon
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 100
       accuracy: 0.75
@@ -5695,7 +5695,7 @@ dragon_tail:
   category: physical
   pp: 10
   priority: -6
-  effects:
+  steps:
     - type: damage
     - type: conditional
       if:
@@ -5712,7 +5712,7 @@ wide_breaker:
   name: ワイドブレイカー
   type: dragon
   category: physical
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -5724,7 +5724,7 @@ tatsumaki:
   type: dragon
   category: special
   pp: 15
-  effects:
+  steps:
     - type: chance
       p: 0.2
       then:
@@ -5745,20 +5745,20 @@ roaring_time:
   name: ときのほうこう
   type: dragon
   category: special
-  effects:
+  steps:
     - type: damage
       power: 150
       accuracy: 0.9
-    - type: delay
-      afterTurns: 1
-      effects: []
+    - type: wait
+      turns: 1
+      steps: []
   pp: 5
 dragon_breath:
   id: dragon_breath
   name: りゅうのいぶき
   type: dragon
   category: special
-  effects:
+  steps:
     - type: chance
       p: 0.3
       then:
@@ -5769,7 +5769,7 @@ dragon_pulse:
   name: りゅうのはどう
   type: dragon
   category: special
-  effects:
+  steps:
     - type: damage
 embargo:
   id: embargo
@@ -5777,7 +5777,7 @@ embargo:
   type: dark
   category: status
   pp: 15
-  effects:
+  steps:
     - type: disable_move
       duration: null
 parting_shot:
@@ -5786,7 +5786,7 @@ parting_shot:
   type: dark
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -5801,7 +5801,7 @@ flatter:
   type: dark
   category: status
   pp: 15
-  effects:
+  steps:
     - type: apply_status
       statusId: confusion
       chance: 1
@@ -5818,7 +5818,7 @@ taunt:
   type: dark
   category: status
   pp: 20
-  effects:
+  steps:
     - type: apply_status
       statusId: lock_move
       duration: 3
@@ -5831,7 +5831,7 @@ sharpen:
   type: dark
   category: status
   pp: 15
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -5846,7 +5846,7 @@ wicked_plot:
   type: dark
   category: status
   pp: 20
-  effects:
+  steps:
     - type: modify_stage
       target: self
       stages:
@@ -5856,7 +5856,7 @@ foul_play:
   name: イカサマ
   type: dark
   category: physical
-  effects:
+  steps:
     - type: damage
       power: null
       accuracy: null
@@ -5867,7 +5867,7 @@ payback:
   type: dark
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 50
     - type: modify_stage
@@ -5931,14 +5931,14 @@ crunch:
   type: dark
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: lock_move
 bite:
   id: bite
   name: かみつく
   type: dark
   category: physical
-  effects:
+  steps:
     - type: damage
     - type: chance
       p: 0.3
@@ -5952,7 +5952,7 @@ hell_blow:
   name: じごくづき
   type: dark
   category: physical
-  effects:
+  steps:
     - type: apply_status
       statusId: disable_move
       duration: 2
@@ -5995,7 +5995,7 @@ dark_pulse:
   name: あくのはどう
   type: dark
   category: special
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -6011,7 +6011,7 @@ thief:
   name: どろぼう
   type: dark
   category: physical
-  effects:
+  steps:
     - type: manual
       manualReason: Steals the opponent's held item if the user is not holding one. Fails if the user is already holding an item, unless Knock Off has removed the user's item.
 fling:
@@ -6019,7 +6019,7 @@ fling:
   name: なげつける
   type: dark
   category: physical
-  effects:
+  steps:
     - type: manual
       manualReason: Effect varies depending on the held item.
 knock_off:
@@ -6028,7 +6028,7 @@ knock_off:
   type: dark
   category: physical
   contact: true
-  effects:
+  steps:
     - type: conditional
       if:
         type: target_has_item
@@ -6046,7 +6046,7 @@ sucker_punch:
   category: physical
   pp: 5
   priority: 1
-  effects:
+  steps:
     - type: manual
       manualReason: Conditional success based on opponent's move choice.
 beat_up:
@@ -6054,12 +6054,12 @@ beat_up:
   name: ふくろだたき
   type: dark
   category: physical
-  effects:
+  steps:
     - type: repeat
       times:
         min: 2
         max: 6
-      effects:
+      steps:
         - type: damage
           power: 10
           accuracy: 1
@@ -6068,7 +6068,7 @@ swing:
   name: ぶんまわす
   type: dark
   category: physical
-  effects:
+  steps:
     - type: damage
       power: 60
 catastrophe:
@@ -6076,7 +6076,7 @@ catastrophe:
   name: カタストロフィ
   type: dark
   category: special
-  effects:
+  steps:
     - type: damage_ratio
       ratioMaxHp: 0.5
       target: target
@@ -6085,7 +6085,7 @@ night_burst:
   name: ナイトバースト
   type: dark
   category: special
-  effects:
+  steps:
     - type: chance
       p: 0.4
       then:
@@ -6099,7 +6099,7 @@ bark_out:
   type: dark
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 55
       accuracy: 0.95
@@ -6113,7 +6113,7 @@ sweet_kiss:
   name: あまえる
   type: fairy
   category: status
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -6124,7 +6124,7 @@ moonlight:
   type: fairy
   category: status
   pp: 5
-  effects:
+  steps:
     - type: conditional
       if:
         type: weather_is_sunny
@@ -6166,7 +6166,7 @@ baby_doll_eyes:
   type: fairy
   category: status
   priority: 1
-  effects:
+  steps:
     - type: modify_stage
       target: target
       stages:
@@ -6178,7 +6178,7 @@ angel_kiss:
   category: status
   pp: 20
   accuracy: 0.75
-  effects:
+  steps:
     - type: apply_status
       statusId: confusion
       duration:
@@ -6191,7 +6191,7 @@ mist_field:
   type: fairy
   category: status
   pp: 10
-  effects:
+  steps:
     - type: apply_field_status
       statusId: misty_terrain
       duration: 5
@@ -6204,7 +6204,7 @@ play_rough:
   type: fairy
   category: physical
   pp: 10
-  effects:
+  steps:
     - type: damage
       power: 90
       accuracy: 0.9
@@ -6220,7 +6220,7 @@ charm_voice:
   name: チャームボイス
   type: fairy
   category: special
-  effects:
+  steps:
     - type: damage
       power: 0
       accuracy: 1
@@ -6233,7 +6233,7 @@ drain_kiss:
   type: fairy
   category: special
   pp: 10
-  effects:
+  steps:
     - type: damage
     - type: damage_ratio
       ratioMaxHp: 0.75
@@ -6243,7 +6243,7 @@ magical_shine:
   name: マジカルシャイン
   type: fairy
   category: special
-  effects:
+  steps:
     - type: damage
       power: 80
       accuracy: 1
@@ -6252,7 +6252,7 @@ mist_burst:
   name: ミストバースト
   type: fairy
   category: special
-  effects:
+  steps:
     - type: damage
       power: 100
     - type: apply_status
@@ -6270,7 +6270,7 @@ dazzling_gleam:
   name: みわくのボイス
   type: fairy
   category: special
-  effects:
+  steps:
     - type: conditional
       if:
         type: target_has_status
@@ -6290,7 +6290,7 @@ moonblast:
   type: fairy
   category: special
   pp: 15
-  effects:
+  steps:
     - type: damage
       power: 95
       accuracy: 1
@@ -6306,7 +6306,7 @@ fairy_wind:
   name: ようせいのかぜ
   type: fairy
   category: special
-  effects:
+  steps:
     - type: damage
       power: 40
       accuracy: 1

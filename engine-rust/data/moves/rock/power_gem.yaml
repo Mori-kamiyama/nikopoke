@@ -1,0 +1,9 @@
+id: power_gem
+name: パワージェム
+type: rock
+category: special
+pp: 20
+steps:
+- type: damage
+  power: 80
+  accuracy: 1

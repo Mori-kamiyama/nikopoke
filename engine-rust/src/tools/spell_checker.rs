@@ -17,7 +17,7 @@ impl SpellChecker {
             "power",
             "accuracy",
             "priority",
-            "effects",
+            "steps",
             "description",
         ];
 
@@ -28,8 +28,8 @@ impl SpellChecker {
         }
 
         // 3. Check types of specific fields
-        if !obj["effects"].is_array() {
-            return Err("'effects' must be an array".to_string());
+        if !obj["steps"].is_array() {
+            return Err("'steps' must be an array".to_string());
         }
 
         if let Some(category) = obj["category"].as_str() {
@@ -72,7 +72,7 @@ mod tests {
             "power": 40,
             "accuracy": 1.0,
             "priority": 0,
-            "effects": [
+            "steps": [
                 {
                     "type": "damage",
                     "power": 40,
@@ -96,7 +96,7 @@ mod tests {
             "power": 40,
             "accuracy": 1.0,
             "priority": 0,
-            "effects": [],
+            "steps": [],
             "description": "test"
         });
 
@@ -114,7 +114,7 @@ mod tests {
             "power": 40,
             "accuracy": 1.0,
             "priority": 0,
-            "effects": [],
+            "steps": [],
             "description": "test"
         });
 

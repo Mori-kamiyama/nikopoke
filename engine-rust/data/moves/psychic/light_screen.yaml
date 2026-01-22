@@ -1,0 +1,9 @@
+id: light_screen
+name: ひかりのかべ
+type: psychic
+category: status
+pp: 30
+steps:
+- type: apply_field_status
+  statusId: light_screen
+  duration: 5

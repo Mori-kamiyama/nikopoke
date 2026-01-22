@@ -1,0 +1,18 @@
+id: healing_wish
+name: いやしのねがい
+type: psychic
+category: status
+pp: 10
+steps:
+- type: damage_ratio
+  ratioMaxHp: 1
+  target: self
+- type: wait
+  turns: 1
+  timing: turn_start
+  steps:
+  - type: cure_all_status
+    target: self
+  - type: damage_ratio
+    ratioMaxHp: 0
+    target: self

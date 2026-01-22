@@ -1,0 +1,10 @@
+id: clear_smog
+name: クリアスモッグ
+type: poison
+category: special
+pp: 15
+steps:
+- type: damage
+  power: 50
+- type: clear_stages
+  target: target

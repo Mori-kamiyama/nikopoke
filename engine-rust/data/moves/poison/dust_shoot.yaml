@@ -1,0 +1,14 @@
+id: dust_shoot
+name: ダストシュート
+type: poison
+category: physical
+pp: 5
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.8
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: poison

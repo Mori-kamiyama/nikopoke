@@ -1,0 +1,20 @@
+id: sand_tomb
+name: すなじごく
+type: ground
+category: physical
+pp: 15
+steps:
+- type: damage
+  power: 35
+  accuracy: 0.85
+- type: over_time
+  steps:
+  - type: damage_ratio
+    ratioMaxHp: 0.125
+  target: target
+- type: apply_status
+  statusId: lock_move
+  target: target
+  duration:
+    min: 4
+    max: 5

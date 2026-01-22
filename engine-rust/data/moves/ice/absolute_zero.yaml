@@ -1,0 +1,14 @@
+id: absolute_zero
+name: ぜったいれいど
+type: ice
+category: special
+pp: 5
+steps:
+- type: ohko
+  baseAccuracy: 0.3
+  nonMatchingTypeAccuracy: 0.2
+  levelScaling: true
+  requiredType: ice
+  respectTypeImmunity: true
+  immuneTypes:
+  - ice
