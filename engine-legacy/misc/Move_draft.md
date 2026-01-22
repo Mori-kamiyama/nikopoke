@@ -1,6 +1,0 @@
-# 技を作る
-GEMINI_API_KEYを使って、Move_data.csvからデータを取り出し、DSLに基づいた技を作成するPythonコードを作成しなさい。
-
-詳しい作りかたはMackMoveとDSLを参考にしなさい。
-
-使うモデルはFreeで性能の高いものでお願いします。
