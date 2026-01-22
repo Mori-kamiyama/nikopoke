@@ -346,6 +346,9 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                         // Non-volatile statuses that persist on switch (sleep is explicitly NOT included - cured on switch)
                         let non_volatile = ["burn", "poison", "toxic", "paralysis", "freeze"];
                         outgoing.statuses.retain(|s| non_volatile.contains(&s.id.as_str()));
+                        if let Some(original) = outgoing.ability_data.get("originalAbility").and_then(|v| v.as_str()) {
+                            outgoing.ability = Some(original.to_string());
+                        }
                         outgoing.ability_data.clear();
                         outgoing.volatile_data.clear();
                     }

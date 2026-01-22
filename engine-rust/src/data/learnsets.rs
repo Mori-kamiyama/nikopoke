@@ -1,4 +1,3 @@
-use serde_json::Value;
 use std::collections::HashMap;
 
 #[derive(Clone, Debug, Default)]
@@ -25,18 +24,9 @@ impl LearnsetDatabase {
         &self.learnsets
     }
 
-    pub fn load_from_json_str(json: &str) -> Result<Self, serde_json::Error> {
-        let value: Value = serde_json::from_str(json)?;
-        let map_value = if let Some(obj) = value.as_object() {
-            if let Some(inner) = obj.get("learnsets") {
-                inner.clone()
-            } else {
-                value.clone()
-            }
-        } else {
-            value.clone()
-        };
-        let map: HashMap<String, Vec<String>> = serde_json::from_value(map_value)?;
+    pub fn load_from_yaml_str(yaml: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        // Direct parse - learnsets.yaml is a simple map of species_id -> Vec<move_id>
+        let map: HashMap<String, Vec<String>> = serde_yaml::from_str(yaml)?;
         let mut db = Self::new();
         for (species_id, moves) in map {
             db.insert(species_id, moves);
@@ -44,8 +34,8 @@ impl LearnsetDatabase {
         Ok(db)
     }
 
-    pub fn load_default() -> Result<Self, serde_json::Error> {
-        const DEFAULT_LEARNSETS_JSON: &str = include_str!("../../data/learnsets.json");
-        Self::load_from_json_str(DEFAULT_LEARNSETS_JSON)
+    pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
+        const DEFAULT_LEARNSETS_YAML: &str = include_str!("../../data/learnsets.yaml");
+        Self::load_from_yaml_str(DEFAULT_LEARNSETS_YAML)
     }
 }

@@ -244,8 +244,8 @@ fn has_stage_change(text: &str, stat: &str) -> bool {
 
 #[test]
 fn sampled_description_matches_dsl_effects() {
-    let move_db = MoveDatabase::load_from_json_file("data/moves.json".as_ref())
-        .expect("load moves.json");
+    let move_db = MoveDatabase::load_from_yaml_file("data/moves.yaml".as_ref())
+        .expect("load moves.yaml");
     let name_to_id = build_name_to_id_map(&move_db);
 
     let mut reader = csv::Reader::from_path("data/2期生男子種族値 - 技一覧.csv")
@@ -272,7 +272,7 @@ fn sampled_description_matches_dsl_effects() {
     for name in csv_names {
         let move_id = name_to_id
             .get(&name)
-            .unwrap_or_else(|| panic!("missing moves.json id for {}", name));
+            .unwrap_or_else(|| panic!("missing moves.yaml id for {}", name));
         let move_data = move_db
             .get(move_id)
             .unwrap_or_else(|| panic!("missing move data for {}", move_id));

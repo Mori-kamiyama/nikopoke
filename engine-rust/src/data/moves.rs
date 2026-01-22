@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
+use serde_json::Map;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
@@ -29,7 +29,7 @@ pub struct Effect {
     #[serde(rename = "type")]
     pub effect_type: String,
     #[serde(flatten)]
-    pub data: Map<String, Value>,
+    pub data: Map<String, serde_json::Value>,
 }
 
 #[derive(Clone, Debug)]
@@ -127,9 +127,9 @@ impl MoveDatabase {
         db
     }
 
-    pub fn load_default() -> Result<Self, serde_json::Error> {
-        const DEFAULT_MOVES_JSON: &str = include_str!("../../data/moves.json");
-        Self::load_from_json_str(DEFAULT_MOVES_JSON)
+    pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
+        const DEFAULT_MOVES_YAML: &str = include_str!("../../data/moves.yaml");
+        Self::load_from_yaml_str(DEFAULT_MOVES_YAML)
     }
 
     pub fn insert(&mut self, move_data: MoveData) {
@@ -144,8 +144,12 @@ impl MoveDatabase {
         &self.moves
     }
 
-    pub fn load_from_json_str(json: &str) -> Result<Self, serde_json::Error> {
-        let map_result: Result<HashMap<String, MoveData>, _> = serde_json::from_str(json);
+    pub fn load_from_yaml_str(yaml: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        // Parse YAML, convert to JSON, then deserialize to maintain serde_json types
+        let yaml_value: serde_yaml::Value = serde_yaml::from_str(yaml)?;
+        let json_value = yaml_to_json(yaml_value);
+        
+        let map_result: Result<HashMap<String, MoveData>, _> = serde_json::from_value(json_value.clone());
         if let Ok(map) = map_result {
             let mut db = Self::new();
             for (_, move_data) in map {
@@ -154,7 +158,7 @@ impl MoveDatabase {
             return Ok(db);
         }
 
-        let vec_result: Result<Vec<MoveData>, _> = serde_json::from_str(json);
+        let vec_result: Result<Vec<MoveData>, _> = serde_json::from_value(json_value);
         let mut db = Self::new();
         for move_data in vec_result? {
             db.insert(move_data);
@@ -162,9 +166,9 @@ impl MoveDatabase {
         Ok(db)
     }
 
-    pub fn load_from_json_file(path: &Path) -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn load_from_yaml_file(path: &Path) -> Result<Self, Box<dyn std::error::Error>> {
         let content = fs::read_to_string(path)?;
-        let db = Self::load_from_json_str(&content)?;
+        let db = Self::load_from_yaml_str(&content)?;
         Ok(db)
     }
 }
@@ -172,5 +176,42 @@ impl MoveDatabase {
 impl Default for MoveDatabase {
     fn default() -> Self {
         Self::load_default().unwrap_or_else(|_| Self::minimal())
+    }
+}
+
+/// Convert serde_yaml::Value to serde_json::Value
+fn yaml_to_json(yaml: serde_yaml::Value) -> serde_json::Value {
+    match yaml {
+        serde_yaml::Value::Null => serde_json::Value::Null,
+        serde_yaml::Value::Bool(b) => serde_json::Value::Bool(b),
+        serde_yaml::Value::Number(n) => {
+            if let Some(i) = n.as_i64() {
+                serde_json::Value::Number(i.into())
+            } else if let Some(f) = n.as_f64() {
+                serde_json::Number::from_f64(f)
+                    .map(serde_json::Value::Number)
+                    .unwrap_or(serde_json::Value::Null)
+            } else {
+                serde_json::Value::Null
+            }
+        }
+        serde_yaml::Value::String(s) => serde_json::Value::String(s),
+        serde_yaml::Value::Sequence(seq) => {
+            serde_json::Value::Array(seq.into_iter().map(yaml_to_json).collect())
+        }
+        serde_yaml::Value::Mapping(map) => {
+            let obj: serde_json::Map<String, serde_json::Value> = map
+                .into_iter()
+                .filter_map(|(k, v)| {
+                    let key = match k {
+                        serde_yaml::Value::String(s) => s,
+                        _ => return None,
+                    };
+                    Some((key, yaml_to_json(v)))
+                })
+                .collect();
+            serde_json::Value::Object(obj)
+        }
+        serde_yaml::Value::Tagged(tagged) => yaml_to_json(tagged.value),
     }
 }

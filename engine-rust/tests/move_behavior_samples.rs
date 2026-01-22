@@ -396,15 +396,15 @@ fn collect_actual_event_kinds(events: &[BattleEvent]) -> HashSet<EventKind> {
 
 #[test]
 fn sampled_move_effects_match_expected_events() {
-    let move_db = MoveDatabase::load_from_json_file("data/moves.json".as_ref())
-        .expect("load moves.json");
+    let move_db = MoveDatabase::load_from_yaml_file("data/moves.yaml".as_ref())
+        .expect("load moves.yaml");
     let name_to_id = build_name_to_id_map(&move_db);
     let sampled_names = sample_move_names(&move_db);
     let type_chart = TypeChart::new();
 
     for name in sampled_names {
         let Some(move_id) = name_to_id.get(&name) else {
-            panic!("missing moves.json id for {}", name);
+            panic!("missing moves.yaml id for {}", name);
         };
         let move_data = move_db
             .get(move_id)

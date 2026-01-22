@@ -511,6 +511,12 @@ fn copy_fainted_ability(state: &BattleState, player_id: &str, ability_id: &str) 
             if creature.ability.as_deref() != Some(ability_id) {
                 return AbilityHookResult::default();
             }
+            if !creature.ability_data.contains_key("originalAbility") {
+                creature.ability_data.insert(
+                    "originalAbility".to_string(),
+                    Value::String(creature.ability.clone().unwrap_or_default()),
+                );
+            }
             creature.ability = Some(last.to_string());
             creature
                 .ability_data

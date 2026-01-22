@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
 use std::collections::HashMap;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -48,32 +47,9 @@ impl SpeciesDatabase {
         &self.species
     }
 
-    pub fn load_from_json_str(json: &str) -> Result<Self, serde_json::Error> {
-        let value: Value = serde_json::from_str(json)?;
-        let map_value = if let Some(obj) = value.as_object() {
-            if let Some(inner) = obj.get("species") {
-                inner.clone()
-            } else {
-                let mut merged = Map::new();
-                for (key, val) in obj {
-                    if key.ends_with("Species") {
-                        if let Some(nested) = val.as_object() {
-                            for (id, data) in nested {
-                                merged.insert(id.clone(), data.clone());
-                            }
-                        }
-                    }
-                }
-                if !merged.is_empty() {
-                    Value::Object(merged)
-                } else {
-                    value.clone()
-                }
-            }
-        } else {
-            value.clone()
-        };
-        let map: HashMap<String, SpeciesData> = serde_json::from_value(map_value)?;
+    pub fn load_from_yaml_str(yaml: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        // Direct parse - species.yaml is a simple map of id -> SpeciesData
+        let map: HashMap<String, SpeciesData> = serde_yaml::from_str(yaml)?;
         let mut db = Self::new();
         for (_, data) in map {
             db.insert(data);
@@ -81,8 +57,8 @@ impl SpeciesDatabase {
         Ok(db)
     }
 
-    pub fn load_default() -> Result<Self, serde_json::Error> {
-        const DEFAULT_SPECIES_JSON: &str = include_str!("../../data/species.json");
-        Self::load_from_json_str(DEFAULT_SPECIES_JSON)
+    pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
+        const DEFAULT_SPECIES_YAML: &str = include_str!("../../data/species.yaml");
+        Self::load_from_yaml_str(DEFAULT_SPECIES_YAML)
     }
 }

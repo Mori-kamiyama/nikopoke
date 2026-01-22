@@ -68,8 +68,8 @@ fn create_battle(p1_team: Vec<CreatureState>, p2_team: Vec<CreatureState>) -> Ba
 
 #[test]
 fn test_lightning_rod_immunity() {
-    let path = Path::new("data/moves.json");
-    let move_db = MoveDatabase::load_from_json_file(path).expect("load moves.json");
+    let path = Path::new("data/moves.yaml");
+    let move_db = MoveDatabase::load_from_yaml_file(path).expect("load moves.yaml");
     let type_chart = TypeChart::new();
     let engine = BattleEngine::new(move_db, type_chart);
 
@@ -124,8 +124,8 @@ fn test_lightning_rod_immunity() {
         
         #[test]
         fn test_thick_fat_resistance() {
-            let path = Path::new("data/moves.json");
-            let move_db = MoveDatabase::load_from_json_file(path).expect("load moves.json");
+            let path = Path::new("data/moves.yaml");
+            let move_db = MoveDatabase::load_from_yaml_file(path).expect("load moves.yaml");
             let type_chart = TypeChart::new();
             let engine = BattleEngine::new(move_db, type_chart);
         
@@ -178,8 +178,8 @@ fn test_lightning_rod_immunity() {
 
 #[test]
 fn test_prankster_priority() {
-    let path = Path::new("data/moves.json");
-    let move_db = MoveDatabase::load_from_json_file(path).expect("load moves.json");
+    let path = Path::new("data/moves.yaml");
+    let move_db = MoveDatabase::load_from_yaml_file(path).expect("load moves.yaml");
     let type_chart = TypeChart::new();
     let engine = BattleEngine::new(move_db, type_chart);
 
@@ -260,8 +260,8 @@ fn test_prankster_priority() {
 }
 #[test]
 fn test_skill_link_multi_hit() {
-    let path = Path::new("data/moves.json");
-    let move_db = MoveDatabase::load_from_json_file(path).expect("load moves.json");
+    let path = Path::new("data/moves.yaml");
+    let move_db = MoveDatabase::load_from_yaml_file(path).expect("load moves.yaml");
     let type_chart = TypeChart::new();
     let engine = BattleEngine::new(move_db, type_chart);
 

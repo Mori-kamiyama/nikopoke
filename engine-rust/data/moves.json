@@ -34,7 +34,7 @@
         "then": [
           {
             "type": "damage_ratio",
-            "ratioMaxHp": 0.6666666666666666,
+            "ratioMaxHp": -0.6666666666666666,
             "target": "self"
           }
         ]
@@ -47,7 +47,7 @@
         "then": [
           {
             "type": "damage_ratio",
-            "ratioMaxHp": 0.25,
+            "ratioMaxHp": -0.25,
             "target": "self"
           }
         ]
@@ -60,7 +60,7 @@
         "then": [
           {
             "type": "damage_ratio",
-            "ratioMaxHp": 0.25,
+            "ratioMaxHp": -0.25,
             "target": "self"
           }
         ]
@@ -73,14 +73,14 @@
         "then": [
           {
             "type": "damage_ratio",
-            "ratioMaxHp": 0.25,
+            "ratioMaxHp": -0.25,
             "target": "self"
           }
         ]
       },
       {
         "type": "damage_ratio",
-        "ratioMaxHp": 0.5,
+        "ratioMaxHp": -0.5,
         "target": "self"
       }
     ]
@@ -110,12 +110,12 @@
     "effects": [
       {
         "type": "damage_ratio",
-        "ratioMaxHp": 0.5,
+        "ratioMaxHp": -0.5,
         "target": "self"
       },
       {
         "type": "damage_ratio",
-        "ratioMaxHp": 0.5,
+        "ratioMaxHp": -0.5,
         "target": "target"
       }
     ]
@@ -639,7 +639,7 @@
     "effects": [
       {
         "type": "damage_ratio",
-        "ratioMaxHp": 0.5,
+        "ratioMaxHp": -0.5,
         "target": "self"
       }
     ]
@@ -841,7 +841,7 @@
     "effects": [
       {
         "type": "damage_ratio",
-        "ratioMaxHp": 0.5,
+        "ratioMaxHp": -0.5,
         "target": "self"
       }
     ]
@@ -2366,7 +2366,7 @@
     "effects": [
       {
         "type": "damage_ratio",
-        "ratioMaxHp": 0.5,
+        "ratioMaxHp": -0.5,
         "target": "self"
       },
       {
@@ -8360,16 +8360,13 @@
     "id": "ice_breath",
     "name": "こおりのいぶき",
     "type": "ice",
+    "critRate": 3,
     "category": "special",
     "effects": [
       {
         "type": "damage",
         "power": 60,
         "accuracy": 0.9
-      },
-      {
-        "type": "crit",
-        "mult": 100
       }
     ]
   },
@@ -9443,7 +9440,7 @@
         "then": [
           {
             "type": "damage_ratio",
-            "ratioMaxHp": 0.6666666666666666,
+            "ratioMaxHp": -0.6666666666666666,
             "target": "self"
           }
         ],
@@ -9456,7 +9453,7 @@
             "then": [
               {
                 "type": "damage_ratio",
-                "ratioMaxHp": 0.25,
+                "ratioMaxHp": -0.25,
                 "target": "self"
               }
             ],
@@ -9469,7 +9466,7 @@
                 "then": [
                   {
                     "type": "damage_ratio",
-                    "ratioMaxHp": 0.25,
+                    "ratioMaxHp": -0.25,
                     "target": "self"
                   }
                 ],
@@ -9482,14 +9479,14 @@
                     "then": [
                       {
                         "type": "damage_ratio",
-                        "ratioMaxHp": 0.25,
+                        "ratioMaxHp": -0.25,
                         "target": "self"
                       }
                     ],
                     "else": [
                       {
                         "type": "damage_ratio",
-                        "ratioMaxHp": 0.5,
+                        "ratioMaxHp": -0.5,
                         "target": "self"
                       }
                     ]
