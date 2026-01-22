@@ -26,23 +26,23 @@ function applyEvent(state, event) {
       const { playerId, slot } = event;
       const player = next.players.find((p) => p.id === playerId);
       if (!player) return next;
-      
+
       const outgoing = player.team[player.activeSlot];
       const incoming = player.team[slot];
-      
+
       if (outgoing) {
         // Reset volatile statuses and stages on switch out
         outgoing.stages = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, acc: 0, eva: 0 };
-        
+
         // Preserve non-volatile statuses
         const NON_VOLATILE = ["burn", "poison", "toxic", "paralysis", "sleep", "freeze"];
         outgoing.statuses = outgoing.statuses.filter(s => NON_VOLATILE.includes(s.id));
-        
+
         outgoing.abilityData = {}; // Clear ability history flags
         outgoing.volatileData = {}; // Clear volatile data
         // Note: Primary status (poison, burn) persists.
       }
-      
+
       player.activeSlot = slot;
       next.log.push(`${player.name} sent out ${incoming.name}!`);
       return next;
@@ -151,15 +151,15 @@ function applyEvent(state, event) {
       } = event;
       const target = getActiveCreature(next, targetId);
       if (!target) return next;
-      
+
       // Ability hook for stages (Contrary, Simple)
       // We pass stages as 'value' AND 'stages' in context to support both patterns
       const adjusted = runAbilityValueHook(
-          next, 
-          targetId, 
-          "onModifyStage", 
-          stages ?? {}, 
-          { stages: stages ?? {} }
+        next,
+        targetId,
+        "onModifyStage",
+        stages ?? {},
+        { stages: stages ?? {} }
       );
 
       const c = target;
@@ -246,10 +246,10 @@ function applyEvent(state, event) {
         next.log.push(`${target.name} fainted!`);
         const owner = next.players.find((p) => p.id === targetId);
         if (owner) {
-            owner.lastFaintedAbility = target.ability;
-            if (!target.statuses.some(s => s.id === "pending_switch")) {
-                target.statuses.push({ id: "pending_switch", remainingTurns: null, data: {} });
-            }
+          owner.lastFaintedAbility = target.ability;
+          if (!target.statuses.some(s => s.id === "pending_switch")) {
+            target.statuses.push({ id: "pending_switch", remainingTurns: null, data: {} });
+          }
         }
       }
       return next;
@@ -260,7 +260,7 @@ function applyEvent(state, event) {
       const target = getActiveCreature(next, targetId);
       if (target) {
         if (!target.statuses.some(s => s.id === "pending_switch")) {
-            target.statuses.push({ id: "pending_switch", remainingTurns: null, data: {} });
+          target.statuses.push({ id: "pending_switch", remainingTurns: null, data: {} });
         }
       }
       return next;
@@ -271,9 +271,8 @@ function applyEvent(state, event) {
 }
 
 function formatStages(stages) {
-  return `atk ${stages.atk ?? 0}, def ${stages.def ?? 0}, spa ${
-    stages.spa ?? 0
-  }, spd ${stages.spd ?? 0}, spe ${stages.spe ?? 0}`;
+  return `atk ${stages.atk ?? 0}, def ${stages.def ?? 0}, spa ${stages.spa ?? 0
+    }, spd ${stages.spd ?? 0}, spe ${stages.spe ?? 0}`;
 }
 
 module.exports = { applyEvent };

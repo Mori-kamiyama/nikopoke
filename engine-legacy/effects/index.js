@@ -12,38 +12,38 @@ function applyEffect(state, effect, ctx) {
   const events = [];
   switch (effect.type) {
     case "protect": {
-        const attackerCreature = currentCreature(state, ctxWithTurn.attackerPlayerId);
-        if (!attackerCreature) return [];
-        
-        // Success chance depends on consecutive uses
-        // We use volatileData.protectSuccessCount for tracking
-        const successCount = attackerCreature.volatileData?.protectSuccessCount ?? 0;
-        
-        let chance = 1.0;
-        for(let i=0; i<successCount; i++) chance *= 0.5; // Simple halving
-        
-        if (ctx.rng() > chance) {
-             events.push({
-                 type: "log",
-                 message: `${ctx.attacker.name}'s protect failed!`,
-             });
-             attackerCreature.volatileData.protectSuccessCount = 0;
-             return events;
-        }
+      const attackerCreature = currentCreature(state, ctxWithTurn.attackerPlayerId);
+      if (!attackerCreature) return [];
 
-        // Increment counter
-        attackerCreature.volatileData.protectSuccessCount = successCount + 1;
+      // Success chance depends on consecutive uses
+      // We use volatileData.protectSuccessCount for tracking
+      const successCount = attackerCreature.volatileData?.protectSuccessCount ?? 0;
 
-        // Apply status protect
+      let chance = 1.0;
+      for (let i = 0; i < successCount; i++) chance *= 0.5; // Simple halving
+
+      if (ctx.rng() > chance) {
         events.push({
-            type: "apply_status",
-            statusId: "protect",
-            targetId: ctx.attackerPlayerId,
-            duration: 1, // Current turn only
-            meta: { moveId: ctx.move?.id, source: ctx.attackerPlayerId },
+          type: "log",
+          message: `${ctx.attacker.name}'s protect failed!`,
         });
-        
+        attackerCreature.volatileData.protectSuccessCount = 0;
         return events;
+      }
+
+      // Increment counter
+      attackerCreature.volatileData.protectSuccessCount = successCount + 1;
+
+      // Apply status protect
+      events.push({
+        type: "apply_status",
+        statusId: "protect",
+        targetId: ctx.attackerPlayerId,
+        duration: 1, // Current turn only
+        meta: { moveId: ctx.move?.id, source: ctx.attackerPlayerId },
+      });
+
+      return events;
     }
     case "damage": {
       const attackerCreature = currentCreature(
@@ -59,15 +59,15 @@ function applyEffect(state, effect, ctx) {
 
       // Accuracy modifiers from abilities
       accuracy = runAbilityValueHook(
-          state, 
-          ctxWithTurn.attackerPlayerId, 
-          "onModifyAccuracy", 
-          accuracy, 
-          { 
-              move: ctx.move, 
-              category, 
-              target: targetCreature 
-          }
+        state,
+        ctxWithTurn.attackerPlayerId,
+        "onModifyAccuracy",
+        accuracy,
+        {
+          move: ctx.move,
+          category,
+          target: targetCreature
+        }
       );
 
       if (ctx.rng() > accuracy) {
@@ -180,16 +180,16 @@ function applyEffect(state, effect, ctx) {
         return events;
       }
       const targetId = resolveTarget(effect.target, ctx);
-      
+
       let duration = effect.duration ?? null;
       if (typeof duration === 'object' && duration !== null && 'min' in duration && 'max' in duration) {
-          const range = duration.max - duration.min + 1;
-          duration = duration.min + Math.floor(ctx.rng() * range);
+        const range = duration.max - duration.min + 1;
+        duration = duration.min + Math.floor(ctx.rng() * range);
       }
-      
+
       const data = { ...effect.data };
       if (data.sourceId === "self") {
-          data.sourceId = ctx.attackerPlayerId;
+        data.sourceId = ctx.attackerPlayerId;
       }
 
       events.push({
@@ -245,8 +245,8 @@ function applyEffect(state, effect, ctx) {
 
       const baseAccuracy =
         effect.requiredType &&
-        !attacker.types?.includes(effect.requiredType) &&
-        effect.nonMatchingTypeAccuracy != null
+          !attacker.types?.includes(effect.requiredType) &&
+          effect.nonMatchingTypeAccuracy != null
           ? effect.nonMatchingTypeAccuracy
           : effect.baseAccuracy ?? 0.3;
 
@@ -426,36 +426,36 @@ function applyEffect(state, effect, ctx) {
     case "repeat": {
       // Resolve repeat count
       let times = effect.times ?? effect.count ?? 1;
-      
+
       // Handle random range { min, max }
       if (typeof times === 'object' && times !== null && 'min' in times && 'max' in times) {
-          // Check for Skill Link ability
-          const isSkillLink = runAbilityCheckHook(state, ctx.attackerPlayerId, "onSkillLink", {});
-          // console.log(`Skill Link check for ${ctx.attackerPlayerId}: ${isSkillLink}`);
-          
-          if (isSkillLink) {
-              times = times.max;
-          } else {
-              const range = times.max - times.min + 1;
-              // Weighted distribution for multi-hit moves usually? 
-              // 2 hits: 35%, 3 hits: 35%, 4 hits: 15%, 5 hits: 15% (for 2-5 range)
-              // But for generic min-max, linear is simpler for now unless specified.
-              // Let's implement standard 2-5 weighted if min=2 max=5?
-              // Or simple linear for now to keep DSL generic.
-              // Let's stick to simple uniform random for generic DSL unless specific logic requested.
-              times = times.min + Math.floor(ctx.rng() * range);
-          }
+        // Check for Skill Link ability
+        const isSkillLink = runAbilityCheckHook(state, ctx.attackerPlayerId, "onSkillLink", {});
+        // console.log(`Skill Link check for ${ctx.attackerPlayerId}: ${isSkillLink}`);
+
+        if (isSkillLink) {
+          times = times.max;
+        } else {
+          const range = times.max - times.min + 1;
+          // Weighted distribution for multi-hit moves usually? 
+          // 2 hits: 35%, 3 hits: 35%, 4 hits: 15%, 5 hits: 15% (for 2-5 range)
+          // But for generic min-max, linear is simpler for now unless specified.
+          // Let's implement standard 2-5 weighted if min=2 max=5?
+          // Or simple linear for now to keep DSL generic.
+          // Let's stick to simple uniform random for generic DSL unless specific logic requested.
+          times = times.min + Math.floor(ctx.rng() * range);
+        }
       }
 
       let collected = [];
       for (let i = 0; i < times; i += 1) {
         collected = collected.concat(applyEffects(state, effect.effects ?? [], ctx, true));
       }
-      
+
       if (times > 1) {
-          collected.push({ type: "log", message: `Hit ${times} time(s)!` });
+        collected.push({ type: "log", message: `Hit ${times} time(s)!` });
       }
-      
+
       return collected;
     }
     case "conditional": {
@@ -671,30 +671,30 @@ function computeSpeed(state, playerId, turn = 0) {
 function modifyMovePower(basePower, state, attacker, target, ctx) {
   // Use hook for power modifiers (Sharpness, Technician, Steelworker, Hustle, Pure Power, Guts)
   let power = runAbilityValueHook(
-      state,
-      ctx.attackerPlayerId,
-      "onModifyPower",
-      basePower,
-      { 
-          move: ctx.move, 
-          category: getMoveCategory(ctx.move), 
-          target 
-      }
+    state,
+    ctx.attackerPlayerId,
+    "onModifyPower",
+    basePower,
+    {
+      move: ctx.move,
+      category: getMoveCategory(ctx.move),
+      target
+    }
   );
 
   // Use hook for defensive power modifiers (Thick Fat, Heatproof, Dry Skin, Fluffy)
   if (ctx.targetPlayerId) {
-      power = runAbilityValueHook(
-          state,
-          ctx.targetPlayerId,
-          "onDefensivePower",
-          power,
-          {
-              move: ctx.move,
-              category: getMoveCategory(ctx.move),
-              attacker
-          }
-      );
+    power = runAbilityValueHook(
+      state,
+      ctx.targetPlayerId,
+      "onDefensivePower",
+      power,
+      {
+        move: ctx.move,
+        category: getMoveCategory(ctx.move),
+        attacker
+      }
+    );
   }
 
   return power;
@@ -725,20 +725,20 @@ function resolveOffenseDefense(state, attacker, target, category, ctx) {
 
   // Hook for Offense (Slow Start, etc.)
   atk = runAbilityValueHook(
-      state,
-      ctx.attackerPlayerId,
-      "onModifyOffense",
-      atk,
-      { category, turn: ctx.turn }
+    state,
+    ctx.attackerPlayerId,
+    "onModifyOffense",
+    atk,
+    { category, turn: ctx.turn }
   );
 
   // Hook for Defense (Fur Coat, etc.)
   def = runAbilityValueHook(
-      state,
-      ctx.targetPlayerId,
-      "onModifyDefense",
-      def,
-      { category, turn: ctx.turn }
+    state,
+    ctx.targetPlayerId,
+    "onModifyDefense",
+    def,
+    { category, turn: ctx.turn }
   );
 
   return { atk, def };
@@ -749,14 +749,14 @@ function rollCritical(state, attacker, target, ctx, rng) {
 
   let critStage = 0;
   if (ctx?.move?.critRate) critStage += ctx.move.critRate;
-  
+
   // Hook for Crit Chance (Super Luck, Merciless)
   critStage = runAbilityValueHook(
-      state,
-      ctx.attackerPlayerId,
-      "onModifyCritChance",
-      critStage,
-      { target }
+    state,
+    ctx.attackerPlayerId,
+    "onModifyCritChance",
+    critStage,
+    { target }
   );
 
   if (critStage <= 0) return false;
@@ -809,13 +809,13 @@ function evaluateCondition(state, cond, ctx) {
     case "weather_is_sandstorm":
       return fieldHasAnyStatus(state, ["sandstorm", "sandstorm_weather"]);
     case "user_type": {
-        // ctx.attacker is a copy, might not be fully populated with types if passed from some contexts?
-        // But assuming ctx.attacker is set.
-        return ctx.attacker?.types?.includes(cond.typeId) ?? false;
+      // ctx.attacker is a copy, might not be fully populated with types if passed from some contexts?
+      // But assuming ctx.attacker is set.
+      return ctx.attacker?.types?.includes(cond.typeId) ?? false;
     }
     case "user_has_status": {
-        const attacker = currentCreature(state, ctx.attackerPlayerId);
-        return !!attacker?.statuses?.some((s) => s.id === cond.statusId);
+      const attacker = currentCreature(state, ctx.attackerPlayerId);
+      return !!attacker?.statuses?.some((s) => s.id === cond.statusId);
     }
     case "target_has_item": {
       const target = currentCreature(state, ctx.targetPlayerId, "def");
