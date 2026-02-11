@@ -2,9 +2,14 @@ id: fake_tears
 name: うそなき
 type: dark
 category: status
-pp: 30
+pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: ないた　ふりをして　涙を　流す。 こまらせる　ことで 相手の　特防を　がくっと　さげる。
 steps:
 - type: modify_stage
   target: target
   stages:
     spd: -2
+tags: []

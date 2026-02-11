@@ -1,0 +1,15 @@
+id: double_team
+name: かげぶんしん
+type: normal
+category: status
+pp: 15
+power: null
+accuracy: null
+priority: 0
+description: 素早い　動きで　分身を　つくり 相手を　まどわせて 回避率を　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    evasion: 1
+tags: []

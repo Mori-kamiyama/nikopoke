@@ -3,7 +3,12 @@ name: はなふぶき
 type: grass
 category: physical
 pp: 15
+power: 90
+accuracy: 1.0
+priority: 0
+description: 激しい　花吹雪を　起こし 周りに　いるものに　攻撃して ダメージを　与える。
 steps:
 - type: damage
   power: 90
-  accuracy: 1
+  accuracy: 1.0
+tags: []

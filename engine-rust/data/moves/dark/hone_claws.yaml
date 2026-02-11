@@ -1,0 +1,16 @@
+id: hone_claws
+name: つめとぎ
+type: dark
+category: status
+pp: 15
+power: null
+accuracy: null
+priority: 0
+description: ツメを　磨いて　鋭く　する。 自分の　攻撃と 命中率を　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    accuracy: 1
+tags: []

@@ -2,11 +2,19 @@ id: icicle_crash
 name: つららおとし
 type: ice
 category: physical
-pp: 30
+pp: 10
+power: 85
+accuracy: 0.9
+priority: 0
+description: 大きな　氷柱を 激しく　ぶつけて　攻撃する。 相手を　ひるませることが　ある。
 steps:
 - type: damage
+  power: 85
+  accuracy: 0.9
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: flinch
+    target: target
+tags: []

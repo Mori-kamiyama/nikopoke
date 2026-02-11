@@ -3,16 +3,13 @@ name: きあいパンチ
 type: fighting
 category: physical
 pp: 20
+power: 150
+accuracy: 1.0
 priority: -3
+description: 精神を　高めて　パンチを　くりだす。 技を　だすまでに 攻撃を　受けると　失敗する。
 steps:
 - type: damage
   power: 150
-  accuracy: 1
-- type: conditional
-  if:
-    type: user_has_status
-    statusId: flinch
-  then: []
-  else: []
+  accuracy: 1.0
 tags:
-- punch
+- contact

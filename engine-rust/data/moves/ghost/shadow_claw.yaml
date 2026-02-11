@@ -3,11 +3,14 @@ name: シャドークロー
 type: ghost
 category: physical
 pp: 15
+power: 70
+accuracy: 1.0
+priority: 0
+description: 影から　つくった　鋭い　ツメで 相手を　切り裂く。 急所に　当たりやすい。
 steps:
 - type: damage
   power: 70
-  accuracy: 1
-- type: modify_stage
-  target: self
-  stages:
-    crit: 1
+  accuracy: 1.0
+tags:
+- contact
+critRate: 1

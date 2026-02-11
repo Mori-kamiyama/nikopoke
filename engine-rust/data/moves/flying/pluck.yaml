@@ -1,0 +1,15 @@
+id: pluck
+name: ついばむ
+type: flying
+category: physical
+pp: 20
+power: 60
+accuracy: 1.0
+priority: 0
+description: くちばしで　攻撃。 相手が　きのみを　持っているとき 食べて　きのみの　効果を　受けられる。
+steps:
+- type: damage
+  power: 60
+  accuracy: 1.0
+tags:
+- contact

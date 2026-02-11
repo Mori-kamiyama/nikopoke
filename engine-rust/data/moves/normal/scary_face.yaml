@@ -1,0 +1,15 @@
+id: scary_face
+name: こわいかお
+type: normal
+category: status
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: '恐ろしい　顔で　にらみ　おびえさせて 相手の　素早さを　がくっと　さげる。 '
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spe: -2
+tags: []

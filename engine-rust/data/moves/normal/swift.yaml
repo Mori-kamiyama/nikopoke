@@ -1,0 +1,13 @@
+id: swift
+name: スピードスター
+type: normal
+category: special
+pp: 20
+power: 60
+accuracy: null
+priority: 0
+description: 星型の　光を　発射して 相手を　攻撃する。 攻撃は　必ず　命中する。
+steps:
+- type: damage
+  power: 60
+tags: []

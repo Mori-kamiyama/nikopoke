@@ -1,17 +1,15 @@
 id: fly
-name: とびはねる
+name: そらをとぶ
 type: flying
 category: physical
-pp: 5
-accuracy: 0.85
+pp: 15
+power: 90
+accuracy: 0.95
+priority: 0
+description: １ターン目で　空へ　飛び ２ターン目に　相手を　攻撃する。 知っている　街に　飛ぶことも　できる。
 steps:
-- type: wait
-  turns: 1
-  steps:
-  - type: damage
-    power: 85
-- type: chance
-  p: 0.3
-  then:
-  - type: apply_status
-    statusId: paralysis
+- type: damage
+  power: 90
+  accuracy: 0.95
+tags:
+- contact

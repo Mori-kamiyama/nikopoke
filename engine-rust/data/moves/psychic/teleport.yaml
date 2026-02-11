@@ -3,7 +3,11 @@ name: テレポート
 type: psychic
 category: status
 pp: 20
+power: null
+accuracy: null
 priority: -6
+description: 野生ポケモンとの　戦闘を　やめる。 最後に　はいった ポケセンの　ある　街にも　行ける。
 steps:
 - type: manual
-  manualReason: Switching Pokemon is not supported in DSL
+  manualReason: No supported effects inferred
+tags: []

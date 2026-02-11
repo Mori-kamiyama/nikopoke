@@ -3,7 +3,12 @@ name: ミルクのみ
 type: normal
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 最大ＨＰの　半分 自分の　ＨＰを　回復する。 仲間に　ＨＰを　わけることも　できる。
 steps:
 - type: damage_ratio
   ratioMaxHp: -0.5
   target: self
+tags: []

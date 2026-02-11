@@ -3,6 +3,11 @@ name: マジカルリーフ
 type: grass
 category: special
 pp: 20
+power: 60
+accuracy: null
+priority: 0
+description: 相手を　追跡する 不思議な　はっぱを まきちらす。 攻撃は　必ず　命中する。
 steps:
 - type: damage
   power: 60
+tags: []

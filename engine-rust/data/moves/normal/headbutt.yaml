@@ -1,14 +1,21 @@
 id: headbutt
-name: ぶちかまし
+name: ずつき
 type: normal
 category: physical
-pp: 5
+pp: 15
+power: 70
+accuracy: 1.0
+priority: 0
+description: 頭を　突きだして まっすぐ　つっこんで　攻撃する。 相手を　ひるませることが　ある。
 steps:
 - type: damage
-  power: 120
-  accuracy: 1
-- type: modify_stage
-  target: self
-  stages:
-    def: -1
-    spd: -1
+  power: 70
+  accuracy: 1.0
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+tags:
+- contact

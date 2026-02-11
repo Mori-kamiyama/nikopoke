@@ -3,7 +3,13 @@ name: メガホーン
 type: bug
 category: physical
 pp: 10
+power: 120
+accuracy: 0.85
+priority: 0
+description: '硬くて　りっぱな　つので　おもいっきり 相手を　突き刺して　攻撃する。 '
 steps:
 - type: damage
   power: 120
   accuracy: 0.85
+tags:
+- contact

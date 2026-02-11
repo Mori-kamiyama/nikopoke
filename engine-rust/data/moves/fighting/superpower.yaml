@@ -1,0 +1,20 @@
+id: superpower
+name: ばかぢから
+type: fighting
+category: physical
+pp: 5
+power: 120
+accuracy: 1.0
+priority: 0
+description: すごい　力を　発揮して 相手を　攻撃する。自分の 攻撃と　防御が　さがる。
+steps:
+- type: damage
+  power: 120
+  accuracy: 1.0
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+    def: -1
+tags:
+- contact

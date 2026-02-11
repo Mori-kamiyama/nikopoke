@@ -1,0 +1,14 @@
+id: roar_of_time
+name: ときのほうこう
+type: dragon
+category: special
+pp: 5
+power: 150
+accuracy: 0.9
+priority: 0
+description: 時間が　ゆがむほどの　力を うちだして　相手を　攻撃する。 次の　ターンは　動けなくなる。
+steps:
+- type: damage
+  power: 150
+  accuracy: 0.9
+tags: []

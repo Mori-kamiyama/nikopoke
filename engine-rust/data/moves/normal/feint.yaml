@@ -3,8 +3,13 @@ name: フェイント
 type: normal
 category: physical
 pp: 10
+power: 30
+accuracy: 1.0
 priority: 2
+description: まもるや　みきりを　している 相手に　攻撃が　できる。 守りの　効果を　解除させる。
 steps:
 - type: damage
   power: 30
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

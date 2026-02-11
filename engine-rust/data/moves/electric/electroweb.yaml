@@ -1,12 +1,18 @@
 id: electroweb
-name: でんじほう
+name: エレキネット
 type: electric
 category: special
-pp: 5
+pp: 15
+power: 55
+accuracy: 0.95
+priority: 0
+description: 電気の　ネットで 相手を　捕まえて　攻撃する。 相手の　素早さを　さげる。
 steps:
 - type: damage
-  power: 120
-  accuracy: 0.5
-- type: apply_status
-  statusId: paralysis
-  chance: 1
+  power: 55
+  accuracy: 0.95
+- type: modify_stage
+  target: target
+  stages:
+    spe: -1
+tags: []

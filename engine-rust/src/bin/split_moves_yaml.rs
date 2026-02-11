@@ -128,6 +128,7 @@ fn ordered_move_value(move_value: &Value) -> Value {
         "power",
         "accuracy",
         "priority",
+        "description",
         "steps",
         "tags",
         "critRate",

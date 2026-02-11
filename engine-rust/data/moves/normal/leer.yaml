@@ -3,8 +3,13 @@ name: にらみつける
 type: normal
 category: status
 pp: 30
+power: null
+accuracy: 1.0
+priority: 0
+description: '鋭い　目つきで　おびえさせて 相手の　防御を　さげる。 '
 steps:
 - type: modify_stage
   target: target
   stages:
     def: -1
+tags: []

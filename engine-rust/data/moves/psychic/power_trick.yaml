@@ -3,14 +3,11 @@ name: パワートリック
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 超能力で 自分の　攻撃と　防御の 力を　交換する。
 steps:
-- type: modify_stage
-  target: self
-  stages:
-    atk: -99
-    def: 99
-- type: modify_stage
-  target: self
-  stages:
-    atk: 99
-    def: -99
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

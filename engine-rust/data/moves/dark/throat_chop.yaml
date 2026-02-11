@@ -1,0 +1,17 @@
+id: throat_chop
+name: じごくづき
+type: dark
+category: physical
+pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: この　技を　受けた　相手は 地獄の　苦しみから　２ターンの間 音の　技を　出すことが　できなくなる。
+steps:
+- type: damage
+  power: 80
+  accuracy: 1.0
+- type: manual
+  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: silence'
+tags:
+- contact

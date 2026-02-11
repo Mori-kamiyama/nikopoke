@@ -1,9 +1,16 @@
 id: sweet_kiss
-name: あまえる
+name: てんしのキッス
 type: fairy
 category: status
+pp: 10
+power: null
+accuracy: 0.75
+priority: 0
+description: '天使のように　かわいく　キスして 相手を　混乱させる。 '
 steps:
-- type: modify_stage
+- type: apply_status
+  statusId: confusion
   target: target
-  stages:
-    atk: -2
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

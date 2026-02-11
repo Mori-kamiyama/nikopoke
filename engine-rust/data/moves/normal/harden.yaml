@@ -3,8 +3,13 @@ name: かたくなる
 type: normal
 category: status
 pp: 30
+power: null
+accuracy: null
+priority: 0
+description: 全身に　力を　こめて 体を　硬くして 自分の　防御を　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     def: 1
+tags: []

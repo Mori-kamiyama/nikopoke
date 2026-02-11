@@ -1,0 +1,15 @@
+id: withdraw
+name: からにこもる
+type: water
+category: status
+pp: 40
+power: null
+accuracy: null
+priority: 0
+description: '殻に　潜りこんで　身を守り 自分の　防御を　あげる。 '
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 1
+tags: []

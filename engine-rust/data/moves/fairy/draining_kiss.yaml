@@ -1,0 +1,16 @@
+id: draining_kiss
+name: ドレインキッス
+type: fairy
+category: special
+pp: 10
+power: 50
+accuracy: 1.0
+priority: 0
+description: キッスによって　相手から　ＨＰを 吸い取る。与えた　ダメージの 半分以上　ＨＰを　回復する。
+steps:
+- type: damage
+  power: 50
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags: []

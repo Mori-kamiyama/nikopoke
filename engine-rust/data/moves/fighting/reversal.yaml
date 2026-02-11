@@ -3,13 +3,12 @@ name: きしかいせい
 type: fighting
 category: physical
 pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: 力を　ふりしぼり　攻撃する。 自分の　ＨＰが　少ないほど 技の　威力は　あがる。
 steps:
-- type: damage
-  power: 20
-- type: conditional
-  if:
-    type: target_hp_lt
-    value: 0.1
-  then:
-  - type: damage
-    power: 200
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

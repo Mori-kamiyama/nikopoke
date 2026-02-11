@@ -1,0 +1,14 @@
+id: steel_beam
+name: てっていこうせん
+type: steel
+category: special
+pp: 5
+power: 140
+accuracy: 0.95
+priority: 0
+description: 全身から　集めた　はがねを ビームとして　激しく　撃ちだす。 自分も　ダメージを　受けてしまう。
+steps:
+- type: damage
+  power: 140
+  accuracy: 0.95
+tags: []

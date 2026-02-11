@@ -1,0 +1,21 @@
+id: dragon_rush
+name: ドラゴンダイブ
+type: dragon
+category: physical
+pp: 10
+power: 100
+accuracy: 0.75
+priority: 0
+description: すさまじい　殺気で　威圧しながら 体当たりする。 相手を　ひるませることが　ある。
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.75
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+tags:
+- contact

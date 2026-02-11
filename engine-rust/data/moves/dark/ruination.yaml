@@ -1,0 +1,14 @@
+id: ruination
+name: カタストロフィ
+type: dark
+category: special
+pp: 10
+power: 1
+accuracy: 0.9
+priority: 0
+description: 相手のHPを残りHPの半分にする。タイプ相性の影響を受けない。
+steps:
+- type: damage
+  power: 1
+  accuracy: 0.9
+tags: []

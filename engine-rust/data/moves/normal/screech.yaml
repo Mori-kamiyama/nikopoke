@@ -1,0 +1,15 @@
+id: screech
+name: いやなおと
+type: normal
+category: status
+pp: 40
+power: null
+accuracy: 0.85
+priority: 0
+description: おもわず　耳を　ふさぎたくなる いやなおとを　だして 相手の　防御を　がくっと　さげる。
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    def: -2
+tags: []

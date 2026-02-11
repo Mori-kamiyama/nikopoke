@@ -3,14 +3,20 @@ name: クロスポイズン
 type: poison
 category: physical
 pp: 20
+power: 70
+accuracy: 1.0
+priority: 0
+description: 毒の　刃で　相手を　切り裂く。 毒状態に　することが　あり 急所にも　当たりやすい。
 steps:
 - type: damage
   power: 70
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.1
   then:
   - type: apply_status
     statusId: poison
     target: target
+tags:
+- contact
 critRate: 1

@@ -3,8 +3,13 @@ name: とんぼがえり
 type: bug
 category: physical
 pp: 20
+power: 70
+accuracy: 1.0
+priority: 0
+description: 攻撃したあと ものすごい　スピードで　もどってきて 控えの　ポケモンと　入れ替わる。
 steps:
 - type: damage
   power: 70
-  accuracy: 1
-- type: self_switch
+  accuracy: 1.0
+tags:
+- contact

@@ -2,13 +2,15 @@ id: memento
 name: おきみやげ
 type: dark
 category: status
-pp: 20
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 自分は　ひんしに　なるが　そのかわりに 相手の　攻撃と　特攻を がくっと　さげる。
 steps:
 - type: modify_stage
   target: target
   stages:
     atk: -2
     spa: -2
-- type: damage_ratio
-  ratioMaxHp: 1
-  target: self
+tags: []

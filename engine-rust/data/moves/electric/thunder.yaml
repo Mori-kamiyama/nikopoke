@@ -3,6 +3,10 @@ name: かみなり
 type: electric
 category: special
 pp: 10
+power: 110
+accuracy: 0.7
+priority: 0
+description: 激しい　雷を 相手に　落として　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
   power: 110
@@ -13,17 +17,4 @@ steps:
   - type: apply_status
     statusId: paralysis
     target: target
-- type: conditional
-  if:
-    type: weather_is_raining
-  then:
-  - type: damage
-    power: 110
-    accuracy: 1
-- type: conditional
-  if:
-    type: weather_is_sunny
-  then:
-  - type: damage
-    power: 110
-    accuracy: 0.5
+tags: []

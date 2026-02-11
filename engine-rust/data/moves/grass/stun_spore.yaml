@@ -1,0 +1,14 @@
+id: stun_spore
+name: しびれごな
+type: grass
+category: status
+pp: 30
+power: null
+accuracy: 0.75
+priority: 0
+description: しびれる　粉を たくさん　ふりまいて 相手を　まひ状態に　する。
+steps:
+- type: apply_status
+  statusId: paralysis
+  target: target
+tags: []

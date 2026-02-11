@@ -2,14 +2,19 @@ id: dark_pulse
 name: あくのはどう
 type: dark
 category: special
+pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 体から　悪意に　みちた 恐ろしい　オーラを　発する。 相手を　ひるませることが　ある。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.2
   then:
   - type: apply_status
     statusId: flinch
     target: target
-    duration: 1
+tags: []

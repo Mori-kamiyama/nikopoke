@@ -3,7 +3,13 @@ name: ドリルくちばし
 type: flying
 category: physical
 pp: 20
+power: 80
+accuracy: 1.0
+priority: 0
+description: '回転しながら　とがった　くちばしを 相手に　突き刺して　攻撃する。 '
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

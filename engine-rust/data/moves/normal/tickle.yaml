@@ -3,9 +3,14 @@ name: くすぐる
 type: normal
 category: status
 pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: '体を　くすぐり　笑わせる　ことで 相手の　攻撃と　防御を　さげる。 '
 steps:
 - type: modify_stage
   target: target
   stages:
     atk: -1
     def: -1
+tags: []

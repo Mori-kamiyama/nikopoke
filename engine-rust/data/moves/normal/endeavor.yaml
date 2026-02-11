@@ -1,0 +1,14 @@
+id: endeavor
+name: がむしゃら
+type: normal
+category: physical
+pp: 5
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手の　ＨＰが　自分の　ＨＰと 同じくらいに　なるように ダメージを　与える。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

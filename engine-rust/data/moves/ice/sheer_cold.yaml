@@ -1,0 +1,13 @@
+id: sheer_cold
+name: ぜったいれいど
+type: ice
+category: special
+pp: 5
+power: null
+accuracy: 0.3
+priority: 0
+description: 絶対零度の　冷たさで 相手を　攻撃する。 当たれば　一撃で　ひんしに　する。
+steps:
+- type: ohko
+  baseAccuracy: 0.3
+tags: []

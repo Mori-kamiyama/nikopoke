@@ -3,13 +3,19 @@ name: かみなりパンチ
 type: electric
 category: physical
 pp: 15
+power: 75
+accuracy: 1.0
+priority: 0
+description: 電撃を　こめた　パンチで 相手を　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
   power: 75
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.1
   then:
   - type: apply_status
     statusId: paralysis
     target: target
+tags:
+- contact

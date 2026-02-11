@@ -1,0 +1,20 @@
+id: fire_blast
+name: だいもんじ
+type: fire
+category: special
+pp: 5
+power: 110
+accuracy: 0.85
+priority: 0
+description: 大の字の　炎で 相手を　焼きつくす。 やけど状態に　することが　ある。
+steps:
+- type: damage
+  power: 110
+  accuracy: 0.85
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
+tags: []

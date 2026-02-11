@@ -1,0 +1,14 @@
+id: hyper_beam
+name: はかいこうせん
+type: normal
+category: special
+pp: 5
+power: 150
+accuracy: 0.9
+priority: 0
+description: 強い　光線を 相手に　発射して　攻撃する。 次の　ターンは　動けなくなる。
+steps:
+- type: damage
+  power: 150
+  accuracy: 0.9
+tags: []

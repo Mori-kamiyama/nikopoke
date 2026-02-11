@@ -3,11 +3,11 @@ name: ねがいごと
 type: normal
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 次の　ターンに 自分の　ＨＰを　最大ＨＰの 半分　回復する。
 steps:
-- type: wait
-  turns: 1
-  timing: turn_end
-  steps:
-  - type: damage_ratio
-    ratioMaxHp: 0.5
-    target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

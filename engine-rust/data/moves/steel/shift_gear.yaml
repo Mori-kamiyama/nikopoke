@@ -1,0 +1,16 @@
+id: shift_gear
+name: ギアチェンジ
+type: steel
+category: status
+pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 歯車を　回して 自分の　攻撃を　あげる　だけでなく 素早さも　ぐーんと　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    spe: 2
+tags: []

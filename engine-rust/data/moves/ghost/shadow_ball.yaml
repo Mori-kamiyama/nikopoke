@@ -3,10 +3,14 @@ name: シャドーボール
 type: ghost
 category: special
 pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 黒い影の　塊を　投げつけて 攻撃する。相手の　特防を さげることが　ある。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.2
   then:
@@ -14,3 +18,4 @@ steps:
     target: target
     stages:
       spd: -1
+tags: []

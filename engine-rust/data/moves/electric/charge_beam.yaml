@@ -3,6 +3,10 @@ name: チャージビーム
 type: electric
 category: special
 pp: 10
+power: 50
+accuracy: 0.9
+priority: 0
+description: 電撃の　束を　相手に 発射する。電気を　ためて　自分の 特攻を　あげることが　ある。
 steps:
 - type: damage
   power: 50
@@ -11,6 +15,7 @@ steps:
   p: 0.7
   then:
   - type: modify_stage
-    target: self
+    target: target
     stages:
       spa: 1
+tags: []

@@ -1,0 +1,14 @@
+id: meteor_beam
+name: メテオビーム
+type: rock
+category: special
+pp: 10
+power: 120
+accuracy: 0.9
+priority: 0
+description: １ターン目に　宇宙の　力を 集めることで　特攻が　あがり ２ターン目に　相手を　攻撃する。
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.9
+tags: []

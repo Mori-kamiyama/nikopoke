@@ -3,8 +3,13 @@ name: こうそくいどう
 type: psychic
 category: status
 pp: 30
+power: null
+accuracy: null
+priority: 0
+description: 力を　ぬいて　体を　軽くして 高速で　動く。 自分の　素早さを　ぐーんと　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     spe: 2
+tags: []

@@ -3,6 +3,10 @@ name: ボーンラッシュ
 type: ground
 category: physical
 pp: 10
+power: 25
+accuracy: 0.9
+priority: 0
+description: 硬い　ホネで 相手を　なぐりつけて　攻撃する。 ２ー５回の　あいだ　連続で　だす。
 steps:
 - type: repeat
   times:
@@ -12,3 +16,4 @@ steps:
   - type: damage
     power: 25
     accuracy: 0.9
+tags: []

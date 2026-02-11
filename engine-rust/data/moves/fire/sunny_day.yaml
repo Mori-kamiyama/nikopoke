@@ -3,10 +3,11 @@ name: にほんばれ
 type: fire
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ　日差しを 強くして　ほのおタイプの 技の　威力を　あげる。
 steps:
-- type: apply_field_status
-  statusId: sunny_weather
-  duration: 5
-  data:
-    fire_boost: 1.5
-    water_reduce: 0.5
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

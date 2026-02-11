@@ -3,11 +3,18 @@ name: いばる
 type: normal
 category: status
 pp: 15
+power: null
+accuracy: 0.85
+priority: 0
+description: 相手を　怒らせて　混乱させる。 怒りで　相手の　攻撃は ぐーんと　あがってしまう。
 steps:
 - type: apply_status
   statusId: confusion
-  chance: 0.85
+  target: target
 - type: modify_stage
   target: target
   stages:
     atk: 2
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

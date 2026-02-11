@@ -1,0 +1,17 @@
+id: supercell_slam
+name: サンダーダイブ
+type: electric
+category: physical
+pp: 15
+power: 100
+accuracy: 0.95
+priority: 0
+description: |-
+  攻撃が外れたり、相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。
+  相手が技『ちいさくなる』を使用していると必ず命中し、威力が2倍になる。
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.95
+tags:
+- contact

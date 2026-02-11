@@ -3,6 +3,11 @@ name: どくびし
 type: poison
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 相手の　足下に　どくびしを しかける。交代で　でてきた　相手の ポケモンに　毒を　おわせる。
 steps:
-- type: apply_field_status
-  statusId: toxic_spikes
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

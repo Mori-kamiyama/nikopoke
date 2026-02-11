@@ -3,21 +3,19 @@ name: のしかかり
 type: normal
 category: physical
 pp: 15
+power: 85
+accuracy: 1.0
+priority: 0
+description: 全身で 相手に　のしかかり　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
   power: 85
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: paralysis
     target: target
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: minimize
-  then:
-  - type: damage
-    power: 170
-    accuracy: 1
+tags:
+- contact

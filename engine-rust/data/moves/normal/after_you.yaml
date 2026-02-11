@@ -1,0 +1,13 @@
+id: after_you
+name: おさきにどうぞ
+type: normal
+category: status
+pp: 15
+power: null
+accuracy: null
+priority: 0
+description: 相手の　行動を　サポートして 自分の　行動の　あとに 続けて　動けるように　する。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

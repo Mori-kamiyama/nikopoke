@@ -3,8 +3,13 @@ name: しんそく
 type: normal
 category: physical
 pp: 5
+power: 80
+accuracy: 1.0
 priority: 2
+description: 目にも　留まらぬ　ものすごい　速さで 相手に　突進して　攻撃する。 必ず　先制攻撃　できる。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

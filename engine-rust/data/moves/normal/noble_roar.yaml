@@ -1,0 +1,16 @@
+id: noble_roar
+name: おたけび
+type: normal
+category: status
+pp: 30
+power: null
+accuracy: 1.0
+priority: 0
+description: おたけびを　あげて 相手を　威嚇し　相手の 攻撃と　特攻を　さげる。
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+    spa: -1
+tags: []

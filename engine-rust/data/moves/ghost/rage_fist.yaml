@@ -1,0 +1,17 @@
+id: rage_fist
+name: ふんどのこぶし
+type: ghost
+category: physical
+pp: 10
+power: 50
+accuracy: 1.0
+priority: 0
+description: |-
+  これまでに受けた攻撃1回につき、威力が50上がる(最大威力350)。手持ちに戻っても、リセットされない。
+  特性『てつのこぶし』の時、威力が1.2倍になる。
+steps:
+- type: damage
+  power: 50
+  accuracy: 1.0
+tags:
+- contact

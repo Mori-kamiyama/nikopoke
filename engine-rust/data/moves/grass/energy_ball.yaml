@@ -3,10 +3,14 @@ name: エナジーボール
 type: grass
 category: special
 pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
+description: 自然から　集めた 命の力を　発射する。 相手の　特防を　さげることがある。
 steps:
 - type: damage
   power: 90
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.1
   then:
@@ -14,3 +18,4 @@ steps:
     target: target
     stages:
       spd: -1
+tags: []

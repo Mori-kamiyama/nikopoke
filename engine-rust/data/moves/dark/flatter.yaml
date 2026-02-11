@@ -3,14 +3,18 @@ name: おだてる
 type: dark
 category: status
 pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手を　おだてて　混乱させる。 同時に　相手の　特攻も あげてしまう。
 steps:
 - type: apply_status
   statusId: confusion
-  chance: 1
-  duration:
-    min: 1
-    max: 4
+  target: target
 - type: modify_stage
   target: target
   stages:
     spa: 1
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

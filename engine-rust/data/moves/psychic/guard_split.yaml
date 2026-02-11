@@ -1,0 +1,13 @@
+id: guard_split
+name: ガードシェア
+type: psychic
+category: status
+pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 超能力で　自分と　相手の 防御と　特防を　たして 半分に　わける。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

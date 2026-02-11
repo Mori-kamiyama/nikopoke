@@ -3,12 +3,19 @@ name: どくづき
 type: poison
 category: physical
 pp: 20
+power: 80
+accuracy: 1.0
+priority: 0
+description: 毒に　そまった　触手や　腕で 相手を　突き刺す。 毒状態に　することが　ある。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: poison
+    target: target
+tags:
+- contact

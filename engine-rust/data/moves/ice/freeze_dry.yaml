@@ -3,19 +3,18 @@ name: フリーズドライ
 type: ice
 category: special
 pp: 20
+power: 70
+accuracy: 1.0
+priority: 0
+description: 相手を　急激に　冷やして こおり　状態に　することが　ある。 みずタイプにも　効果抜群になる。
 steps:
 - type: damage
   power: 70
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.1
   then:
   - type: apply_status
     statusId: freeze
     target: target
-- type: conditional
-  if:
-    type: water
-  then:
-  - type: damage
-    power: 140
+tags: []

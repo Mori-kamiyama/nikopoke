@@ -2,6 +2,11 @@ id: ice_fang
 name: こおりのキバ
 type: ice
 category: physical
+pp: 15
+power: 65
+accuracy: 0.95
+priority: 0
+description: 冷気を　ひめた　キバで　かみつく。 相手を　ひるませたり こおり状態に　することが　ある。
 steps:
 - type: damage
   power: 65
@@ -10,9 +15,13 @@ steps:
   p: 0.1
   then:
   - type: apply_status
-    statusId: freeze
+    statusId: flinch
+    target: target
 - type: chance
   p: 0.1
   then:
   - type: apply_status
-    statusId: flinch
+    statusId: freeze
+    target: target
+tags:
+- contact

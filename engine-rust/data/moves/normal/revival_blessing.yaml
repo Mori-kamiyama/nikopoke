@@ -3,7 +3,11 @@ name: さいきのいのり
 type: normal
 category: status
 pp: 1
+power: 0
+accuracy: null
+priority: 0
+description: 手持ちの『ひんし』状態のポケモンを、最大HPの半分だけ回復させる。
 steps:
-- type: damage_ratio
-  ratioMaxHp: 0.5
-  target: all
+- type: damage
+  power: 0
+tags: []

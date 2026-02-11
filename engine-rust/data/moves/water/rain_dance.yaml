@@ -3,10 +3,11 @@ name: あまごい
 type: water
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ　雨を　降らせて みずタイプの 技の　威力を　あげる。
 steps:
-- type: apply_field_status
-  statusId: rain
-  duration: 5
-  data:
-    water_power_boost: 1.5
-    fire_power_reduction: 0.5
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

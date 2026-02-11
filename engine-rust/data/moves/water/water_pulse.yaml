@@ -3,15 +3,20 @@ name: みずのはどう
 type: water
 category: special
 pp: 20
+power: 60
+accuracy: 1.0
+priority: 0
+description: 水の　振動を 相手に　与えて　攻撃する。 相手を　混乱させることが　ある。
 steps:
 - type: damage
   power: 60
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.2
   then:
   - type: apply_status
     statusId: confusion
-    duration:
-      min: 1
-      max: 4
+    target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

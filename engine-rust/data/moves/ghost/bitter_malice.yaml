@@ -1,0 +1,14 @@
+id: bitter_malice
+name: うらみつらみ
+type: ghost
+category: special
+pp: 10
+power: 75
+accuracy: 1.0
+priority: 0
+description: 100%の確率で相手の『こうげき』ランクを1段階下げる。
+steps:
+- type: damage
+  power: 75
+  accuracy: 1.0
+tags: []

@@ -1,0 +1,18 @@
+id: acid_spray
+name: アシッドボム
+type: poison
+category: special
+pp: 20
+power: 40
+accuracy: 1.0
+priority: 0
+description: 相手を　とかす　液体を 吐きだして　攻撃する。 相手の　特防を　がくっと　さげる。
+steps:
+- type: damage
+  power: 40
+  accuracy: 1.0
+- type: modify_stage
+  target: target
+  stages:
+    spd: -2
+tags: []

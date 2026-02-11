@@ -1,0 +1,15 @@
+id: charm
+name: あまえる
+type: fairy
+category: status
+pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: 'かわいく　みつめて　油断を　誘い 相手の　攻撃を　がくっと　さげる。 '
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    atk: -2
+tags: []

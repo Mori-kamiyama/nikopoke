@@ -3,17 +3,13 @@ name: れんぞくぎり
 type: bug
 category: physical
 pp: 20
+power: 40
+accuracy: 0.95
+priority: 0
+description: カマや　ツメなどで　相手を 切りつけて　攻撃する。 連続で　当てると　威力が　あがる。
 steps:
 - type: damage
   power: 40
   accuracy: 0.95
-- type: over_time
-  timing: turn_end
-  steps:
-  - type: modify_stage
-    target: self
-    stages:
-      atk: 1
-  data:
-    consecutiveHits: 0
-    maxPower: 160
+tags:
+- contact

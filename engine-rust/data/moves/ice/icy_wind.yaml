@@ -1,0 +1,18 @@
+id: icy_wind
+name: こごえるかぜ
+type: ice
+category: special
+pp: 15
+power: 55
+accuracy: 0.95
+priority: 0
+description: 凍てつく　冷気を 相手に　吹きつけて　攻撃する。 相手の　素早さを　さげる。
+steps:
+- type: damage
+  power: 55
+  accuracy: 0.95
+- type: modify_stage
+  target: target
+  stages:
+    spe: -1
+tags: []

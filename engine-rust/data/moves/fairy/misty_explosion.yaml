@@ -1,0 +1,14 @@
+id: misty_explosion
+name: ミストバースト
+type: fairy
+category: special
+pp: 5
+power: 100
+accuracy: 1.0
+priority: 0
+description: 自分の　周りに　いる　すべてを 攻撃するが　使うと　瀕死になる。 ミストフィールドで　威力が　あがる。
+steps:
+- type: damage
+  power: 100
+  accuracy: 1.0
+tags: []

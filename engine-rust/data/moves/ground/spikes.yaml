@@ -1,0 +1,13 @@
+id: spikes
+name: まきびし
+type: ground
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 相手の　足下に　まきびしを しかける。交代で　でてきた　相手の ポケモンに　ダメージを　与える。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

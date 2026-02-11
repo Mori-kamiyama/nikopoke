@@ -1,0 +1,16 @@
+id: supersonic
+name: ちょうおんぱ
+type: normal
+category: status
+pp: 20
+power: null
+accuracy: 0.55
+priority: 0
+description: 特殊な　音波を 体から　発して 相手を　混乱させる。
+steps:
+- type: apply_status
+  statusId: confusion
+  target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

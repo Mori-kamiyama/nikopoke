@@ -2,6 +2,12 @@ id: fling
 name: なげつける
 type: dark
 category: physical
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 持たせた　道具を 素早く　投げつけて　攻撃する。 道具で　威力と　効果が　変わる。
 steps:
 - type: manual
-  manualReason: Effect varies depending on the held item.
+  manualReason: No supported effects inferred
+tags: []

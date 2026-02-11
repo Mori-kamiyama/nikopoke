@@ -3,11 +3,14 @@ name: クロスチョップ
 type: fighting
 category: physical
 pp: 5
+power: 100
+accuracy: 0.8
+priority: 0
+description: 両手チョップを 相手に　たたきつけて　攻撃する。 急所に　当たりやすい。
 steps:
 - type: damage
   power: 100
   accuracy: 0.8
-- type: modify_stage
-  target: target
-  stages:
-    crit: 1
+tags:
+- contact
+critRate: 1

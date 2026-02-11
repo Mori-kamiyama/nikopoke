@@ -3,12 +3,19 @@ name: スパーク
 type: electric
 category: physical
 pp: 20
+power: 65
+accuracy: 1.0
+priority: 0
+description: 電気を　まとい 相手に　突進して　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
   power: 65
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: paralysis
+    target: target
+tags:
+- contact

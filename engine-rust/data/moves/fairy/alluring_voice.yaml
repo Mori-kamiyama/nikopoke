@@ -1,0 +1,17 @@
+id: alluring_voice
+name: みわくのボイス
+type: fairy
+category: special
+pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: |-
+  100%の確率で、そのターンの間に能力ランクが上がった相手ポケモンを1～4ターンの間『こんらん』状態にする(
+  通常は後攻で攻撃する必要があるが、場に出た時に能力ランクが上がった場合も対象となる)。音系の技。
+  相手の『みがわり』状態を貫通する。
+steps:
+- type: damage
+  power: 80
+  accuracy: 1.0
+tags: []

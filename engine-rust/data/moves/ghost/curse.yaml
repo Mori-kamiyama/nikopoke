@@ -3,24 +3,11 @@ name: のろい
 type: ghost
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 使う　ポケモンが ゴーストタイプと　それ以外　とでは 効果が　変わる。
 steps:
-- type: conditional
-  if:
-    type: user_has_status
-    statusId: ghost
-  then:
-  - type: damage_ratio
-    ratioMaxHp: 0.5
-    target: self
-  - type: apply_status
-    statusId: curse
-    target: target
-    data:
-      damageRatio: 0.25
-  else:
-  - type: modify_stage
-    target: self
-    stages:
-      atk: 1
-      def: 1
-      spe: -1
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

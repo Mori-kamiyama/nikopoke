@@ -1,0 +1,14 @@
+id: boomburst
+name: ばくおんぱ
+type: normal
+category: special
+pp: 10
+power: 140
+accuracy: 1.0
+priority: 0
+description: すさまじい　爆音の 破壊力に　よって 周りに　いるものを　攻撃する。
+steps:
+- type: damage
+  power: 140
+  accuracy: 1.0
+tags: []

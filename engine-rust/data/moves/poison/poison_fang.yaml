@@ -2,13 +2,20 @@ id: poison_fang
 name: どくどくのキバ
 type: poison
 category: physical
-pp: 20
+pp: 15
+power: 50
+accuracy: 1.0
+priority: 0
+description: 毒の　ある　キバで 相手に　かみついて　攻撃する。 猛毒を　おわせる　ことが　ある。
 steps:
 - type: damage
-  power: 80
-  accuracy: 1
+  power: 50
+  accuracy: 1.0
 - type: chance
   p: 0.5
   then:
   - type: apply_status
-    statusId: badly_poisoned
+    statusId: poison
+    target: target
+tags:
+- contact

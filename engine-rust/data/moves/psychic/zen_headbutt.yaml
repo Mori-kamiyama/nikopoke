@@ -3,6 +3,10 @@ name: しねんのずつき
 type: psychic
 category: physical
 pp: 15
+power: 80
+accuracy: 0.9
+priority: 0
+description: 思念の　力を 額に　集めて　攻撃する。 相手を　ひるませることが　ある。
 steps:
 - type: damage
   power: 80
@@ -12,3 +16,6 @@ steps:
   then:
   - type: apply_status
     statusId: flinch
+    target: target
+tags:
+- contact

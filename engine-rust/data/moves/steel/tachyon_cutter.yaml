@@ -3,9 +3,12 @@ name: タキオンカッター
 type: steel
 category: special
 pp: 10
+power: 50
+accuracy: 0.0
+priority: 0
+description: 1ターンに2回連続で攻撃する。自分の命中率、相手の回避率に関係なく必ず命中する。
 steps:
-- type: repeat
-  times: 2
-  steps:
-  - type: damage
-    power: 50
+- type: damage
+  power: 50
+  accuracy: 0.0
+tags: []

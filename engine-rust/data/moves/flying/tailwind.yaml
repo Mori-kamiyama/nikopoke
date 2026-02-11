@@ -3,8 +3,11 @@ name: おいかぜ
 type: flying
 category: status
 pp: 15
+power: null
+accuracy: null
+priority: 0
+description: 激しく　吹きあれる 風の渦を　つくり　４ターンの　あいだ 味方　全員の　素早さを　あげる。
 steps:
-- type: modify_stage
-  target: self
-  stages:
-    spe: 2
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

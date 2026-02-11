@@ -3,11 +3,14 @@ name: あやしいひかり
 type: ghost
 category: status
 pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 怪しい　光を 相手に　みせて　まどわせる。 相手を　混乱させる。
 steps:
 - type: apply_status
   statusId: confusion
   target: target
-  duration:
-    min: 1
-    max: 4
-  chance: 1
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

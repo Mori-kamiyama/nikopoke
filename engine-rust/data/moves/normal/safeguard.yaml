@@ -3,8 +3,11 @@ name: しんぴのまもり
 type: normal
 category: status
 pp: 25
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ 不思議な　力に　守られて 状態異常に　ならなくなる。
 steps:
-- type: apply_status
-  statusId: safeguard
-  target: all
-  duration: 5
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

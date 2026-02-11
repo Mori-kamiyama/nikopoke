@@ -3,8 +3,13 @@ name: ストーンエッジ
 type: rock
 category: physical
 pp: 5
+power: 100
 accuracy: 0.8
+priority: 0
+description: とがった　岩を 相手に　突き刺して　攻撃する。 急所に　当たりやすい。
 steps:
 - type: damage
   power: 100
+  accuracy: 0.8
+tags: []
 critRate: 1

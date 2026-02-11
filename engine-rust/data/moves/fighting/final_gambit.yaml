@@ -3,10 +3,11 @@ name: いのちがけ
 type: fighting
 category: special
 pp: 5
+power: null
+accuracy: 1.0
+priority: 0
+description: 命懸けで　相手を　攻撃する。 自分は　ひんしに　なるが　相手に ＨＰ分の　ダメージを　与える。
 steps:
-- type: damage_ratio
-  ratioMaxHp: 1
-  target: target
-- type: damage_ratio
-  ratioMaxHp: 1
-  target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

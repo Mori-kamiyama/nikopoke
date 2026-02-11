@@ -1,0 +1,15 @@
+id: swords_dance
+name: つるぎのまい
+type: normal
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 戦いの舞を　激しく　おどって 気合を　高める。 自分の　攻撃を　ぐーんと　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 2
+tags: []

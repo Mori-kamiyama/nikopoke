@@ -3,12 +3,14 @@ name: すてゼリフ
 type: dark
 category: status
 pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: すてゼリフで　相手を　いかくし 攻撃と　特攻を　さげたのち 控えの　ポケモンと　入れ替わる。
 steps:
 - type: modify_stage
   target: target
   stages:
     atk: -1
     spa: -1
-- type: replace_status
-  from: always
-  to: parting_shot_switch
+tags: []

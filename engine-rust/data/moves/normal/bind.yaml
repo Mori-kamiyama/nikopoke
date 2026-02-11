@@ -3,19 +3,15 @@ name: しめつける
 type: normal
 category: physical
 pp: 20
+power: 15
+accuracy: 0.85
+priority: 0
+description: 長い　体や　つるなどを　使い ４ー５ターンの　あいだ 相手を　締めつけて　攻撃する。
 steps:
 - type: damage
   power: 15
   accuracy: 0.85
-- type: over_time
-  steps:
-  - type: damage_ratio
-    ratioMaxHp: 0.125
-- type: apply_status
-  statusId: lock_move
-  duration:
-    min: 4
-    max: 5
-  data:
-    immuneTypes:
-    - ghost
+- type: manual
+  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
+tags:
+- contact

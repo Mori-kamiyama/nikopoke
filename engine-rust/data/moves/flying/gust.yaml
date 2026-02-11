@@ -1,31 +1,14 @@
 id: gust
-name: ぼうふう
+name: かぜおこし
 type: flying
 category: special
-pp: 10
+pp: 35
+power: 40
+accuracy: 1.0
+priority: 0
+description: '翼で　おこした　激しい　風を 相手に　ぶつけて　攻撃する。 '
 steps:
 - type: damage
-  power: 110
-  accuracy: 0.7
-- type: chance
-  p: 0.3
-  then:
-  - type: apply_status
-    statusId: confusion
-    duration:
-      min: 2
-      max: 5
-- type: conditional
-  if:
-    type: weather_is_raining
-  then:
-  - type: damage
-    power: 110
-    accuracy: 1
-- type: conditional
-  if:
-    type: weather_is_sunny
-  then:
-  - type: damage
-    power: 110
-    accuracy: 0.5
+  power: 40
+  accuracy: 1.0
+tags: []

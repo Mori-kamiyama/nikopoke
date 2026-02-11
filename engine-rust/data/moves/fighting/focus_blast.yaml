@@ -3,6 +3,10 @@ name: きあいだま
 type: fighting
 category: special
 pp: 5
+power: 120
+accuracy: 0.7
+priority: 0
+description: 気合を　高めて ありったけの　力を　放出する。 相手の　特防を　さげることが　ある。
 steps:
 - type: damage
   power: 120
@@ -14,3 +18,4 @@ steps:
     target: target
     stages:
       spd: -1
+tags: []

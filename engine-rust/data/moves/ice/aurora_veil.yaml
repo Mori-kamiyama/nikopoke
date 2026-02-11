@@ -3,10 +3,11 @@ name: オーロラベール
 type: ice
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　間　物理と 特殊の　ダメージを　弱める。 あられの　時しか　出すことが　できない。
 steps:
-- type: conditional
-  if:
-    type: weather_is_hail
-  then:
-  - type: apply_field_status
-    statusId: aurora_veil
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

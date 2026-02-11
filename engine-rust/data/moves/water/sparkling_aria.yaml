@@ -1,0 +1,14 @@
+id: sparkling_aria
+name: うたかたのアリア
+type: water
+category: special
+pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
+description: 歌うことによって　たくさんの バルーンを　放出する。 技を　受けると　やけどが　治る。
+steps:
+- type: damage
+  power: 90
+  accuracy: 1.0
+tags: []

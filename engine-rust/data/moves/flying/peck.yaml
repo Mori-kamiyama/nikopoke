@@ -3,7 +3,13 @@ name: つつく
 type: flying
 category: physical
 pp: 35
+power: 35
+accuracy: 1.0
+priority: 0
+description: '鋭く　とがった　くちばしや　つので 相手を　突いて　攻撃する。 '
 steps:
 - type: damage
   power: 35
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

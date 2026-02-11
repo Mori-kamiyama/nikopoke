@@ -1,0 +1,15 @@
+id: fell_stinger
+name: とどめばり
+type: bug
+category: physical
+pp: 25
+power: 50
+accuracy: 1.0
+priority: 0
+description: この　技を　使って 相手を　倒すと 攻撃が　ぐーんと　あがる。
+steps:
+- type: damage
+  power: 50
+  accuracy: 1.0
+tags:
+- contact

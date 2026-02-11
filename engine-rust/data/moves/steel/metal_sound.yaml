@@ -3,8 +3,13 @@ name: きんぞくおん
 type: steel
 category: status
 pp: 40
+power: null
+accuracy: 0.85
+priority: 0
+description: 金属を　こすって　でるような いやな　音を　聞かせる。 相手の　特防を　がくっと　さげる。
 steps:
 - type: modify_stage
   target: target
   stages:
     spd: -2
+tags: []

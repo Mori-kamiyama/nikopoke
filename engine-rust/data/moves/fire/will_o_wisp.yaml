@@ -1,0 +1,14 @@
+id: will_o_wisp
+name: おにび
+type: fire
+category: status
+pp: 15
+power: null
+accuracy: 0.85
+priority: 0
+description: '不気味で　怪しい　炎を　放って 相手を　やけどの　状態に　する。 '
+steps:
+- type: apply_status
+  statusId: burn
+  target: target
+tags: []

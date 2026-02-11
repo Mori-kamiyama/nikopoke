@@ -1,0 +1,15 @@
+id: giga_impact
+name: ギガインパクト
+type: normal
+category: physical
+pp: 5
+power: 150
+accuracy: 0.9
+priority: 0
+description: 持てる　力を　すべて　使って 相手に　突撃する。 次の　ターンは　動けなくなる。
+steps:
+- type: damage
+  power: 150
+  accuracy: 0.9
+tags:
+- contact

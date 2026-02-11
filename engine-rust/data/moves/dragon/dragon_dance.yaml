@@ -3,9 +3,14 @@ name: りゅうのまい
 type: dragon
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 神秘的で　力強い　舞を 激しく　おどる。自分の 攻撃と　素早さを　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     atk: 1
     spe: 1
+tags: []

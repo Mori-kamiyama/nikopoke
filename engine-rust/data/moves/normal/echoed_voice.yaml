@@ -1,0 +1,14 @@
+id: echoed_voice
+name: エコーボイス
+type: normal
+category: special
+pp: 15
+power: 40
+accuracy: 1.0
+priority: 0
+description: 響く　声で　相手を　攻撃する。 毎ターン　だれかが　技を 使い続けると　威力が　あがる。
+steps:
+- type: damage
+  power: 40
+  accuracy: 1.0
+tags: []

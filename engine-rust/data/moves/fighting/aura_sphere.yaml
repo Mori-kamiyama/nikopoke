@@ -1,0 +1,13 @@
+id: aura_sphere
+name: はどうだん
+type: fighting
+category: special
+pp: 20
+power: 80
+accuracy: null
+priority: 0
+description: 体の　奥から　波導の　力を 相手に　うち放つ。 攻撃は　必ず　命中する。
+steps:
+- type: damage
+  power: 80
+tags: []

@@ -1,0 +1,21 @@
+id: force_palm
+name: はっけい
+type: fighting
+category: physical
+pp: 10
+power: 60
+accuracy: 1.0
+priority: 0
+description: 相手の　体に 衝撃波を　当てて　攻撃する。 まひ状態に　することが　ある。
+steps:
+- type: damage
+  power: 60
+  accuracy: 1.0
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: paralysis
+    target: target
+tags:
+- contact

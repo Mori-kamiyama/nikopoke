@@ -2,6 +2,14 @@ id: thief
 name: どろぼう
 type: dark
 category: physical
+pp: 25
+power: 60
+accuracy: 1.0
+priority: 0
+description: 攻撃と　同時に　道具を　盗む。 自分が　道具を　持っている　場合は 盗めない。
 steps:
-- type: manual
-  manualReason: Steals the opponent's held item if the user is not holding one. Fails if the user is already holding an item, unless Knock Off has removed the user's item.
+- type: damage
+  power: 60
+  accuracy: 1.0
+tags:
+- contact

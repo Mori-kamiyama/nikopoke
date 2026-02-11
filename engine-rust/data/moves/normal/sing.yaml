@@ -3,9 +3,14 @@ name: うたう
 type: normal
 category: status
 pp: 15
+power: null
+accuracy: 0.55
+priority: 0
+description: 心地好い　きれいな 歌声を　聞かせて 相手を　眠り状態に　する。
 steps:
 - type: apply_status
   statusId: sleep
-  chance: 0.55
-  data:
-    bypassSubstitute: true
+  target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

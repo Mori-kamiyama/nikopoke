@@ -1,0 +1,15 @@
+id: dive
+name: ダイビング
+type: water
+category: physical
+pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: １ターン目で　潜り　２ターン目に 浮きあがって　攻撃する。
+steps:
+- type: damage
+  power: 80
+  accuracy: 1.0
+tags:
+- contact

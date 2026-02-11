@@ -3,15 +3,14 @@ name: ゆめくい
 type: psychic
 category: special
 pp: 15
+power: 100
+accuracy: 1.0
+priority: 0
+description: 寝ている　相手の　夢を　食べて 攻撃する。ダメージの　半分の ＨＰを　回復する。
 steps:
 - type: damage
   power: 100
-  accuracy: 1
-- type: damage_ratio
-  ratioMaxHp: 0.5
-  target: self
-conditional:
-  if:
-    type: target_has_status
-    statusId: sleep
-  then: []
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags: []

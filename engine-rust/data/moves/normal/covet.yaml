@@ -3,18 +3,13 @@ name: ほしがる
 type: normal
 category: physical
 pp: 25
+power: 60
+accuracy: 1.0
+priority: 0
+description: かわいく　あまえながら 相手に　ちかづき 持っている　道具を　うばう。
 steps:
 - type: damage
   power: 60
-  accuracy: 1
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: item
-  then:
-  - type: remove_status
-    target: target
-    statusId: item
-  - type: apply_status
-    target: self
-    statusId: item
+  accuracy: 1.0
+tags:
+- contact

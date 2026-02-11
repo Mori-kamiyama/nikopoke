@@ -1,0 +1,20 @@
+id: scorching_sands
+name: ねっさのだいち
+type: ground
+category: special
+pp: 10
+power: 70
+accuracy: 1.0
+priority: 0
+description: 熱く　焼けた　砂を 相手に　ぶつけて　攻撃する。 やけど状態に　することが　ある。
+steps:
+- type: damage
+  power: 70
+  accuracy: 1.0
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
+tags: []

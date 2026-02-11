@@ -3,15 +3,20 @@ name: サイケこうせん
 type: psychic
 category: special
 pp: 20
+power: 65
+accuracy: 1.0
+priority: 0
+description: 不思議な　光線を 相手に　発射して　攻撃する。 混乱させることが　ある。
 steps:
 - type: damage
   power: 65
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.1
   then:
   - type: apply_status
     statusId: confusion
-    duration:
-      min: 1
-      max: 4
+    target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

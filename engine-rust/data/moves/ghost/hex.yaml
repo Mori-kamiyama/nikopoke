@@ -1,0 +1,14 @@
+id: hex
+name: たたりめ
+type: ghost
+category: special
+pp: 10
+power: 65
+accuracy: 1.0
+priority: 0
+description: たたみかける　ように　攻撃する。 状態異常の　相手に 大きな　ダメージを　与える。
+steps:
+- type: damage
+  power: 65
+  accuracy: 1.0
+tags: []

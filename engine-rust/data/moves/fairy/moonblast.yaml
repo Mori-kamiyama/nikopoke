@@ -3,10 +3,14 @@ name: ムーンフォース
 type: fairy
 category: special
 pp: 15
+power: 95
+accuracy: 1.0
+priority: 0
+description: 月の　パワーを　かりて 相手を　攻撃する。　相手の 特攻を　さげる　ことがある。
 steps:
 - type: damage
   power: 95
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
@@ -14,3 +18,4 @@ steps:
     target: target
     stages:
       spa: -1
+tags: []

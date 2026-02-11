@@ -1,0 +1,19 @@
+id: pin_missile
+name: ミサイルばり
+type: bug
+category: physical
+pp: 20
+power: 25
+accuracy: 0.95
+priority: 0
+description: 鋭い　ハリを 相手に　発射して　攻撃する。 ２ー５回の　あいだ　連続で　だす。
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage
+    power: 25
+    accuracy: 0.95
+tags: []

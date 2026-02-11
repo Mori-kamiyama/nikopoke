@@ -1,0 +1,17 @@
+id: coil
+name: とぐろをまく
+type: poison
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: とぐろを　まいて　集中する。 自分の　攻撃と　防御と 命中率を　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    def: 1
+    accuracy: 1
+tags: []

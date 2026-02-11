@@ -3,21 +3,14 @@ name: まとわりつく
 type: bug
 category: special
 pp: 20
+power: 20
+accuracy: 1.0
+priority: 0
+description: ４ー５ターンの　あいだ　相手に まとわりついて　攻撃する。 そのあいだ　相手は　逃げられない。
 steps:
 - type: damage
   power: 20
-  accuracy: 1
-- type: over_time
-  steps:
-  - type: damage_ratio
-    ratioMaxHp: 0.125
-  target: target
-- type: apply_status
-  statusId: lock_move
-  target: target
-  duration:
-    min: 4
-    max: 5
-  data:
-    immuneTypes:
-    - ghost
+  accuracy: 1.0
+- type: manual
+  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
+tags: []

@@ -3,6 +3,11 @@ name: つぼをつく
 type: normal
 category: status
 pp: 30
+power: null
+accuracy: null
+priority: 0
+description: つぼおしで　体を　活性化させる。 能力の　どれか　１つを ぐーんと　あげる。
 steps:
-- type: random_move
-  pool: status
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

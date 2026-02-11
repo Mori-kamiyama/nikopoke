@@ -1,0 +1,15 @@
+id: acid_armor
+name: とける
+type: poison
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: '細胞の　変化で　液状に　なり 自分の　防御を　ぐーんと　あげる。 '
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 2
+tags: []

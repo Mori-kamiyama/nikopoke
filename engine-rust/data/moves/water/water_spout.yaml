@@ -3,14 +3,12 @@ name: しおふき
 type: water
 category: special
 pp: 5
+power: 150
+accuracy: 1.0
+priority: 0
+description: 潮を　吹きつけて　攻撃する。 自分の　ＨＰが　少ないほど 技の　威力は　さがる。
 steps:
 - type: damage
   power: 150
-  accuracy: 1
-- type: conditional
-  if:
-    type: target_hp_lt
-    value: 1
-  then:
-  - type: damage
-    power: 1
+  accuracy: 1.0
+tags: []

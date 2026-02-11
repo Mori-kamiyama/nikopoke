@@ -1,0 +1,13 @@
+id: psych_up
+name: じこあんじ
+type: normal
+category: status
+pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 自分に　暗示を　かけることで 能力変化の　状態を 相手と　同じにする。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

@@ -1,0 +1,15 @@
+id: stuff_cheeks
+name: ほおばる
+type: normal
+category: status
+pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 持っている　きのみを　食べて 防御を　ぐーんと　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    def: 2
+tags: []

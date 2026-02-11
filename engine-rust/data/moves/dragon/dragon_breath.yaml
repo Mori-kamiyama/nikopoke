@@ -2,9 +2,19 @@ id: dragon_breath
 name: りゅうのいぶき
 type: dragon
 category: special
+pp: 20
+power: 60
+accuracy: 1.0
+priority: 0
+description: ものすごい　息を 相手に　吹きつけて　攻撃する。 まひ状態に　することが　ある。
 steps:
+- type: damage
+  power: 60
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: paralysis
+    target: target
+tags: []

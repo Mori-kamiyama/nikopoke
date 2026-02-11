@@ -1,0 +1,15 @@
+id: eerie_impulse
+name: かいでんぱ
+type: electric
+category: status
+pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: 体から　かいでんぱを　放ち 相手に　浴びせる　ことによって 特攻を　がくっと　さげる。
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spa: -2
+tags: []

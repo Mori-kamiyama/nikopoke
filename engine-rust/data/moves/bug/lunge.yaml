@@ -3,12 +3,17 @@ name: とびかかる
 type: bug
 category: physical
 pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 全力で　相手に 飛びかかって　攻撃。 相手の　攻撃を　さげる。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
 - type: modify_stage
   target: target
   stages:
     atk: -1
-  chance: 1
+tags:
+- contact

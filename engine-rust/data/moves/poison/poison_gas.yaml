@@ -3,7 +3,12 @@ name: どくガス
 type: poison
 category: status
 pp: 40
+power: null
+accuracy: 0.9
+priority: 0
+description: '毒ガスを　相手の　顔に　吹きかけて 毒の　状態に　する。 '
 steps:
 - type: apply_status
   statusId: poison
-  chance: 0.9
+  target: target
+tags: []

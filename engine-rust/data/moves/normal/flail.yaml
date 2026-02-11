@@ -1,0 +1,14 @@
+id: flail
+name: じたばた
+type: normal
+category: physical
+pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: じたばた　暴れて　攻撃する。 自分の　ＨＰが　少ないほど 技の　威力は　あがる。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

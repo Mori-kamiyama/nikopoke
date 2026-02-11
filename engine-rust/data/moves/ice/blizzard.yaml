@@ -3,6 +3,10 @@ name: ふぶき
 type: ice
 category: special
 pp: 5
+power: 110
+accuracy: 0.7
+priority: 0
+description: 激しい　吹雪を 相手に　吹きつけて　攻撃する。 こおり状態に　することが　ある。
 steps:
 - type: damage
   power: 110
@@ -13,11 +17,4 @@ steps:
   - type: apply_status
     statusId: freeze
     target: target
-- type: conditional
-  if:
-    type: field_has_status
-    statusId: snow
-  then:
-  - type: damage
-    power: 110
-    accuracy: 1
+tags: []

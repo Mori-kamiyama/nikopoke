@@ -3,10 +3,14 @@ name: どくどく
 type: poison
 category: status
 pp: 10
+power: null
 accuracy: 0.9
+priority: 0
+description: 相手を　猛毒の　状態に　する。 ターンが　すすむほど 毒の　ダメージが　増えていく。
 steps:
 - type: apply_status
   statusId: poison
-  chance: 1
-  data:
-    toxic: true
+  target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

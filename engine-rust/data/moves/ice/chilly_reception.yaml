@@ -1,0 +1,15 @@
+id: chilly_reception
+name: さむいギャグ
+type: ice
+category: status
+pp: 10
+power: 0
+accuracy: null
+priority: 0
+description: |-
+  手持ちのポケモンと入れ替わる。また、5ターンの間、天気を『ゆき』にする
+  (『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。
+steps:
+- type: damage
+  power: 0
+tags: []

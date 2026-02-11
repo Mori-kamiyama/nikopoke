@@ -1,0 +1,17 @@
+id: quiver_dance
+name: ちょうのまい
+type: bug
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 神秘的で　美しい　舞を 軽やかに　おどる。自分の　特攻と 特防と　素早さを　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 1
+    spd: 1
+    spe: 1
+tags: []

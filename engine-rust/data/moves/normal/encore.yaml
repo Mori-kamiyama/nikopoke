@@ -3,9 +3,11 @@ name: アンコール
 type: normal
 category: status
 pp: 5
-accuracy: 1
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手が　最後に　使った技を ３ターンの　あいだ ずっと　ださせる。
 steps:
-- type: apply_status
-  statusId: lock_move
-  duration: 3
-  target: target
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

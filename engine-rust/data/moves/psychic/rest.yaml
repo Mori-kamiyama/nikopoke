@@ -1,0 +1,13 @@
+id: rest
+name: ねむる
+type: psychic
+category: status
+pp: 5
+power: null
+accuracy: null
+priority: 0
+description: ２ターンの　あいだ　眠り続ける。 自分の　ＨＰと　状態異常を すべて　回復する。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

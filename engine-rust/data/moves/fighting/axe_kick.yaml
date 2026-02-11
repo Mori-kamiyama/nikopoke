@@ -1,0 +1,17 @@
+id: axe_kick
+name: かかとおとし
+type: fighting
+category: physical
+pp: 10
+power: 120
+accuracy: 0.9
+priority: 0
+description: |-
+  30%の確率で相手を1～4ターンの間『こんらん』状態にする。攻撃が外れたり、
+  相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.9
+tags:
+- contact

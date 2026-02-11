@@ -1,0 +1,20 @@
+id: pyro_ball
+name: かえんボール
+type: fire
+category: physical
+pp: 5
+power: 120
+accuracy: 0.9
+priority: 0
+description: 小石を　燃やした　炎の　ボールで 相手を　攻撃する。 やけど　状態に　することが　ある。
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.9
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
+tags: []

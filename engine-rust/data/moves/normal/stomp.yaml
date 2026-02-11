@@ -3,21 +3,19 @@ name: ふみつけ
 type: normal
 category: physical
 pp: 20
+power: 65
+accuracy: 1.0
+priority: 0
+description: 大きな　足で 相手を　踏みつけて　攻撃する。 相手を　ひるませることが　ある。
 steps:
 - type: damage
   power: 65
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: flinch
     target: target
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: minimize
-  then:
-  - type: damage
-    power: 130
-    accuracy: 1
+tags:
+- contact

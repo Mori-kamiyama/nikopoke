@@ -1,18 +1,14 @@
 id: dazzling_gleam
-name: みわくのボイス
+name: マジカルシャイン
 type: fairy
 category: special
+pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: '強力な　光を　放ち 相手に　ダメージを　与える。 '
 steps:
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: stat_boost
-  then:
-  - type: apply_status
-    statusId: confusion
-    chance: 1
-    duration:
-      min: 1
-      max: 4
-tags:
-- sound
+- type: damage
+  power: 80
+  accuracy: 1.0
+tags: []

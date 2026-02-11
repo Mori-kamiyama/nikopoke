@@ -1,0 +1,17 @@
+id: inferno
+name: れんごく
+type: fire
+category: special
+pp: 5
+power: 100
+accuracy: 0.5
+priority: 0
+description: 激しい　炎で 相手を　包みこみ　攻撃する。 やけど状態に　する。
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.5
+- type: apply_status
+  statusId: burn
+  target: target
+tags: []

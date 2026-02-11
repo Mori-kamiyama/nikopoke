@@ -3,7 +3,13 @@ name: ふいうち
 type: dark
 category: physical
 pp: 5
+power: 70
+accuracy: 1.0
 priority: 1
+description: 相手より　先に　攻撃　できる。 相手が　だす技が 攻撃技でないと　失敗する。
 steps:
-- type: manual
-  manualReason: Conditional success based on opponent's move choice.
+- type: damage
+  power: 70
+  accuracy: 1.0
+tags:
+- contact

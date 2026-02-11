@@ -3,9 +3,11 @@ name: ゆきげしき
 type: ice
 category: status
 pp: 10
+power: 0
+accuracy: null
+priority: 0
+description: 5ターンの間、天気を『ゆき』にする(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。
 steps:
-- type: apply_field_status
-  statusId: snow
-  duration: 5
-  data:
-    boost_def_ice: true
+- type: damage
+  power: 0
+tags: []

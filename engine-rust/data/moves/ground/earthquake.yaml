@@ -3,14 +3,12 @@ name: じしん
 type: ground
 category: physical
 pp: 10
+power: 100
+accuracy: 1.0
+priority: 0
+description: '地震の　衝撃で　自分の 周りに　いるものを　攻撃する。 '
 steps:
 - type: damage
   power: 100
-  accuracy: 1
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: dig
-  then:
-  - type: damage
-    power: 200
+  accuracy: 1.0
+tags: []

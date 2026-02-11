@@ -1,0 +1,21 @@
+id: astonish
+name: おどろかす
+type: ghost
+category: physical
+pp: 15
+power: 30
+accuracy: 1.0
+priority: 0
+description: 大きな　声などで 不意に　驚かして　攻撃する。 相手を　ひるませることが　ある。
+steps:
+- type: damage
+  power: 30
+  accuracy: 1.0
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+tags:
+- contact

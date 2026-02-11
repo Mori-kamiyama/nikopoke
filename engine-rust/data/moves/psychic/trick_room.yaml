@@ -3,8 +3,11 @@ name: トリックルーム
 type: psychic
 category: status
 pp: 5
+power: null
+accuracy: null
 priority: -7
+description: まか不思議な　空間を　つくる。 ５ターンの　あいだ 遅い　ポケモンから　行動できる。
 steps:
-- type: apply_field_status
-  statusId: trick_room
-  duration: 5
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

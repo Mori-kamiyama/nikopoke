@@ -3,11 +3,16 @@ name: オーバーヒート
 type: fire
 category: special
 pp: 5
+power: 130
+accuracy: 0.9
+priority: 0
+description: フルパワーで　相手を　攻撃する。 使うと　反動で 自分の　特攻が　がくっと　さがる。
 steps:
 - type: damage
   power: 130
   accuracy: 0.9
 - type: modify_stage
-  target: self
+  target: target
   stages:
     spa: -2
+tags: []

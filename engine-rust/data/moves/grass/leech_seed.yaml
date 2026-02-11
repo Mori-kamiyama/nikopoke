@@ -3,21 +3,11 @@ name: やどりぎのタネ
 type: grass
 category: status
 pp: 10
+power: null
 accuracy: 0.9
+priority: 0
+description: 植えつけた　相手の　ＨＰを 毎ターン　少しだけ　吸い取り 自分の　ＨＰを　回復する。
 steps:
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: grass
-  then: []
-- type: chance
-  p: 1
-  then:
-  - type: over_time
-    steps:
-    - type: damage_ratio
-      ratioMaxHp: 0.125
-      target: target
-    - type: damage_ratio
-      ratioMaxHp: -0.125
-      target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

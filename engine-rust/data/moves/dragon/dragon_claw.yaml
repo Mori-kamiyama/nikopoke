@@ -2,7 +2,14 @@ id: dragon_claw
 name: ドラゴンクロー
 type: dragon
 category: physical
+pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: '鋭く　とがった　巨大な　ツメで 相手を　切り裂いて　攻撃する。 '
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

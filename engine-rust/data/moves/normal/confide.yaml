@@ -1,0 +1,15 @@
+id: confide
+name: ないしょばなし
+type: normal
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: ないしょばなしを　することで　相手の 集中力を　失わせ 相手の　特攻を　さげる。
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    spa: -1
+tags: []

@@ -1,0 +1,13 @@
+id: switcheroo
+name: すりかえ
+type: dark
+category: status
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 目にも　とまらぬ　速さで 自分と　相手の 持ち物を　交換する。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

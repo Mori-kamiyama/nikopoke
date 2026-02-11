@@ -3,8 +3,11 @@ name: きあいだめ
 type: normal
 category: status
 pp: 30
+power: null
+accuracy: null
+priority: 0
+description: 深く　息を　吸い　気合を　こめる。 自分の　攻撃が 急所に　当たりやすくなる。
 steps:
-- type: modify_stage
-  target: self
-  stages:
-    crit: 2
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

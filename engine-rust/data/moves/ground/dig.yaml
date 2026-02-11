@@ -3,12 +3,13 @@ name: あなをほる
 type: ground
 category: physical
 pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: １ターン目に　潜り　２ターン目で 相手を　攻撃する。 洞窟からの　脱出も　できる。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
-- type: wait
-  turns: 1
-  steps: []
-  target: self
-- type: protect
+  accuracy: 1.0
+tags:
+- contact

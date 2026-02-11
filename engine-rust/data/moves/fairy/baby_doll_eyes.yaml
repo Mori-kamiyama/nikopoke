@@ -2,9 +2,14 @@ id: baby_doll_eyes
 name: つぶらなひとみ
 type: fairy
 category: status
+pp: 30
+power: null
+accuracy: 1.0
 priority: 1
+description: つぶらなひとみで　相手を　みつめて 攻撃を　さげる。 必ず　先制攻撃　できる。
 steps:
 - type: modify_stage
   target: target
   stages:
     atk: -1
+tags: []

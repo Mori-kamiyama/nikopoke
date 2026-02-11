@@ -3,10 +3,12 @@ name: ジャイロボール
 type: steel
 category: physical
 pp: 5
+power: null
+accuracy: 1.0
+priority: 0
+description: 体を　高速に　回転させて 体当たりする。相手より　素早さが 低いほど　強い。
 steps:
-- type: damage
-  power: 1
-  accuracy: 1
-  data:
-    scaling: speed
-    maxPower: 150
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

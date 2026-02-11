@@ -3,8 +3,13 @@ name: ちいさくなる
 type: normal
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 体を　ちぢめて　小さく　みせて 自分の　回避率を ぐーんと　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     evasion: 2
+tags: []

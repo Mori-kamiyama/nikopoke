@@ -3,9 +3,11 @@ name: じゅうりょく
 type: psychic
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ 重力を　強くして　ふゆうや 空へ　飛ぶ　技を　使えなくする。
 steps:
-- type: apply_field_status
-  statusId: gravity
-  duration: 5
-  data:
-    accuracy_multiplier: 1.6666666666666667
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

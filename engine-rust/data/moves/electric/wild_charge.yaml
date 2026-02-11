@@ -3,10 +3,15 @@ name: ワイルドボルト
 type: electric
 category: physical
 pp: 15
+power: 90
+accuracy: 1.0
+priority: 0
+description: 電気を　まとって 相手に　ぶつかって　攻撃する。 自分も　少し　ダメージを　受ける。
 steps:
 - type: damage
   power: 90
-  accuracy: 1
-- type: damage_ratio
-  ratioMaxHp: 0.25
-  target: self
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags:
+- contact

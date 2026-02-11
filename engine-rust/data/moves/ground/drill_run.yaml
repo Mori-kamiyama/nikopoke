@@ -3,11 +3,14 @@ name: ドリルライナー
 type: ground
 category: physical
 pp: 10
+power: 80
 accuracy: 0.95
+priority: 0
+description: ドリルのように　体を　回転しながら 相手に　体当たりする。 急所に　当たりやすい。
 steps:
 - type: damage
   power: 80
-- type: modify_stage
-  target: self
-  stages:
-    crit: 1
+  accuracy: 0.95
+tags:
+- contact
+critRate: 1

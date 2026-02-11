@@ -1,0 +1,20 @@
+id: twister
+name: たつまき
+type: dragon
+category: special
+pp: 20
+power: 40
+accuracy: 1.0
+priority: 0
+description: 竜巻を　おこして 相手を　まきこみ　攻撃する。 相手を　ひるませることが　ある。
+steps:
+- type: damage
+  power: 40
+  accuracy: 1.0
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+tags: []

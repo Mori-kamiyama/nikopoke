@@ -1,0 +1,21 @@
+id: fake_out
+name: ねこだまし
+type: normal
+category: physical
+pp: 10
+power: 40
+accuracy: 1.0
+priority: 3
+description: 先制攻撃で　相手を　ひるませる。 戦闘に　でたら すぐに　ださないと　成功しない。
+steps:
+- type: damage
+  power: 40
+  accuracy: 1.0
+- type: chance
+  p: 1.0
+  then:
+  - type: apply_status
+    statusId: flinch
+    target: target
+tags:
+- contact

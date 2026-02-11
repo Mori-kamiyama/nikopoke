@@ -3,8 +3,13 @@ name: てっぺき
 type: steel
 category: status
 pp: 15
+power: null
+accuracy: null
+priority: 0
+description: 皮膚を　鉄のように 硬くする　ことで 自分の　防御を　ぐーんと　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     def: 2
+tags: []

@@ -1,0 +1,17 @@
+id: burning_jealousy
+name: しっとのほのお
+type: fire
+category: special
+pp: 5
+power: 70
+accuracy: 1.0
+priority: 0
+description: しっとの　エネルギーで　相手を　攻撃。 そのターン　能力が　あがった　ポケモンを やけどの　状態に　する。
+steps:
+- type: damage
+  power: 70
+  accuracy: 1.0
+- type: apply_status
+  statusId: burn
+  target: target
+tags: []

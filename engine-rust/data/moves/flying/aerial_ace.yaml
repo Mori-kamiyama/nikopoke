@@ -3,7 +3,12 @@ name: つばめがえし
 type: flying
 category: physical
 pp: 20
+power: 60
+accuracy: null
+priority: 0
+description: 素早い　動きで 相手を　ほんろうして　切りつける。 攻撃は　必ず　命中する。
 steps:
 - type: damage
   power: 60
-- type: self_switch
+tags:
+- contact

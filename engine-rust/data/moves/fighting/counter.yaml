@@ -3,7 +3,12 @@ name: カウンター
 type: fighting
 category: physical
 pp: 20
+power: null
+accuracy: 1.0
 priority: -5
+description: 相手から　受けた　物理攻撃の ダメージを　２倍に　して 同じ　相手に　返す。
 steps:
-- type: damage_ratio
-  ratioMaxHp: 2
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

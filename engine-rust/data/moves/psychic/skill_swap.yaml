@@ -3,8 +3,11 @@ name: スキルスワップ
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: '超能力で　自分の　特性と 相手の　特性を　入れ替える。 '
 steps:
-- type: replace_status
-  from: ability
-  to: ability
-  target: all
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

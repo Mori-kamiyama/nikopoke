@@ -1,0 +1,15 @@
+id: psychic_fangs
+name: サイコファング
+type: psychic
+category: physical
+pp: 10
+power: 85
+accuracy: 1.0
+priority: 0
+description: サイコパワーで　かみついて 相手を　攻撃する。　ひかりのかべや リフレクター　なども　破壊できる。
+steps:
+- type: damage
+  power: 85
+  accuracy: 1.0
+tags:
+- contact

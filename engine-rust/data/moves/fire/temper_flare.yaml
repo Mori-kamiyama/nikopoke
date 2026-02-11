@@ -1,0 +1,17 @@
+id: temper_flare
+name: やけっぱち
+type: fire
+category: physical
+pp: 10
+power: 75
+accuracy: 1.0
+priority: 0
+description: |-
+  前のターンで自分が使った技が外れたり失敗したり、
+  『まひ』『こんらん』『ひるみ』状態などで行動できなかった場合、威力が2倍になる。
+steps:
+- type: damage
+  power: 75
+  accuracy: 1.0
+tags:
+- contact

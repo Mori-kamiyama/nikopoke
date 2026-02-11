@@ -3,41 +3,13 @@ name: ソーラーブレード
 type: grass
 category: physical
 pp: 10
+power: 125
+accuracy: 1.0
+priority: 0
+description: １ターン目に　光を　いっぱいに　集め ２ターン目に　その　力を 剣に　込めて　攻撃する。
 steps:
-- type: wait
-  turns: 1
-  steps:
-  - type: damage
-    power: 125
-    accuracy: 1
-- type: conditional
-  if:
-    type: weather_is_sunny
-  then:
-  - type: damage
-    power: 125
-    accuracy: 1
-  else:
-  - type: conditional
-    if:
-      type: weather_is_raining
-    then:
-    - type: damage
-      power: 62
-      accuracy: 1
-    else:
-    - type: conditional
-      if:
-        type: weather_is_hail
-      then:
-      - type: damage
-        power: 62
-        accuracy: 1
-      else:
-      - type: conditional
-        if:
-          type: weather_is_sandstorm
-        then:
-        - type: damage
-          power: 62
-          accuracy: 1
+- type: damage
+  power: 125
+  accuracy: 1.0
+tags:
+- contact

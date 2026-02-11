@@ -3,13 +3,19 @@ name: ほのおのパンチ
 type: fire
 category: physical
 pp: 15
+power: 75
+accuracy: 1.0
+priority: 0
+description: 炎を　こめた　パンチで 相手を　攻撃する。 やけど状態に　することが　ある。
 steps:
 - type: damage
   power: 75
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.1
   then:
   - type: apply_status
     statusId: burn
     target: target
+tags:
+- contact

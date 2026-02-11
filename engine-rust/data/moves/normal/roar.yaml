@@ -2,17 +2,11 @@ id: roar
 name: ほえる
 type: normal
 category: status
-pp: 30
+pp: 20
+power: null
+accuracy: null
 priority: -6
+description: 相手を　逃がして 控えの　ポケモンを　ひきずりだす。 野生の　場合は　戦闘が　終わる。
 steps:
-- type: conditional
-  if:
-    type: field_has_status
-    statusId: trainer_battle
-  then:
-  - type: force_switch
-    target: target
-  else:
-  - type: run_away
-    chance: 1
-- type: bypass_protect
+- type: force_switch
+tags: []

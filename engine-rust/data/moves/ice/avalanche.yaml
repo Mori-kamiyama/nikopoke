@@ -2,15 +2,14 @@ id: avalanche
 name: ゆきなだれ
 type: ice
 category: physical
+pp: 10
+power: 60
+accuracy: 1.0
 priority: -4
+description: 相手から　技を　受けていると その　相手に　対して 技の　威力が　２倍に　なる。
 steps:
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: flinch
-  then:
-  - type: damage
-    power: 120
-  else:
-  - type: damage
-    power: 60
+- type: damage
+  power: 60
+  accuracy: 1.0
+tags:
+- contact

@@ -3,15 +3,12 @@ name: シャドーパンチ
 type: ghost
 category: physical
 pp: 20
+power: 60
+accuracy: null
+priority: 0
+description: '影に　まぎれて　パンチを　くりだす。 攻撃は　必ず　命中する。 '
 steps:
 - type: damage
   power: 60
-- type: modify_stage
-  target: target
-  stages:
-    atk: 0
-    def: 0
-    spa: 0
-    spd: 0
-    spe: 0
-  accuracy: 1
+tags:
+- contact

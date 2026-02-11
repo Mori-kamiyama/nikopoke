@@ -3,20 +3,11 @@ name: くさむすび
 type: grass
 category: special
 pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: 草を　からませて　相手を 転ばせる。相手が　重いほど 威力が　あがる。
 steps:
-- type: damage
-  power: 0
-  accuracy: 1
-  data:
-    weight_based_power:
-      under_10kg: 20
-      under_25kg: 40
-      under_50kg: 60
-      under_100kg: 80
-      under_200kg: 100
-      over_200kg: 120
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: dynamax
-  then: []
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

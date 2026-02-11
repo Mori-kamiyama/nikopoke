@@ -3,9 +3,14 @@ name: コスモパワー
 type: psychic
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 宇宙から　神秘の　力を とりこむ　ことで 自分の　防御と　特防を　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     def: 1
     spd: 1
+tags: []

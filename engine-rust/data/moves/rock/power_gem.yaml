@@ -3,7 +3,12 @@ name: パワージェム
 type: rock
 category: special
 pp: 20
+power: 80
+accuracy: 1.0
+priority: 0
+description: '宝石のように　きらめく　光を 発射して　相手を　攻撃する。 '
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
+tags: []

@@ -1,0 +1,13 @@
+id: trick
+name: トリック
+type: psychic
+category: status
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手の　すきを　ついて 自分と　相手の 持ち物を　交換する。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

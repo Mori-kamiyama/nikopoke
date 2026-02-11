@@ -3,9 +3,13 @@ name: フェザーダンス
 type: flying
 category: status
 pp: 15
-accuracy: 1
+power: null
+accuracy: 1.0
+priority: 0
+description: 羽毛を　ふりまいて 相手の　体に　からませる。 相手の　攻撃を　がくっと　さげる。
 steps:
 - type: modify_stage
   target: target
   stages:
     atk: -2
+tags: []

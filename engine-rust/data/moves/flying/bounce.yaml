@@ -1,0 +1,21 @@
+id: bounce
+name: とびはねる
+type: flying
+category: physical
+pp: 5
+power: 85
+accuracy: 0.85
+priority: 0
+description: 空高く　飛び跳ねて ２ターン目に　相手を　攻撃する。 まひ状態に　することが　ある。
+steps:
+- type: damage
+  power: 85
+  accuracy: 0.85
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: paralysis
+    target: target
+tags:
+- contact

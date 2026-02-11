@@ -1,0 +1,13 @@
+id: detect
+name: みきり
+type: fighting
+category: status
+pp: 5
+power: null
+accuracy: null
+priority: 4
+description: 相手の　攻撃を まったく　受けない。 連続で　だすと　失敗しやすい。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

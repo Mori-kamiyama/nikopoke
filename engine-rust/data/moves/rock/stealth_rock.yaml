@@ -3,6 +3,11 @@ name: ステルスロック
 type: rock
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 相手の　周りに　無数の　岩を 浮かべて　交代で　でてきた　相手の ポケモンに　ダメージを　与える。
 steps:
-- type: apply_field_status
-  statusId: stealth_rock
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

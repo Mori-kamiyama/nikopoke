@@ -3,7 +3,13 @@ name: たいあたり
 type: normal
 category: physical
 pp: 35
+power: 40
+accuracy: 1.0
+priority: 0
+description: '相手に　むかって　全身で ぶつかっていき　攻撃する。 '
 steps:
 - type: damage
   power: 40
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

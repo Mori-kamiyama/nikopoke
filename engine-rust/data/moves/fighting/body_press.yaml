@@ -3,8 +3,13 @@ name: ボディプレス
 type: fighting
 category: physical
 pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: 体を　ぶつけて　攻撃。 防御が　高いほど 与える　ダメージが　増える。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
-  basedOn: user_def
+  accuracy: 1.0
+tags:
+- contact

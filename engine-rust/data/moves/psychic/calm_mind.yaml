@@ -1,0 +1,16 @@
+id: calm_mind
+name: めいそう
+type: psychic
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 静かに　精神を　統一し 心を　鎮めることで　自分の 特攻と　特防を　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 1
+    spd: 1
+tags: []

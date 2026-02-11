@@ -3,19 +3,13 @@ name: ころがる
 type: rock
 category: physical
 pp: 20
+power: 30
 accuracy: 0.9
+priority: 0
+description: ５ターンの　あいだ　転がり続けて 攻撃する。技が　当たるたびに 威力が　あがる。
 steps:
 - type: damage
   power: 30
-- type: repeat
-  times: 5
-  steps:
-  - type: damage
-    power: 30
-- type: conditional
-  if:
-    type: user_has_status
-    statusId: defense_curl
-  then:
-  - type: damage
-    power: 60
+  accuracy: 0.9
+tags:
+- contact

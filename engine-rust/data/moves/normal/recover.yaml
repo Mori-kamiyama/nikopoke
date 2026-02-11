@@ -1,0 +1,14 @@
+id: recover
+name: じこさいせい
+type: normal
+category: status
+pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 細胞を　再生させて 自分の　最大ＨＰの 半分の　ＨＰを　回復する。
+steps:
+- type: damage_ratio
+  ratioMaxHp: -0.5
+  target: self
+tags: []

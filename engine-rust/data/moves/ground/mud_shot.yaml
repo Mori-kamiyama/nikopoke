@@ -3,6 +3,10 @@ name: マッドショット
 type: ground
 category: special
 pp: 15
+power: 55
+accuracy: 0.95
+priority: 0
+description: 泥の　塊を 相手に　投げつけて　攻撃する。 同時に　相手の　素早さを　さげる。
 steps:
 - type: damage
   power: 55
@@ -11,4 +15,4 @@ steps:
   target: target
   stages:
     spe: -1
-  chance: 1
+tags: []

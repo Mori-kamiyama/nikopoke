@@ -1,0 +1,14 @@
+id: moongeist_beam
+name: シャドーレイ
+type: ghost
+category: special
+pp: 5
+power: 100
+accuracy: 1.0
+priority: 0
+description: 怪しい　光線を　放って 攻撃する。相手の　特性を 無視して　攻撃　することが　できる。
+steps:
+- type: damage
+  power: 100
+  accuracy: 1.0
+tags: []

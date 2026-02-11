@@ -3,10 +3,15 @@ name: きゅうけつ
 type: bug
 category: physical
 pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: 血を　吸い取って　相手を 攻撃する。与えた　ダメージの 半分の　ＨＰを　回復できる。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
-- type: damage_ratio
-  ratioMaxHp: -0.5
-  target: self
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags:
+- contact

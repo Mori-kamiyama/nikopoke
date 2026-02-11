@@ -3,6 +3,10 @@ name: ほのおのキバ
 type: fire
 category: physical
 pp: 15
+power: 65
+accuracy: 0.95
+priority: 0
+description: 炎を　まとった　キバで　かみつく。 相手を　ひるませたり やけど状態に　することが　ある。
 steps:
 - type: damage
   power: 65
@@ -11,12 +15,13 @@ steps:
   p: 0.1
   then:
   - type: apply_status
-    statusId: burn
+    statusId: flinch
     target: target
 - type: chance
   p: 0.1
   then:
   - type: apply_status
-    statusId: flinch
+    statusId: burn
     target: target
-    duration: 1
+tags:
+- contact

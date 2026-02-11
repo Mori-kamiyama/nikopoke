@@ -3,13 +3,18 @@ name: トリプルアクセル
 type: ice
 category: physical
 pp: 10
+power: 20
+accuracy: 0.9
+priority: 0
+description: ３回連続で　キックを　くりだして 攻撃する。　技が　当たるたびに 威力は　あがる。
 steps:
 - type: repeat
-  times: 3
+  times:
+    min: 3
+    max: 3
   steps:
   - type: damage
     power: 20
-  - type: modify_stage
-    target: self
-    stages:
-      atk: 1
+    accuracy: 0.9
+tags:
+- contact

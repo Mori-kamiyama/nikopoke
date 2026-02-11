@@ -1,21 +1,21 @@
 id: flame_wheel
-name: ほのおのうず
+name: かえんぐるま
 type: fire
-category: special
-pp: 15
+category: physical
+pp: 25
+power: 60
+accuracy: 1.0
+priority: 0
+description: 炎を　まとい 相手に　突進して　攻撃する。 やけど状態に　することが　ある。
 steps:
 - type: damage
-  power: 35
-  accuracy: 0.85
-- type: over_time
-  steps:
-  - type: damage_ratio
-    ratioMaxHp: 0.125
-  target: target
-- type: apply_status
-  statusId: lock_move
-  target: target
-  duration:
-    min: 4
-    max: 5
-  chance: 1
+  power: 60
+  accuracy: 1.0
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
+tags:
+- contact

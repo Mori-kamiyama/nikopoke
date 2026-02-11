@@ -1,14 +1,14 @@
 id: low_kick
-name: ローキック
+name: けたぐり
 type: fighting
 category: physical
 pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: 足を　強く　けり 相手を　転ばせて　攻撃する。 相手が　重いほど　威力が　あがる。
 steps:
-- type: damage
-  power: 65
-  accuracy: 1
-- type: modify_stage
-  target: target
-  stages:
-    spe: -1
-  chance: 1
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

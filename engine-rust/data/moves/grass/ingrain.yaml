@@ -1,0 +1,13 @@
+id: ingrain
+name: ねをはる
+type: grass
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 大地に　根を　張り 毎ターン　自分の　ＨＰを　回復する。 根を　張っているので　入れ替えられない。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

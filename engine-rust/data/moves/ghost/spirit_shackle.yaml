@@ -1,0 +1,14 @@
+id: spirit_shackle
+name: かげぬい
+type: ghost
+category: physical
+pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: 攻撃と　同時に 相手の　影を　縫い付けて 逃げられなくする。
+steps:
+- type: damage
+  power: 80
+  accuracy: 1.0
+tags: []

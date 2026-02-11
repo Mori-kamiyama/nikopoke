@@ -1,0 +1,15 @@
+id: nasty_plot
+name: わるだくみ
+type: dark
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 悪いことを　考えて 頭を　活性化させる。 自分の　特攻を　ぐーんと　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 2
+tags: []

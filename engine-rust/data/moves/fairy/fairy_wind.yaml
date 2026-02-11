@@ -2,7 +2,13 @@ id: fairy_wind
 name: ようせいのかぜ
 type: fairy
 category: special
+pp: 30
+power: 40
+accuracy: 1.0
+priority: 0
+description: 'ようせいのかぜを　起こし 相手に　吹きつけて　攻撃する。 '
 steps:
 - type: damage
   power: 40
-  accuracy: 1
+  accuracy: 1.0
+tags: []

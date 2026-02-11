@@ -1,0 +1,15 @@
+id: grassy_glide
+name: グラススライダー
+type: grass
+category: physical
+pp: 20
+power: 55
+accuracy: 1.0
+priority: 0
+description: 地面を　滑るように　相手を　攻撃。 グラスフィールドの時 必ず　先制攻撃　できる。
+steps:
+- type: damage
+  power: 55
+  accuracy: 1.0
+tags:
+- contact

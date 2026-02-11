@@ -1,0 +1,17 @@
+id: zap_cannon
+name: でんじほう
+type: electric
+category: special
+pp: 5
+power: 120
+accuracy: 0.5
+priority: 0
+description: 大砲の　ような 電気を　発射して　攻撃する。 相手を　まひの　状態に　する。
+steps:
+- type: damage
+  power: 120
+  accuracy: 0.5
+- type: apply_status
+  statusId: paralysis
+  target: target
+tags: []

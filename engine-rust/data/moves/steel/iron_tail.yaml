@@ -3,6 +3,10 @@ name: アイアンテール
 type: steel
 category: physical
 pp: 15
+power: 100
+accuracy: 0.75
+priority: 0
+description: 硬い　しっぽで 相手を　たたきつけて　攻撃する。 相手の　防御を　さげることが　ある。
 steps:
 - type: damage
   power: 100
@@ -14,3 +18,5 @@ steps:
     target: target
     stages:
       def: -1
+tags:
+- contact

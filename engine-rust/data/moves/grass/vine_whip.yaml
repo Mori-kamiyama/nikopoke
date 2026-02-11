@@ -3,7 +3,13 @@ name: つるのムチ
 type: grass
 category: physical
 pp: 25
+power: 45
+accuracy: 1.0
+priority: 0
+description: 'ムチのように　しなる　細長い　つるで 相手を　たたきつけて　攻撃する。 '
 steps:
 - type: damage
   power: 45
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

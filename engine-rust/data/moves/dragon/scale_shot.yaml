@@ -3,6 +3,10 @@ name: スケイルショット
 type: dragon
 category: physical
 pp: 20
+power: 25
+accuracy: 0.9
+priority: 0
+description: ウロコを　撃ちだして　攻撃する。 ２ー５回の　間　連続で　だす。 素早さが　あがるが　防御が　さがる。
 steps:
 - type: repeat
   times:
@@ -12,8 +16,4 @@ steps:
   - type: damage
     power: 25
     accuracy: 0.9
-- type: modify_stage
-  target: self
-  stages:
-    def: -1
-    spe: 1
+tags: []

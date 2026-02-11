@@ -3,12 +3,12 @@ name: ふんか
 type: fire
 category: special
 pp: 5
+power: 150
+accuracy: 1.0
+priority: 0
+description: 怒りを　爆発させて　相手を 攻撃する。自分の　ＨＰが 少ないほど　技の　威力は　さがる。
 steps:
 - type: damage
   power: 150
-  accuracy: 1
-- type: conditional
-  if:
-    type: target_hp_lt
-    value: 1
-  then: []
+  accuracy: 1.0
+tags: []

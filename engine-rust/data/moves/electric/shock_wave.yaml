@@ -1,0 +1,13 @@
+id: shock_wave
+name: でんげきは
+type: electric
+category: special
+pp: 20
+power: 60
+accuracy: null
+priority: 0
+description: 電撃を　素早く 相手に　浴びせる。 攻撃は　必ず　命中する。
+steps:
+- type: damage
+  power: 60
+tags: []

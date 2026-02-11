@@ -1,0 +1,21 @@
+id: muddy_water
+name: だくりゅう
+type: water
+category: special
+pp: 10
+power: 90
+accuracy: 0.85
+priority: 0
+description: 濁った　水を 相手に　発射して　攻撃する。 命中率を　さげることが　ある。
+steps:
+- type: damage
+  power: 90
+  accuracy: 0.85
+- type: chance
+  p: 0.3
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      accuracy: -1
+tags: []

@@ -1,0 +1,20 @@
+id: ice_beam
+name: れいとうビーム
+type: ice
+category: special
+pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
+description: 凍える　ビームを 相手に　発射して　攻撃する。 こおり状態に　することが　ある。
+steps:
+- type: damage
+  power: 90
+  accuracy: 1.0
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: freeze
+    target: target
+tags: []

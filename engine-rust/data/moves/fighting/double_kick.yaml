@@ -3,10 +3,18 @@ name: にどげり
 type: fighting
 category: physical
 pp: 30
+power: 30
+accuracy: 1.0
+priority: 0
+description: ２本の　足で　相手を　けとばして 攻撃する。２回連続で ダメージを　与える。
 steps:
 - type: repeat
-  times: 2
+  times:
+    min: 2
+    max: 2
   steps:
   - type: damage
     power: 30
-    accuracy: 1
+    accuracy: 1.0
+tags:
+- contact

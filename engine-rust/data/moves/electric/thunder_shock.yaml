@@ -1,8 +1,20 @@
 id: thunder_shock
-name: でんげきは
+name: でんきショック
 type: electric
 category: special
-pp: 20
+pp: 30
+power: 40
+accuracy: 1.0
+priority: 0
+description: 電気の　刺激を 相手に　浴びせて　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
-  power: 60
+  power: 40
+  accuracy: 1.0
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: paralysis
+    target: target
+tags: []

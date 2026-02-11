@@ -3,7 +3,11 @@ name: みちづれ
 type: ghost
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 技を　だしたあと　攻撃を　受けて ひんしに　なったとき 攻撃　相手も　ひんしに　する。
 steps:
-- type: apply_status
-  statusId: destiny_bond
-  target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

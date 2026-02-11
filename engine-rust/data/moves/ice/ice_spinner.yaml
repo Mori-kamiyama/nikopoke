@@ -2,12 +2,16 @@ id: ice_spinner
 name: アイススピナー
 type: ice
 category: physical
+pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: |-
+  場の状態
+  『グラスフィールド』『ミストフィールド』『エレキフィールド』『サイコフィールド』を解除し、元に戻す。
 steps:
-- type: remove_field_status
-  statusId: grass_terrain
-- type: remove_field_status
-  statusId: mist_terrain
-- type: remove_field_status
-  statusId: electric_terrain
-- type: remove_field_status
-  statusId: psychic_terrain
+- type: damage
+  power: 80
+  accuracy: 1.0
+tags:
+- contact

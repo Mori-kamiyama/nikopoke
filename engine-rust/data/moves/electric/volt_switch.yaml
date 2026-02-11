@@ -1,0 +1,14 @@
+id: volt_switch
+name: ボルトチェンジ
+type: electric
+category: special
+pp: 20
+power: 70
+accuracy: 1.0
+priority: 0
+description: 攻撃したあと ものすごい　スピードで　もどってきて 控えポケモンと　入れ替わる。
+steps:
+- type: damage
+  power: 70
+  accuracy: 1.0
+tags: []

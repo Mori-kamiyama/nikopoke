@@ -3,11 +3,14 @@ name: きりさく
 type: normal
 category: physical
 pp: 20
+power: 70
+accuracy: 1.0
+priority: 0
+description: ツメや　カマなどで 相手を　切り裂いて　攻撃する。 急所に　当たりやすい。
 steps:
 - type: damage
   power: 70
-  accuracy: 1
-- type: modify_stage
-  target: target
-  stages:
-    crit: 1
+  accuracy: 1.0
+tags:
+- contact
+critRate: 1

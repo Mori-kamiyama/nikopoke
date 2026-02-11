@@ -3,9 +3,11 @@ name: こらえる
 type: normal
 category: status
 pp: 10
+power: null
+accuracy: null
 priority: 4
+description: 攻撃を　受けても ＨＰを　必ず　１だけ　残せる。 連続で　だすと　失敗しやすい。
 steps:
-- type: protect
-- type: apply_status
-  statusId: protect
-  target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

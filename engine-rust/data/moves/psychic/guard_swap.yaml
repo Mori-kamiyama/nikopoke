@@ -3,10 +3,11 @@ name: ガードスワップ
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 超能力で　自分と　相手の 防御と　特防の 能力変化を　入れ替える。
 steps:
-- type: modify_stage
-  target: all
-  stages:
-    def: 0
-    spd: 0
-  swap: true
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

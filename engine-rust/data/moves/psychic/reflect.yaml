@@ -3,10 +3,11 @@ name: リフレクター
 type: psychic
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ　不思議な　かべで 相手から　受ける　物理攻撃の ダメージを　弱める。
 steps:
-- type: apply_field_status
-  statusId: reflect
-  duration: 5
-  data:
-    single_battle_ratio: 0.5
-    double_battle_ratio: 0.667
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

@@ -1,0 +1,16 @@
+id: work_up
+name: ふるいたてる
+type: normal
+category: status
+pp: 30
+power: null
+accuracy: null
+priority: 0
+description: '自分を　奮いたてて 攻撃と　特攻を　あげる。 '
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    spa: 1
+tags: []

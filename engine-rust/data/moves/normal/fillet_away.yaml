@@ -1,0 +1,21 @@
+id: fillet_away
+name: みをけずる
+type: normal
+category: status
+pp: 10
+power: 0
+accuracy: null
+priority: 0
+description: |-
+  自分のHPを最大HPの半分だけ減らす代わりに、
+  自分の『こうげき』『とくこう』『すばやさ』ランクが2段階ずつ上がる。
+steps:
+- type: damage
+  power: 0
+- type: modify_stage
+  target: self
+  stages:
+    atk: 2
+    spa: 2
+    spe: 2
+tags: []

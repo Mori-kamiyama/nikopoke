@@ -3,13 +3,12 @@ name: はねやすめ
 type: flying
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 地面に　降りて　体を　やすめる。 最大ＨＰの　半分の ＨＰを　回復する。
 steps:
 - type: damage_ratio
   ratioMaxHp: -0.5
   target: self
-- type: apply_status
-  statusId: roost_effect
-  target: self
-  duration: 1
-  data:
-    typeChange: normal
+tags: []

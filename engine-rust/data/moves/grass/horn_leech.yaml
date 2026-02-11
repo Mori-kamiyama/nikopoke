@@ -1,0 +1,17 @@
+id: horn_leech
+name: ウッドホーン
+type: grass
+category: physical
+pp: 10
+power: 75
+accuracy: 1.0
+priority: 0
+description: つのを　突き刺して　相手の　養分を 吸い取る。与えた　ダメージの 半分の　ＨＰを　回復できる。
+steps:
+- type: damage
+  power: 75
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags:
+- contact

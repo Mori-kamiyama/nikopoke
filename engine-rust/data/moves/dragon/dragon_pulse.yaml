@@ -2,5 +2,13 @@ id: dragon_pulse
 name: りゅうのはどう
 type: dragon
 category: special
+pp: 10
+power: 85
+accuracy: 1.0
+priority: 0
+description: '大きな　口から　衝撃波を まきおこして　相手を　攻撃する。 '
 steps:
 - type: damage
+  power: 85
+  accuracy: 1.0
+tags: []

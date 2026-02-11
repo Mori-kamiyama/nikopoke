@@ -3,10 +3,12 @@ name: じばく
 type: normal
 category: physical
 pp: 5
+power: 200
+accuracy: 1.0
+priority: 0
+description: 爆発を　おこして　自分の 周りに　いるものを　攻撃する。 使ったあとに　ひんしに　なる。
 steps:
 - type: damage
   power: 200
-  accuracy: 1
-- type: apply_status
-  statusId: fainted
-  target: self
+  accuracy: 1.0
+tags: []

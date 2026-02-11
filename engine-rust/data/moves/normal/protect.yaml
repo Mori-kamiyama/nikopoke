@@ -3,6 +3,11 @@ name: まもる
 type: normal
 category: status
 pp: 10
+power: null
+accuracy: null
 priority: 4
+description: 相手の　攻撃を まったく　受けない。 連続で　だすと　失敗しやすい。
 steps:
-- type: protect
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

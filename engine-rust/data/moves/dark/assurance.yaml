@@ -1,0 +1,15 @@
+id: assurance
+name: ダメおし
+type: dark
+category: physical
+pp: 10
+power: 60
+accuracy: 1.0
+priority: 0
+description: そのターンに　相手が すでに　ダメージを　受けていたら 技の　威力は　２倍に　なる。
+steps:
+- type: damage
+  power: 60
+  accuracy: 1.0
+tags:
+- contact

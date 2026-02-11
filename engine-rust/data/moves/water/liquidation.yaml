@@ -1,0 +1,22 @@
+id: liquidation
+name: アクアブレイク
+type: water
+category: physical
+pp: 10
+power: 85
+accuracy: 1.0
+priority: 0
+description: 水の　力で　相手に ぶつかって　攻撃する。 相手の　防御を　さげる　ことがある。
+steps:
+- type: damage
+  power: 85
+  accuracy: 1.0
+- type: chance
+  p: 0.2
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      def: -1
+tags:
+- contact

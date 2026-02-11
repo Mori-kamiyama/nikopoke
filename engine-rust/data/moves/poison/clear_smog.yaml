@@ -3,8 +3,11 @@ name: クリアスモッグ
 type: poison
 category: special
 pp: 15
+power: 50
+accuracy: null
+priority: 0
+description: 特殊な　泥の　塊を 相手に　投げつけて　攻撃する。 能力変化を　もとに　もどす。
 steps:
 - type: damage
   power: 50
-- type: clear_stages
-  target: target
+tags: []

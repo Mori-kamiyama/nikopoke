@@ -3,8 +3,12 @@ name: どくのこな
 type: poison
 category: status
 pp: 35
+power: null
 accuracy: 0.75
+priority: 0
+description: 毒の　ある　粉を たくさん　ふりまいて 相手を　毒状態に　する。
 steps:
 - type: apply_status
   statusId: poison
-  chance: 1
+  target: target
+tags: []

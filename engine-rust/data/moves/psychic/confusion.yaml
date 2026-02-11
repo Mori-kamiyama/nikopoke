@@ -1,0 +1,22 @@
+id: confusion
+name: ねんりき
+type: psychic
+category: special
+pp: 25
+power: 50
+accuracy: 1.0
+priority: 0
+description: 弱い　念力を 相手に　送って　攻撃する。 相手を　混乱させることが　ある。
+steps:
+- type: damage
+  power: 50
+  accuracy: 1.0
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: confusion
+    target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

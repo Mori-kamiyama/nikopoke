@@ -1,0 +1,17 @@
+id: upper_hand
+name: はやてがえし
+type: fighting
+category: physical
+pp: 15
+power: 65
+accuracy: 1.0
+priority: 3
+description: |-
+  必ず先制できる(優先度:+3)。相手を100%の確率でひるませる。
+  ただし、そのターン相手が選んだ技が先制技ではない場合や、すでに攻撃を終えていた場合は失敗する。
+steps:
+- type: damage
+  power: 65
+  accuracy: 1.0
+tags:
+- contact

@@ -1,0 +1,13 @@
+id: disable
+name: かなしばり
+type: normal
+category: status
+pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手の　動きを　とめて 直前に　だしていた　技を ４ターンの　あいだ　使えなくする。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

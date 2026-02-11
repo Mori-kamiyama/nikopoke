@@ -3,10 +3,13 @@ name: くらいつく
 type: dark
 category: physical
 pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: お互い　ひんしに　なるまで 交代が　できなくなる。　どちらかの ポケモンが　いなくなると　効果は消える。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
-- type: apply_status
-  statusId: lock_move
-  target: all
+  accuracy: 1.0
+tags:
+- contact

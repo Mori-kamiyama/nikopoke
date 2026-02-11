@@ -2,8 +2,14 @@ id: foul_play
 name: イカサマ
 type: dark
 category: physical
+pp: 15
+power: 95
+accuracy: 1.0
+priority: 0
+description: 相手の　力を　利用する。 戦っている　相手の　攻撃が 高いほど　ダメージが　あがる。
 steps:
 - type: damage
-  power: null
-  accuracy: null
-  useTargetAttack: true
+  power: 95
+  accuracy: 1.0
+tags:
+- contact

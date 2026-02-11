@@ -2,6 +2,14 @@ id: ice_shard
 name: こおりのつぶて
 type: ice
 category: physical
+pp: 30
+power: 40
+accuracy: 1.0
 priority: 1
+description: 氷の塊を　一瞬で　つくり 相手に　素早く　放つ。 必ず　先制攻撃　できる。
 steps:
 - type: damage
+  power: 40
+  accuracy: 1.0
+tags:
+- contact

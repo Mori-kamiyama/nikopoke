@@ -3,8 +3,12 @@ name: しんくうは
 type: fighting
 category: special
 pp: 30
+power: 40
+accuracy: 1.0
 priority: 1
+description: こぶしを　ふって 真空の　波を　まきおこす。 必ず　先制攻撃できる。
 steps:
 - type: damage
   power: 40
-  accuracy: 1
+  accuracy: 1.0
+tags: []

@@ -1,0 +1,18 @@
+id: nuzzle
+name: ほっぺすりすり
+type: electric
+category: physical
+pp: 20
+power: 20
+accuracy: 1.0
+priority: 0
+description: 電気を　帯びた　ほっぺを すりつけて　攻撃。 相手を　まひ状態に　する。
+steps:
+- type: damage
+  power: 20
+  accuracy: 1.0
+- type: apply_status
+  statusId: paralysis
+  target: target
+tags:
+- contact

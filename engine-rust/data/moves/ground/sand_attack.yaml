@@ -3,8 +3,13 @@ name: すなかけ
 type: ground
 category: status
 pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: '相手の　顔に　砂を　かけて 命中率を　さげる。 '
 steps:
 - type: modify_stage
   target: target
   stages:
     accuracy: -1
+tags: []

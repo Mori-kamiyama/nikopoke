@@ -1,0 +1,13 @@
+id: disarming_voice
+name: チャームボイス
+type: fairy
+category: special
+pp: 15
+power: 40
+accuracy: null
+priority: 0
+description: 魅惑の　鳴き声を　だして　相手に 精神的な　ダメージを　与える。 攻撃は　必ず　命中　する。
+steps:
+- type: damage
+  power: 40
+tags: []

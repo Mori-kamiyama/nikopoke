@@ -3,16 +3,11 @@ name: いやしのねがい
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 自分は　ひんしに　なるが 控えから　でてくる　ポケモンの 状態異常と　ＨＰを　回復する。
 steps:
-- type: damage_ratio
-  ratioMaxHp: 1
-  target: self
-- type: wait
-  turns: 1
-  timing: turn_start
-  steps:
-  - type: cure_all_status
-    target: self
-  - type: damage_ratio
-    ratioMaxHp: 0
-    target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

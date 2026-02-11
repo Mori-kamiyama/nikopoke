@@ -3,11 +3,13 @@ name: ねらいうち
 type: water
 category: special
 pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 相手の　技を　引き受ける 特性や　技の　影響を　無視して 選んだ　相手を　攻撃　できる。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
-- type: modify_stage
-  target: self
-  stages:
-    crit: 1
+  accuracy: 1.0
+tags: []
+critRate: 1

@@ -1,0 +1,14 @@
+id: smart_strike
+name: スマートホーン
+type: steel
+category: physical
+pp: 10
+power: 70
+accuracy: null
+priority: 0
+description: とがった　つので　相手を 突き刺して　攻撃する。 攻撃は　必ず　命中する。
+steps:
+- type: damage
+  power: 70
+tags:
+- contact

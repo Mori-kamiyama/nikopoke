@@ -3,8 +3,13 @@ name: ロックカット
 type: rock
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 自分の　体を　磨いて　空気の 抵抗を　少なくする。素早さを ぐーんと　あげることが　できる。
 steps:
 - type: modify_stage
   target: self
   stages:
     spe: 2
+tags: []

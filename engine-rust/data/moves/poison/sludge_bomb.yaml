@@ -1,16 +1,20 @@
 id: sludge_bomb
-name: ようかいえき
+name: ヘドロばくだん
 type: poison
 category: special
-pp: 30
+pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
+description: 汚い　ヘドロを 相手に　投げつけて　攻撃する。 毒状態に　することが　ある。
 steps:
 - type: damage
-  power: 40
-  accuracy: 1
+  power: 90
+  accuracy: 1.0
 - type: chance
-  p: 0.1
+  p: 0.3
   then:
-  - type: modify_stage
+  - type: apply_status
+    statusId: poison
     target: target
-    stages:
-      spd: -1
+tags: []

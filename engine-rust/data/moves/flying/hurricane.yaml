@@ -1,0 +1,22 @@
+id: hurricane
+name: ぼうふう
+type: flying
+category: special
+pp: 10
+power: 110
+accuracy: 0.7
+priority: 0
+description: 強烈な　風で　相手を 包みこんで　攻撃する。 相手を　混乱させることが　ある。
+steps:
+- type: damage
+  power: 110
+  accuracy: 0.7
+- type: chance
+  p: 0.3
+  then:
+  - type: apply_status
+    statusId: confusion
+    target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

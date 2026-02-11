@@ -1,0 +1,19 @@
+id: flame_charge
+name: ニトロチャージ
+type: fire
+category: physical
+pp: 20
+power: 50
+accuracy: 1.0
+priority: 0
+description: 炎を　まとい　相手を　攻撃する。 力を　ためて　自分の 素早さを　あげる。
+steps:
+- type: damage
+  power: 50
+  accuracy: 1.0
+- type: modify_stage
+  target: target
+  stages:
+    spe: 1
+tags:
+- contact

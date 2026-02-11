@@ -3,6 +3,10 @@ name: せいなるほのお
 type: fire
 category: physical
 pp: 5
+power: 100
+accuracy: 0.95
+priority: 0
+description: 神秘の　炎で 相手を　焼きつくして　攻撃する。 やけど状態に　することが　ある。
 steps:
 - type: damage
   power: 100
@@ -12,11 +16,5 @@ steps:
   then:
   - type: apply_status
     statusId: burn
-- type: conditional
-  if:
-    type: user_has_status
-    statusId: freeze
-  then:
-  - type: remove_status
-    statusId: freeze
-    target: self
+    target: target
+tags: []

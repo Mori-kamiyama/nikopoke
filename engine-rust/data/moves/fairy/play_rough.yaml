@@ -3,6 +3,10 @@ name: じゃれつく
 type: fairy
 category: physical
 pp: 10
+power: 90
+accuracy: 0.9
+priority: 0
+description: 相手に　じゃれついて 攻撃する。　相手の 攻撃を　さげる　ことがある。
 steps:
 - type: damage
   power: 90
@@ -14,3 +18,5 @@ steps:
     target: target
     stages:
       atk: -1
+tags:
+- contact

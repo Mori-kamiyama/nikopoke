@@ -3,12 +3,16 @@ name: じならし
 type: ground
 category: physical
 pp: 20
+power: 60
+accuracy: 1.0
+priority: 0
+description: 地面を　踏みならして　自分の 周りに　いるものを　攻撃する。 相手の　素早さを　さげる。
 steps:
 - type: damage
   power: 60
-  accuracy: 1
+  accuracy: 1.0
 - type: modify_stage
   target: target
   stages:
     spe: -1
-  chance: 1
+tags: []

@@ -3,10 +3,15 @@ name: とっしん
 type: normal
 category: physical
 pp: 20
+power: 90
+accuracy: 0.85
+priority: 0
+description: すごい　勢いで 相手に　ぶつかって　攻撃する。 自分も　少し　ダメージを　受ける。
 steps:
 - type: damage
   power: 90
   accuracy: 0.85
-- type: damage_ratio
-  ratioMaxHp: 0.25
-  target: self
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags:
+- contact

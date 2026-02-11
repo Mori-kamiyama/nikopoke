@@ -3,11 +3,14 @@ name: さいみんじゅつ
 type: psychic
 category: status
 pp: 20
+power: null
+accuracy: 0.6
+priority: 0
+description: '眠気を　誘う　暗示を　かけて 相手を　眠り状態に　する。 '
 steps:
 - type: apply_status
   statusId: sleep
   target: target
-  duration:
-    min: 2
-    max: 4
-  chance: 0.6
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

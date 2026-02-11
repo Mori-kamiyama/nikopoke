@@ -1,0 +1,13 @@
+id: pain_split
+name: いたみわけ
+type: normal
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 自分の　ＨＰと　相手の　ＨＰを あわせて　それを　自分と　相手で なかよく　わける。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

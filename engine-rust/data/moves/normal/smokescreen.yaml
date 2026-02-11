@@ -3,13 +3,13 @@ name: えんまく
 type: normal
 category: status
 pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: '煙や　墨などを　吹きかけて 相手の　命中率を　さげる。 '
 steps:
 - type: modify_stage
   target: target
   stages:
-    atk: -1
-    def: -1
-    spa: -1
-    spd: -1
-    spe: -1
     accuracy: -1
+tags: []

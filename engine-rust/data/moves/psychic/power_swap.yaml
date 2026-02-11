@@ -3,24 +3,11 @@ name: パワースワップ
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 超能力で　自分と　相手の 攻撃と　特攻の 能力変化を　入れ替える。
 steps:
-- type: modify_stage
-  target: self
-  stages:
-    atk: null
-    spa: null
-- type: modify_stage
-  target: target
-  stages:
-    atk: null
-    spa: null
-- type: modify_stage
-  target: self
-  stages:
-    atk: 100
-    spa: 100
-- type: modify_stage
-  target: target
-  stages:
-    atk: -100
-    spa: -100
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

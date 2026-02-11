@@ -1,0 +1,15 @@
+id: frost_breath
+name: こおりのいぶき
+type: ice
+category: special
+pp: 10
+power: 60
+accuracy: 0.9
+priority: 0
+description: 冷たい　息を 相手に　吹きつけて　攻撃する。 必ず　急所に　当たる。
+steps:
+- type: damage
+  power: 60
+  accuracy: 0.9
+tags: []
+critRate: 6

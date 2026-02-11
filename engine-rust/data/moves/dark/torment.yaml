@@ -1,0 +1,13 @@
+id: torment
+name: いちゃもん
+type: dark
+category: status
+pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手に　いちゃもんを　つけて 同じ　技を　２回連続で だせなくする。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

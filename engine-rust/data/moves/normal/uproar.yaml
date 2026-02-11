@@ -3,19 +3,14 @@ name: さわぐ
 type: normal
 category: special
 pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
+description: ３ターンの　あいだ 騒いで　相手を　攻撃する。 そのあいだは　だれも　眠れなくなる。
 steps:
 - type: damage
   power: 90
-  accuracy: 1
-- type: apply_status
-  statusId: lock_move
-  target: self
-  duration: 3
-- type: apply_field_status
-  statusId: uproar
-  duration: 3
-  data:
-    prevent_sleep: true
-tags:
-- sound
-- bypass-substitute
+  accuracy: 1.0
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags: []

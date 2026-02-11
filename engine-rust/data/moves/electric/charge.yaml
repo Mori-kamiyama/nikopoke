@@ -3,11 +3,13 @@ name: じゅうでん
 type: electric
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 次の　ターンに　だす　でんきタイプの 技の　威力を　あげる。 自分の　特防も　あがる。
 steps:
-- type: apply_status
-  statusId: charge
-  target: self
 - type: modify_stage
   target: self
   stages:
     spd: 1
+tags: []

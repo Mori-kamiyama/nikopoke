@@ -3,7 +3,12 @@ name: ハイドロポンプ
 type: water
 category: special
 pp: 5
+power: 110
+accuracy: 0.8
+priority: 0
+description: 大量の　水を 激しい　勢いで 相手に　発射して　攻撃する。
 steps:
 - type: damage
   power: 110
   accuracy: 0.8
+tags: []

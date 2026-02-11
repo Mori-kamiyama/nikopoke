@@ -1,0 +1,19 @@
+id: no_retreat
+name: はいすいのじん
+type: fighting
+category: status
+pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 自分の　すべての 能力が　上がるが　交代　したり 逃げることが　できなくなる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    atk: 1
+    def: 1
+    spa: 1
+    spd: 1
+    spe: 1
+tags: []

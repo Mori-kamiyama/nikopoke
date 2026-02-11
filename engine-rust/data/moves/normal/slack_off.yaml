@@ -3,7 +3,12 @@ name: なまける
 type: normal
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 怠けて　やすむ。 自分の　ＨＰを　最大ＨＰの 半分　回復する。
 steps:
 - type: damage_ratio
   ratioMaxHp: -0.5
   target: self
+tags: []

@@ -1,0 +1,13 @@
+id: electro_ball
+name: エレキボール
+type: electric
+category: special
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 電気の　塊を　相手に ぶつける。相手より　素早さが 速いほど　威力が　あがる。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

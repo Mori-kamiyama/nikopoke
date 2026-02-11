@@ -3,10 +3,11 @@ name: ふういん
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 相手が　自分と　同じ　技を おぼえていたら　相手だけ その技を　使えなくする。
 steps:
-- type: disable_move
-  moveId: target_move
-  target: target
-  duration: null
-  data:
-    basedOnUserMoves: true
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

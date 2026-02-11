@@ -3,16 +3,13 @@ name: ドラゴンテール
 type: dragon
 category: physical
 pp: 10
+power: 60
+accuracy: 0.9
 priority: -6
+description: 相手を　はじきとばして 控えの　ポケモンを　ひきずりだす。 野生の　場合は　戦闘が　終わる。
 steps:
 - type: damage
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: ダイマックス
-  then: []
-  else:
-  - type: replace_status
-    from: active
-    to: next
-    target: target
+  power: 60
+  accuracy: 0.9
+tags:
+- contact

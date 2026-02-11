@@ -1,0 +1,13 @@
+id: mean_look
+name: くろいまなざし
+type: normal
+category: status
+pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 吸いこまれるような　黒い　まなざしで じっと　みつめて　相手を 戦闘から　逃げられなくする。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

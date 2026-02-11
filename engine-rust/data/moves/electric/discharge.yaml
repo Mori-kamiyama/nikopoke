@@ -3,13 +3,18 @@ name: ほうでん
 type: electric
 category: special
 pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: まばゆい　電撃で　自分の 周りに　いるものを　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: paralysis
     target: target
+tags: []

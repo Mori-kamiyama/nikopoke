@@ -1,0 +1,20 @@
+id: double_hit
+name: ダブルアタック
+type: normal
+category: physical
+pp: 10
+power: 35
+accuracy: 0.9
+priority: 0
+description: しっぽなどを　使い 相手を　たたいて　攻撃する。 ２回連続で　ダメージを　与える。
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 2
+  steps:
+  - type: damage
+    power: 35
+    accuracy: 0.9
+tags:
+- contact

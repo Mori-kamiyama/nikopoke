@@ -3,6 +3,10 @@ name: がんせきふうじ
 type: rock
 category: physical
 pp: 15
+power: 60
+accuracy: 0.95
+priority: 0
+description: 岩石を　投げつけて　攻撃する。 相手の　動きを　封じることで 素早さを　さげる。
 steps:
 - type: damage
   power: 60
@@ -11,4 +15,4 @@ steps:
   target: target
   stages:
     spe: -1
-  chance: 1
+tags: []

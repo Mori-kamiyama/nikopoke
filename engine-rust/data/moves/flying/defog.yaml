@@ -1,0 +1,15 @@
+id: defog
+name: きりばらい
+type: flying
+category: status
+pp: 15
+power: null
+accuracy: null
+priority: 0
+description: 強い風で　相手の　リフレクターや ひかりのかべ　などを　はらいのける。 回避率も　さげる。
+steps:
+- type: modify_stage
+  target: target
+  stages:
+    evasion: -1
+tags: []

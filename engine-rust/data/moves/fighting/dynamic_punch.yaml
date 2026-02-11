@@ -3,15 +3,18 @@ name: ばくれつパンチ
 type: fighting
 category: physical
 pp: 5
+power: 100
+accuracy: 0.5
+priority: 0
+description: こん身の　力で パンチを　くりだして　攻撃する。 相手を　必ず　混乱させる。
 steps:
 - type: damage
   power: 100
   accuracy: 0.5
-- type: chance
-  p: 1
-  then:
-  - type: apply_status
-    statusId: confusion
-    duration:
-      min: 1
-      max: 4
+- type: apply_status
+  statusId: confusion
+  target: target
+- type: manual
+  manualReason: Multi-turn trapping/binding effects are not fully supported
+tags:
+- contact

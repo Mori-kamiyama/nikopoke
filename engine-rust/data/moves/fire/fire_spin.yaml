@@ -1,0 +1,16 @@
+id: fire_spin
+name: ほのおのうず
+type: fire
+category: special
+pp: 15
+power: 35
+accuracy: 0.85
+priority: 0
+description: 激しく　渦をまく　炎の中に ４ー５ターンの　あいだ 相手を　閉じこめて　攻撃する。
+steps:
+- type: damage
+  power: 35
+  accuracy: 0.85
+- type: manual
+  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
+tags: []

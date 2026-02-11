@@ -3,6 +3,11 @@ name: まねっこ
 type: normal
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 直前に　でた　技を　まねして 同じ　技を　だす。 技が　でていないと　失敗する。
 steps:
 - type: manual
-  manualReason: Copies the last move used by the opponent.  Need custom engine logic to handle move selection.
+  manualReason: No supported effects inferred
+tags: []

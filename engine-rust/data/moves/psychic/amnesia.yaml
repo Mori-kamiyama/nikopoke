@@ -3,8 +3,13 @@ name: ドわすれ
 type: psychic
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 頭を　からにして 一瞬　なにかを　忘れることで 自分の　特防を　ぐーんと　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     spd: 2
+tags: []

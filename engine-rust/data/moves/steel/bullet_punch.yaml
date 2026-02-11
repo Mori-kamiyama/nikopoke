@@ -3,9 +3,13 @@ name: バレットパンチ
 type: steel
 category: physical
 pp: 30
+power: 40
+accuracy: 1.0
 priority: 1
+description: 弾丸の　ような　速くて　硬い パンチを　相手に　くりだす。 必ず　先制攻撃　できる。
 steps:
 - type: damage
   power: 40
+  accuracy: 1.0
 tags:
-- punch
+- contact

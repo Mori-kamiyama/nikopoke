@@ -3,18 +3,14 @@ name: すなじごく
 type: ground
 category: physical
 pp: 15
+power: 35
+accuracy: 0.85
+priority: 0
+description: 激しく　吹きあれる　砂あらしの 中に　４ー５ターンの　あいだ 相手を　閉じこめて　攻撃する。
 steps:
 - type: damage
   power: 35
   accuracy: 0.85
-- type: over_time
-  steps:
-  - type: damage_ratio
-    ratioMaxHp: 0.125
-  target: target
-- type: apply_status
-  statusId: lock_move
-  target: target
-  duration:
-    min: 4
-    max: 5
+- type: manual
+  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
+tags: []

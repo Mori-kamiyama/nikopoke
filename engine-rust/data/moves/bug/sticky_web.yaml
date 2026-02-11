@@ -3,6 +3,11 @@ name: ねばねばネット
 type: bug
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 相手の　周りに　ねばねばした ネットを　はりめぐらせ　交代で でてきた　相手の　素早さを　さげる。
 steps:
-- type: apply_field_status
-  statusId: sticky_web
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

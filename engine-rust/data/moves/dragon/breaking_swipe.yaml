@@ -1,0 +1,19 @@
+id: breaking_swipe
+name: ワイドブレイカー
+type: dragon
+category: physical
+pp: 15
+power: 60
+accuracy: 1.0
+priority: 0
+description: きょうじんな　しっぽを　激しく ふりはらって　相手を　攻撃する。 相手の　攻撃を　下げる。
+steps:
+- type: damage
+  power: 60
+  accuracy: 1.0
+- type: modify_stage
+  target: target
+  stages:
+    atk: -1
+tags:
+- contact

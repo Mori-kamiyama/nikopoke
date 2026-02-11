@@ -3,14 +3,13 @@ name: じだんだ
 type: ground
 category: physical
 pp: 10
+power: 75
+accuracy: 1.0
+priority: 0
+description: 悔しさを　バネにして　攻撃する。 前の　ターンに　技を　外していると 威力が　倍に　なる。
 steps:
 - type: damage
   power: 75
-  accuracy: 1
-- type: conditional
-  if:
-    type: user_has_status
-    statusId: flinch
-  then:
-  - type: damage
-    power: 150
+  accuracy: 1.0
+tags:
+- contact

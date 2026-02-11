@@ -1,0 +1,13 @@
+id: misty_terrain
+name: ミストフィールド
+type: fairy
+category: status
+pp: 10
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ　足元を ミストフィールドにする。地面にいると 状態異常に　ならない。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

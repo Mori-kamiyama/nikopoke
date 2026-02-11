@@ -3,8 +3,13 @@ name: エアカッター
 type: flying
 category: special
 pp: 25
+power: 60
+accuracy: 0.95
+priority: 0
+description: 鋭い　風で 相手を　切りつけて　攻撃する。 急所に　当たりやすい。
 steps:
 - type: damage
   power: 60
   accuracy: 0.95
+tags: []
 critRate: 1

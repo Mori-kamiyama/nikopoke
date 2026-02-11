@@ -3,10 +3,11 @@ name: あくび
 type: normal
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 大きな　あくびで　眠気を　誘う。 次の　ターンに 相手を　眠り状態に　する。
 steps:
-- type: wait
-  turns: 1
-  steps:
-  - type: apply_status
-    statusId: sleep
-    chance: 1
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

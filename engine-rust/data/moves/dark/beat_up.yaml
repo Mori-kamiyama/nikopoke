@@ -2,12 +2,12 @@ id: beat_up
 name: ふくろだたき
 type: dark
 category: physical
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 味方　全員で　攻撃する。 仲間の　ポケモンが　多いほど 技の　攻撃回数が　増える。
 steps:
-- type: repeat
-  times:
-    min: 2
-    max: 6
-  steps:
-  - type: damage
-    power: 10
-    accuracy: 1
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

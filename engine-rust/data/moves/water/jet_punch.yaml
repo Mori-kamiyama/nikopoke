@@ -3,9 +3,13 @@ name: ジェットパンチ
 type: water
 category: physical
 pp: 15
+power: 60
+accuracy: 1.0
 priority: 1
+description: 必ず先制できる(優先度:+1)。特性『てつのこぶし』の時、威力が1.2倍になる。
 steps:
 - type: damage
   power: 60
+  accuracy: 1.0
 tags:
-- punch
+- contact

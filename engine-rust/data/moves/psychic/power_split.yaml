@@ -3,6 +3,11 @@ name: パワーシェア
 type: psychic
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 超能力で　自分と　相手の 攻撃と　特攻を　たして 半分に　わける。
 steps:
 - type: manual
-  manualReason: 自分と相手の『こうげき』と『とくこう』を足して半分に分ける効果はDSLで表現できないため
+  manualReason: No supported effects inferred
+tags: []

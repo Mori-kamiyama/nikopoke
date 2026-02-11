@@ -3,10 +3,14 @@ name: すいとる
 type: grass
 category: special
 pp: 25
+power: 20
+accuracy: 1.0
+priority: 0
+description: 養分を　吸い取り　攻撃する。 相手に　与えた　ダメージの 半分の　ＨＰを　回復できる。
 steps:
 - type: damage
   power: 20
-  accuracy: 1
-- type: damage_ratio
-  ratioMaxHp: -0.5
-  target: self
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags: []

@@ -3,8 +3,13 @@ name: コットンガード
 type: grass
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: フワフワの　綿毛で　自分の 体を　包みこんで　守る。 防御を　ぐぐーんと　あげる。
 steps:
 - type: modify_stage
   target: self
   stages:
     def: 3
+tags: []

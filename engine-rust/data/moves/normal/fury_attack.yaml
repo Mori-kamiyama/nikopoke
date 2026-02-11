@@ -1,0 +1,20 @@
+id: fury_attack
+name: みだれづき
+type: normal
+category: physical
+pp: 20
+power: 15
+accuracy: 0.85
+priority: 0
+description: つのや　くちばしで 相手を　つついて　攻撃する。 ２ー５回の　あいだ　連続で　だす。
+steps:
+- type: repeat
+  times:
+    min: 2
+    max: 5
+  steps:
+  - type: damage
+    power: 15
+    accuracy: 0.85
+tags:
+- contact

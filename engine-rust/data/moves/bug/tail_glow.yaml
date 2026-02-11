@@ -1,0 +1,15 @@
+id: tail_glow
+name: ほたるび
+type: bug
+category: status
+pp: 20
+power: null
+accuracy: null
+priority: 0
+description: 点滅する　光を　眺めて 自分の　精神を　統一し 特攻を　ぐぐーんと　あげる。
+steps:
+- type: modify_stage
+  target: self
+  stages:
+    spa: 3
+tags: []

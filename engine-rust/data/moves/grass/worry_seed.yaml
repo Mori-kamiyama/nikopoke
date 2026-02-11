@@ -1,0 +1,13 @@
+id: worry_seed
+name: なやみのタネ
+type: grass
+category: status
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 心を　なやませる　タネを 植えつける。相手を　眠れなくして 特性を　ふみんに　する。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

@@ -1,0 +1,18 @@
+id: torch_song
+name: フレアソング
+type: fire
+category: special
+pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: 100%の確率で自分の『とくこう』ランクを1段階上げる。音系の技。相手の『みがわり』状態を貫通する。
+steps:
+- type: damage
+  power: 80
+  accuracy: 1.0
+- type: modify_stage
+  target: target
+  stages:
+    spa: 1
+tags: []

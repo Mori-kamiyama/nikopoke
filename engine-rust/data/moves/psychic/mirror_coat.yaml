@@ -3,15 +3,11 @@ name: ミラーコート
 type: psychic
 category: special
 pp: 20
+power: null
+accuracy: 1.0
 priority: -5
+description: 相手から　受けた　特殊攻撃の ダメージを　２倍に　して その相手に　返す。
 steps:
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: protect
-  then: []
-- type: damage_ratio
-  ratioMaxHp: 2
-  target: target
-  data:
-    damage_type: special
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

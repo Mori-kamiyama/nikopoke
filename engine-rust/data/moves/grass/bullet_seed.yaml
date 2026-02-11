@@ -3,6 +3,10 @@ name: タネマシンガン
 type: grass
 category: physical
 pp: 30
+power: 25
+accuracy: 1.0
+priority: 0
+description: タネを　勢いよく 相手に　発射して　攻撃する。 ２ー５回の　あいだ　連続で　だす。
 steps:
 - type: repeat
   times:
@@ -11,4 +15,6 @@ steps:
   steps:
   - type: damage
     power: 25
-    accuracy: 1
+    accuracy: 1.0
+tags:
+- contact

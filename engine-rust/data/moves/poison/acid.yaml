@@ -1,9 +1,21 @@
 id: acid
-name: いえき
+name: ようかいえき
 type: poison
-category: status
-pp: 10
+category: special
+pp: 30
+power: 40
+accuracy: 1.0
+priority: 0
+description: 強い　酸を　相手に　かけて 攻撃する。相手の　特防を さげることが　ある。
 steps:
-- type: remove_status
-  statusId: ability
-  target: target
+- type: damage
+  power: 40
+  accuracy: 1.0
+- type: chance
+  p: 0.1
+  then:
+  - type: modify_stage
+    target: target
+    stages:
+      spd: -1
+tags: []

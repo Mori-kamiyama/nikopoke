@@ -1,0 +1,14 @@
+id: sandsear_storm
+name: ねっさのあらし
+type: ground
+category: special
+pp: 10
+power: 100
+accuracy: 0.8
+priority: 0
+description: 20%の確率で相手を『やけど』状態にする。天気が『あめ』の時は必ず命中する。
+steps:
+- type: damage
+  power: 100
+  accuracy: 0.8
+tags: []

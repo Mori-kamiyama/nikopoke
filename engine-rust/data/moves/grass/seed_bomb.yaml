@@ -3,7 +3,12 @@ name: タネばくだん
 type: grass
 category: physical
 pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 硬い　殻を　もつ　大きな　タネを 上から　たたきつけて 相手を　攻撃する。
 steps:
 - type: damage
   power: 80
-  accuracy: 1
+  accuracy: 1.0
+tags: []

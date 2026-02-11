@@ -1,0 +1,13 @@
+id: haze
+name: くろいきり
+type: ice
+category: status
+pp: 30
+power: null
+accuracy: null
+priority: 0
+description: 黒い霧を　だして　戦闘に でている　ポケモン　全員の 能力変化を　もとに　もどす。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

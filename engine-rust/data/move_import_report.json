@@ -1,0 +1,1668 @@
+{
+  "not_found_in_pokeapi": [
+    "しっぽぎり",
+    "ゴットバード",
+    "10まんばりき",
+    "はめつのめがい",
+    "10まんボルト"
+  ],
+  "ambiguous_matches": [],
+  "manual_effects": [
+    {
+      "move_id": "yawn",
+      "move_name": "あくび",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: yawn",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "encore",
+      "move_name": "アンコール",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "pain_split",
+      "move_name": "いたみわけ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "swagger",
+      "move_name": "いばる",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "sing",
+      "move_name": "うたう",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "after_you",
+      "move_name": "おさきにどうぞ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "disable",
+      "move_name": "かなしばり",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: disable",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "focus_energy",
+      "move_name": "きあいだめ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "mean_look",
+      "move_name": "くろいまなざし",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "endure",
+      "move_name": "こらえる",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "safeguard",
+      "move_name": "しんぴのまもり",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "psych_up",
+      "move_name": "じこあんじ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "supersonic",
+      "move_name": "ちょうおんぱ",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "acupressure",
+      "move_name": "つぼをつく",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "entrainment",
+      "move_name": "なかまづくり",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "wish",
+      "move_name": "ねがいごと",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "sleep_talk",
+      "move_name": "ねごと",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "happy_hour",
+      "move_name": "ハッピータイム",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "splash",
+      "move_name": "はねる",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "belly_drum",
+      "move_name": "はらだいこ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "baton_pass",
+      "move_name": "バトンタッチ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "teeter_dance",
+      "move_name": "フラフラダンス",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "copycat",
+      "move_name": "まねっこ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "protect",
+      "move_name": "まもる",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "substitute",
+      "move_name": "みがわり",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "metronome",
+      "move_name": "ゆびをふる",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "lock_on",
+      "move_name": "ロックオン",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "super_fang",
+      "move_name": "いかりのまえば",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "endeavor",
+      "move_name": "がむしゃら",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "bind",
+      "move_name": "しめつける",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: trap"
+      ]
+    },
+    {
+      "move_id": "flail",
+      "move_name": "じたばた",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "double_edge",
+      "move_name": "すてみタックル",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "take_down",
+      "move_name": "とっしん",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "uproar",
+      "move_name": "さわぐ",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "detect",
+      "move_name": "みきり",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "counter",
+      "move_name": "カウンター",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "reversal",
+      "move_name": "きしかいせい",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "low_kick",
+      "move_name": "けたぐり",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "drain_punch",
+      "move_name": "ドレインパンチ",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "dynamic_punch",
+      "move_name": "ばくれつパンチ",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "final_gambit",
+      "move_name": "いのちがけ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "tailwind",
+      "move_name": "おいかぜ",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "brave_bird",
+      "move_name": "ブレイブバード",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "hurricane",
+      "move_name": "ぼうふう",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "gastro_acid",
+      "move_name": "いえき",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "baneful_bunker",
+      "move_name": "トーチカ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "toxic",
+      "move_name": "どくどく",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "toxic_spikes",
+      "move_name": "どくびし",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "spikes",
+      "move_name": "まきびし",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "sand_tomb",
+      "move_name": "すなじごく",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: trap"
+      ]
+    },
+    {
+      "move_id": "stealth_rock",
+      "move_name": "ステルスロック",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "sandstorm",
+      "move_name": "すなあらし",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "sticky_web",
+      "move_name": "ねばねばネット",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "leech_life",
+      "move_name": "きゅうけつ",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "infestation",
+      "move_name": "まとわりつく",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: trap"
+      ]
+    },
+    {
+      "move_id": "confuse_ray",
+      "move_name": "あやしいひかり",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "curse",
+      "move_name": "のろい",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "destiny_bond",
+      "move_name": "みちづれ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "gyro_ball",
+      "move_name": "ジャイロボール",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "heavy_slam",
+      "move_name": "ヘビーボンバー",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "sunny_day",
+      "move_name": "にほんばれ",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "flare_blitz",
+      "move_name": "フレアドライブ",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "fire_spin",
+      "move_name": "ほのおのうず",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: trap"
+      ]
+    },
+    {
+      "move_id": "aqua_ring",
+      "move_name": "アクアリング",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "rain_dance",
+      "move_name": "あまごい",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "whirlpool",
+      "move_name": "うずしお",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: trap"
+      ]
+    },
+    {
+      "move_id": "water_pulse",
+      "move_name": "みずのはどう",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "spore",
+      "move_name": "キノコのほうし",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "grassy_terrain",
+      "move_name": "グラスフィールド",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "worry_seed",
+      "move_name": "なやみのタネ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "ingrain",
+      "move_name": "ねをはる",
+      "reasons": [
+        "Unsupported ailment: ingrain",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "leech_seed",
+      "move_name": "やどりぎのタネ",
+      "reasons": [
+        "Unsupported ailment: leech-seed",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "wood_hammer",
+      "move_name": "ウッドハンマー",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "horn_leech",
+      "move_name": "ウッドホーン",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "giga_drain",
+      "move_name": "ギガドレイン",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "grass_knot",
+      "move_name": "くさむすび",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "absorb",
+      "move_name": "すいとる",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "mega_drain",
+      "move_name": "メガドレイン",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "electric_terrain",
+      "move_name": "エレキフィールド",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "magnet_rise",
+      "move_name": "でんじふゆう",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "volt_tackle",
+      "move_name": "ボルテッカー",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "wild_charge",
+      "move_name": "ワイルドボルト",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "electro_ball",
+      "move_name": "エレキボール",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "parabolic_charge",
+      "move_name": "パラボラチャージ",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "healing_wish",
+      "move_name": "いやしのねがい",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "guard_split",
+      "move_name": "ガードシェア",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "guard_swap",
+      "move_name": "ガードスワップ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "psychic_terrain",
+      "move_name": "サイコフィールド",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "hypnosis",
+      "move_name": "さいみんじゅつ",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "gravity",
+      "move_name": "じゅうりょく",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "skill_swap",
+      "move_name": "スキルスワップ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "teleport",
+      "move_name": "テレポート",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "trick",
+      "move_name": "トリック",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "trick_room",
+      "move_name": "トリックルーム",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "rest",
+      "move_name": "ねむる",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "power_split",
+      "move_name": "パワーシェア",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "power_swap",
+      "move_name": "パワースワップ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "power_trick",
+      "move_name": "パワートリック",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "light_screen",
+      "move_name": "ひかりのかべ",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "imprison",
+      "move_name": "ふういん",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "reflect",
+      "move_name": "リフレクター",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "psybeam",
+      "move_name": "サイケこうせん",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "confusion",
+      "move_name": "ねんりき",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "mirror_coat",
+      "move_name": "ミラーコート",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "dream_eater",
+      "move_name": "ゆめくい",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    },
+    {
+      "move_id": "aurora_veil",
+      "move_name": "オーロラベール",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "haze",
+      "move_name": "くろいきり",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "mist",
+      "move_name": "しろいきり",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "torment",
+      "move_name": "いちゃもん",
+      "reasons": [
+        "Unsupported ailment: torment",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "flatter",
+      "move_name": "おだてる",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "switcheroo",
+      "move_name": "すりかえ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "taunt",
+      "move_name": "ちょうはつ",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "throat_chop",
+      "move_name": "じごくづき",
+      "reasons": [
+        "Turn-based trapping/binding is not supported",
+        "Unsupported ailment: silence"
+      ]
+    },
+    {
+      "move_id": "fling",
+      "move_name": "なげつける",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "beat_up",
+      "move_name": "ふくろだたき",
+      "reasons": [
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "sweet_kiss",
+      "move_name": "てんしのキッス",
+      "reasons": [
+        "Turn-based trapping/binding is not supported"
+      ]
+    },
+    {
+      "move_id": "misty_terrain",
+      "move_name": "ミストフィールド",
+      "reasons": [
+        "Field effects are not supported",
+        "No supported effects inferred"
+      ]
+    },
+    {
+      "move_id": "draining_kiss",
+      "move_name": "ドレインキッス",
+      "reasons": [
+        "Drain/recoil effects are not supported"
+      ]
+    }
+  ],
+  "id_changes": [
+    {
+      "name": "アクセルロック",
+      "old_id": "accel_rock",
+      "new_id": "accelerock"
+    },
+    {
+      "name": "ようかいえき",
+      "old_id": "sludge_bomb",
+      "new_id": "acid"
+    },
+    {
+      "name": "アシッドボム",
+      "old_id": "acid_bomb",
+      "new_id": "acid_spray"
+    },
+    {
+      "name": "おさきにどうぞ",
+      "old_id": "helping_hand",
+      "new_id": "after_you"
+    },
+    {
+      "name": "みわくのボイス",
+      "old_id": "dazzling_gleam",
+      "new_id": "alluring_voice"
+    },
+    {
+      "name": "つっぱり",
+      "old_id": "tsuppari",
+      "new_id": "arm_thrust"
+    },
+    {
+      "name": "おどろかす",
+      "old_id": "scary_face",
+      "new_id": "astonish"
+    },
+    {
+      "name": "はどうだん",
+      "old_id": "hadou_dan",
+      "new_id": "aura_sphere"
+    },
+    {
+      "name": "かかとおとし",
+      "old_id": "high_jump_kick",
+      "new_id": "axe_kick"
+    },
+    {
+      "name": "トーチカ",
+      "old_id": "torchica",
+      "new_id": "baneful_bunker"
+    },
+    {
+      "name": "うらみつらみ",
+      "old_id": "grudge_hatred",
+      "new_id": "bitter_malice"
+    },
+    {
+      "name": "ばくおんぱ",
+      "old_id": "boom_burst",
+      "new_id": "boomburst"
+    },
+    {
+      "name": "とびはねる",
+      "old_id": "fly",
+      "new_id": "bounce"
+    },
+    {
+      "name": "えだづき",
+      "old_id": "eda_zuki",
+      "new_id": "branch_poke"
+    },
+    {
+      "name": "ワイドブレイカー",
+      "old_id": "wide_breaker",
+      "new_id": "breaking_swipe"
+    },
+    {
+      "name": "ぶんまわす",
+      "old_id": "swing",
+      "new_id": "brutal_swing"
+    },
+    {
+      "name": "しっとのほのお",
+      "old_id": "scald",
+      "new_id": "burning_jealousy"
+    },
+    {
+      "name": "めいそう",
+      "old_id": "meditate",
+      "new_id": "calm_mind"
+    },
+    {
+      "name": "あまえる",
+      "old_id": "sweet_kiss",
+      "new_id": "charm"
+    },
+    {
+      "name": "ひやみず",
+      "old_id": "cold_water",
+      "new_id": "chilling_water"
+    },
+    {
+      "name": "さむいギャグ",
+      "old_id": "samui_gag",
+      "new_id": "chilly_reception"
+    },
+    {
+      "name": "インファイト",
+      "old_id": "infight",
+      "new_id": "close_combat"
+    },
+    {
+      "name": "とぐろをまく",
+      "old_id": "coil_up",
+      "new_id": "coil"
+    },
+    {
+      "name": "ないしょばなし",
+      "old_id": "nayshobanashi",
+      "new_id": "confide"
+    },
+    {
+      "name": "ねんりき",
+      "old_id": "telekinesis",
+      "new_id": "confusion"
+    },
+    {
+      "name": "マジカルシャイン",
+      "old_id": "magical_shine",
+      "new_id": "dazzling_gleam"
+    },
+    {
+      "name": "かなしばり",
+      "old_id": "kanashibari",
+      "new_id": "disable"
+    },
+    {
+      "name": "チャームボイス",
+      "old_id": "charm_voice",
+      "new_id": "disarming_voice"
+    },
+    {
+      "name": "ダイビング",
+      "old_id": "diving",
+      "new_id": "dive"
+    },
+    {
+      "name": "ダブルアタック",
+      "old_id": "double_attack",
+      "new_id": "double_hit"
+    },
+    {
+      "name": "かげぶんしん",
+      "old_id": "kage_bunshin",
+      "new_id": "double_team"
+    },
+    {
+      "name": "りゅうせいぐん",
+      "old_id": "ryuseigun",
+      "new_id": "draco_meteor"
+    },
+    {
+      "name": "ドラゴンダイブ",
+      "old_id": "dragon_dive",
+      "new_id": "dragon_rush"
+    },
+    {
+      "name": "ドレインキッス",
+      "old_id": "drain_kiss",
+      "new_id": "draining_kiss"
+    },
+    {
+      "name": "ダブルウイング",
+      "old_id": "double_wing",
+      "new_id": "dual_wingbeat"
+    },
+    {
+      "name": "エコーボイス",
+      "old_id": "echo_voice",
+      "new_id": "echoed_voice"
+    },
+    {
+      "name": "かいでんぱ",
+      "old_id": "kaidenpa",
+      "new_id": "eerie_impulse"
+    },
+    {
+      "name": "エレキボール",
+      "old_id": "electric_ball",
+      "new_id": "electro_ball"
+    },
+    {
+      "name": "エレキネット",
+      "old_id": "electric_net",
+      "new_id": "electroweb"
+    },
+    {
+      "name": "がむしゃら",
+      "old_id": "desperate",
+      "new_id": "endeavor"
+    },
+    {
+      "name": "なかまづくり",
+      "old_id": "teammate",
+      "new_id": "entrainment"
+    },
+    {
+      "name": "じんつうりき",
+      "old_id": "jin_tsu_riki",
+      "new_id": "extrasensory"
+    },
+    {
+      "name": "からげんき",
+      "old_id": "karagenki",
+      "new_id": "facade"
+    },
+    {
+      "name": "うそなき",
+      "old_id": "fake_out",
+      "new_id": "fake_tears"
+    },
+    {
+      "name": "とどめばり",
+      "old_id": "first_impression",
+      "new_id": "fell_stinger"
+    },
+    {
+      "name": "ほのおのまい",
+      "old_id": "flame_dance",
+      "new_id": "fiery_dance"
+    },
+    {
+      "name": "だいもんじ",
+      "old_id": "daimonji",
+      "new_id": "fire_blast"
+    },
+    {
+      "name": "ほのおのうず",
+      "old_id": "flame_wheel",
+      "new_id": "fire_spin"
+    },
+    {
+      "name": "ニトロチャージ",
+      "old_id": "nitro_charge",
+      "new_id": "flame_charge"
+    },
+    {
+      "name": "フレアドライブ",
+      "old_id": "flare_drive",
+      "new_id": "flare_blitz"
+    },
+    {
+      "name": "ラスターカノン",
+      "old_id": "luster_cannon",
+      "new_id": "flash_cannon"
+    },
+    {
+      "name": "クイックターン",
+      "old_id": "quick_turn",
+      "new_id": "flip_turn"
+    },
+    {
+      "name": "はっけい",
+      "old_id": "hakkei",
+      "new_id": "force_palm"
+    },
+    {
+      "name": "ハードプラント",
+      "old_id": "hard_plant",
+      "new_id": "frenzy_plant"
+    },
+    {
+      "name": "こおりのいぶき",
+      "old_id": "ice_breath",
+      "new_id": "frost_breath"
+    },
+    {
+      "name": "みだれづき",
+      "old_id": "fury_swipes",
+      "new_id": "fury_attack"
+    },
+    {
+      "name": "いえき",
+      "old_id": "acid",
+      "new_id": "gastro_acid"
+    },
+    {
+      "name": "ギガドレイン",
+      "old_id": "gigadrain",
+      "new_id": "giga_drain"
+    },
+    {
+      "name": "ギガインパクト",
+      "old_id": "gigaimpact",
+      "new_id": "giga_impact"
+    },
+    {
+      "name": "グラススライダー",
+      "old_id": "grass_slider",
+      "new_id": "grassy_glide"
+    },
+    {
+      "name": "グラスフィールド",
+      "old_id": "grass_field",
+      "new_id": "grassy_terrain"
+    },
+    {
+      "name": "ガードシェア",
+      "old_id": "guard_share",
+      "new_id": "guard_split"
+    },
+    {
+      "name": "ダストシュート",
+      "old_id": "dust_shoot",
+      "new_id": "gunk_shot"
+    },
+    {
+      "name": "アームハンマー",
+      "old_id": "arm_hammer",
+      "new_id": "hammer_arm"
+    },
+    {
+      "name": "くろいきり",
+      "old_id": "black_fog",
+      "new_id": "haze"
+    },
+    {
+      "name": "ぶちかまし",
+      "old_id": "headbutt",
+      "new_id": "headlong_rush"
+    },
+    {
+      "name": "ねっぷう",
+      "old_id": "neppuu",
+      "new_id": "heat_wave"
+    },
+    {
+      "name": "たたりめ",
+      "old_id": "ominous_wind",
+      "new_id": "hex"
+    },
+    {
+      "name": "とびひざげり",
+      "old_id": "flying_kick",
+      "new_id": "high_jump_kick"
+    },
+    {
+      "name": "つめとぎ",
+      "old_id": "sharpen",
+      "new_id": "hone_claws"
+    },
+    {
+      "name": "ウッドホーン",
+      "old_id": "wood_horn",
+      "new_id": "horn_leech"
+    },
+    {
+      "name": "ぼうふう",
+      "old_id": "gust",
+      "new_id": "hurricane"
+    },
+    {
+      "name": "はかいこうせん",
+      "old_id": "destruction_beam",
+      "new_id": "hyper_beam"
+    },
+    {
+      "name": "れいとうビーム",
+      "old_id": "freezing_beam",
+      "new_id": "ice_beam"
+    },
+    {
+      "name": "れいとうパンチ",
+      "old_id": "freezing_punch",
+      "new_id": "ice_punch"
+    },
+    {
+      "name": "こごえるかぜ",
+      "old_id": "ice_wind",
+      "new_id": "icy_wind"
+    },
+    {
+      "name": "れんごく",
+      "old_id": "hell_fire",
+      "new_id": "inferno"
+    },
+    {
+      "name": "ねをはる",
+      "old_id": "root_grow",
+      "new_id": "ingrain"
+    },
+    {
+      "name": "アクアブレイク",
+      "old_id": "aqua_break",
+      "new_id": "liquidation"
+    },
+    {
+      "name": "ローキック",
+      "old_id": "low_kick",
+      "new_id": "low_sweep"
+    },
+    {
+      "name": "でんじふゆう",
+      "old_id": "denji_fuyu",
+      "new_id": "magnet_rise"
+    },
+    {
+      "name": "ゴールドラッシュ",
+      "old_id": "gold_rush",
+      "new_id": "make_it_rain"
+    },
+    {
+      "name": "くろいまなざし",
+      "old_id": "kuroi_manazashi",
+      "new_id": "mean_look"
+    },
+    {
+      "name": "コメットパンチ",
+      "old_id": "comet_punch",
+      "new_id": "meteor_mash"
+    },
+    {
+      "name": "ゆびをふる",
+      "old_id": "yubi_o_furu",
+      "new_id": "metronome"
+    },
+    {
+      "name": "しろいきり",
+      "old_id": "shiroi_kiri",
+      "new_id": "mist"
+    },
+    {
+      "name": "ミストバースト",
+      "old_id": "mist_burst",
+      "new_id": "misty_explosion"
+    },
+    {
+      "name": "ミストフィールド",
+      "old_id": "mist_field",
+      "new_id": "misty_terrain"
+    },
+    {
+      "name": "シャドーレイ",
+      "old_id": "shadow_ray",
+      "new_id": "moongeist_beam"
+    },
+    {
+      "name": "だくりゅう",
+      "old_id": "mud_stream",
+      "new_id": "muddy_water"
+    },
+    {
+      "name": "マジカルフレイム",
+      "old_id": "magical_flame",
+      "new_id": "mystical_fire"
+    },
+    {
+      "name": "わるだくみ",
+      "old_id": "wicked_plot",
+      "new_id": "nasty_plot"
+    },
+    {
+      "name": "ナイトバースト",
+      "old_id": "night_burst",
+      "new_id": "night_daze"
+    },
+    {
+      "name": "つじぎり",
+      "old_id": "tsujigiri",
+      "new_id": "night_slash"
+    },
+    {
+      "name": "はいすいのじん",
+      "old_id": "haisuinonjin",
+      "new_id": "no_retreat"
+    },
+    {
+      "name": "ほっぺすりすり",
+      "old_id": "cheek_pouch",
+      "new_id": "nuzzle"
+    },
+    {
+      "name": "いたみわけ",
+      "old_id": "painsplit",
+      "new_id": "pain_split"
+    },
+    {
+      "name": "パラボラチャージ",
+      "old_id": "parabola_charge",
+      "new_id": "parabolic_charge"
+    },
+    {
+      "name": "はなびらのまい",
+      "old_id": "petals_dance",
+      "new_id": "petal_dance"
+    },
+    {
+      "name": "ゴーストダイブ",
+      "old_id": "ghost_dive",
+      "new_id": "phantom_force"
+    },
+    {
+      "name": "ミサイルばり",
+      "old_id": "missile_needle",
+      "new_id": "pin_missile"
+    },
+    {
+      "name": "かふんだんご",
+      "old_id": "kafun_dango",
+      "new_id": "pollen_puff"
+    },
+    {
+      "name": "こなゆき",
+      "old_id": "snow_powder",
+      "new_id": "powder_snow"
+    },
+    {
+      "name": "つけあがる",
+      "old_id": "payback",
+      "new_id": "power_trip"
+    },
+    {
+      "name": "じこあんじ",
+      "old_id": "self_suggestion",
+      "new_id": "psych_up"
+    },
+    {
+      "name": "サイコファング",
+      "old_id": "psycho_fang",
+      "new_id": "psychic_fangs"
+    },
+    {
+      "name": "サイコフィールド",
+      "old_id": "psycho_field",
+      "new_id": "psychic_terrain"
+    },
+    {
+      "name": "サイコショック",
+      "old_id": "psycho_shock",
+      "new_id": "psyshock"
+    },
+    {
+      "name": "かえんボール",
+      "old_id": "flame_ball",
+      "new_id": "pyro_ball"
+    },
+    {
+      "name": "ちょうのまい",
+      "old_id": "butterfly_dance",
+      "new_id": "quiver_dance"
+    },
+    {
+      "name": "ふんどのこぶし",
+      "old_id": "revenge",
+      "new_id": "rage_fist"
+    },
+    {
+      "name": "ねむる",
+      "old_id": "sleep",
+      "new_id": "rest"
+    },
+    {
+      "name": "かたきうち",
+      "old_id": "vengeance",
+      "new_id": "retaliate"
+    },
+    {
+      "name": "ときのほうこう",
+      "old_id": "roaring_time",
+      "new_id": "roar_of_time"
+    },
+    {
+      "name": "カタストロフィ",
+      "old_id": "catastrophe",
+      "new_id": "ruination"
+    },
+    {
+      "name": "ねっさのあらし",
+      "old_id": "earth_power",
+      "new_id": "sandsear_storm"
+    },
+    {
+      "name": "ねっとう",
+      "old_id": "nettou",
+      "new_id": "scald"
+    },
+    {
+      "name": "ねっさのだいち",
+      "old_id": "netsu_no_daichi",
+      "new_id": "scorching_sands"
+    },
+    {
+      "name": "ぜったいれいど",
+      "old_id": "absolute_zero",
+      "new_id": "sheer_cold"
+    },
+    {
+      "name": "ギアチェンジ",
+      "old_id": "gear_change",
+      "new_id": "shift_gear"
+    },
+    {
+      "name": "でんげきは",
+      "old_id": "thunder_shock",
+      "new_id": "shock_wave"
+    },
+    {
+      "name": "スマートホーン",
+      "old_id": "smart_horn",
+      "new_id": "smart_strike"
+    },
+    {
+      "name": "バークアウト",
+      "old_id": "bark_out",
+      "new_id": "snarl"
+    },
+    {
+      "name": "うたかたのアリア",
+      "old_id": "aria",
+      "new_id": "sparkling_aria"
+    },
+    {
+      "name": "かげぬい",
+      "old_id": "shadow_stitch",
+      "new_id": "spirit_shackle"
+    },
+    {
+      "name": "はねる",
+      "old_id": "hazure",
+      "new_id": "splash"
+    },
+    {
+      "name": "キノコのほうし",
+      "old_id": "mushroom_spore",
+      "new_id": "spore"
+    },
+    {
+      "name": "てっていこうせん",
+      "old_id": "blast_burn",
+      "new_id": "steel_beam"
+    },
+    {
+      "name": "たくわえる",
+      "old_id": "takuwaeru",
+      "new_id": "stockpile"
+    },
+    {
+      "name": "アシストパワー",
+      "old_id": "assist_power",
+      "new_id": "stored_power"
+    },
+    {
+      "name": "かいりき",
+      "old_id": "kairiki",
+      "new_id": "strength"
+    },
+    {
+      "name": "ちからをすいとる",
+      "old_id": "steal_power",
+      "new_id": "strength_sap"
+    },
+    {
+      "name": "しびれごな",
+      "old_id": "paralysis_powder",
+      "new_id": "stun_spore"
+    },
+    {
+      "name": "サンダーダイブ",
+      "old_id": "thunder_dive",
+      "new_id": "supercell_slam"
+    },
+    {
+      "name": "ばかぢから",
+      "old_id": "bulk_up",
+      "new_id": "superpower"
+    },
+    {
+      "name": "ちょうおんぱ",
+      "old_id": "ultrasonic",
+      "new_id": "supersonic"
+    },
+    {
+      "name": "なみのり",
+      "old_id": "wave",
+      "new_id": "surf"
+    },
+    {
+      "name": "てんしのキッス",
+      "old_id": "angel_kiss",
+      "new_id": "sweet_kiss"
+    },
+    {
+      "name": "スピードスター",
+      "old_id": "speed_star",
+      "new_id": "swift"
+    },
+    {
+      "name": "すりかえ",
+      "old_id": "trick",
+      "new_id": "switcheroo"
+    },
+    {
+      "name": "つるぎのまい",
+      "old_id": "sword_dance",
+      "new_id": "swords_dance"
+    },
+    {
+      "name": "ほたるび",
+      "old_id": "firefly",
+      "new_id": "tail_glow"
+    },
+    {
+      "name": "やけっぱち",
+      "old_id": "desperation",
+      "new_id": "temper_flare"
+    },
+    {
+      "name": "あばれる",
+      "old_id": "rampage",
+      "new_id": "thrash"
+    },
+    {
+      "name": "じごくづき",
+      "old_id": "hell_blow",
+      "new_id": "throat_chop"
+    },
+    {
+      "name": "でんきショック",
+      "old_id": "electric_shock",
+      "new_id": "thunder_shock"
+    },
+    {
+      "name": "フレアソング",
+      "old_id": "flare_song",
+      "new_id": "torch_song"
+    },
+    {
+      "name": "いちゃもん",
+      "old_id": "embargo",
+      "new_id": "torment"
+    },
+    {
+      "name": "くさわけ",
+      "old_id": "grass_divide",
+      "new_id": "trailblaze"
+    },
+    {
+      "name": "たつまき",
+      "old_id": "tatsumaki",
+      "new_id": "twister"
+    },
+    {
+      "name": "はやてがえし",
+      "old_id": "quick_guard",
+      "new_id": "upper_hand"
+    },
+    {
+      "name": "ベノムショック",
+      "old_id": "venom_shock",
+      "new_id": "venoshock"
+    },
+    {
+      "name": "ボルトチェンジ",
+      "old_id": "bolt_change",
+      "new_id": "volt_switch"
+    },
+    {
+      "name": "ボルテッカー",
+      "old_id": "volttackle",
+      "new_id": "volt_tackle"
+    },
+    {
+      "name": "おにび",
+      "old_id": "onibi",
+      "new_id": "will_o_wisp"
+    },
+    {
+      "name": "からにこもる",
+      "old_id": "shell_fortify",
+      "new_id": "withdraw"
+    },
+    {
+      "name": "なやみのタネ",
+      "old_id": "nayanomi_tane",
+      "new_id": "worry_seed"
+    },
+    {
+      "name": "シザークロス",
+      "old_id": "scissor_cross",
+      "new_id": "x_scissor"
+    },
+    {
+      "name": "でんじほう",
+      "old_id": "electroweb",
+      "new_id": "zap_cannon"
+    }
+  ]
+}

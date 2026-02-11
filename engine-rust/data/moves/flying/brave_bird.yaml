@@ -3,10 +3,15 @@ name: ブレイブバード
 type: flying
 category: physical
 pp: 15
+power: 120
+accuracy: 1.0
+priority: 0
+description: はねを　おりたたみ 低空飛行で　突撃する。 自分も　かなり　ダメージを　受ける。
 steps:
 - type: damage
   power: 120
-  accuracy: 1
-- type: damage_ratio
-  ratioMaxHp: 0.33
-  target: self
+  accuracy: 1.0
+- type: manual
+  manualReason: Drain/recoil effects are not fully supported
+tags:
+- contact

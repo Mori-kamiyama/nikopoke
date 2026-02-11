@@ -1,0 +1,14 @@
+id: super_fang
+name: いかりのまえば
+type: normal
+category: physical
+pp: 10
+power: null
+accuracy: 0.9
+priority: 0
+description: 鋭い　前歯で 激しく　かみついて　攻撃する。 相手の　ＨＰは　半分に　なる。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags:
+- contact

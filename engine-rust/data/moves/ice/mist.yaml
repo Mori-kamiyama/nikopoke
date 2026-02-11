@@ -1,0 +1,13 @@
+id: mist
+name: しろいきり
+type: ice
+category: status
+pp: 30
+power: null
+accuracy: null
+priority: 0
+description: 白い霧で　体を　おおう。 ５ターンの　あいだ　相手に 能力を　さげられなく　なる。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

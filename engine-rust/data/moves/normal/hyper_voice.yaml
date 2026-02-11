@@ -3,7 +3,12 @@ name: ハイパーボイス
 type: normal
 category: special
 pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
+description: 'うるさく　響く　大きな　振動を 相手に　与えて　攻撃する。 '
 steps:
 - type: damage
   power: 90
-  accuracy: 1
+  accuracy: 1.0
+tags: []

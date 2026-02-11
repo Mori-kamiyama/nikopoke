@@ -1,0 +1,13 @@
+id: magnet_rise
+name: でんじふゆう
+type: electric
+category: status
+pp: 10
+power: null
+accuracy: null
+priority: 0
+description: 電気で　つくった　磁力の　力で 宙に　浮かぶ。 ５ターンの　あいだ　浮遊できる。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

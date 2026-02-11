@@ -3,13 +3,19 @@ name: したでなめる
 type: ghost
 category: physical
 pp: 30
+power: 30
+accuracy: 1.0
+priority: 0
+description: 長い　舌で 相手を　なめまわして　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
   power: 30
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: paralysis
     target: target
+tags:
+- contact

@@ -3,7 +3,13 @@ name: つばさでうつ
 type: flying
 category: physical
 pp: 35
+power: 60
+accuracy: 1.0
+priority: 0
+description: '大きく　ひろげた　りっぱな　翼を 相手に　ぶつけて　攻撃する。 '
 steps:
 - type: damage
   power: 60
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

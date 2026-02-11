@@ -3,9 +3,11 @@ name: エレキフィールド
 type: electric
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
+description: ５ターンの　あいだ　足元を エレキフィールドにする。地面にいる ポケモンは　眠らなくなる。
 steps:
-- type: apply_field_status
-  statusId: electric_terrain
-  duration: 5
-  data:
-    boost_type: electric
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

@@ -3,7 +3,11 @@ name: ロックオン
 type: normal
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 照準を　しっかり　あわせて 次の　攻撃が　必ず 相手に　当たるように　する。
 steps:
-- type: apply_status
-  statusId: lock_move
-  target: self
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

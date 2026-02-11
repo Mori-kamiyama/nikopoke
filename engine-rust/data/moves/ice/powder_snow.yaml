@@ -1,0 +1,20 @@
+id: powder_snow
+name: こなゆき
+type: ice
+category: special
+pp: 25
+power: 40
+accuracy: 1.0
+priority: 0
+description: 冷たい　粉雪を 相手に　吹きつけて　攻撃する。 こおり状態に　することが　ある。
+steps:
+- type: damage
+  power: 40
+  accuracy: 1.0
+- type: chance
+  p: 0.1
+  then:
+  - type: apply_status
+    statusId: freeze
+    target: target
+tags: []

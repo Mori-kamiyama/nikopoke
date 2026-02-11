@@ -3,10 +3,11 @@ name: ちょうはつ
 type: dark
 category: status
 pp: 20
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手を　怒らせる。３ターンの あいだ　相手は　ダメージを 与える　技しか　だせなくなる。
 steps:
-- type: apply_status
-  statusId: lock_move
-  duration: 3
-  data:
-    moveType: damage
-  target: target
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

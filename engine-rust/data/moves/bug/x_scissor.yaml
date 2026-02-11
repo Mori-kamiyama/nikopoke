@@ -1,0 +1,15 @@
+id: x_scissor
+name: シザークロス
+type: bug
+category: physical
+pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 'カマや　ツメを　ハサミのように 交差させながら　相手を　切り裂く。 '
+steps:
+- type: damage
+  power: 80
+  accuracy: 1.0
+tags:
+- contact

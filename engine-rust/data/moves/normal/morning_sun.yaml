@@ -3,35 +3,12 @@ name: あさのひざし
 type: normal
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 自分の　ＨＰを　回復する。 天気に　よって 回復の　量が　変化する。
 steps:
-- type: conditional
-  if:
-    type: weather_is_sunny
-  then:
-  - type: damage_ratio
-    ratioMaxHp: -0.6666666666666666
-    target: self
-- type: conditional
-  if:
-    type: weather_is_raining
-  then:
-  - type: damage_ratio
-    ratioMaxHp: -0.25
-    target: self
-- type: conditional
-  if:
-    type: weather_is_hail
-  then:
-  - type: damage_ratio
-    ratioMaxHp: -0.25
-    target: self
-- type: conditional
-  if:
-    type: weather_is_sandstorm
-  then:
-  - type: damage_ratio
-    ratioMaxHp: -0.25
-    target: self
 - type: damage_ratio
   ratioMaxHp: -0.5
   target: self
+tags: []

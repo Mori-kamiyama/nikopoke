@@ -1,18 +1,15 @@
 id: first_impression
-name: とどめばり
+name: であいがしら
 type: bug
 category: physical
-pp: 25
+pp: 10
+power: 90
+accuracy: 1.0
+priority: 2
+description: 威力が　高い　技　だが 戦闘に　出たら すぐに　出さないと　成功　しない。
 steps:
 - type: damage
-  power: 50
-  accuracy: 1
-- type: conditional
-  if:
-    type: target_hp_lt
-    value: 0
-  then:
-  - type: modify_stage
-    target: self
-    stages:
-      atk: 3
+  power: 90
+  accuracy: 1.0
+tags:
+- contact

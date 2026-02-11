@@ -1,0 +1,13 @@
+id: gastro_acid
+name: いえき
+type: poison
+category: status
+pp: 10
+power: null
+accuracy: 1.0
+priority: 0
+description: 胃液を　相手の 体に　吐きつける。ついた　胃液は 相手の　特性の　効果を　消す。
+steps:
+- type: manual
+  manualReason: No supported effects inferred
+tags: []

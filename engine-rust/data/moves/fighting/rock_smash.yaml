@@ -3,10 +3,14 @@ name: いわくだき
 type: fighting
 category: physical
 pp: 15
+power: 40
+accuracy: 1.0
+priority: 0
+description: パンチで　攻撃する。相手の 防御を　さげる　ことが　ある。 岩を　砕くことも　ある。
 steps:
 - type: damage
   power: 40
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.5
   then:
@@ -14,3 +18,5 @@ steps:
     target: target
     stages:
       def: -1
+tags:
+- contact

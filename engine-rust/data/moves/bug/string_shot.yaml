@@ -3,9 +3,13 @@ name: いとをはく
 type: bug
 category: status
 pp: 40
+power: null
 accuracy: 0.95
+priority: 0
+description: 口から　吹きだした 糸を　まきつけて　相手の 素早さを　がくっと　さげる。
 steps:
 - type: modify_stage
   target: target
   stages:
     spe: -2
+tags: []

@@ -1,0 +1,14 @@
+id: thunder_wave
+name: でんじは
+type: electric
+category: status
+pp: 20
+power: null
+accuracy: 0.9
+priority: 0
+description: '弱い　電撃を　浴びせることで 相手を　まひ状態に　する。 '
+steps:
+- type: apply_status
+  statusId: paralysis
+  target: target
+tags: []
