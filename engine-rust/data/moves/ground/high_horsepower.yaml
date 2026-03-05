@@ -1,0 +1,15 @@
+id: high_horsepower
+name: １０まんばりき
+type: ground
+category: physical
+pp: 10
+power: 95
+accuracy: 0.95
+priority: 0
+description: 全身を　使って 相手に　猛アタックする。
+steps:
+- type: damage
+  power: 95
+  accuracy: 0.95
+tags:
+- contact

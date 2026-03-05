@@ -11,6 +11,4 @@ steps:
 - type: damage
   power: 90
   accuracy: 1.0
-- type: manual
-  manualReason: Multi-turn trapping/binding effects are not fully supported
 tags: []

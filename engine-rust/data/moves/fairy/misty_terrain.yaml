@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: ５ターンの　あいだ　足元を ミストフィールドにする。地面にいると 状態異常に　ならない。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: misty_terrain
+  duration: 5
 tags: []

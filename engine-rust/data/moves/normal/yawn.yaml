@@ -8,6 +8,8 @@ accuracy: null
 priority: 0
 description: 大きな　あくびで　眠気を　誘う。 次の　ターンに 相手を　眠り状態に　する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: yawn
+  target: target
+  chance: 1
 tags: []

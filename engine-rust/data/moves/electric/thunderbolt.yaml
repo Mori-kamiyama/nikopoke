@@ -1,14 +1,21 @@
 id: thunderbolt
-name: 10まんボルト
+name: １０まんボルト
 type: electric
 category: special
 pp: 15
+power: 90
+accuracy: 1
+priority: 0
+description: 強い　電撃を 相手に　浴びせて　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
-  power: 90
+  power: 100
   accuracy: 1
 - type: chance
   p: 0.1
   then:
   - type: apply_status
-    statusId: paralysis
+    statusId: やけど
+    target: 相手
+    chance: 1
+tags: []

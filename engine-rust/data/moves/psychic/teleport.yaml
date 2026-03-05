@@ -8,6 +8,5 @@ accuracy: null
 priority: -6
 description: 野生ポケモンとの　戦闘を　やめる。 最後に　はいった ポケセンの　ある　街にも　行ける。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: self_switch
 tags: []

@@ -348,7 +348,7 @@ fn collect_expectations(
                 collect_expectations(&nested, requirements, expected);
             }
             "repeat" => {
-                let nested = collect_effects_from_value(effect.data.get("effects"));
+                let nested = collect_effects_from_value(effect.data.get("steps").or_else(|| effect.data.get("effects")));
                 collect_expectations(&nested, requirements, expected);
             }
             "conditional" => {
@@ -412,7 +412,7 @@ fn sampled_move_effects_match_expected_events() {
 
         let mut requirements = Requirements::default();
         let mut expected = HashSet::new();
-        collect_expectations(&move_data.effects, &mut requirements, &mut expected);
+        collect_expectations(&move_data.steps, &mut requirements, &mut expected);
 
         let state = build_state(&requirements);
         let mut rng = || 0.0;
@@ -428,9 +428,10 @@ fn sampled_move_effects_match_expected_events() {
             bypass_substitute: false,
             ignore_substitute: false,
             is_sound: false,
+            last_damage: None,
         };
 
-        let events = apply_effects(&state, &move_data.effects, &mut ctx);
+        let events = apply_effects(&state, &move_data.steps, &mut ctx);
         let actual = collect_actual_event_kinds(&events);
 
         for kind in expected {

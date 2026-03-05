@@ -9,16 +9,23 @@ interface BattleResult {
 
 export default function ResultPage() {
     const navigate = useNavigate();
-    const [result, setResult] = useState<BattleResult | null>(null);
-
-    useEffect(() => {
+    const [result] = useState<BattleResult | null>(() => {
         const resultJson = sessionStorage.getItem('battleResult');
         if (!resultJson) {
-            navigate('/home');
-            return;
+            return null;
         }
-        setResult(JSON.parse(resultJson));
-    }, [navigate]);
+        try {
+            return JSON.parse(resultJson) as BattleResult;
+        } catch {
+            return null;
+        }
+    });
+
+    useEffect(() => {
+        if (!result) {
+            navigate('/home');
+        }
+    }, [navigate, result]);
 
     if (!result) {
         return (

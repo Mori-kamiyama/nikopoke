@@ -1,11 +1,10 @@
-use engine_rust::core::state::{BattleState, PlayerState, CreatureState, Action, ActionType, FieldState, StatStages};
+use engine_rust::core::state::{BattleState, PlayerState, CreatureState, FieldState, StatStages};
 use engine_rust::core::events::{apply_event, BattleEvent};
 use engine_rust::core::effects::{apply_effects, EffectContext};
-use engine_rust::data::moves::{MoveDatabase, MoveData};
+use engine_rust::data::moves::MoveDatabase;
 use engine_rust::data::type_chart::TypeChart;
 use engine_rust::core::abilities::{run_ability_hooks, AbilityHookContext};
 use std::collections::HashMap;
-use serde_json::Value;
 
 fn create_test_state() -> BattleState {
     let p1 = PlayerState {
@@ -97,9 +96,10 @@ fn test_morning_sun_healing() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
-    let events = apply_effects(&state, &move_data.effects, &mut ctx);
+    let events = apply_effects(&state, &move_data.steps, &mut ctx);
     
     // Should contain a damage event with a negative amount (healing)
     let heal_event = events.iter().find(|e| match e {

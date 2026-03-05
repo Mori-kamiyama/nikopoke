@@ -247,11 +247,10 @@ async fn generate_move(
     );
 
     let mut prompt = prompt;
-    let mut move_data: Value = Value::Null;
     let mut retries = 0;
     const MAX_RETRIES: usize = 3;
 
-    loop {
+    let mut move_data = loop {
         let response = client.generate(&prompt).await?;
         
         // Parse the JSON response
@@ -269,8 +268,7 @@ async fn generate_move(
                 // Validate with SpellChecker
                 match SpellChecker::validate(&data) {
                     Ok(_) => {
-                        move_data = data;
-                        break;
+                        break data;
                     }
                     Err(e) => {
                         println!("      ⚠️ Validation failed: {}", e);
@@ -296,13 +294,9 @@ async fn generate_move(
                   sleep(Duration::from_millis(1000)).await;
             }
         }
-    }
-    
-    // move_data is now valid and unwrapped from the loop
-    
-    
+    };
+
     // Add contact tag if needed
-    let mut move_data = move_data;
     if record.contact == "接触" {
         if let Some(obj) = move_data.as_object_mut() {
             let tags = obj.entry("tags").or_insert(Value::Array(Vec::new()));

@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: 自分が　おぼえている　技の　うち どれか　１つを　くりだす。 自分が　寝ているときだけ　使える。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: random_move
+  pool: self_moves
 tags: []

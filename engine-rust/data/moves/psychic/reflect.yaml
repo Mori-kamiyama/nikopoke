@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: ５ターンの　あいだ　不思議な　かべで 相手から　受ける　物理攻撃の ダメージを　弱める。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: reflect
+  duration: 5
 tags: []

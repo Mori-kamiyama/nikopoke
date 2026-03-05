@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: ５ターンの　あいだ　日差しを 強くして　ほのおタイプの 技の　威力を　あげる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: sun
+  duration: 5
 tags: []

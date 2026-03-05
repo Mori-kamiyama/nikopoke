@@ -8,6 +8,11 @@ accuracy: null
 priority: 0
 description: 次の　ターンに 自分の　ＨＰを　最大ＨＰの 半分　回復する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: delay
+  target: self
+  turns: 1
+  steps:
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
 tags: []

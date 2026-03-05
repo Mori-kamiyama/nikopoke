@@ -1,48 +1,12 @@
 {
-  "not_found_in_pokeapi": [
-    "しっぽぎり",
-    "ゴットバード",
-    "10まんばりき",
-    "はめつのめがい",
-    "10まんボルト"
-  ],
+  "not_found_in_pokeapi": [],
   "ambiguous_matches": [],
   "manual_effects": [
-    {
-      "move_id": "yawn",
-      "move_name": "あくび",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported",
-        "Unsupported ailment: yawn",
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "encore",
-      "move_name": "アンコール",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
     {
       "move_id": "pain_split",
       "move_name": "いたみわけ",
       "reasons": [
         "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "swagger",
-      "move_name": "いばる",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "sing",
-      "move_name": "うたう",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
       ]
     },
     {
@@ -56,7 +20,6 @@
       "move_id": "disable",
       "move_name": "かなしばり",
       "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported",
         "Unsupported ailment: disable",
         "No supported effects inferred"
       ]
@@ -76,13 +39,6 @@
       ]
     },
     {
-      "move_id": "endure",
-      "move_name": "こらえる",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
       "move_id": "safeguard",
       "move_name": "しんぴのまもり",
       "reasons": [
@@ -97,13 +53,6 @@
       ]
     },
     {
-      "move_id": "supersonic",
-      "move_name": "ちょうおんぱ",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "acupressure",
       "move_name": "つぼをつく",
       "reasons": [
@@ -113,20 +62,6 @@
     {
       "move_id": "entrainment",
       "move_name": "なかまづくり",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "wish",
-      "move_name": "ねがいごと",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "sleep_talk",
-      "move_name": "ねごと",
       "reasons": [
         "No supported effects inferred"
       ]
@@ -148,48 +83,6 @@
     {
       "move_id": "belly_drum",
       "move_name": "はらだいこ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "baton_pass",
-      "move_name": "バトンタッチ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "teeter_dance",
-      "move_name": "フラフラダンス",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "copycat",
-      "move_name": "まねっこ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "protect",
-      "move_name": "まもる",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "substitute",
-      "move_name": "みがわり",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "metronome",
-      "move_name": "ゆびをふる",
       "reasons": [
         "No supported effects inferred"
       ]
@@ -231,34 +124,6 @@
       ]
     },
     {
-      "move_id": "double_edge",
-      "move_name": "すてみタックル",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "take_down",
-      "move_name": "とっしん",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "uproar",
-      "move_name": "さわぐ",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "detect",
-      "move_name": "みきり",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
       "move_id": "counter",
       "move_name": "カウンター",
       "reasons": [
@@ -280,20 +145,6 @@
       ]
     },
     {
-      "move_id": "drain_punch",
-      "move_name": "ドレインパンチ",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "dynamic_punch",
-      "move_name": "ばくれつパンチ",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "final_gambit",
       "move_name": "いのちがけ",
       "reasons": [
@@ -301,57 +152,8 @@
       ]
     },
     {
-      "move_id": "tailwind",
-      "move_name": "おいかぜ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "brave_bird",
-      "move_name": "ブレイブバード",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "hurricane",
-      "move_name": "ぼうふう",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "gastro_acid",
       "move_name": "いえき",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "baneful_bunker",
-      "move_name": "トーチカ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "toxic",
-      "move_name": "どくどく",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "toxic_spikes",
-      "move_name": "どくびし",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "spikes",
-      "move_name": "まきびし",
       "reasons": [
         "No supported effects inferred"
       ]
@@ -365,46 +167,11 @@
       ]
     },
     {
-      "move_id": "stealth_rock",
-      "move_name": "ステルスロック",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "sandstorm",
-      "move_name": "すなあらし",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "sticky_web",
-      "move_name": "ねばねばネット",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "leech_life",
-      "move_name": "きゅうけつ",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "infestation",
       "move_name": "まとわりつく",
       "reasons": [
         "Multi-turn trapping/binding effects are not fully supported",
         "Unsupported ailment: trap"
-      ]
-    },
-    {
-      "move_id": "confuse_ray",
-      "move_name": "あやしいひかり",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
       ]
     },
     {
@@ -436,20 +203,6 @@
       ]
     },
     {
-      "move_id": "sunny_day",
-      "move_name": "にほんばれ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "flare_blitz",
-      "move_name": "フレアドライブ",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "fire_spin",
       "move_name": "ほのおのうず",
       "reasons": [
@@ -465,39 +218,11 @@
       ]
     },
     {
-      "move_id": "rain_dance",
-      "move_name": "あまごい",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
       "move_id": "whirlpool",
       "move_name": "うずしお",
       "reasons": [
         "Multi-turn trapping/binding effects are not fully supported",
         "Unsupported ailment: trap"
-      ]
-    },
-    {
-      "move_id": "water_pulse",
-      "move_name": "みずのはどう",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "spore",
-      "move_name": "キノコのほうし",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "grassy_terrain",
-      "move_name": "グラスフィールド",
-      "reasons": [
-        "No supported effects inferred"
       ]
     },
     {
@@ -524,50 +249,8 @@
       ]
     },
     {
-      "move_id": "wood_hammer",
-      "move_name": "ウッドハンマー",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "horn_leech",
-      "move_name": "ウッドホーン",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "giga_drain",
-      "move_name": "ギガドレイン",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "grass_knot",
       "move_name": "くさむすび",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "absorb",
-      "move_name": "すいとる",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "mega_drain",
-      "move_name": "メガドレイン",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "electric_terrain",
-      "move_name": "エレキフィールド",
       "reasons": [
         "No supported effects inferred"
       ]
@@ -580,31 +263,10 @@
       ]
     },
     {
-      "move_id": "volt_tackle",
-      "move_name": "ボルテッカー",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "wild_charge",
-      "move_name": "ワイルドボルト",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "electro_ball",
       "move_name": "エレキボール",
       "reasons": [
         "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "parabolic_charge",
-      "move_name": "パラボラチャージ",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
       ]
     },
     {
@@ -629,20 +291,6 @@
       ]
     },
     {
-      "move_id": "psychic_terrain",
-      "move_name": "サイコフィールド",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "hypnosis",
-      "move_name": "さいみんじゅつ",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "gravity",
       "move_name": "じゅうりょく",
       "reasons": [
@@ -657,29 +305,8 @@
       ]
     },
     {
-      "move_id": "teleport",
-      "move_name": "テレポート",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
       "move_id": "trick",
       "move_name": "トリック",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "trick_room",
-      "move_name": "トリックルーム",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "rest",
-      "move_name": "ねむる",
       "reasons": [
         "No supported effects inferred"
       ]
@@ -706,13 +333,6 @@
       ]
     },
     {
-      "move_id": "light_screen",
-      "move_name": "ひかりのかべ",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
       "move_id": "imprison",
       "move_name": "ふういん",
       "reasons": [
@@ -720,43 +340,8 @@
       ]
     },
     {
-      "move_id": "reflect",
-      "move_name": "リフレクター",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "psybeam",
-      "move_name": "サイケこうせん",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "confusion",
-      "move_name": "ねんりき",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "mirror_coat",
       "move_name": "ミラーコート",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "dream_eater",
-      "move_name": "ゆめくい",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "aurora_veil",
-      "move_name": "オーロラベール",
       "reasons": [
         "No supported effects inferred"
       ]
@@ -784,13 +369,6 @@
       ]
     },
     {
-      "move_id": "flatter",
-      "move_name": "おだてる",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
       "move_id": "switcheroo",
       "move_name": "すりかえ",
       "reasons": [
@@ -808,7 +386,6 @@
       "move_id": "throat_chop",
       "move_name": "じごくづき",
       "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported",
         "Unsupported ailment: silence"
       ]
     },
@@ -825,29 +402,16 @@
       "reasons": [
         "No supported effects inferred"
       ]
-    },
-    {
-      "move_id": "sweet_kiss",
-      "move_name": "てんしのキッス",
-      "reasons": [
-        "Multi-turn trapping/binding effects are not fully supported"
-      ]
-    },
-    {
-      "move_id": "misty_terrain",
-      "move_name": "ミストフィールド",
-      "reasons": [
-        "No supported effects inferred"
-      ]
-    },
-    {
-      "move_id": "draining_kiss",
-      "move_name": "ドレインキッス",
-      "reasons": [
-        "Drain/recoil effects are not fully supported"
-      ]
     }
   ],
   "gemini_failed": [],
-  "gemini_updated": 378
+  "gemini_skipped": [
+    {
+      "scope": "global",
+      "category": "config",
+      "reason": "GEMINI_API_KEY is not set; skipped Gemini refinement",
+      "fallback": "base_dsl"
+    }
+  ],
+  "gemini_updated": 0
 }

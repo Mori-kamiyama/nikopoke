@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: 直前に　でた　技を　まねして 同じ　技を　だす。 技が　でていないと　失敗する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: random_move
+  pool: self_moves
 tags: []

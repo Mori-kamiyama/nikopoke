@@ -15,13 +15,14 @@ import json
 import os
 import re
 import time
+import unicodedata
 from pathlib import Path
 from typing import Any
 
 import requests
 import yaml
 
-POKEAPI_LIST_URL = "https://pokeapi.co/api/v2/move?limit=200&offset=0"
+POKEAPI_LIST_URL = "https://pokeapi.co/api/v2/move?limit=2000&offset=0"
 GEMINI_URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 SUPPORTED_TYPES = {
     "normal",
@@ -44,6 +45,12 @@ SUPPORTED_TYPES = {
     "fairy",
 }
 SUPPORTED_CATEGORY = {"physical", "special", "status"}
+NAME_ALIASES_JA = {
+    "しっぽぎり": "しっぽきり",
+    "ゴットバード": "ゴッドバード",
+    "ごっとばーど": "ゴッドバード",
+    "はめつのめがい": "はめつのねがい",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -54,6 +61,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cache-dir", default="data/cache/pokeapi/move")
     parser.add_argument("--model", default="gemini-2.0-flash")
     parser.add_argument("--delay-ms", type=int, default=80)
+    parser.add_argument("--gemini-delay-ms", type=int, default=250)
+    parser.add_argument("--gemini-retries", type=int, default=2)
+    parser.add_argument("--gemini-timeout-sec", type=int, default=60)
     parser.add_argument("--max-moves", type=int, default=0, help="0 means all")
     parser.add_argument("--no-gemini", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
@@ -76,8 +86,9 @@ def resolve_path(engine_root: Path, path_str: str) -> Path:
 
 
 def normalize_name(name: str) -> str:
+    raw = unicodedata.normalize("NFKC", name).strip().lower()
     out = []
-    for ch in name.strip().lower():
+    for ch in raw:
         if ch.isspace():
             continue
         if ch in "・･/／-−ー―–—~〜()（）[]【】":
@@ -244,6 +255,7 @@ def parse_condition_target(move_detail: dict[str, Any]) -> str:
 def build_base_steps(move_detail: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str]]:
     steps: list[dict[str, Any]] = []
     reasons: list[str] = []
+    move_id = to_snake_id(move_detail.get("name", ""))
     power = move_detail.get("power")
     accuracy = move_detail.get("accuracy")
     accuracy_f = (accuracy / 100.0) if isinstance(accuracy, int) else None
@@ -275,9 +287,16 @@ def build_base_steps(move_detail: dict[str, Any]) -> tuple[list[dict[str, Any]],
             steps.append({"type": "damage_ratio", "ratioMaxHp": -(healing / 100.0), "target": "self"})
 
     drain = meta.get("drain")
-    if isinstance(drain, int) and drain != 0:
-        reasons.append("Drain/recoil effects are not fully supported")
-    if isinstance(meta.get("min_turns"), int) or isinstance(meta.get("max_turns"), int):
+    if isinstance(drain, int) and drain != 0 and isinstance(power, int):
+        ratio = abs(drain) / 100.0
+        if drain > 0:
+            steps.append({"type": "damage_ratio", "ratioMaxHp": -ratio, "target": "self"})
+        else:
+            steps.append({"type": "damage_ratio", "ratioMaxHp": ratio, "target": "self"})
+    ailment_name = (meta.get("ailment") or {}).get("name")
+    if ailment_name in {"trap"} and (
+        isinstance(meta.get("min_turns"), int) or isinstance(meta.get("max_turns"), int)
+    ):
         reasons.append("Multi-turn trapping/binding effects are not fully supported")
 
     flinch = meta.get("flinch_chance")
@@ -290,7 +309,7 @@ def build_base_steps(move_detail: dict[str, Any]) -> tuple[list[dict[str, Any]],
             }
         )
 
-    ailment = (meta.get("ailment") or {}).get("name")
+    ailment = ailment_name
     ailment_chance = meta.get("ailment_chance")
     mapped_ailment = map_ailment(ailment) if isinstance(ailment, str) else None
     if mapped_ailment:
@@ -310,7 +329,10 @@ def build_base_steps(move_detail: dict[str, Any]) -> tuple[list[dict[str, Any]],
         if key and isinstance(val, int):
             stages[key] = val
     if stages:
-        stat_step = {"type": "modify_stage", "target": target, "stages": stages}
+        stat_target = target
+        if target == "target" and isinstance(power, int) and all(v < 0 for v in stages.values()):
+            stat_target = "self"
+        stat_step = {"type": "modify_stage", "target": stat_target, "stages": stages}
         stat_chance = meta.get("stat_chance")
         if isinstance(stat_chance, int) and 0 < stat_chance < 100:
             steps.append({"type": "chance", "p": stat_chance / 100.0, "then": [stat_step]})
@@ -321,6 +343,11 @@ def build_base_steps(move_detail: dict[str, Any]) -> tuple[list[dict[str, Any]],
     if isinstance(category_name, str) and "force-switch" in category_name:
         steps.append({"type": "force_switch"})
 
+    add_special_step_overrides(move_id, steps)
+    special = special_steps(move_id)
+    if special is not None:
+        return special, []
+
     if not steps:
         reasons.append("No supported effects inferred")
         steps.append({"type": "manual", "manualReason": "No supported effects inferred"})
@@ -328,6 +355,88 @@ def build_base_steps(move_detail: dict[str, Any]) -> tuple[list[dict[str, Any]],
         steps.append({"type": "manual", "manualReason": "; ".join(reasons)})
 
     return steps, reasons
+
+
+def add_special_step_overrides(move_id: str, steps: list[dict[str, Any]]) -> None:
+    if move_id == "headlong_rush":
+        has_damage = any(step.get("type") == "damage" for step in steps)
+        has_stage = any(step.get("type") == "modify_stage" for step in steps)
+        if has_damage and not has_stage:
+            steps.append({"type": "modify_stage", "target": "self", "stages": {"def": -1, "spd": -1}})
+    if move_id in {"flip_turn", "u_turn", "volt_switch"}:
+        has_damage = any(step.get("type") == "damage" for step in steps)
+        has_switch = any(step.get("type") == "self_switch" for step in steps)
+        if has_damage and not has_switch:
+            steps.append({"type": "self_switch"})
+
+
+def special_steps(move_id: str) -> list[dict[str, Any]] | None:
+    if move_id in {"protect", "detect", "endure", "baneful_bunker"}:
+        return [{"type": "protect"}]
+
+    if move_id == "yawn":
+        return [{"type": "apply_status", "statusId": "yawn", "target": "target", "data": {"turns": 1}}]
+
+    if move_id == "encore":
+        return [{"type": "lock_move", "target": "target", "duration": 3, "data": {"mode": "force_last_move"}}]
+
+    if move_id == "wish":
+        return [
+            {
+                "type": "delay",
+                "target": "self",
+                "turns": 1,
+                "steps": [{"type": "damage_ratio", "ratioMaxHp": -0.5, "target": "self"}],
+            }
+        ]
+
+    if move_id in {"baton_pass", "teleport"}:
+        return [{"type": "self_switch"}]
+
+    if move_id == "substitute":
+        return [
+            {"type": "damage_ratio", "ratioMaxHp": 0.25, "target": "self"},
+            {"type": "apply_status", "statusId": "substitute", "target": "self"},
+        ]
+
+    if move_id == "rest":
+        return [
+            {"type": "cure_all_status", "target": "self"},
+            {"type": "damage_ratio", "ratioMaxHp": -1.0, "target": "self"},
+            {"type": "apply_status", "statusId": "sleep", "target": "self", "duration": 2},
+        ]
+
+    if move_id in {"metronome", "copycat", "sleep_talk"}:
+        return [{"type": "random_move", "pool": "self_moves"}]
+
+    if move_id in {"trick_room", "toxic_spikes", "stealth_rock", "spikes", "sticky_web"}:
+        map_duration = {"trick_room": 5}
+        map_stack = {"toxic_spikes": True, "spikes": True}
+        step: dict[str, Any] = {"type": "apply_field_status", "statusId": move_id}
+        if move_id in map_duration:
+            step["duration"] = map_duration[move_id]
+        if move_id in map_stack:
+            step["stack"] = map_stack[move_id]
+        return [step]
+
+    field_status_moves = {
+        "sunny_day": ("sun", 5),
+        "rain_dance": ("rain", 5),
+        "sandstorm": ("sandstorm", 5),
+        "grassy_terrain": ("grassy_terrain", 5),
+        "electric_terrain": ("electric_terrain", 5),
+        "psychic_terrain": ("psychic_terrain", 5),
+        "misty_terrain": ("misty_terrain", 5),
+        "tailwind": ("tailwind", 4),
+        "light_screen": ("light_screen", 5),
+        "reflect": ("reflect", 5),
+        "aurora_veil": ("aurora_veil", 5),
+    }
+    if move_id in field_status_moves:
+        status_id, duration = field_status_moves[move_id]
+        return [{"type": "apply_field_status", "statusId": status_id, "duration": duration}]
+
+    return None
 
 
 def build_base_move(csv_record: dict[str, str], move_detail: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
@@ -397,14 +506,44 @@ PokeAPI英語効果文:
 """
 
 
-def gemini_refine(
+def build_retry_prompt(base_prompt: str, previous_error: str, attempt: int) -> str:
+    return f"""{base_prompt}
+
+前回エラー(再試行 {attempt} 回目):
+{previous_error}
+
+上記エラーを解消するように JSON を修正して再出力してください。
+"""
+
+
+def classify_gemini_error(err: Exception | str, validation: bool = False) -> str:
+    if validation:
+        return "schema_mismatch"
+    if isinstance(err, json.JSONDecodeError):
+        return "json_parse"
+    if isinstance(err, requests.exceptions.Timeout):
+        return "timeout"
+    if isinstance(err, requests.exceptions.HTTPError):
+        code = getattr(err.response, "status_code", None)
+        if code == 429:
+            return "rate_limited"
+        return f"http_{code}" if code else "http_error"
+    if isinstance(err, requests.exceptions.RequestException):
+        return "request_error"
+    return "unknown"
+
+
+def should_retry_gemini(category: str) -> bool:
+    return category in {"json_parse", "schema_mismatch", "timeout", "rate_limited", "request_error"}
+
+
+def gemini_refine_once(
+    prompt: str,
     move_obj: dict[str, Any],
-    csv_record: dict[str, str],
-    move_detail: dict[str, Any],
     api_key: str,
     model: str,
-) -> tuple[dict[str, Any], str | None]:
-    prompt = build_gemini_prompt(move_obj, csv_record, move_detail)
+    timeout_sec: int,
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
     url = f"{GEMINI_URL_BASE}/{model}:generateContent?key={api_key}"
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -417,21 +556,50 @@ def gemini_refine(
         },
     }
     try:
-        res = requests.post(url, json=body, timeout=60)
+        res = requests.post(url, json=body, timeout=timeout_sec)
         res.raise_for_status()
         payload = res.json()
         candidate = (((payload.get("candidates") or [{}])[0].get("content") or {}).get("parts") or [{}])[0]
         raw = candidate.get("text") or ""
         parsed = json.loads(strip_code_fence(raw))
         if not isinstance(parsed, dict):
-            return move_obj, "Gemini output is not an object"
+            return move_obj, {"category": "schema_mismatch", "reason": "Gemini output is not an object"}
         refined = merge_refined(move_obj, parsed)
         err = validate_move(refined)
         if err:
-            return move_obj, f"Validation failed: {err}"
+            return move_obj, {"category": "schema_mismatch", "reason": f"Validation failed: {err}"}
         return refined, None
     except Exception as e:  # noqa: BLE001
-        return move_obj, str(e)
+        return move_obj, {"category": classify_gemini_error(e), "reason": str(e)}
+
+
+def gemini_refine(
+    move_obj: dict[str, Any],
+    csv_record: dict[str, str],
+    move_detail: dict[str, Any],
+    api_key: str,
+    model: str,
+    retries: int,
+    timeout_sec: int,
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    base_prompt = build_gemini_prompt(move_obj, csv_record, move_detail)
+    last_error: dict[str, Any] | None = None
+    max_attempts = retries + 1
+
+    for attempt in range(1, max_attempts + 1):
+        prompt = base_prompt
+        if attempt > 1 and last_error:
+            prompt = build_retry_prompt(base_prompt, str(last_error.get("reason")), attempt - 1)
+        refined, err = gemini_refine_once(prompt, move_obj, api_key, model, timeout_sec)
+        if err is None:
+            return refined, None
+        last_error = {"attempt": attempt, **err}
+        if attempt >= max_attempts or not should_retry_gemini(str(err.get("category", ""))):
+            break
+        wait_sec = min(6.0, 1.2 * attempt)
+        time.sleep(wait_sec)
+
+    return move_obj, last_error
 
 
 def merge_refined(base: dict[str, Any], refined: dict[str, Any]) -> dict[str, Any]:
@@ -467,6 +635,18 @@ def build_name_map(details: list[dict[str, Any]]) -> dict[str, list[dict[str, An
             key = normalize_name(nm)
             name_map.setdefault(key, []).append(detail)
     return name_map
+
+
+def resolve_alias_keys(name: str) -> list[str]:
+    key = normalize_name(name)
+    keys = [key]
+    for src, dst in NAME_ALIASES_JA.items():
+        if key == normalize_name(src):
+            keys.append(normalize_name(dst))
+    typo_fix = key.replace("めがい", "ねがい")
+    if typo_fix != key:
+        keys.append(typo_fix)
+    return list(dict.fromkeys(keys))
 
 
 def collect_details_from_cache(cache_dir: Path) -> list[dict[str, Any]]:
@@ -528,6 +708,7 @@ def main() -> int:
         "ambiguous_matches": [],
         "manual_effects": [],
         "gemini_failed": [],
+        "gemini_skipped": [],
         "gemini_updated": 0,
     }
 
@@ -535,11 +716,21 @@ def main() -> int:
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
     if use_gemini and not api_key:
         use_gemini = False
-        report["gemini_failed"].append({"_global": "GEMINI_API_KEY is not set; skipped Gemini refinement"})
+        report["gemini_skipped"].append(
+            {
+                "scope": "global",
+                "category": "config",
+                "reason": "GEMINI_API_KEY is not set; skipped Gemini refinement",
+                "fallback": "base_dsl",
+            }
+        )
 
     for rec in records:
-        key = normalize_name(rec["name"])
-        candidates = name_map.get(key, [])
+        candidates: list[dict[str, Any]] = []
+        for key in resolve_alias_keys(rec["name"]):
+            candidates = name_map.get(key, [])
+            if candidates:
+                break
         if not candidates:
             report["not_found_in_pokeapi"].append(rec["name"])
             continue
@@ -559,13 +750,31 @@ def main() -> int:
             )
 
         if use_gemini:
-            refined, err = gemini_refine(move_obj, rec, detail, api_key, args.model)
+            refined, err = gemini_refine(
+                move_obj,
+                rec,
+                detail,
+                api_key,
+                args.model,
+                retries=args.gemini_retries,
+                timeout_sec=args.gemini_timeout_sec,
+            )
             if err:
-                report["gemini_failed"].append({"move_id": move_obj["id"], "reason": err})
+                report["gemini_failed"].append(
+                    {
+                        "move_id": move_obj["id"],
+                        "category": err.get("category"),
+                        "attempts": err.get("attempt"),
+                        "reason": err.get("reason"),
+                        "fallback": "base_dsl",
+                    }
+                )
             else:
                 if refined.get("steps") != move_obj.get("steps"):
                     report["gemini_updated"] += 1
                 move_obj = refined
+            if args.gemini_delay_ms > 0:
+                time.sleep(args.gemini_delay_ms / 1000.0)
 
         moves_yaml[move_obj["id"]] = ordered_move(move_obj)
 

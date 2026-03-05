@@ -70,7 +70,8 @@ struct ResponsePart {
 #[derive(Debug, Deserialize)]
 struct GeminiError {
     message: String,
-    code: Option<i32>,
+    #[serde(rename = "code")]
+    _code: Option<i32>,
 }
 
 impl GeminiClient {

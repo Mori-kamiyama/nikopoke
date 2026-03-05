@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tatuta | 技DSLフロースタジオ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&family=Lora:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/msg/ja.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="./blockly-blocks.js"></script>
+</head>
+
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="app-header">
+      <div class="brand">
+        <p class="brand-kicker">Tatuta</p>
+        <h1>技DSLフロースタジオ</h1>
+        <p class="brand-sub">YAMLを直接更新しつつ、ステップをワークフローで編集</p>
+      </div>
+      <div class="meta">
+        <span id="moveCount">-- 件</span>
+        <span id="selectedMove">-- 選択中</span>
+        <button id="exportYaml" class="btn primary small">データを書き出す (YAML)</button>
+        <button id="openSettings" class="btn secondary circle" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <div id="settingsModal" class="modal-overlay" style="display:none">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3>プロジェクト設定 (Supabase)</h3>
+          <button id="closeSettings" class="icon-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="hint">Supabaseのプロジェクト設定(Settings > API)から取得した値を入力してください。</p>
+          <label>Supabase URL
+            <input id="sUrl" type="url" placeholder="https://xxx.supabase.co" />
+          </label>
+          <label>API Key (anon)
+            <input id="sKey" type="password" placeholder="your-anon-key" />
+          </label>
+          <div class="modal-actions">
+            <button id="saveSettings" class="btn primary">保存して再読込</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="main-layout">
+      <aside class="panel catalog">
+        <div class="search-block">
+          <input id="search" type="text" placeholder="技名 または ID で検索" />
+          <select id="sortBy">
+            <option value="name">名前順</option>
+            <option value="id">ID順</option>
+            <option value="type">タイプ順</option>
+          </select>
+        </div>
+        <div id="progressInfo" class="progress-info">
+          完了: <span id="doneCount">0</span> / <span id="totalCount">0</span>
+          (<span id="remainingCount">0</span> 個 残り)
+        </div>
+        <div id="moveList" class="move-list"></div>
+      </aside>
+
+      <section id="studio" class="panel studio">
+        <div class="move-head">
+          <div>
+            <h2 id="moveName">技を選択してください</h2>
+            <p id="moveMeta"></p>
+          </div>
+          <div id="tags" class="chips"></div>
+        </div>
+
+        <article class="block description">
+          <h3>説明</h3>
+          <p id="moveDescription">--</p>
+        </article>
+
+
+
+        <article class="block scratch">
+          <div class="section-head">
+            <h3>基本項目</h3>
+          </div>
+          <div class="scratch-grid">
+            <label>名前 <input id="fName" /></label>
+            <label>タイプ <select id="fType"></select></label>
+            <label>分類 <select id="fCategory"></select></label>
+            <label>PP <input id="fPp" /></label>
+            <label>威力 <input id="fPower" /></label>
+            <label>命中 <input id="fAccuracy" /></label>
+            <label>優先度 <input id="fPriority" /></label>
+            <div class="full">
+              <label>タグ</label>
+              <div id="tagCheckboxes" class="tag-checkboxes"></div>
+              <input id="fTags" placeholder="カスタムタグ（カンマ区切り）" />
+            </div>
+            <label class="full">説明 <textarea id="fDescription" rows="3"></textarea></label>
+          </div>
+        </article>
+
+        <article class="block extras">
+          <div class="section-head">
+            <h3>追加トップレベル項目</h3>
+            <button id="addExtraField" class="btn ghost">+ 項目</button>
+          </div>
+          <div id="extraFields" class="fields-stack"></div>
+        </article>
+
+        <article class="block flow-board">
+          <div class="section-head">
+            <h3>ステップフロー（Blockly）</h3>
+            <button id="markDoneNext" class="btn accent">完了して次へ</button>
+          </div>
+
+          <div id="blocklyDiv" style="width:100%;height:480px;"></div>
+
+          <div class="flow-diagram-wrap">
+            <details open>
+              <summary class="diagram-toggle">ライブフローチャート</summary>
+              <div id="flowDiagram" class="flow-diagram"></div>
+            </details>
+          </div>
+
+          <div class="flow-script-wrap">
+            <details>
+              <summary class="script-label">フロースクリプト（テキスト）</summary>
+              <pre id="flowScript" class="flow-script"></pre>
+            </details>
+          </div>
+          <div class="block actions-bar">
+            <button id="yamlToScratch" class="btn secondary">YAML → 画面反映</button>
+            <button id="scratchToYaml" class="btn secondary">画面反映 → YAML</button>
+          </div>
+
+          <details id="yamlPanel" class="block yaml-panel">
+            <summary>詳細YAMLエディタ</summary>
+            <div class="panel-actions">
+              <button id="reloadYaml" class="btn small">再読込</button>
+              <button id="formatYaml" class="btn small">整形</button>
+              <button id="saveEdit" class="btn primary small">サーバーに保存 (Ctrl+S)</button>
+            </div>
+            <p class="hint">保存すると `engine-rust/data/moves.yaml` と `engine-rust/data/moves/<type>/<id>.yaml`
+                  を直接更新します。</p>
+            <textarea id="dslEditor" rows="16" spellcheck="false"></textarea>
+          </details>
+
+          <p id="statusLine" class="status">準備完了。</p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js" type="module"></script>
+</body>
+
+</html>

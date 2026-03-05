@@ -268,7 +268,7 @@ fn test_skill_link_multi_hit() {
     // Cinccino with Skill Link
     let cinccino = create_creature(
         "p1_cinccino", "cinccino", "Cinccino", vec!["normal"],
-        Some("skill_link"), vec!["fury_swipes"],
+        Some("skill_link"), vec!["fury_attack"],
         (100, 95, 60, 65, 60, 115)
     );
 
@@ -284,7 +284,7 @@ fn test_skill_link_multi_hit() {
         Action {
             player_id: "p1".to_string(),
             action_type: ActionType::Move,
-            move_id: Some("fury_swipes".to_string()),
+            move_id: Some("fury_attack".to_string()),
             target_id: Some("p2".to_string()),
             slot: None,
             priority: None,

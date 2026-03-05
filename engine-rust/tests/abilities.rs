@@ -79,7 +79,8 @@ fn soundproof_blocks_sound_tagged_damage() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.1 }))],
+        description: None,
+        steps: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.1 }))],
         tags: vec!["sound".to_string()],
         crit_rate: None,
     });
@@ -92,7 +93,8 @@ fn soundproof_blocks_sound_tagged_damage() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });

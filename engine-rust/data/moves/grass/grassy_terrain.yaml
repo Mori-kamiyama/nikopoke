@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: ５ターンの　あいだ　足元を グラスフィールドにする。地面にいる ポケモンは　毎ターン　回復する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: grassy_terrain
+  duration: 5
 tags: []

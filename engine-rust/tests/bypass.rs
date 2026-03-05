@@ -78,7 +78,8 @@ fn bypass_protect_allows_damage() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![
+        description: None,
+        steps: vec![
             effect("damage", json!({ "power": 40, "accuracy": 1.0 })),
             effect("bypass_protect", json!({})),
         ],
@@ -94,7 +95,8 @@ fn bypass_protect_allows_damage() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -147,7 +149,8 @@ fn protect_blocks_damage_without_bypass() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
+        description: None,
+        steps: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -160,7 +163,8 @@ fn protect_blocks_damage_without_bypass() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -213,7 +217,8 @@ fn ignore_immunity_allows_damage() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![
+        description: None,
+        steps: vec![
             effect("damage", json!({ "power": 40, "accuracy": 1.0 })),
             effect("ignore_immunity", json!({})),
         ],
@@ -229,7 +234,8 @@ fn ignore_immunity_allows_damage() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -276,7 +282,8 @@ fn immunity_blocks_damage_without_ignore() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
+        description: None,
+        steps: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -289,7 +296,8 @@ fn immunity_blocks_damage_without_ignore() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -336,7 +344,8 @@ fn substitute_blocks_damage_without_bypass() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
+        description: None,
+        steps: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -349,7 +358,8 @@ fn substitute_blocks_damage_without_bypass() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -402,7 +412,8 @@ fn bypass_substitute_allows_damage_by_tag() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
+        description: None,
+        steps: vec![effect("damage", json!({ "power": 40, "accuracy": 1.0 }))],
         tags: vec!["bypass_substitute".to_string()],
         crit_rate: None,
     });
@@ -415,7 +426,8 @@ fn bypass_substitute_allows_damage_by_tag() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -468,7 +480,8 @@ fn ignore_substitute_allows_damage_by_effect() {
         power: Some(40),
         accuracy: Some(1.0),
         priority: Some(0),
-        effects: vec![
+        description: None,
+        steps: vec![
             effect("damage", json!({ "power": 40, "accuracy": 1.0 })),
             effect("ignore_substitute", json!({})),
         ],
@@ -484,7 +497,8 @@ fn ignore_substitute_allows_damage_by_effect() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });

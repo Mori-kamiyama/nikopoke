@@ -15,6 +15,4 @@ steps:
   target: target
   stages:
     atk: 2
-- type: manual
-  manualReason: Multi-turn trapping/binding effects are not fully supported
 tags: []

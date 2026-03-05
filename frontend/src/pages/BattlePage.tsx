@@ -231,7 +231,6 @@ export default function BattlePage() {
                         creature={aiPokemon}
                         species={aiSpecies}
                         isPlayer={false}
-                        moves={moves}
                     />
                 </div>
 
@@ -257,7 +256,6 @@ export default function BattlePage() {
                         creature={playerPokemon}
                         species={playerSpecies}
                         isPlayer={true}
-                        moves={moves}
                     />
                 </div>
 
@@ -407,13 +405,11 @@ function TeamIndicator({
 function PokemonStatus({
     creature,
     species,
-    isPlayer,
-    moves: _moves
+    isPlayer
 }: {
     creature: CreatureStateWire;
     species: SpeciesData[string] | undefined;
     isPlayer: boolean;
-    moves: MoveData;
 }) {
     const hpPercentage = creature.maxHp > 0 ? (creature.hp / creature.maxHp) * 100 : 0;
     const hpColor = hpPercentage > 50 ? 'bg-emerald-500' : hpPercentage > 20 ? 'bg-amber-500' : 'bg-red-500';

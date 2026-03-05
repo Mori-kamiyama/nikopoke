@@ -213,24 +213,6 @@ fn test_moody_turn_end() {
         }
     ];
 
-    let rng = || 0.0; // Fixed rng, affects which stat is chosen
-    // ...
-    // let mut rng = ...
-    // ...
-    // Actually, I need to remove the first 'let mut rng = ...' which is shadowed and unused.
-
-    // In code:
-    // let stats = ["atk", "def", "spa", "spd", "spe"];
-    // up_index = (0.0 * 5).floor() % 5 = 0 -> "atk"
-    // down_index = (0.0 * 5).floor() % 5 = 0 -> loop continues
-    // Wait, the while loop uses the same rng?
-    // In `abilities.rs`:
-    // while down_index == up_index {
-    //     down_index = (ctx.rng)().mul_add(stats.len() as f64, 0.0).floor() as usize % stats.len();
-    // }
-    // If I use a closure that always returns 0.0, this will infinite loop!
-    // I need a stateful RNG.
-
     let mut rng_call_count = 0;
     let mut rng = || {
         rng_call_count += 1;

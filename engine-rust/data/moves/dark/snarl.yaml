@@ -12,7 +12,7 @@ steps:
   power: 55
   accuracy: 0.95
 - type: modify_stage
-  target: target
+  target: self
   stages:
     spa: -1
 tags: []

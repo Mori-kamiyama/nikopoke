@@ -87,6 +87,7 @@ fn substitute_initializes_hp_on_apply() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![
@@ -118,7 +119,8 @@ fn substitute_takes_damage_and_loses_hp() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.1 }))],
+        description: None,
+        steps: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.1 }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -131,7 +133,8 @@ fn substitute_takes_damage_and_loses_hp() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -193,7 +196,8 @@ fn substitute_breaks_when_hp_depleted() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.1 }))],
+        description: None,
+        steps: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.1 }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -206,7 +210,8 @@ fn substitute_breaks_when_hp_depleted() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });

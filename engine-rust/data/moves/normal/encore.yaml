@@ -8,6 +8,9 @@ accuracy: 1.0
 priority: 0
 description: 相手が　最後に　使った技を ３ターンの　あいだ ずっと　ださせる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: lock_move
+  target: target
+  duration: 3
+  data:
+    mode: force_last_move
 tags: []

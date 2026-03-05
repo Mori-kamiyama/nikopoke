@@ -1,0 +1,16 @@
+id: shed_tail
+name: しっぽきり
+type: normal
+category: status
+pp: 10
+power: 0
+accuracy: null
+priority: 0
+description: |-
+  自分のHPを最大HPの半分だけ減らして『みがわり』状態となり、
+  『みがわり』状態のまま手持ちのポケモンに入れ替わる。
+  『みがわり』のHPは最大HPの1/4になる。
+steps:
+- type: damage
+  power: 0
+tags: []

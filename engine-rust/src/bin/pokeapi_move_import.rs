@@ -171,7 +171,6 @@ struct MoveMeta {
 
 #[derive(Debug, Deserialize)]
 struct MoveDetail {
-    id: i32,
     name: String,
     accuracy: Option<i32>,
     power: Option<i32>,

@@ -11,4 +11,5 @@ steps:
 - type: damage
   power: 70
   accuracy: 1.0
+- type: self_switch
 tags: []

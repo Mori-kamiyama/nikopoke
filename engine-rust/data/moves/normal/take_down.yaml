@@ -11,7 +11,8 @@ steps:
 - type: damage
   power: 90
   accuracy: 0.85
-- type: manual
-  manualReason: Drain/recoil effects are not fully supported
+- type: damage_ratio
+  ratioMaxHp: 0.25
+  target: self
 tags:
 - contact

@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: ５ターンの　あいだ　砂あらしで いわ　じめん　はがねタイプ　以外の ポケモンに　ダメージを　与える。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: sandstorm
+  duration: 5
 tags: []

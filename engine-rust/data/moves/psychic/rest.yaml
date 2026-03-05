@@ -8,6 +8,13 @@ accuracy: null
 priority: 0
 description: ２ターンの　あいだ　眠り続ける。 自分の　ＨＰと　状態異常を すべて　回復する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: cure_all_status
+  target: self
+- type: damage_ratio
+  ratioMaxHp: -1.0
+  target: self
+- type: apply_status
+  statusId: sleep
+  target: self
+  duration: 2
 tags: []

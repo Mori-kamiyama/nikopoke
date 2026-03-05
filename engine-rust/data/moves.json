@@ -17,7 +17,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "次のターンに相手をねむり状態にする。"
   },
   "morning_sun": {
     "id": "morning_sun",
@@ -83,7 +84,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "天気が通常の時は最大HPの1/2、晴れ状態の時は最大HPの2/3、\nそれ以外の時は最大HPの1/4回復する。"
   },
   "encore": {
     "id": "encore",
@@ -99,7 +101,8 @@
         "duration": 3,
         "target": "target"
       }
-    ]
+    ],
+    "description": "相手が直前に出した技を3回続けて出させる。"
   },
   "painsplit": {
     "id": "painsplit",
@@ -118,7 +121,8 @@
         "ratioMaxHp": -0.5,
         "target": "target"
       }
-    ]
+    ],
+    "description": "自分のHPと相手のHPを足して半分ずつに分ける。"
   },
   "swagger": {
     "id": "swagger",
@@ -139,7 +143,8 @@
           "atk": 2
         }
       }
-    ]
+    ],
+    "description": "相手を1～4ターンの間こんらん状態にする。相手の攻撃を2段階上げる。"
   },
   "leer": {
     "id": "leer",
@@ -155,7 +160,8 @@
           "def": -1
         }
       }
-    ]
+    ],
+    "description": "相手の『ぼうぎょ』ランクを1段階下げる。"
   },
   "sing": {
     "id": "sing",
@@ -172,7 +178,8 @@
           "bypassSubstitute": true
         }
       }
-    ]
+    ],
+    "description": "相手をねむり状態にする。相手の「みがわり」状態を貫通する。"
   },
   "smokescreen": {
     "id": "smokescreen",
@@ -193,7 +200,8 @@
           "accuracy": -1
         }
       }
-    ]
+    ],
+    "description": "相手の命中率を1段階下げる。"
   },
   "helping_hand": {
     "id": "helping_hand",
@@ -208,7 +216,8 @@
         "timing": "turn_start",
         "steps": []
       }
-    ]
+    ],
+    "description": "受けた相手は自分の行動の後に続けて行動する。"
   },
   "roar": {
     "id": "roar",
@@ -240,7 +249,8 @@
       {
         "type": "bypass_protect"
       }
-    ]
+    ],
+    "description": "必ず後攻になる(優先度:-6)。相手のポケモンを強制的に交代させる。\n野生のポケモンの場合は戦闘を終了する。自分の命中率、相手の回避率に関係なく必ず命中する。\n相手の『まもる』『みきり』『トーチカ』『ニードルガード』『ブロッキング』『スレッドトラップ』\n『かえんのまもり』の効果を受けない。相手の『みがわり』状態を貫通する。\nダイマックスしている相手には無効。野生のポケモンの場合、\n相手が自分のレベルより高い場合は失敗する。"
   },
   "kage_bunshin": {
     "id": "kage_bunshin",
@@ -256,7 +266,8 @@
           "eva": 1
         }
       }
-    ]
+    ],
+    "description": "自分の回避率を1段階上げる。"
   },
   "harden": {
     "id": "harden",
@@ -272,7 +283,8 @@
           "def": 1
         }
       }
-    ]
+    ],
+    "description": "自分の防御を1段階上げる。"
   },
   "kanashibari": {
     "id": "kanashibari",
@@ -286,7 +298,8 @@
         "duration": 4,
         "target": "target"
       }
-    ]
+    ],
+    "description": "相手が直前に出した技を4ターンの間使えなくする。"
   },
   "shell_smash": {
     "id": "shell_smash",
@@ -302,7 +315,8 @@
           "def": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『ぼうぎょ』ランクを1段階上げる。"
   },
   "focus_energy": {
     "id": "focus_energy",
@@ -318,7 +332,8 @@
           "crit": 2
         }
       }
-    ]
+    ],
+    "description": "自分の攻撃が急所に当たりやすくなる。"
   },
   "tickle": {
     "id": "tickle",
@@ -335,7 +350,8 @@
           "def": -1
         }
       }
-    ]
+    ],
+    "description": "\t相手の『こうげき』『ぼうぎょ』ランクを1段階ずつ下げる。"
   },
   "kuroi_manazashi": {
     "id": "kuroi_manazashi",
@@ -354,7 +370,8 @@
           ]
         }
       }
-    ]
+    ],
+    "description": "『ゴースト』タイプではない相手は逃げたり、交代できなくなる。\n自分が場を離れると効果は消える。"
   },
   "endure": {
     "id": "endure",
@@ -372,7 +389,8 @@
         "statusId": "protect",
         "target": "self"
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+4)。そのターンに『ひんし』状態になる攻撃を\n受けてもHPが1残る。連続で使うと失敗しやすくなる。"
   },
   "scary_face": {
     "id": "scary_face",
@@ -397,7 +415,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "revival_blessing": {
     "id": "revival_blessing",
@@ -411,7 +430,8 @@
         "ratioMaxHp": 0.5,
         "target": "all"
       }
-    ]
+    ],
+    "description": "手持ちの『ひんし』状態のポケモンを、最大HPの半分だけ回復させる。"
   },
   "tail_whip": {
     "id": "tail_whip",
@@ -427,7 +447,8 @@
           "def": -1
         }
       }
-    ]
+    ],
+    "description": "\t相手の『ぼうぎょ』ランクを1段階下げる。"
   },
   "safeguard": {
     "id": "safeguard",
@@ -442,7 +463,8 @@
         "target": "all",
         "duration": 5
       }
-    ]
+    ],
+    "description": " 5ターンの間、自分と味方のポケモンは状態異常にならなくなる。\n交代しても効果は続く。"
   },
   "self_suggestion": {
     "id": "self_suggestion",
@@ -463,7 +485,8 @@
         },
         "copy_stages": true
       }
-    ]
+    ],
+    "description": "相手の能力ランクの変化を、すべて自分にコピーする。"
   },
   "self_destruct": {
     "id": "self_destruct",
@@ -482,7 +505,8 @@
         "statusId": "fainted",
         "target": "self"
       }
-    ]
+    ],
+    "description": "攻撃後、自分が『ひんし』状態になる。"
   },
   "growth": {
     "id": "growth",
@@ -521,7 +545,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分の『こうげき』『とくこう』ランクが1段階ずつ上がる。\n天気が『にほんばれ』の時は、2段階ずつ上がる。"
   },
   "takuwaeru": {
     "id": "takuwaeru",
@@ -538,7 +563,8 @@
           "spd": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『ぼうぎょ』『とくぼう』ランクを1段階ずつ上げる。\n技『のみこむ』『はきだす』の効果を上げる。3回までたくわえることができる。"
   },
   "minimize": {
     "id": "minimize",
@@ -554,7 +580,8 @@
           "evasion": 2
         }
       }
-    ]
+    ],
+    "description": "自分の回避率を2段階上げる。ただし、技『サンダーダイブ』『のしかかり』\n『ふみつけ』『ドラゴンダイブ』『ハードローラー』『ハイパーダーククラッシャー』\n『フライングプレス』『ヒートスタンプ』『ヘビーボンバー』は必ず命中し、\n威力2倍で受けるようになってしまう"
   },
   "ultrasonic": {
     "id": "ultrasonic",
@@ -568,7 +595,8 @@
         "statusId": "confusion",
         "chance": 0.55
       }
-    ]
+    ],
+    "description": "相手を1～4ターンの間『こんらん』状態にする。音系の技。\n相手の『みがわり』状態を貫通する。"
   },
   "acupressure": {
     "id": "acupressure",
@@ -581,7 +609,8 @@
         "type": "random_move",
         "pool": "status"
       }
-    ]
+    ],
+    "description": "ランダムで『こうげき』『ぼうぎょ』『とくこう』『とくぼう』『すばやさ』『回避率』\n『命中率』ランクのどれか1つが2段階上がる。\nこの技は『ダイウォール』の効果も受けない。"
   },
   "sword_dance": {
     "id": "sword_dance",
@@ -597,7 +626,8 @@
           "atk": 2
         }
       }
-    ]
+    ],
+    "description": "\t自分の『こうげき』ランクを2段階上げる。"
   },
   "nayshobanashi": {
     "id": "nayshobanashi",
@@ -613,7 +643,8 @@
           "spa": -1
         }
       }
-    ]
+    ],
+    "description": "相手の『とくこう』ランクを1段階下げる。自分の命中率、\n相手の回避率に関係なく必ず命中する。相手の『まもる』『みきり』『トーチカ』\n『ニードルガード』『ブロッキング』『スレッドトラップ』『かえんのまもり』\nの効果を受けない(『ダイウォール』を除く)。音系の技。相手の『みがわり』状態を貫通する。"
   },
   "teammate": {
     "id": "teammate",
@@ -628,7 +659,8 @@
         "to": "ability",
         "target": "target"
       }
-    ]
+    ],
+    "description": "相手の特性を自分と同じ特性にする。ダイマックスしている相手には無効。"
   },
   "slack_off": {
     "id": "slack_off",
@@ -642,7 +674,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "        HPが最大HPの半分回復する。"
   },
   "wish": {
     "id": "wish",
@@ -663,7 +696,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "次のターンの終了時にHPが最大HPの半分回復する。\n交代した場合は同じ位置にいるポケモンが回復する。"
   },
   "snore": {
     "id": "snore",
@@ -690,7 +724,8 @@
     ],
     "tags": [
       "sound"
-    ]
+    ],
+    "description": "\t自分が『ねむり』状態の時のみ使用可能。30%の確率で相手をひるませる。音系の技。\n相手の『みがわり』状態を貫通する。"
   },
   "happy_hour": {
     "id": "happy_hour",
@@ -703,7 +738,8 @@
         "type": "manual",
         "manualReason": "Doubles prize money after battle, which is not a battle effect."
       }
-    ]
+    ],
+    "description": "\t戦闘後に得られる賞金が2倍になる。"
   },
   "hazure": {
     "id": "hazure",
@@ -711,7 +747,8 @@
     "type": "normal",
     "category": "status",
     "pp": 40,
-    "steps": []
+    "steps": [],
+    "description": "何も起こらない。"
   },
   "belly_drum": {
     "id": "belly_drum",
@@ -732,7 +769,8 @@
           "atk": 6
         }
       }
-    ]
+    ],
+    "description": "自分のHPを最大HPの半分だけ減らす代わりに、自分の『こうげき』ランクを最大まで上げる。"
   },
   "baton_pass": {
     "id": "baton_pass",
@@ -744,7 +782,8 @@
       {
         "type": "self_switch"
       }
-    ]
+    ],
+    "description": "他の味方のポケモンと交代し、かかっていた補助効果を引き継ぐ。"
   },
   "teeter_dance": {
     "id": "teeter_dance",
@@ -763,7 +802,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "\t相手を1～4ターンの間『こんらん』状態にする。"
   },
   "bulk_up": {
     "id": "bulk_up",
@@ -785,7 +825,8 @@
           "def": -1
         }
       }
-    ]
+    ],
+    "description": "攻撃後、自分の『こうげき』『ぼうぎょ』ランクが1段階ずつ下がる。"
   },
   "copycat": {
     "id": "copycat",
@@ -798,7 +839,8 @@
         "type": "manual",
         "manualReason": "Copies the last move used by the opponent.  Need custom engine logic to handle move selection."
       }
-    ]
+    ],
+    "description": "最後に使われた技で相手に攻撃する。自分の技も対象となる。\n最後の技がダイマックス技の場合、元となった技が使われる。"
   },
   "protect": {
     "id": "protect",
@@ -811,7 +853,8 @@
       {
         "type": "protect"
       }
-    ]
+    ],
+    "description": "必ず先制でき(優先度:+4)、そのターンの間、相手の技を受けない。\n連続で使うと失敗しやすくなる。\nダイマックス技や第7世代のZワザの攻撃技は貫通し、1/4のダメージを受ける。"
   },
   "substitute": {
     "id": "substitute",
@@ -830,7 +873,8 @@
         "statusId": "substitute",
         "target": "self"
       }
-    ]
+    ],
+    "description": "自分のHPを最大HPの1/4だけ減らして分身を作り、\n分身のHPが0になるまですべての攻撃を自分の代わ\nりに分身が受ける。音系の技などはそのまま受ける。\n分身は状態異常にならない。"
   },
   "milk_drink": {
     "id": "milk_drink",
@@ -844,7 +888,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "HPが最大HPの半分回復する。"
   },
   "body_slam": {
     "id": "body_slam",
@@ -883,7 +928,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。\n相手が技『ちいさくなる』を使用していると必ず命中し、威力が2倍になる。"
   },
   "yubi_o_furu": {
     "id": "yubi_o_furu",
@@ -896,7 +942,8 @@
         "type": "random_move",
         "pool": "all"
       }
-    ]
+    ],
+    "description": "ほぼすべての技の中からランダムで1つ使う。"
   },
   "lock_on": {
     "id": "lock_on",
@@ -910,7 +957,8 @@
         "statusId": "lock_move",
         "target": "self"
       }
-    ]
+    ],
+    "description": "次のターン、使った相手に自分の技が必ず命中する。"
   },
   "rampage": {
     "id": "rampage",
@@ -937,7 +985,8 @@
           "confuseOnEnd": true
         }
       }
-    ]
+    ],
+    "description": "2～3ターン連続で攻撃し、その後自分は1～4ターンの間『こんらん』状態になる。"
   },
   "fury_swipes": {
     "id": "fury_swipes",
@@ -960,7 +1009,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "kairiki": {
     "id": "kairiki",
@@ -974,7 +1024,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "\t通常攻撃。"
   },
   "vengeance": {
     "id": "vengeance",
@@ -1000,7 +1051,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "\t前のターンに味方のポケモンが倒されていると威力が2倍になる。"
   },
   "karagenki": {
     "id": "karagenki",
@@ -1056,7 +1108,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分が『どく』『まひ』『やけど』状態の時、威力が2倍になる。\n『やけど』による『こうげき』の半減の影響を受けない。"
   },
   "desperate": {
     "id": "desperate",
@@ -1082,7 +1135,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手の残りHPから自分の残りHPを引いた分のダメージを与える。\n『ゴースト』タイプには無効だが、それ以外のタイプ相性の影響を受けない。"
   },
   "slash": {
     "id": "slash",
@@ -1103,7 +1157,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "\t急所に当たりやすい(急所ランク:+1)。"
   },
   "gigaimpact": {
     "id": "gigaimpact",
@@ -1123,7 +1178,8 @@
         "statusId": "lock_move",
         "duration": 1
       }
-    ]
+    ],
+    "description": "使用した次のターンは行動できない。"
   },
   "rapid_spin": {
     "id": "rapid_spin",
@@ -1211,7 +1267,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分が受けている技『うずしお』『からではさむ』『サンダープリズン』『しめつける』『すなじごく』\n『トラバサミ』『ほのおのうず』『マグマストーム』『まきつく』『やどりぎのタネ』\nおよび自分の場の『ステルスロック』『どくびし』『まきびし』『ねばねばネット』の効果を解除する。\n第8世代からは、攻撃後、100%の確率で自分の『すばやさ』ランクが1段階上がる。"
   },
   "bind": {
     "id": "bind",
@@ -1247,7 +1304,8 @@
           ]
         }
       }
-    ]
+    ],
+    "description": "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、\nその間『ゴースト』タイプではない相手は逃げたり交代できない。"
   },
   "extreme_speed": {
     "id": "extreme_speed",
@@ -1262,7 +1320,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+2)。"
   },
   "struggle": {
     "id": "struggle",
@@ -1280,7 +1339,8 @@
         "ratioMaxHp": 0.25,
         "target": "self"
       }
-    ]
+    ],
+    "description": "すべての技のPPが0になる等して使える技がなくなると使える。自分の最大HPの1/4を自分も受ける。\n『タイプ』に関係なくダメージを与える。"
   },
   "double_edge": {
     "id": "double_edge",
@@ -1299,7 +1359,8 @@
         "ratioMaxHp": 0.33,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの33%を自分も受ける。"
   },
   "headbutt": {
     "id": "headbutt",
@@ -1321,7 +1382,8 @@
           "spd": -1
         }
       }
-    ]
+    ],
+    "description": "攻撃後、自分の『ぼうぎょ』『とくぼう』ランクが1段階ずつ下がる。\n特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "tackle": {
     "id": "tackle",
@@ -1335,7 +1397,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "\t通常攻撃。"
   },
   "double_attack": {
     "id": "double_attack",
@@ -1355,7 +1418,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2回連続で攻撃する。"
   },
   "quick_attack": {
     "id": "quick_attack",
@@ -1370,7 +1434,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。"
   },
   "take_down": {
     "id": "take_down",
@@ -1389,7 +1454,8 @@
         "ratioMaxHp": 0.25,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの1/4を自分も受ける。"
   },
   "fake_out": {
     "id": "fake_out",
@@ -1405,7 +1471,8 @@
           "spd": -2
         }
       }
-    ]
+    ],
+    "description": "相手の『とくぼう』ランクを2段階下げる。"
   },
   "guillotine": {
     "id": "guillotine",
@@ -1420,7 +1487,8 @@
         "levelScaling": true,
         "respectTypeImmunity": true
       }
-    ]
+    ],
+    "description": "相手を『ひんし』状態にする。相手のレベルが自分より高いと失敗する。\n(30＋自分のレベル－相手のレベル)が命中率になる。\n『ゴースト』タイプには無効だが、それ以外のタイプ相性の影響を受けない。\nダイマックスしている相手には無効。"
   },
   "feint": {
     "id": "feint",
@@ -1435,7 +1503,8 @@
         "power": 30,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+2)。相手が技『まもる』『みきり』『たたみがえし』『トーチカ』\n『キングシールド』『ニードルガード』『ブロッキング』『スレッドトラップ』『かえんのまもり』\n『ファストガード』『ワイドガード』をしている場合は、その効果を解除して攻撃できる\n(使用していない場合は通常攻撃)。『ダイウォール』は解除はできないが、貫通する。"
   },
   "stomp": {
     "id": "stomp",
@@ -1474,7 +1543,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。相手が技『ちいさくなる』を使用していると必ず命中し、\n威力が2倍になる。"
   },
   "covet": {
     "id": "covet",
@@ -1507,7 +1577,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手が持っている道具を自分の物にする。自分が既に道具を持っている場合は失敗するが、\n技『はたきおとす』で自分の道具が無効化されている時は奪う事ができ、道具は上書きされる。\nトレーナー戦の場合はバトル終了後になくなる。"
   },
   "weather_ball": {
     "id": "weather_ball",
@@ -1589,7 +1660,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "天気が『にほんばれ』の時は『ほのお』タイプ、『あめ』の時は『みず』タイプ、『ゆき』の時は\n『こおり』タイプ、『すなあらし』の時は『いわ』タイプになり、威力が2倍になる。\nダイマックス技や第7世代のZワザもタイプが変わる。"
   },
   "echo_voice": {
     "id": "echo_voice",
@@ -1606,7 +1678,8 @@
         "type": "apply_field_status",
         "statusId": "echo_voice_power_up"
       }
-    ]
+    ],
+    "description": "毎ターン、誰かが技『エコーボイス』を使う度に威力が高くなっていく。音系の技。\n相手の『みがわり』状態を貫通する。"
   },
   "uproar": {
     "id": "uproar",
@@ -1638,7 +1711,8 @@
     "tags": [
       "sound",
       "bypass-substitute"
-    ]
+    ],
+    "description": " 3ターン連続で攻撃し、その間はすべてのポケモンが『ねむり』状態にならない。音系の技。\n相手の『みがわり』状態を貫通する。"
   },
   "speed_star": {
     "id": "speed_star",
@@ -1651,7 +1725,8 @@
         "type": "damage",
         "power": 60
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "hyper_voice": {
     "id": "hyper_voice",
@@ -1665,7 +1740,8 @@
         "power": 90,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "音系の技。相手の『みがわり』状態を貫通する。"
   },
   "destruction_beam": {
     "id": "destruction_beam",
@@ -1684,7 +1760,8 @@
         "turns": 1,
         "steps": []
       }
-    ]
+    ],
+    "description": "\t使用した次のターンは行動できない。"
   },
   "boom_burst": {
     "id": "boom_burst",
@@ -1701,7 +1778,8 @@
       {
         "type": "ignore_substitute"
       }
-    ]
+    ],
+    "description": "音系の技。相手の『みがわり』状態を貫通する。"
   },
   "haisuinonjin": {
     "id": "haisuinonjin",
@@ -1740,7 +1818,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分のすべての『のうりょく』ランクが1段階ずつ上がるが、逃げたり交代できなくなる。\n2回目からは失敗する。なお、自分が『ゴースト』タイプの場合は逃げたり交代できる。"
   },
   "arm_hammer": {
     "id": "arm_hammer",
@@ -1761,7 +1840,8 @@
           "spe": -1
         }
       }
-    ]
+    ],
+    "description": "攻撃後、自分の『すばやさ』ランクが1段階下がる。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "rock_smash": {
     "id": "rock_smash",
@@ -1788,7 +1868,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "50%の確率で相手の『ぼうぎょ』ランクを1段階下げる。"
   },
   "infight": {
     "id": "infight",
@@ -1810,7 +1891,8 @@
           "spd": -1
         }
       }
-    ]
+    ],
+    "description": "攻撃後、自分の『ぼうぎょ』『とくぼう』ランクが1段階ずつ下がる。"
   },
   "counter": {
     "id": "counter",
@@ -1824,7 +1906,8 @@
         "type": "damage_ratio",
         "ratioMaxHp": 2
       }
-    ]
+    ],
+    "description": "相手の物理攻撃のダメージの2倍をその相手に与える。\n『ダブルバトル』の時は最後に受けた技のみ有効になる。必ず後攻になる(優先度:-5)。\n『ゴースト』タイプには無効だが、それ以外のタイプ相性の影響を受けない。"
   },
   "high_jump_kick": {
     "id": "high_jump_kick",
@@ -1865,7 +1948,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を1～4ターンの間『こんらん』状態にする。攻撃が外れたり、\n相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。"
   },
   "brick_break": {
     "id": "brick_break",
@@ -1891,7 +1975,8 @@
         "type": "remove_field_status",
         "statusId": "aurora_veil"
       }
-    ]
+    ],
+    "description": "相手の技『リフレクター』『オーロラベール』の効果を受けず、\n相手の技『リフレクター』『ひかりのかべ』『オーロラベール』を壊す。"
   },
   "focus_punch": {
     "id": "focus_punch",
@@ -1918,7 +2003,8 @@
     ],
     "tags": [
       "punch"
-    ]
+    ],
+    "description": "必ず後攻になり(優先度:-3)、攻撃するまでに技を受けると失敗してしまう。\n特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "reversal": {
     "id": "reversal",
@@ -1944,7 +2030,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分の残りHPが少ないほど威力が高くなる。(威力は20～200)"
   },
   "cross_chop": {
     "id": "cross_chop",
@@ -1965,7 +2052,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "tsuppari": {
     "id": "tsuppari",
@@ -1988,7 +2076,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "flying_kick": {
     "id": "flying_kick",
@@ -2030,7 +2119,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "攻撃が外れたり、相手の技『まもる』などで失敗すると、\n自分の最大HPの半分のダメージを自分が受ける。"
   },
   "circle_throw": {
     "id": "circle_throw",
@@ -2061,7 +2151,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "必ず後攻になる(優先度:-6)。攻撃後、相手のポケモンを強制的に交代させる。\n野生のポケモンの場合は戦闘を終了する。ダイマックスしている相手には追加効果は無効。"
   },
   "triple_kick": {
     "id": "triple_kick",
@@ -2069,6 +2160,7 @@
     "type": "fighting",
     "category": "physical",
     "pp": 10,
+    "description": "1ターンに外れるまで最大3回連続で攻撃する。攻撃が当たる度に威力が10ずつ増える。",
     "steps": [
       {
         "type": "repeat",
@@ -2107,7 +2199,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。\n特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "double_kick": {
     "id": "double_kick",
@@ -2127,7 +2220,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2回連続で攻撃する。"
   },
   "hakkei": {
     "id": "hakkei",
@@ -2152,7 +2246,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。"
   },
   "quick_guard": {
     "id": "quick_guard",
@@ -2172,7 +2267,8 @@
         "statusId": "flinch",
         "chance": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+3)。相手を100%の確率でひるませる。\nただし、そのターン相手が選んだ技が先制技ではない場合や、すでに攻撃を終えていた場合は失敗する。"
   },
   "dynamic_punch": {
     "id": "dynamic_punch",
@@ -2200,7 +2296,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "100%の確率で相手を1～4ターンの間『こんらん』状態にする。\n特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "body_press": {
     "id": "body_press",
@@ -2215,7 +2312,8 @@
         "accuracy": 1,
         "basedOn": "user_def"
       }
-    ]
+    ],
+    "description": "『こうげき』ではなく、\n自分の『ぼうぎょ』と『ぼうぎょ』ランクを『こうげき』の数値にしてダメージ計算する。"
   },
   "mach_punch": {
     "id": "mach_punch",
@@ -2243,7 +2341,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "low_kick": {
     "id": "low_kick",
@@ -2265,7 +2364,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "final_gambit": {
     "id": "final_gambit",
@@ -2284,7 +2384,8 @@
         "ratioMaxHp": 1,
         "target": "self"
       }
-    ]
+    ],
+    "description": "自分のHPを0にし、その分のダメージを相手に与える。\n『ゴースト』タイプには無効だが、それ以外のタイプ相性の影響を受けない。"
   },
   "focus_blast": {
     "id": "focus_blast",
@@ -2311,7 +2412,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『とくぼう』ランクを1段階下げる。"
   },
   "vacuum_wave": {
     "id": "vacuum_wave",
@@ -2326,7 +2428,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。"
   },
   "hadou_dan": {
     "id": "hadou_dan",
@@ -2339,7 +2442,8 @@
         "type": "damage",
         "power": 80
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "tailwind": {
     "id": "tailwind",
@@ -2355,7 +2459,8 @@
           "spe": 2
         }
       }
-    ]
+    ],
+    "description": "4ターンの間、自分と味方の『すばやさ』が2倍になる。"
   },
   "roost": {
     "id": "roost",
@@ -2378,7 +2483,8 @@
           "typeChange": "normal"
         }
       }
-    ]
+    ],
+    "description": "HPが最大HPの半分回復するが、そのターンは『ひこう』タイプではなくなる。"
   },
   "feather_dance": {
     "id": "feather_dance",
@@ -2395,7 +2501,8 @@
         }
       }
     ],
-    "accuracy": 1
+    "accuracy": 1,
+    "description": "相手の『こうげき』ランクを2段階下げる。"
   },
   "acrobatics": {
     "id": "acrobatics",
@@ -2423,7 +2530,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "\t自分が道具を持っていない時、威力が2倍になる。"
   },
   "god_bird": {
     "id": "god_bird",
@@ -2454,7 +2562,8 @@
         ]
       }
     ],
-    "critRate": 1
+    "critRate": 1,
+    "description": "1ターン目は攻撃せずに、2ターン目で攻撃する。30%の確率で相手をひるませる。\n急所に当たりやすい(急所ランク:+1)。"
   },
   "fly": {
     "id": "fly",
@@ -2484,7 +2593,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターン目に空中へ飛び上がり、2ターン目に攻撃する。空中にいる間は『うちおとす』『かぜおこし』\n『かみなり』『サウザンアロー』『スカイアッパー』『たつまき』『ぼうふう』以外の技を受けない。\n30%の確率で相手を『まひ』状態にする。"
   },
   "double_wing": {
     "id": "double_wing",
@@ -2504,7 +2614,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2回連続で攻撃する。"
   },
   "peck": {
     "id": "peck",
@@ -2518,7 +2629,8 @@
         "power": 35,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "wing_attack": {
     "id": "wing_attack",
@@ -2532,7 +2644,8 @@
         "power": 60,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "aerial_ace": {
     "id": "aerial_ace",
@@ -2548,7 +2661,8 @@
       {
         "type": "self_switch"
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "drill_peck": {
     "id": "drill_peck",
@@ -2562,7 +2676,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "brave_bird": {
     "id": "brave_bird",
@@ -2581,7 +2696,8 @@
         "ratioMaxHp": 0.33,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの33%を自分も受ける。"
   },
   "air_cutter": {
     "id": "air_cutter",
@@ -2596,7 +2712,8 @@
         "power": 60,
         "accuracy": 0.95
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "air_slash": {
     "id": "air_slash",
@@ -2620,7 +2737,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "gust": {
     "id": "gust",
@@ -2674,7 +2792,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で、相手を2～5ターンの間『こんらん』状態にする。天気が『あめ』の時は必ず命中し、\n『にほんばれ』の時は命中率が50%になる。相手が技『そらをとぶ』『とびはねる』『フリーフォール』\nを使っている時でも命中する。"
   },
   "acid": {
     "id": "acid",
@@ -2688,7 +2807,8 @@
         "statusId": "ability",
         "target": "target"
       }
-    ]
+    ],
+    "description": "相手の特性を無効にする。ただし、『バトルスイッチ』『ばけのかわ』などフォルムに関わる特性や、\n一部の固有の特性などには効かない。"
   },
   "torchica": {
     "id": "torchica",
@@ -2706,7 +2826,8 @@
         "statusId": "poison",
         "chance": 1
       }
-    ]
+    ],
+    "description": "必ず先制でき(優先度:+4)、そのターンの間、相手の攻撃を防ぐと同時に、\n直接攻撃をした相手を『どく』状態にする。連続で使うと失敗しやすくなる。\nダイマックス技や第7世代のZワザの攻撃技は貫通し、1/4のダメージを受ける。"
   },
   "coil_up": {
     "id": "coil_up",
@@ -2730,7 +2851,8 @@
           "accuracy": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『こうげき』『ぼうぎょ』『命中率』ランクが1段階ずつ上がる。"
   },
   "amnesia": {
     "id": "amnesia",
@@ -2746,7 +2868,8 @@
           "spd": 2
         }
       }
-    ]
+    ],
+    "description": "自分の『とくぼう』ランクを2段階上げる。"
   },
   "poison_gas": {
     "id": "poison_gas",
@@ -2760,7 +2883,8 @@
         "statusId": "poison",
         "chance": 0.9
       }
-    ]
+    ],
+    "description": "相手を『どく』状態にする。『どく』タイプや『はがね』タイプには無効。"
   },
   "toxic": {
     "id": "toxic",
@@ -2778,7 +2902,8 @@
           "toxic": true
         }
       }
-    ]
+    ],
+    "description": "相手を『もうどく』状態にする。『もうどく』状態は通常の『どく』状態と違い、\n受けるダメージが1/16、2/16、3/16・・・と増えていく。『どく』タイプのポケモンが使うと必ず命中する。\n『どく』タイプや『はがね』タイプには無効。"
   },
   "poison_powder": {
     "id": "poison_powder",
@@ -2793,7 +2918,8 @@
         "statusId": "poison",
         "chance": 1
       }
-    ]
+    ],
+    "description": "相手を『どく』状態にする。『どく』タイプや『はがね』タイプ、『くさ』タイプ、特性『ぼうじん』、\n道具『ぼうじんゴーグル』を持っているポケモンには無効。"
   },
   "toxic_spikes": {
     "id": "toxic_spikes",
@@ -2806,7 +2932,8 @@
         "type": "apply_field_status",
         "statusId": "toxic_spikes"
       }
-    ]
+    ],
+    "description": "相手の場を『どくびし』状態にし、相手はポケモンを交代する度に、出したポケモンが『どく』状態になる。\n2回使うと『もうどく』状態になる。『どく』『はがね』『ひこう』タイプ、\n特性『ふゆう』のポケモンは効果を受けない。『どく』タイプのポケモンが出ると効果がなくなる。"
   },
   "cross_poison": {
     "id": "cross_poison",
@@ -2832,7 +2959,8 @@
         ]
       }
     ],
-    "critRate": 1
+    "critRate": 1,
+    "description": "10%の確率で相手を『どく』状態にする。急所に当たりやすい(急所ランク:+1)。"
   },
   "dust_shoot": {
     "id": "dust_shoot",
@@ -2856,7 +2984,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『どく』状態にする。"
   },
   "poison_jab": {
     "id": "poison_jab",
@@ -2880,7 +3009,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『どく』状態にする。"
   },
   "poison_fang": {
     "id": "poison_fang",
@@ -2904,7 +3034,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "50%の確率で相手を『もうどく』状態にする。『もうどく』状態は通常の『どく』状態と違い、\n受けるダメージが1/16、2/16、3/16・・・と増えていく。"
   },
   "acid_bomb": {
     "id": "acid_bomb",
@@ -2925,7 +3056,8 @@
           "spd": -2
         }
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『とくぼう』ランクを2段階下げる。"
   },
   "clear_smog": {
     "id": "clear_smog",
@@ -2942,7 +3074,8 @@
         "type": "clear_stages",
         "target": "target"
       }
-    ]
+    ],
+    "description": "相手の能力ランクの変化を元に戻す。"
   },
   "belch": {
     "id": "belch",
@@ -2971,7 +3104,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "この技は『きのみ』を食べると使えるようになる。"
   },
   "sludge_bomb": {
     "id": "sludge_bomb",
@@ -2998,7 +3132,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『とくぼう』ランクを1段階下げる。"
   },
   "venom_shock": {
     "id": "venom_shock",
@@ -3025,7 +3160,8 @@
         ]
       }
     ],
-    "accuracy": 1
+    "accuracy": 1,
+    "description": "相手が『どく』状態の時、威力が2倍になる。"
   },
   "sand_attack": {
     "id": "sand_attack",
@@ -3041,7 +3177,8 @@
           "accuracy": -1
         }
       }
-    ]
+    ],
+    "description": "相手の命中率を1段階下げる。"
   },
   "dig": {
     "id": "dig",
@@ -3064,7 +3201,8 @@
       {
         "type": "protect"
       }
-    ]
+    ],
+    "description": "1ターン目に地中に潜り、2ターン目に攻撃する。\n地中にいる間は『じしん』『マグニチュード』以外の技を受けない。"
   },
   "earthquake": {
     "id": "earthquake",
@@ -3091,7 +3229,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手が技『あなをほる』を使っている時でも命中し、ダメージが2倍になる。"
   },
   "stomping_tantrum": {
     "id": "stomping_tantrum",
@@ -3118,7 +3257,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "前のターンで自分が使った技が外れたり失敗したり、\n『まひ』『こんらん』『ひるみ』状態などで行動できなかった場合、威力が2倍になる。"
   },
   "bulldoze": {
     "id": "bulldoze",
@@ -3140,7 +3280,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "ten_million_horsepower": {
     "id": "ten_million_horsepower",
@@ -3154,7 +3295,8 @@
         "power": 95,
         "accuracy": 0.95
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "fissure": {
     "id": "fissure",
@@ -3169,7 +3311,8 @@
         "levelScaling": true,
         "respectTypeImmunity": true
       }
-    ]
+    ],
+    "description": "相手を『ひんし』状態にする。相手のレベルが自分より高いと失敗する。\n(30＋自分のレベル－相手のレベル)が命中率になる。『ひこう』タイプには無効だが、\nそれ以外のタイプ相性の影響を受けない。ダイマックスしている相手には無効。"
   },
   "sand_tomb": {
     "id": "sand_tomb",
@@ -3202,7 +3345,8 @@
           "max": 5
         }
       }
-    ]
+    ],
+    "description": "\t4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、\nその間『ゴースト』タイプではない相手は逃げたり交代できない。"
   },
   "drill_run": {
     "id": "drill_run",
@@ -3223,7 +3367,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "bone_rush": {
     "id": "bone_rush",
@@ -3246,7 +3391,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "earth_power": {
     "id": "earth_power",
@@ -3284,7 +3430,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手を『やけど』状態にする。天気が『あめ』の時は必ず命中する。"
   },
   "mud_slap": {
     "id": "mud_slap",
@@ -3306,7 +3453,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の命中率を1段階下げる。"
   },
   "netsu_no_daichi": {
     "id": "netsu_no_daichi",
@@ -3345,7 +3493,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『やけど』状態にする。\n自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。"
   },
   "mud_shot": {
     "id": "mud_shot",
@@ -3367,7 +3516,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "stealth_rock": {
     "id": "stealth_rock",
@@ -3380,7 +3530,8 @@
         "type": "apply_field_status",
         "statusId": "stealth_rock"
       }
-    ]
+    ],
+    "description": "使用後、相手はポケモンを交代する度に、出てきたポケモンは最大HPの1/8のダメージを受ける。\n『タイプ』相性の影響を受け、例えば4倍弱点の場合は最大HPの1/2のダメージとなる。"
   },
   "sandstorm": {
     "id": "sandstorm",
@@ -3422,7 +3573,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "5ターンの間、天気を『すなあらし』にする。『いわ』『じめん』『はがね』タイプではないポケモンは、\n毎ターン最大HPの1/16のダメージを受ける。また、『いわ』タイプのポケモンは『とくぼう』が1.5倍になる。"
   },
   "rock_polish": {
     "id": "rock_polish",
@@ -3438,7 +3590,8 @@
           "spe": 2
         }
       }
-    ]
+    ],
+    "description": "自分の『すばやさ』ランクが2段階上がる。"
   },
   "accel_rock": {
     "id": "accel_rock",
@@ -3453,7 +3606,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。"
   },
   "rock_throw": {
     "id": "rock_throw",
@@ -3467,7 +3621,8 @@
         "power": 50,
         "accuracy": 0.95
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "rock_slide": {
     "id": "rock_slide",
@@ -3492,7 +3647,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "rock_tomb": {
     "id": "rock_tomb",
@@ -3514,7 +3670,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "rollout": {
     "id": "rollout",
@@ -3551,7 +3708,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "外れるまで5ターン連続で攻撃し、攻撃が当たる度に威力が倍増する(最大480)。\n事前に技『まるくなる』を使っていると威力が2倍になる。"
   },
   "stone_edge": {
     "id": "stone_edge",
@@ -3566,7 +3724,8 @@
         "type": "damage",
         "power": 100
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "rock_blast": {
     "id": "rock_blast",
@@ -3589,7 +3748,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "ancient_power": {
     "id": "ancient_power",
@@ -3620,7 +3780,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で自分の『こうげき』『ぼうぎょ』『とくこう』『とくぼう』『すばやさ』ランクが1段階ずつ上がる。"
   },
   "power_gem": {
     "id": "power_gem",
@@ -3634,7 +3795,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "meteor_beam": {
     "id": "meteor_beam",
@@ -3652,7 +3814,8 @@
           "spa": -2
         }
       }
-    ]
+    ],
+    "description": "攻撃後、100%の確率で自分の『とくこう』ランクが2段階下がる。"
   },
   "string_shot": {
     "id": "string_shot",
@@ -3669,7 +3832,8 @@
           "spe": -2
         }
       }
-    ]
+    ],
+    "description": "相手の『すばやさ』ランクを2段階下げる。"
   },
   "butterfly_dance": {
     "id": "butterfly_dance",
@@ -3687,7 +3851,8 @@
           "spe": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『とくこう』『とくぼう』『すばやさ』ランクが1段階ずつ上がる。"
   },
   "sticky_web": {
     "id": "sticky_web",
@@ -3700,7 +3865,8 @@
         "type": "apply_field_status",
         "statusId": "sticky_web"
       }
-    ]
+    ],
+    "description": "使用後、相手はポケモンを交代する度に、出てきたポケモンの『すばやさ』ランクが1段階下がる。\n『ひこう』タイプや特性『ふゆう』のポケモンは影響を受けない。"
   },
   "firefly": {
     "id": "firefly",
@@ -3716,7 +3882,8 @@
           "spa": 3
         }
       }
-    ]
+    ],
+    "description": "自分の『とくこう』ランクが3段階上がる。"
   },
   "leech_life": {
     "id": "leech_life",
@@ -3735,7 +3902,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。"
   },
   "scissor_cross": {
     "id": "scissor_cross",
@@ -3749,7 +3917,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "first_impression": {
     "id": "first_impression",
@@ -3779,7 +3948,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "この技で相手を倒すと、自分の『こうげき』ランクが3段階上がる。"
   },
   "lunge": {
     "id": "lunge",
@@ -3801,7 +3971,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『こうげき』ランクを1段階下げる。"
   },
   "u_turn": {
     "id": "u_turn",
@@ -3818,7 +3989,8 @@
       {
         "type": "self_switch"
       }
-    ]
+    ],
+    "description": "攻撃後、手持ちのポケモンと入れ替わる。"
   },
   "missile_needle": {
     "id": "missile_needle",
@@ -3841,7 +4013,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "megahorn": {
     "id": "megahorn",
@@ -3855,7 +4028,8 @@
         "power": 120,
         "accuracy": 0.85
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "fury_cutter": {
     "id": "fury_cutter",
@@ -3886,7 +4060,8 @@
           "maxPower": 160
         }
       }
-    ]
+    ],
+    "description": "連続で使用すると攻撃が当たる度に威力が倍増していく(最大160)。\n攻撃が外れたり連続で使用しないと元に戻る。"
   },
   "kafun_dango": {
     "id": "kafun_dango",
@@ -3914,7 +4089,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "味方に使った場合、ダメージではなく味方のHPを最大HPの1/2回復する。"
   },
   "infestation": {
     "id": "infestation",
@@ -3952,7 +4128,8 @@
           ]
         }
       }
-    ]
+    ],
+    "description": "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、\nその間『ゴースト』タイプではない相手は逃げたり交代できない。"
   },
   "bug_buzz": {
     "id": "bug_buzz",
@@ -3982,7 +4159,8 @@
     ],
     "tags": [
       "sound"
-    ]
+    ],
+    "description": "10%の確率で相手の『とくぼう』ランクを1段階下げる。音系の技。相手の『みがわり』状態を貫通する。"
   },
   "confuse_ray": {
     "id": "confuse_ray",
@@ -4001,7 +4179,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "相手を1～4ターンの間『こんらん』状態にする。"
   },
   "curse": {
     "id": "curse",
@@ -4043,7 +4222,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分のタイプが『ゴースト』タイプの時は自分のHPを最大HPの半分だけ減らして、相手を『のろい』状態にする。\n『のろい』状態になると毎ターン、HPが最大HPの1/4ずつ減る。\nそれ以外のポケモンの場合『すばやさ』ランクが1段階下がり、\n『こうげき』『ぼうぎょ』ランクが1段階ずつ上がる。"
   },
   "destiny_bond": {
     "id": "destiny_bond",
@@ -4057,7 +4237,8 @@
         "statusId": "destiny_bond",
         "target": "self"
       }
-    ]
+    ],
+    "description": "次の自分のターンまでに相手の攻撃で『ひんし』状態になると、相手も『ひんし』状態になる。\nダイマックスしている相手には効果がない。第7世代以降は、連続で使うと必ず失敗する。"
   },
   "odorokasu": {
     "id": "odorokasu",
@@ -4082,7 +4263,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "shadow_sneak": {
     "id": "shadow_sneak",
@@ -4097,7 +4279,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。"
   },
   "shadow_stitch": {
     "id": "shadow_stitch",
@@ -4122,7 +4305,8 @@
           ]
         }
       }
-    ]
+    ],
+    "description": "『ゴースト』タイプではない相手は逃げたり、交代できなくなる。自分が場を離れると効果は消える。"
   },
   "ghost_dive": {
     "id": "ghost_dive",
@@ -4142,7 +4326,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターン目に消えて、2ターン目に攻撃する。消えている間はほとんどの技を受けない。\n相手の『まもる』『みきり』『たたみがえし』『トーチカ』『キングシールド』『ニードルガード』『ブロッキング』\n『スレッドトラップ』『かえんのまもり』の効果を受けない(『ダイウォール』を除く)。"
   },
   "lick": {
     "id": "lick",
@@ -4167,7 +4352,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。"
   },
   "shadow_claw": {
     "id": "shadow_claw",
@@ -4188,7 +4374,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "shadow_punch": {
     "id": "shadow_punch",
@@ -4213,7 +4400,8 @@
         },
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "revenge": {
     "id": "revenge",
@@ -4311,7 +4499,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "これまでに受けた攻撃1回につき、威力が50上がる(最大威力350)。手持ちに戻っても、リセットされない。\n特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "poltergeist": {
     "id": "poltergeist",
@@ -4340,7 +4529,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手が道具を持っていない時は失敗する。なお、相手の道具を無効にする効果はない。"
   },
   "grudge_hatred": {
     "id": "grudge_hatred",
@@ -4362,7 +4552,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『こうげき』ランクを1段階下げる。"
   },
   "shadow_ball": {
     "id": "shadow_ball",
@@ -4389,7 +4580,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手の『とくぼう』ランクを1段階下げる。"
   },
   "shadow_ray": {
     "id": "shadow_ray",
@@ -4403,7 +4595,8 @@
         "power": 100,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "相手の特性の影響を受けずに攻撃する。"
   },
   "ominous_wind": {
     "id": "ominous_wind",
@@ -4429,7 +4622,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手が状態異常の時、威力が2倍になる。"
   },
   "metal_sound": {
     "id": "metal_sound",
@@ -4445,7 +4639,8 @@
           "spd": -2
         }
       }
-    ]
+    ],
+    "description": "音系の技。相手の『とくぼう』ランクを2段階下げる。"
   },
   "gear_change": {
     "id": "gear_change",
@@ -4462,7 +4657,8 @@
           "atk": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『すばやさ』ランクが2段階、『こうげき』ランクが1段階上がる。"
   },
   "iron_defense": {
     "id": "iron_defense",
@@ -4478,7 +4674,8 @@
           "def": 2
         }
       }
-    ]
+    ],
+    "description": "自分の『ぼうぎょ』ランクを2段階上げる。"
   },
   "iron_tail": {
     "id": "iron_tail",
@@ -4505,7 +4702,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手の『ぼうぎょ』ランクを1段階下げる。"
   },
   "iron_head": {
     "id": "iron_head",
@@ -4530,7 +4728,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "comet_punch": {
     "id": "comet_punch",
@@ -4557,7 +4756,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で自分の『こうげき』ランクが1段階上がる。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "gyro_ball": {
     "id": "gyro_ball",
@@ -4575,7 +4775,8 @@
           "maxPower": 150
         }
       }
-    ]
+    ],
+    "description": "相手より『すばやさ』が低いほど威力が高くなる。(25×相手のすばやさ÷自分のすばやさ)+1が威力になる。\nただし最大威力は150。小数点以下は切り捨て。"
   },
   "smart_horn": {
     "id": "smart_horn",
@@ -4588,7 +4789,8 @@
         "type": "damage",
         "power": 70
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "hard_press": {
     "id": "hard_press",
@@ -4605,7 +4807,8 @@
           "scaling_hp": true
         }
       }
-    ]
+    ],
+    "description": "相手の残りHPが多いほど威力が高くなる。(100×相手の残りHP÷相手の最大HP)が威力になる。"
   },
   "bullet_punch": {
     "id": "bullet_punch",
@@ -4622,7 +4825,8 @@
     ],
     "tags": [
       "punch"
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "heavy_slam": {
     "id": "heavy_slam",
@@ -4649,7 +4853,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分の『おもさ』が相手より重いほど威力が高くなる。\n相手の『おもさ』が自分の1/5以下なら120、1/4以下なら100、1/3以下なら80、1/2以下なら60、\nそれより大きければ40。相手が技『ちいさくなる』を使用していると必ず命中し、威力が2倍になる(第7世代以降)。\nダイマックスしている相手には無効。"
   },
   "metal_claw": {
     "id": "metal_claw",
@@ -4676,7 +4881,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で自分の『こうげき』ランクが1段階上がる。"
   },
   "gold_rush": {
     "id": "gold_rush",
@@ -4697,7 +4903,8 @@
           "spa": -1
         }
       }
-    ]
+    ],
+    "description": "攻撃後、自分の『とくこう』ランクが1段階下がる。"
   },
   "tachyon_cutter": {
     "id": "tachyon_cutter",
@@ -4716,7 +4923,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2回連続で攻撃する。自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "blast_burn": {
     "id": "blast_burn",
@@ -4735,7 +4943,8 @@
         "ratioMaxHp": 0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "自分のHPを最大HPの半分だけ減らす。『まもる』などで技が防がれた場合も、自分のHPは減る。"
   },
   "ruin_sting": {
     "id": "ruin_sting",
@@ -4755,7 +4964,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "2ターン後に攻撃する。交代した場合は同じ位置にいるポケモンに攻撃する。タイプ相性の影響を受ける。"
   },
   "luster_cannon": {
     "id": "luster_cannon",
@@ -4782,7 +4992,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『とくぼう』ランクを1段階下げる。"
   },
   "onibi": {
     "id": "onibi",
@@ -4796,7 +5007,8 @@
         "statusId": "burn",
         "chance": 0.85
       }
-    ]
+    ],
+    "description": "相手を『やけど』状態にする。『ほのお』タイプには無効。"
   },
   "sunny_day": {
     "id": "sunny_day",
@@ -4814,7 +5026,8 @@
           "water_reduce": 0.5
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、天気を『にほんばれ』にする。『ほのお』タイプの技のダメージが1.5倍になり、\n『みず』タイプの技のダメージが半減する。『こおり』状態にならない。"
   },
   "flame_wheel": {
     "id": "flame_wheel",
@@ -4848,7 +5061,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、\nその間『ゴースト』タイプではない相手は逃げたり交代できない。"
   },
   "flame_ball": {
     "id": "flame_ball",
@@ -4878,7 +5092,8 @@
         "statusId": "freeze",
         "target": "self"
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『やけど』状態にする。\n自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。"
   },
   "sacred_fire": {
     "id": "sacred_fire",
@@ -4916,7 +5131,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "50%の確率で相手を『やけど』状態にする。\n自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。"
   },
   "nitro_charge": {
     "id": "nitro_charge",
@@ -4937,7 +5153,8 @@
           "spe": 1
         }
       }
-    ]
+    ],
+    "description": "100%の確率で自分の『すばやさ』ランクが1段階上がる。"
   },
   "flare_drive": {
     "id": "flare_drive",
@@ -4981,7 +5198,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの33%を自分も受ける。10%の確率で相手を『やけど』状態にする。\n自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。"
   },
   "blaze_kick": {
     "id": "blaze_kick",
@@ -5007,7 +5225,8 @@
         ]
       }
     ],
-    "critRate": 1
+    "critRate": 1,
+    "description": "10%の確率で相手を『やけど』状態にする。急所に当たりやすい(急所ランク:+1)。"
   },
   "fire_fang": {
     "id": "fire_fang",
@@ -5044,7 +5263,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『やけど』状態にするか、ひるませる。"
   },
   "fire_punch": {
     "id": "fire_punch",
@@ -5069,7 +5289,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『やけど』状態にする。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "desperation": {
     "id": "desperation",
@@ -5129,7 +5350,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "前のターンで自分が使った技が外れたり失敗したり、\n『まひ』『こんらん』『ひるみ』状態などで行動できなかった場合、威力が2倍になる。"
   },
   "overheat": {
     "id": "overheat",
@@ -5150,7 +5372,8 @@
           "spa": -2
         }
       }
-    ]
+    ],
+    "description": "攻撃後、100%の確率で自分の『とくこう』ランクが2段階下がる。"
   },
   "flamethrower": {
     "id": "flamethrower",
@@ -5174,7 +5397,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『やけど』状態にする。"
   },
   "scald": {
     "id": "scald",
@@ -5203,7 +5427,8 @@
         ]
       }
     ],
-    "tags": []
+    "tags": [],
+    "description": "100%の確率で、そのターンの間に能力ランクが上がった相手ポケモンを『やけど』状態にする\n(通常は後攻で攻撃する必要があるが、場に出た時に能力ランクが上がった場合も対象となる)。"
   },
   "daimonji": {
     "id": "daimonji",
@@ -5228,7 +5453,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『やけど』状態にする。"
   },
   "neppuu": {
     "id": "neppuu",
@@ -5252,7 +5478,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『やけど』状態にする。"
   },
   "flare_song": {
     "id": "flare_song",
@@ -5277,7 +5504,8 @@
     "tags": [
       "sound",
       "bypass_substitute"
-    ]
+    ],
+    "description": "100%の確率で自分の『とくこう』ランクを1段階上げる。音系の技。相手の『みがわり』状態を貫通する。"
   },
   "eruption": {
     "id": "eruption",
@@ -5299,7 +5527,8 @@
         },
         "then": []
       }
-    ]
+    ],
+    "description": "自分のHPが少ないほど技の威力が下がる。(150×自分の残りHP÷自分の最大HP)が威力。"
   },
   "flame_vortex": {
     "id": "flame_vortex",
@@ -5333,7 +5562,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、\nその間『ゴースト』タイプではない相手は逃げたり交代できない。"
   },
   "flame_dance": {
     "id": "flame_dance",
@@ -5360,7 +5590,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "50%の確率で自分の『とくこう』ランクが1段階上がる。"
   },
   "magical_flame": {
     "id": "magical_flame",
@@ -5382,7 +5613,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『とくこう』ランクを1段階下げる。"
   },
   "burn_up": {
     "id": "burn_up",
@@ -5420,7 +5652,8 @@
         "to": "normal",
         "target": "self"
       }
-    ]
+    ],
+    "description": "攻撃後、自分は『ほのお』タイプではなくなる。自分が『ほのお』タイプではない時は失敗する。\n自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。"
   },
   "hell_fire": {
     "id": "hell_fire",
@@ -5439,7 +5672,8 @@
         "statusId": "burn",
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手を『やけど』状態にする。"
   },
   "aqua_ring": {
     "id": "aqua_ring",
@@ -5459,7 +5693,8 @@
         ],
         "target": "self"
       }
-    ]
+    ],
+    "description": "使用後、毎ターン、HPが最大HPの1/16ずつ回復する。"
   },
   "rain_dance": {
     "id": "rain_dance",
@@ -5477,7 +5712,8 @@
           "fire_power_reduction": 0.5
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、天気を『あめ』にする。\n『みず』タイプの技のダメージが1.5倍になり、『ほのお』タイプの技のダメージが半減する。"
   },
   "shell_fortify": {
     "id": "shell_fortify",
@@ -5493,7 +5729,8 @@
           "def": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『ぼうぎょ』ランクを1段階上げる。"
   },
   "aqua_cutter": {
     "id": "aqua_cutter",
@@ -5517,7 +5754,8 @@
     ],
     "tags": [
       "slicing"
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "aqua_jet": {
     "id": "aqua_jet",
@@ -5532,7 +5770,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。"
   },
   "aqua_step": {
     "id": "aqua_step",
@@ -5553,7 +5792,8 @@
           "spe": 1
         }
       }
-    ]
+    ],
+    "description": "100%の確率で自分の『すばやさ』ランクが1段階上がる。"
   },
   "aqua_tail": {
     "id": "aqua_tail",
@@ -5567,7 +5807,8 @@
         "power": 90,
         "accuracy": 0.9
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "aqua_break": {
     "id": "aqua_break",
@@ -5594,7 +5835,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で、相手の『ぼうぎょ』ランクを1段階下げる。"
   },
   "quick_turn": {
     "id": "quick_turn",
@@ -5614,7 +5856,8 @@
         "to": "pending_switch",
         "target": "self"
       }
-    ]
+    ],
+    "description": "攻撃後、手持ちのポケモンと入れ替わる。"
   },
   "jet_punch": {
     "id": "jet_punch",
@@ -5631,7 +5874,8 @@
     ],
     "tags": [
       "punch"
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "waterfall": {
     "id": "waterfall",
@@ -5655,7 +5899,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手をひるませる。"
   },
   "diving": {
     "id": "diving",
@@ -5675,7 +5920,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターン目に水中へ潜り、2ターン目に攻撃する。水中にいる間は『なみのり』『うずしお』以外の技を受けない。"
   },
   "whirlpool": {
     "id": "whirlpool",
@@ -5724,7 +5970,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "4～5ターンの間、毎ターン終了後最大HPの1/8のダメージを与え、\nその間『ゴースト』タイプではない相手は逃げたり交代できない。\n相手が『ダイビング』を使っている時でも命中し、ダメージが2倍になる。"
   },
   "aria": {
     "id": "aria",
@@ -5746,7 +5993,8 @@
     ],
     "tags": [
       "sound"
-    ]
+    ],
+    "description": "相手の『やけど』状態を治す。音系の技。相手の『みがわり』状態を貫通する。"
   },
   "water_spout": {
     "id": "water_spout",
@@ -5773,7 +6021,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分のHPが少ないほど技の威力が下がる。(150×自分の残りHP÷自分の最大HP)が威力。"
   },
   "mud_stream": {
     "id": "mud_stream",
@@ -5800,7 +6049,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手の命中率を1段階下げる。"
   },
   "wave": {
     "id": "wave",
@@ -5828,7 +6078,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手が『ダイビング』を使っている時でも命中し、ダメージが2倍になる。"
   },
   "nettou": {
     "id": "nettou",
@@ -5863,7 +6114,8 @@
         "statusId": "freeze",
         "target": "target"
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『やけど』状態にする。\n自分が『こおり』状態の時でも使う事ができ、使うと『こおり』状態が治る。また、相手の『こおり』状態を治す。"
   },
   "snipe_shot": {
     "id": "snipe_shot",
@@ -5884,7 +6136,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "hydro_pump": {
     "id": "hydro_pump",
@@ -5898,7 +6151,8 @@
         "power": 110,
         "accuracy": 0.8
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "bubble_beam": {
     "id": "bubble_beam",
@@ -5925,7 +6179,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "cold_water": {
     "id": "cold_water",
@@ -5947,7 +6202,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『こうげき』ランクを1段階下げる。"
   },
   "water_pulse": {
     "id": "water_pulse",
@@ -5975,7 +6231,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手を1～4ターンの間『こんらん』状態にする。"
   },
   "mushroom_spore": {
     "id": "mushroom_spore",
@@ -5999,7 +6256,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手を2～4ターン(実質1～3ターン)の間『ねむり』状態にする。\n『くさ』タイプや特性『ぼうじん』、道具『ぼうじんゴーグル』を持っているポケモンには無効。"
   },
   "grass_field": {
     "id": "grass_field",
@@ -6017,7 +6275,8 @@
           "weaken_ground": true
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、場の状態を『グラスフィールド』にする。\n『ひこう』タイプや特性『ふゆう』などではない地面にいるすべてのポケモンは、毎ターン最大HPの1/16ずつ回復し、\nまた『くさ』タイプの技の威力が1.3倍になり(第7世代までは1.5倍)、技『じしん』『じならし』『マグニチュード』\nの受けるダメージが半減する。道具『グラスシード』を持ったポケモンは『ぼうぎょ』ランクが1段階上がる。"
   },
   "synthesis": {
     "id": "synthesis",
@@ -6091,7 +6350,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "HPが、天気が通常の時は最大HPの1/2、『にほんばれ』の時は最大HPの2/3、\n『あめ』『ゆき』『すなあらし』の時は最大HPの1/4回復する。"
   },
   "cotton_guard": {
     "id": "cotton_guard",
@@ -6107,7 +6367,8 @@
           "def": 3
         }
       }
-    ]
+    ],
+    "description": "自分の『ぼうぎょ』ランクが3段階上がる。"
   },
   "paralysis_powder": {
     "id": "paralysis_powder",
@@ -6121,7 +6382,8 @@
         "statusId": "paralysis",
         "chance": 0.75
       }
-    ]
+    ],
+    "description": "相手を『まひ』状態にする。\n『でんき』タイプや『くさ』タイプ、特性『ぼうじん』、『ぼうじんゴーグル』を持っているのポケモンには無効。"
   },
   "steal_power": {
     "id": "steal_power",
@@ -6143,7 +6405,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "相手の『こうげき』の能力値と同じ値だけ自分のHPを回復し、相手の『こうげき』ランクを1段階下げる。\n特性などでランクが下がらない場合は、回復の効果のみ発動する。すでにランクが最低の場合は失敗する。"
   },
   "nayanomi_tane": {
     "id": "nayanomi_tane",
@@ -6163,7 +6426,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手の特性を『ふみん』にする。ただし、『なまけ』『バトルスイッチ』など一部の固有な特性の場合は失敗する。"
   },
   "root_grow": {
     "id": "root_grow",
@@ -6187,7 +6451,8 @@
         "statusId": "lock_move",
         "target": "self"
       }
-    ]
+    ],
+    "description": "使用後、毎ターン、HPが最大HPの1/16ずつ回復するが、交代できなくなる。"
   },
   "leech_seed": {
     "id": "leech_seed",
@@ -6226,7 +6491,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "使用後、毎ターン、相手のHPを最大HPの1/8ずつ減らし、その分自分のHPを回復させる。\n自分は交代しても効果が引き継ぐ。『くさ』タイプのポケモンには無効。"
   },
   "cotton_spore": {
     "id": "cotton_spore",
@@ -6242,7 +6508,8 @@
           "spe": -2
         }
       }
-    ]
+    ],
+    "description": "相手の『すばやさ』ランクを2段階下げる。\n『くさ』タイプや特性『ぼうじん』、道具『ぼうじんゴーグル』を持っているポケモンには無効。"
   },
   "wood_hammer": {
     "id": "wood_hammer",
@@ -6261,7 +6528,8 @@
         "ratioMaxHp": 0.33,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの33%を自分も受ける。"
   },
   "wood_horn": {
     "id": "wood_horn",
@@ -6280,7 +6548,8 @@
         "ratioMaxHp": 0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。"
   },
   "eda_zuki": {
     "id": "eda_zuki",
@@ -6294,7 +6563,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "grass_divide": {
     "id": "grass_divide",
@@ -6316,7 +6586,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で自分の『すばやさ』ランクが1段階上がる。"
   },
   "grass_slider": {
     "id": "grass_slider",
@@ -6331,7 +6602,8 @@
         "power": 55,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "場の状態が『グラスフィールド』で、自分が『ひこう』タイプや特性『ふゆう』などではなく地面にいる時、\n必ず先制できる(優先度:+1)。"
   },
   "solar_blade": {
     "id": "solar_blade",
@@ -6409,7 +6681,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターン目は攻撃せずに、2ターン目で攻撃する。\n天気が『にほんばれ』の時は1ターンためずに攻撃でき、『あめ』『ゆき』『すなあらし』の時は威力が半分になる。"
   },
   "seed_bomb": {
     "id": "seed_bomb",
@@ -6423,7 +6696,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "bullet_seed": {
     "id": "bullet_seed",
@@ -6446,7 +6720,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "vine_whip": {
     "id": "vine_whip",
@@ -6460,7 +6735,8 @@
         "power": 45,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "petal_blizzard": {
     "id": "petal_blizzard",
@@ -6474,7 +6750,8 @@
         "power": 90,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "power_whip": {
     "id": "power_whip",
@@ -6488,7 +6765,8 @@
         "power": 120,
         "accuracy": 0.85
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "leaf_blade": {
     "id": "leaf_blade",
@@ -6513,7 +6791,8 @@
     ],
     "tags": [
       "slicing"
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "energy_ball": {
     "id": "energy_ball",
@@ -6540,7 +6819,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『とくぼう』ランクを1段階下げる。"
   },
   "gigadrain": {
     "id": "gigadrain",
@@ -6559,7 +6839,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。"
   },
   "grass_knot": {
     "id": "grass_knot",
@@ -6591,7 +6872,8 @@
         },
         "then": []
       }
-    ]
+    ],
+    "description": "相手の『おもさ』が重いほど威力が高くなる。10kg未満は20、25kg未満は40、50kg未満は60、100kg未満は80、\n200kg未満は100、それ以上は120。ダイマックスしている相手には無効。"
   },
   "absorb": {
     "id": "absorb",
@@ -6610,7 +6892,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。"
   },
   "solar_beam": {
     "id": "solar_beam",
@@ -6674,7 +6957,8 @@
         "timing": "turn_start",
         "steps": []
       }
-    ]
+    ],
+    "description": "使用した次のターンは行動できない。"
   },
   "petals_dance": {
     "id": "petals_dance",
@@ -6706,7 +6990,8 @@
           "max": 4
         }
       }
-    ]
+    ],
+    "description": "2～3ターン連続で攻撃し、その後自分は1～4ターンの間『こんらん』状態になる。"
   },
   "magical_leaf": {
     "id": "magical_leaf",
@@ -6719,7 +7004,8 @@
         "type": "damage",
         "power": 60
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "mega_drain": {
     "id": "mega_drain",
@@ -6738,7 +7024,8 @@
         "ratioMaxHp": -0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。"
   },
   "leaf_storm": {
     "id": "leaf_storm",
@@ -6759,7 +7046,8 @@
           "spa": -2
         }
       }
-    ]
+    ],
+    "description": "攻撃後、100%の確率で自分の『とくこう』ランクが2段階下がる。"
   },
   "electric_terrain": {
     "id": "electric_terrain",
@@ -6776,7 +7064,8 @@
           "boost_type": "electric"
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、場の状態を『エレキフィールド』にする。\n『ひこう』タイプや特性『ふゆう』などではない地面にいるすべてのポケモンは、\n『ねむり』『あくび』(ねむけ)状態にならず、また『でんき』タイプの技の威力が1.3倍になる。\nすでに『ねむり』状態の場合は回復しない。\n道具『エレキシード』を持ったポケモンは『ぼうぎょ』ランクが1段階上がる。"
   },
   "kaidenpa": {
     "id": "kaidenpa",
@@ -6792,7 +7081,8 @@
           "spa": -2
         }
       }
-    ]
+    ],
+    "description": "相手の『とくこう』ランクを2段階下げる。"
   },
   "charge": {
     "id": "charge",
@@ -6813,7 +7103,8 @@
           "spd": 1
         }
       }
-    ]
+    ],
+    "description": "一度だけ次回使う自分の『でんき』タイプの技の威力が2倍になる。自分の『とくぼう』ランクが1段階上がる。"
   },
   "denji_fuyu": {
     "id": "denji_fuyu",
@@ -6828,7 +7119,8 @@
         "target": "self",
         "duration": 5
       }
-    ]
+    ],
+    "description": "5ターンの間、『ふゆう』状態となり、『じめん』タイプの技や、\n『グラスフィールド』『ミストフィールド』『エレキフィールド』『サイコフィールド』などの効果を受けなくなる。"
   },
   "thunder_fang": {
     "id": "thunder_fang",
@@ -6862,7 +7154,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『まひ』状態にするか、ひるませる。"
   },
   "thunder_punch": {
     "id": "thunder_punch",
@@ -6887,7 +7180,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『まひ』状態にする。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "thunder_dive": {
     "id": "thunder_dive",
@@ -6940,7 +7234,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "攻撃が外れたり、相手の技『まもる』などで失敗すると、自分の最大HPの半分のダメージを自分が受ける。\n相手が技『ちいさくなる』を使用していると必ず命中し、威力が2倍になる。"
   },
   "spark": {
     "id": "spark",
@@ -6964,7 +7259,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。"
   },
   "cheek_pouch": {
     "id": "cheek_pouch",
@@ -6983,7 +7279,8 @@
         "statusId": "paralysis",
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手を『まひ』状態にする。"
   },
   "volttackle": {
     "id": "volttackle",
@@ -7013,7 +7310,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの33%を自分も受ける。10%の確率で相手を『まひ』状態にする。"
   },
   "wild_charge": {
     "id": "wild_charge",
@@ -7032,7 +7330,8 @@
         "ratioMaxHp": 0.25,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの1/4を自分も受ける。"
   },
   "electric_net": {
     "id": "electric_net",
@@ -7054,7 +7353,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "electric_ball": {
     "id": "electric_ball",
@@ -7089,7 +7389,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手より『すばやさ』が高いほど威力が高くなる。\n1倍未満は40、2倍未満は60、3倍未満は80、4倍未満は120、それ以上は150。"
   },
   "thunder": {
     "id": "thunder",
@@ -7140,7 +7441,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。\n天気が『あめ』の時は必ず命中し、『にほんばれ』の時は命中率が50%になる。\n相手が技『そらをとぶ』『とびはねる』『フリーフォール』を使っている時でも命中する。"
   },
   "thunderbolt": {
     "id": "thunderbolt",
@@ -7164,7 +7466,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『まひ』状態にする。"
   },
   "charge_beam": {
     "id": "charge_beam",
@@ -7191,7 +7494,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "70%の確率で自分の『とくこう』ランクが1段階上がる。"
   },
   "electric_shock": {
     "id": "electric_shock",
@@ -7215,7 +7519,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『まひ』状態にする。"
   },
   "thunder_shock": {
     "id": "thunder_shock",
@@ -7228,7 +7533,8 @@
         "type": "damage",
         "power": 60
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。"
   },
   "electroweb": {
     "id": "electroweb",
@@ -7247,7 +7553,8 @@
         "statusId": "paralysis",
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手を『まひ』状態にする。"
   },
   "parabola_charge": {
     "id": "parabola_charge",
@@ -7266,7 +7573,8 @@
         "ratioMaxHp": 0.5,
         "target": "self"
       }
-    ]
+    ],
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。"
   },
   "discharge": {
     "id": "discharge",
@@ -7291,7 +7599,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。"
   },
   "bolt_change": {
     "id": "bolt_change",
@@ -7309,7 +7618,8 @@
         "type": "random_move",
         "pool": "self_moves"
       }
-    ]
+    ],
+    "description": "攻撃後、手持ちのポケモンと入れ替わる。"
   },
   "healing_wish": {
     "id": "healing_wish",
@@ -7339,7 +7649,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分が『ひんし』になる代わりに、次に出す自分のポケモンの状態異常とHPが全回復する。"
   },
   "guard_swap": {
     "id": "guard_swap",
@@ -7357,7 +7668,8 @@
         },
         "swap": true
       }
-    ]
+    ],
+    "description": "自分と相手の『ぼうぎょ』『とくぼう』ランクを入れ替える。"
   },
   "agility": {
     "id": "agility",
@@ -7373,7 +7685,8 @@
           "spe": 2
         }
       }
-    ]
+    ],
+    "description": "自分の『すばやさ』ランクが2段階上がる。"
   },
   "cosmic_power": {
     "id": "cosmic_power",
@@ -7390,7 +7703,8 @@
           "spd": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『ぼうぎょ』『とくぼう』ランクが1段階ずつ上がる。"
   },
   "psycho_field": {
     "id": "psycho_field",
@@ -7407,7 +7721,8 @@
           "psychic_boost": 1.3
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、場の状態を『サイコフィールド』にする。\n『ひこう』タイプや特性『ふゆう』などではない地面にいるすべてのポケモンは、\n相手(味方は含まない)の先制技を受けなくなり、また『エスパー』タイプの技の威力が1.3倍になる\n(第7世代までは1.5倍)。道具『サイコシード』を持ったポケモンは『とくぼう』ランクが1段階上がる。"
   },
   "hypnosis": {
     "id": "hypnosis",
@@ -7426,7 +7741,8 @@
         },
         "chance": 0.6
       }
-    ]
+    ],
+    "description": "相手を2～4ターン(実質1～3ターン)の間『ねむり』状態にする。"
   },
   "gravity": {
     "id": "gravity",
@@ -7443,7 +7759,8 @@
           "accuracy_multiplier": 1.6666666666666667
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、すべてのポケモンの命中率が5/3倍になる。\nまた、特性『ふゆう』や、『ひこう』タイプのポケモンに『じめん』タイプの技が当たるようになる。\n技『そらをとぶ』『はねる』『とびげり』『とびひざげり』『とびはねる』『でんじふゆう』『フライングプレス』\n『フリーフォール』が使えなくなり、使用している場合は解除される。『テレキネシス』を受けなくなり、\n受けている場合は解除される。技『Gのちから』の威力が1.5倍になる。"
   },
   "skill_swap": {
     "id": "skill_swap",
@@ -7458,7 +7775,8 @@
         "to": "ability",
         "target": "all"
       }
-    ]
+    ],
+    "description": "自分と相手の特性を入れ替える。"
   },
   "teleport": {
     "id": "teleport",
@@ -7472,7 +7790,8 @@
         "type": "manual",
         "manualReason": "Switching Pokemon is not supported in DSL"
       }
-    ]
+    ],
+    "description": "必ず後攻になる(優先度:-6)。手持ちのポケモンと入れ替わる。"
   },
   "trick": {
     "id": "trick",
@@ -7485,7 +7804,8 @@
         "type": "manual",
         "manualReason": "道具の交換はDSLで表現できないため"
       }
-    ]
+    ],
+    "description": "相手と自分が持っている道具を入れ替える。片方しか道具を持っていない場合も成功する。"
   },
   "trick_room": {
     "id": "trick_room",
@@ -7500,7 +7820,8 @@
         "statusId": "trick_room",
         "duration": 5
       }
-    ]
+    ],
+    "description": "5ターンの間、『すばやさ』が低いポケモンから攻撃できるようになる。ただし、必ず先制できる技には無効。\nもう1度使用すると元に戻る。必ず後攻になる(優先度:-7)。"
   },
   "sleep": {
     "id": "sleep",
@@ -7524,7 +7845,8 @@
         "target": "self",
         "duration": 2
       }
-    ]
+    ],
+    "description": "HPと状態異常をすべて回復した後、2ターンの間『ねむり』状態になる。"
   },
   "power_swap": {
     "id": "power_swap",
@@ -7565,7 +7887,8 @@
           "spa": -100
         }
       }
-    ]
+    ],
+    "description": "自分と相手の『こうげき』『とくこう』ランクを入れ替える。"
   },
   "power_trick": {
     "id": "power_trick",
@@ -7590,7 +7913,8 @@
           "def": -99
         }
       }
-    ]
+    ],
+    "description": "自分の『こうげき』と『ぼうぎょ』を入れ替える。『ランク』は変化しない。"
   },
   "light_screen": {
     "id": "light_screen",
@@ -7604,7 +7928,8 @@
         "statusId": "light_screen",
         "duration": 5
       }
-    ]
+    ],
+    "description": "5ターンの間、相手の特殊攻撃のダメージを半分にする。"
   },
   "imprison": {
     "id": "imprison",
@@ -7622,7 +7947,8 @@
           "basedOnUserMoves": true
         }
       }
-    ]
+    ],
+    "description": "自分が場を離れるまで、自分が覚えている技と同じ技を相手のポケモンは使えなくなる。"
   },
   "meditate": {
     "id": "meditate",
@@ -7639,7 +7965,8 @@
           "spd": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『とくこう』『とくぼう』ランクが1段階ずつ上がる。"
   },
   "reflect": {
     "id": "reflect",
@@ -7657,7 +7984,8 @@
           "double_battle_ratio": 0.667
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、相手の物理攻撃のダメージを半分にする。味方が複数の場合は半分ではなく2/3になる。\n急所に当たった場合は軽減されない。交代しても効果は続く。"
   },
   "psycho_cut": {
     "id": "psycho_cut",
@@ -7678,7 +8006,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "psycho_fang": {
     "id": "psycho_fang",
@@ -7704,7 +8033,8 @@
         "type": "remove_field_status",
         "statusId": "aurora_veil"
       }
-    ]
+    ],
+    "description": "相手の技『リフレクター』『オーロラベール』の効果を受けず、\n相手の技『リフレクター』『ひかりのかべ』『オーロラベール』を壊す。"
   },
   "zen_headbutt": {
     "id": "zen_headbutt",
@@ -7728,7 +8058,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手をひるませる。"
   },
   "assist_power": {
     "id": "assist_power",
@@ -7812,7 +8143,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分のいずれかの能力ランクが1つ上がる度に威力が20上がる。"
   },
   "psybeam": {
     "id": "psybeam",
@@ -7840,7 +8172,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を1～4ターンの間『こんらん』状態にする。"
   },
   "psychic": {
     "id": "psychic",
@@ -7867,7 +8200,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『とくぼう』ランクを1段階下げる。"
   },
   "psycho_shock": {
     "id": "psycho_shock",
@@ -7882,7 +8216,8 @@
         "accuracy": 1,
         "useDefensiveStat": true
       }
-    ]
+    ],
+    "description": "相手の『とくぼう』ではなく、相手の『ぼうぎょ』の能力値でダメージ計算する。"
   },
   "psychic_noise": {
     "id": "psychic_noise",
@@ -7906,7 +8241,8 @@
     ],
     "tags": [
       "sound"
-    ]
+    ],
+    "description": "100%の確率で、相手は2ターンの間『かいふくふうじ』状態となり、\n回復系の技『あさのひざし』『いやしのねがい』『いやしのはどう』『ウッドホーン』『かいふくしれい』\n『ギガドレイン』『きゅうけつ』『こうごうせい』『じこさいせい』『じょうか』『すいとる』『すなあつめ』\n『タマゴうみ』『ちからをすいとる』『つきのひかり』『デスウイング』『ドレインキッス』『ドレインパンチ』\n『なまける』『ねがいごと』『ねむる』『のみこむ』『はねやすめ』『パラボラチャージ』『フラワーヒール』\n『みかづきのまい』『ミルクのみ』『メガドレイン』『ゆめくい』『いのちのしずく』『ジャングルヒール』\n『みかづきのいのり』『さいきのいのり』『むねんのつるぎ』『シャカシャカほう』が使えなくなり、\nまた特性や道具、場の状態などでHPが回復しなくなる。音系の技。相手の『みがわり』状態を貫通する。"
   },
   "jin_tsu_riki": {
     "id": "jin_tsu_riki",
@@ -7930,7 +8266,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手をひるませる。"
   },
   "telekinesis": {
     "id": "telekinesis",
@@ -7958,7 +8295,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を1～4ターンの間『こんらん』状態にする。"
   },
   "mirror_coat": {
     "id": "mirror_coat",
@@ -7984,7 +8322,8 @@
           "damage_type": "special"
         }
       }
-    ]
+    ],
+    "description": "相手の特殊攻撃のダメージの2倍をその相手に与える。『ダブルバトル』の時は最後に受けた技のみ有効になる。\n必ず後攻になる(優先度:-5)。『あく』タイプには無効だが、それ以外のタイプ相性の影響を受けない。"
   },
   "future_sight": {
     "id": "future_sight",
@@ -8004,7 +8343,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "2ターン後に攻撃する。交代した場合は同じ位置にいるポケモンに攻撃する。タイプ相性の影響を受ける。"
   },
   "dream_eater": {
     "id": "dream_eater",
@@ -8030,7 +8370,8 @@
         "statusId": "sleep"
       },
       "then": []
-    }
+    },
+    "description": "相手に与えたダメージの半分だけ自分のHPが回復する。相手が『ねむり』状態の時だけ成功する。"
   },
   "aurora_veil": {
     "id": "aurora_veil",
@@ -8051,7 +8392,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "天気が『ゆき』状態の時のみ使用でき、\n5ターンの間、自分と味方が受ける相手の物理攻撃と特殊攻撃のダメージを半分にする。\n急所に当たった場合は軽減されない。交代しても効果は続く。"
   },
   "black_fog": {
     "id": "black_fog",
@@ -8064,7 +8406,8 @@
         "type": "reset_stages",
         "target": "all"
       }
-    ]
+    ],
+    "description": "すべてのポケモンの能力ランクの変化を元に戻す。"
   },
   "samui_gag": {
     "id": "samui_gag",
@@ -8083,7 +8426,8 @@
           "boost_ice_def": 1.5
         }
       }
-    ]
+    ],
+    "description": "\t手持ちのポケモンと入れ替わる。また、5ターンの間、天気を『ゆき』にする\n(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。"
   },
   "shiroi_kiri": {
     "id": "shiroi_kiri",
@@ -8097,7 +8441,8 @@
         "statusId": "mist",
         "duration": 5
       }
-    ]
+    ],
+    "description": "5ターンの間、自分と味方のポケモンは能力ランクを下げられなくなる。交代しても効果は続く。"
   },
   "snowscape": {
     "id": "snowscape",
@@ -8114,7 +8459,8 @@
           "boost_def_ice": true
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、天気を『ゆき』にする(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。"
   },
   "ice_spinner": {
     "id": "ice_spinner",
@@ -8138,7 +8484,8 @@
         "type": "remove_field_status",
         "statusId": "psychic_terrain"
       }
-    ]
+    ],
+    "description": "場の状態\n『グラスフィールド』『ミストフィールド』『エレキフィールド』『サイコフィールド』を解除し、元に戻す。"
   },
   "ice_hammer": {
     "id": "ice_hammer",
@@ -8162,7 +8509,8 @@
     ],
     "tags": [
       "contact"
-    ]
+    ],
+    "description": "攻撃後、自分の『すばやさ』ランクが1段階下がる。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "ice_fang": {
     "id": "ice_fang",
@@ -8195,7 +8543,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『こおり』状態にするか、ひるませる。"
   },
   "ice_shard": {
     "id": "ice_shard",
@@ -8207,7 +8556,8 @@
       {
         "type": "damage"
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。"
   },
   "icicle_crash": {
     "id": "icicle_crash",
@@ -8229,7 +8579,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "icicle_spear": {
     "id": "icicle_spear",
@@ -8249,7 +8600,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "triple_axel": {
     "id": "triple_axel",
@@ -8275,7 +8627,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに外れるまで最大3回連続で攻撃する。攻撃が当たる度に威力が20ずつ増える。"
   },
   "avalanche": {
     "id": "avalanche",
@@ -8303,7 +8656,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "そのターンに相手の技のダメージを受けると威力が2倍になる。必ず後攻になる(優先度:-4)。"
   },
   "freezing_punch": {
     "id": "freezing_punch",
@@ -8328,7 +8682,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『こおり』状態にする。特性『てつのこぶし』の時、威力が1.2倍になる。"
   },
   "aurora_beam": {
     "id": "aurora_beam",
@@ -8354,7 +8709,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『こうげき』ランクを1段階下げる。"
   },
   "ice_breath": {
     "id": "ice_breath",
@@ -8368,7 +8724,8 @@
         "power": 60,
         "accuracy": 0.9
       }
-    ]
+    ],
+    "description": "必ず急所に当たる。"
   },
   "ice_wind": {
     "id": "ice_wind",
@@ -8385,7 +8742,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『すばやさ』ランクを1段階下げる。"
   },
   "snow_powder": {
     "id": "snow_powder",
@@ -8409,7 +8767,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『こおり』状態にする。"
   },
   "absolute_zero": {
     "id": "absolute_zero",
@@ -8429,7 +8788,8 @@
           "ice"
         ]
       }
-    ]
+    ],
+    "description": "相手を『ひんし』状態にする。相手のレベルが自分より高いと失敗する。\n(30＋自分のレベル－相手のレベル)が命中率になる。\n第7世代以降は『こおり』タイプ以外のポケモンが使うと命中率が下がり(20＋自分のレベル－相手のレベル？)、\nまた相手が『こおり』タイプの場合は効果がない。ダイマックスしている相手にも無効。"
   },
   "blizzard": {
     "id": "blizzard",
@@ -8468,7 +8828,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『こおり』状態にする。天気が『ゆき』の時は必ず命中する。"
   },
   "freeze_dry": {
     "id": "freeze_dry",
@@ -8505,7 +8866,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手を『こおり』状態にする。この技は『みず』タイプにも効果抜群になる。"
   },
   "freezing_beam": {
     "id": "freezing_beam",
@@ -8529,7 +8891,8 @@
         ]
       }
     ],
-    "pp": 10
+    "pp": 10,
+    "description": "10%の確率で相手を『こおり』状態にする。"
   },
   "dragon_dance": {
     "id": "dragon_dance",
@@ -8546,7 +8909,8 @@
           "spe": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『こうげき』『すばやさ』ランクを1段階ずつ上げる。"
   },
   "outrage": {
     "id": "outrage",
@@ -8573,7 +8937,8 @@
           "confuseOnEnd": true
         }
       }
-    ]
+    ],
+    "description": "2～3ターン連続で攻撃し、その後自分は1～4ターンの間『こんらん』状態になる。"
   },
   "scale_shot": {
     "id": "scale_shot",
@@ -8604,7 +8969,8 @@
           "spe": 1
         }
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。\nその後、自分の『ぼうぎょ』ランクが1段階下がり、『すばやさ』ランクが1段階上がる。"
   },
   "dragon_claw": {
     "id": "dragon_claw",
@@ -8617,7 +8983,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "dragon_dive": {
     "id": "dragon_dive",
@@ -8654,7 +9021,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手をひるませる。相手が『ちいさくなる』を使用していると必ず命中し、威力が2倍になる。"
   },
   "dragon_tail": {
     "id": "dragon_tail",
@@ -8683,7 +9051,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "必ず後攻になる(優先度:-6)。攻撃後、相手のポケモンを強制的に交代させる。\n野生のポケモンの場合は戦闘を終了する。"
   },
   "wide_breaker": {
     "id": "wide_breaker",
@@ -8699,7 +9068,8 @@
         }
       }
     ],
-    "pp": 15
+    "pp": 15,
+    "description": "100%の確率で相手の『こうげき』ランクを1段階下げる。"
   },
   "tatsumaki": {
     "id": "tatsumaki",
@@ -8736,7 +9106,8 @@
         "type": "damage",
         "power": 40
       }
-    ]
+    ],
+    "description": "20%の確率で相手をひるませる。\n相手が技『そらをとぶ』『とびはねる』『フリーフォール』を使っている時でも命中し、ダメージが2倍になる。"
   },
   "roaring_time": {
     "id": "roaring_time",
@@ -8755,7 +9126,8 @@
         "steps": []
       }
     ],
-    "pp": 5
+    "pp": 5,
+    "description": "使用した次のターンは行動できない。"
   },
   "ryuseigun": {
     "id": "ryuseigun",
@@ -8775,7 +9147,8 @@
           "spa": -2
         }
       }
-    ]
+    ],
+    "description": "攻撃後、100%の確率で自分の『とくこう』ランクが2段階下がる。"
   },
   "dragon_breath": {
     "id": "dragon_breath",
@@ -8793,7 +9166,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手を『まひ』状態にする。"
   },
   "dragon_pulse": {
     "id": "dragon_pulse",
@@ -8804,7 +9178,8 @@
       {
         "type": "damage"
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "embargo": {
     "id": "embargo",
@@ -8817,7 +9192,8 @@
         "type": "disable_move",
         "duration": null
       }
-    ]
+    ],
+    "description": "使用後、相手は同じ技を連続で出せなくなる。"
   },
   "fake_tears": {
     "id": "fake_tears",
@@ -8833,7 +9209,8 @@
           "spd": -2
         }
       }
-    ]
+    ],
+    "description": "相手の『とくぼう』ランクを2段階下げる。"
   },
   "memento": {
     "id": "memento",
@@ -8855,7 +9232,8 @@
         "ratioMaxHp": 1,
         "target": "self"
       }
-    ]
+    ],
+    "description": "自分が『ひんし』になる代わりに、相手の『こうげき』『とくこう』ランクを2段階ずつ下げる。"
   },
   "flatter": {
     "id": "flatter",
@@ -8880,7 +9258,8 @@
           "spa": 1
         }
       }
-    ]
+    ],
+    "description": "相手を1～4ターンの間『こんらん』状態にするが、相手の『とくこう』ランクを1段階上げてしまう。"
   },
   "parting_shot": {
     "id": "parting_shot",
@@ -8902,7 +9281,8 @@
         "from": "always",
         "to": "parting_shot_switch"
       }
-    ]
+    ],
+    "description": "相手の『こうげき』『とくこう』ランクを1段階下げたあと、手持ちのポケモンと入れ替わる。音系の技。\n相手の『みがわり』状態を貫通する。"
   },
   "trick_exchange": {
     "id": "trick_exchange",
@@ -8915,7 +9295,8 @@
         "type": "manual",
         "manualReason": "道具の交換はDSLで表現できないため"
       }
-    ]
+    ],
+    "description": "相手と自分が持っている道具を入れ替える。片方しか道具を持っていない場合も成功する。"
   },
   "taunt": {
     "id": "taunt",
@@ -8933,7 +9314,8 @@
         },
         "target": "target"
       }
-    ]
+    ],
+    "description": "3ターンの間、相手は攻撃技しか出せなくなる。(変化技を使えなくする)"
   },
   "sharpen": {
     "id": "sharpen",
@@ -8956,7 +9338,8 @@
           "accuracy": 1
         }
       }
-    ]
+    ],
+    "description": "自分の『こうげき』『命中率』ランクが1段階ずつ上がる。"
   },
   "wicked_plot": {
     "id": "wicked_plot",
@@ -8972,7 +9355,8 @@
           "spa": 2
         }
       }
-    ]
+    ],
+    "description": "自分の『とくこう』ランクを2段階上げる。"
   },
   "foul_play": {
     "id": "foul_play",
@@ -8986,7 +9370,8 @@
         "accuracy": null,
         "useTargetAttack": true
       }
-    ]
+    ],
+    "description": "自分の『こうげき』ではなく、相手の『こうげき』の能力値でダメージ計算する。"
   },
   "payback": {
     "id": "payback",
@@ -9099,7 +9484,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分のいずれかの能力ランクが1つ上がる度に威力が20上がる。"
   },
   "crunch": {
     "id": "crunch",
@@ -9111,7 +9497,8 @@
       {
         "type": "lock_move"
       }
-    ]
+    ],
+    "description": "自分と相手のどちらかが『ひんし』になるまで、どちらも逃げたり交代できなくなる。\n自分か相手が『ゴースト』タイプの場合は追加効果はない。"
   },
   "bite": {
     "id": "bite",
@@ -9134,7 +9521,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手をひるませる。"
   },
   "jaw_lock": {
     "id": "jaw_lock",
@@ -9153,7 +9541,8 @@
         "statusId": "lock_move",
         "target": "all"
       }
-    ]
+    ],
+    "description": "自分と相手のどちらかが『ひんし』になるまで、どちらも逃げたり交代できなくなる。\n自分か相手が『ゴースト』タイプの場合は追加効果はない。"
   },
   "hell_blow": {
     "id": "hell_blow",
@@ -9202,7 +9591,8 @@
           ]
         }
       }
-    ]
+    ],
+    "description": "相手は2ターンの間、音系の技『いにしえのうた』『いびき』『いやしのすず』『いやなおと』『うたう』\n『うたかたのアリア』『エコーボイス』『おしゃべり』『おたけび』『きんぞくおん』『くさぶえ』『さわぐ』\n『スケイルノイズ』『すてゼリフ』『チャームボイス』『ちょうおんぱ』『とおぼえ』『ないしょばなし』『なきごえ』\n『バークアウト』『ハイパーボイス』『ばくおんぱ』『ほえる』『ほろびのうた』『むしのさざめき』『りんしょう』\n『ソウルビート』『オーバードライブ』『ぶきみなじゅもん』『フレアソング』『みわくのボイス』『サイコノイズ』\nを使えなくなる。"
   },
   "tsujigiri": {
     "id": "tsujigiri",
@@ -9223,7 +9613,8 @@
           "crit": 1
         }
       }
-    ]
+    ],
+    "description": "急所に当たりやすい(急所ランク:+1)。"
   },
   "thief": {
     "id": "thief",
@@ -9235,7 +9626,8 @@
         "type": "manual",
         "manualReason": "Steals the opponent's held item if the user is not holding one. Fails if the user is already holding an item, unless Knock Off has removed the user's item."
       }
-    ]
+    ],
+    "description": "相手が持っている道具を自分の物にする。自分が既に道具を持っている場合は失敗するが、\n技『はたきおとす』で自分の道具が無効化されている時は奪う事ができ、道具は上書きされる。\nトレーナー戦の場合はバトル終了後になくなる。"
   },
   "fling": {
     "id": "fling",
@@ -9247,7 +9639,8 @@
         "type": "manual",
         "manualReason": "Effect varies depending on the held item."
       }
-    ]
+    ],
+    "description": "自分の持っている道具によって効果が変化する。投げつけた道具はなくなる。"
   },
   "knock_off": {
     "id": "knock_off",
@@ -9277,7 +9670,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "相手が道具を持っている場合、ダメージが1.5倍になり、さらに道具を持っていない状態にする。\n戦闘終了後、道具は元に戻る。"
   },
   "sucker_punch": {
     "id": "sucker_punch",
@@ -9291,7 +9685,8 @@
         "type": "manual",
         "manualReason": "Conditional success based on opponent's move choice."
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。\nそのターン相手が選んだ技が攻撃技ではない場合や、優先度などの関係ですでに攻撃を終えていた場合は失敗する。\n相手が『ねむり』『こおり』状態でも攻撃技を選択していれば成功する。"
   },
   "beat_up": {
     "id": "beat_up",
@@ -9313,7 +9708,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "自分を含む『ひんし』や状態異常でない『てもち』のポケモンの数だけ攻撃する。"
   },
   "swing": {
     "id": "swing",
@@ -9325,7 +9721,8 @@
         "type": "damage",
         "power": 60
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "dark_pulse": {
     "id": "dark_pulse",
@@ -9350,7 +9747,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "20%の確率で相手をひるませる。"
   },
   "catastrophe": {
     "id": "catastrophe",
@@ -9365,7 +9763,8 @@
         "ratioCurrentHp": 0.5,
         "target": "target"
       }
-    ]
+    ],
+    "description": "相手のHPを残りHPの半分にする。タイプ相性の影響を受けない。"
   },
   "night_burst": {
     "id": "night_burst",
@@ -9386,7 +9785,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "40%の確率で相手の命中率を1段階下げる。"
   },
   "bark_out": {
     "id": "bark_out",
@@ -9408,7 +9808,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "100%の確率で相手の『とくこう』ランクを1段階下げる。音系の技。相手の『みがわり』状態を貫通する。"
   },
   "sweet_kiss": {
     "id": "sweet_kiss",
@@ -9423,7 +9824,8 @@
           "atk": -2
         }
       }
-    ]
+    ],
+    "description": "相手の『こうげき』ランクを2段階下げる。"
   },
   "moonlight": {
     "id": "moonlight",
@@ -9497,7 +9899,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "HPが、天気が通常の時は最大HPの1/2、『にほんばれ』の時は最大HPの2/3、『あめ』『ゆき』『すなあらし』の時は最大HPの1/4回復する。"
   },
   "baby_doll_eyes": {
     "id": "baby_doll_eyes",
@@ -9513,7 +9916,8 @@
           "atk": -1
         }
       }
-    ]
+    ],
+    "description": "必ず先制できる(優先度:+1)。相手の『こうげき』ランクを1段階下げる。"
   },
   "angel_kiss": {
     "id": "angel_kiss",
@@ -9532,7 +9936,8 @@
         },
         "chance": 1
       }
-    ]
+    ],
+    "description": "相手を1～4ターンの間『こんらん』状態にする。"
   },
   "mist_field": {
     "id": "mist_field",
@@ -9550,7 +9955,8 @@
           "preventsStatus": true
         }
       }
-    ]
+    ],
+    "description": "5ターンの間、場の状態を『ミストフィールド』にする。\n『ひこう』タイプや特性『ふゆう』などではない地面にいるすべてのポケモンは、状態異常にならず、\nまた『ドラゴン』タイプの技の受けるダメージが半減する。すでに状態異常の場合は回復しない。\n道具『ミストシード』を持ったポケモンは『とくぼう』ランクが1段階上がる。"
   },
   "play_rough": {
     "id": "play_rough",
@@ -9577,7 +9983,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "10%の確率で相手の『こうげき』ランクを1段階下げる。"
   },
   "drain_kiss": {
     "id": "drain_kiss",
@@ -9594,7 +10001,8 @@
         "ratioMaxHp": 0.75,
         "target": "self"
       }
-    ]
+    ],
+    "description": " 相手に与えたダメージの3/4だけ自分のHPが回復する。"
   },
   "magical_shine": {
     "id": "magical_shine",
@@ -9607,7 +10015,8 @@
         "power": 80,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "mist_burst": {
     "id": "mist_burst",
@@ -9637,7 +10046,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "攻撃後、自分が『ひんし』状態になる。場の状態が『ミストフィールド』で、\n自分が『ひこう』タイプや特性『ふゆう』などではなく地面にいる時、威力が1.5倍になる。"
   },
   "dazzling_gleam": {
     "id": "dazzling_gleam",
@@ -9666,7 +10076,8 @@
     ],
     "tags": [
       "sound"
-    ]
+    ],
+    "description": "100%の確率で、そのターンの間に能力ランクが上がった相手ポケモンを1～4ターンの間『こんらん』状態にする(\n通常は後攻で攻撃する必要があるが、場に出た時に能力ランクが上がった場合も対象となる)。音系の技。\n相手の『みがわり』状態を貫通する。"
   },
   "moonblast": {
     "id": "moonblast",
@@ -9693,7 +10104,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手の『とくこう』ランクを1段階下げる。"
   },
   "fairy_wind": {
     "id": "fairy_wind",
@@ -9706,7 +10118,8 @@
         "power": 40,
         "accuracy": 1
       }
-    ]
+    ],
+    "description": "通常攻撃。"
   },
   "mud_bomb": {
     "id": "mud_bomb",
@@ -9733,7 +10146,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "30%の確率で相手の命中率を1段階下げる。"
   },
   "seed_machine_gun": {
     "id": "seed_machine_gun",
@@ -9756,7 +10170,8 @@
           }
         ]
       }
-    ]
+    ],
+    "description": "1ターンに2～5回連続で攻撃する。"
   },
   "guard_share": {
     "id": "guard_share",
@@ -9769,7 +10184,8 @@
         "type": "manual",
         "manualReason": "自分と相手の『ぼうぎょ』と『とくぼう』を足して半分に分ける効果はDSLで表現できないため"
       }
-    ]
+    ],
+    "description": "自分と相手の『ぼうぎょ』と『とくぼう』を足して半分に分ける。"
   },
   "power_split": {
     "id": "power_split",
@@ -9782,7 +10198,8 @@
         "type": "manual",
         "manualReason": "自分と相手の『こうげき』と『とくこう』を足して半分に分ける効果はDSLで表現できないため"
       }
-    ]
+    ],
+    "description": "自分と相手の『こうげき』と『とくこう』を足して半分に分ける。"
   },
   "charm_voice": {
     "id": "charm_voice",
@@ -9804,6 +10221,7 @@
       {
         "type": "sound"
       }
-    ]
+    ],
+    "description": "自分の命中率、相手の回避率に関係なく必ず命中する。音系の技。相手の『みがわり』状態を貫通する。"
   }
 }

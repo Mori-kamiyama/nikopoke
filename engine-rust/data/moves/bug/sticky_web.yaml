@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: 相手の　周りに　ねばねばした ネットを　はりめぐらせ　交代で でてきた　相手の　素早さを　さげる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: sticky_web
 tags: []

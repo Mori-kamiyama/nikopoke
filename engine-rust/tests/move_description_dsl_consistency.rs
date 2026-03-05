@@ -69,6 +69,11 @@ fn collect_effect_summary(effects: &[Effect], summary: &mut EffectSummary) {
                 if let Some(status_id) = effect.data.get("to").and_then(|v| v.as_str()) {
                     summary.status_ids.insert(status_id.to_string());
                 }
+                if effect.data.get("from").and_then(|v| v.as_str()) == Some("active")
+                    && effect.data.get("to").and_then(|v| v.as_str()) == Some("pending_switch")
+                {
+                    summary.has_switch = true;
+                }
             }
             "modify_stage" => {
                 if let Some(Value::Object(stages)) = effect.data.get("stages") {
@@ -95,13 +100,6 @@ fn collect_effect_summary(effects: &[Effect], summary: &mut EffectSummary) {
             "self_switch" | "replace_pokemon" | "force_switch" => {
                 summary.has_switch = true;
             }
-            "replace_status" => {
-                if effect.data.get("from").and_then(|v| v.as_str()) == Some("active")
-                    && effect.data.get("to").and_then(|v| v.as_str()) == Some("pending_switch")
-                {
-                    summary.has_switch = true;
-                }
-            }
             "manual" => {
                 if effect
                     .data
@@ -124,7 +122,7 @@ fn collect_effect_summary(effects: &[Effect], summary: &mut EffectSummary) {
                 collect_effect_summary(&nested_else, summary);
             }
             "repeat" => {
-                let nested = collect_effects_from_value(effect.data.get("effects"));
+                let nested = collect_effects_from_value(effect.data.get("steps").or_else(|| effect.data.get("effects")));
                 collect_effect_summary(&nested, summary);
             }
             "conditional" => {
@@ -134,7 +132,7 @@ fn collect_effect_summary(effects: &[Effect], summary: &mut EffectSummary) {
                 collect_effect_summary(&nested_else, summary);
             }
             "delay" | "over_time" => {
-                let nested = collect_effects_from_value(effect.data.get("effects"));
+                let nested = collect_effects_from_value(effect.data.get("steps").or_else(|| effect.data.get("effects")));
                 collect_effect_summary(&nested, summary);
             }
             _ => {}
@@ -170,7 +168,7 @@ fn parse_expected_effects(description: &str) -> ExpectedEffects {
             expected.status_ids.insert(status_id.to_string());
         }
     }
-    if text.contains("ひるませる") || text.contains("ひるみ") {
+    if text.contains("ひるませる") || text.contains("ひるみ状態にする") {
         expected.status_ids.insert("flinch".to_string());
     }
 
@@ -214,7 +212,10 @@ fn parse_expected_effects(description: &str) -> ExpectedEffects {
         expected.requires_item_change = true;
     }
 
-    if text.contains("回復") && (text.contains("HP") || text.contains("最大HP")) {
+    if text.contains("回復")
+        && (text.contains("HP") || text.contains("最大HP"))
+        && !text.contains("ダメージ")
+    {
         expected.requires_heal = true;
     }
 
@@ -223,7 +224,11 @@ fn parse_expected_effects(description: &str) -> ExpectedEffects {
             || text.contains("交代するたびに")
             || text.contains("交代する毎に")
             || text.contains("交代するごとに");
-        if !is_hazard {
+        let is_non_switch_context = text.contains("入れ替わっても")
+            || text.contains("交代しても")
+            || text.contains("交代したとしても")
+            || text.contains("交代した場合");
+        if !is_hazard && !is_non_switch_context {
             expected.requires_switch = true;
         }
     }
@@ -292,7 +297,7 @@ fn sampled_description_matches_dsl_effects() {
         }
 
         let mut summary = EffectSummary::default();
-        collect_effect_summary(&move_data.effects, &mut summary);
+        collect_effect_summary(&move_data.steps, &mut summary);
 
         for status_id in &expected.status_ids {
             assert!(

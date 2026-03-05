@@ -15,7 +15,7 @@ steps:
   p: 0.3
   then:
   - type: modify_stage
-    target: target
+    target: self
     stages:
       accuracy: -1
 tags: []

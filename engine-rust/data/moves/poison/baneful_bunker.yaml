@@ -8,6 +8,5 @@ accuracy: null
 priority: 4
 description: 相手の　攻撃を　防ぐと 同時に　触れた　相手に 毒を　与えてしまう。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: protect
 tags: []

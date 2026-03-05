@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: ５ターンの間　地面にいると 先制技を　受けない。 エスパータイプの　威力が　あがる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: psychic_terrain
+  duration: 5
 tags: []

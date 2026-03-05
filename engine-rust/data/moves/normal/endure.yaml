@@ -8,6 +8,5 @@ accuracy: null
 priority: 4
 description: 攻撃を　受けても ＨＰを　必ず　１だけ　残せる。 連続で　だすと　失敗しやすい。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: protect
 tags: []

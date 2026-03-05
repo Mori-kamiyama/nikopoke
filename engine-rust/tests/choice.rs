@@ -78,7 +78,8 @@ fn pending_switch_blocks_non_switch_action() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.5 }))],
+        description: None,
+        steps: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.5 }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -91,7 +92,8 @@ fn pending_switch_blocks_non_switch_action() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -142,7 +144,8 @@ fn self_switch_requires_choice_and_clears_after_switch() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("self_switch", json!({}))],
+        description: None,
+        steps: vec![effect("self_switch", json!({}))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -155,7 +158,8 @@ fn self_switch_requires_choice_and_clears_after_switch() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -232,7 +236,8 @@ fn manual_switch_effect_sets_pending_switch() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect(
+        description: None,
+        steps: vec![effect(
             "manual",
             json!({ "manualReason": "Switching Pokemon is not supported in DSL" }),
         )],
@@ -248,7 +253,8 @@ fn manual_switch_effect_sets_pending_switch() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![],
+        description: None,
+        steps: vec![],
         tags: Vec::new(),
         crit_rate: None,
     });

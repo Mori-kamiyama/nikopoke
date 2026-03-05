@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: 指をふり　自分の　脳を　刺激して すべての　技の　なかから どれか　１つを　くりだす。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: random_move
+  pool: self_moves
 tags: []

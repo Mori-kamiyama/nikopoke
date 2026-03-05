@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: 控えの　ポケモンと　入れ替わる。 能力変化は　替わった ポケモンが　そのまま　受けつぐ。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: self_switch
 tags: []

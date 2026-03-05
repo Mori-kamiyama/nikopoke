@@ -1,0 +1,14 @@
+id: doom_desire
+name: はめつのねがい
+type: steel
+category: special
+pp: 5
+power: 140
+accuracy: 1.0
+priority: 0
+description: 技を　使った　２ターン後に 無数の　光の　束で 相手を　攻撃する。
+steps:
+- type: damage
+  power: 140
+  accuracy: 1.0
+tags: []

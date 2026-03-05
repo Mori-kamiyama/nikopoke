@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: 激しく　吹きあれる 風の渦を　つくり　４ターンの　あいだ 味方　全員の　素早さを　あげる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: tailwind
+  duration: 4
 tags: []

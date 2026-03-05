@@ -15,7 +15,7 @@ steps:
   p: 0.1
   then:
   - type: modify_stage
-    target: target
+    target: self
     stages:
       atk: -1
 tags:

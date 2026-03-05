@@ -8,6 +8,10 @@ accuracy: null
 priority: 0
 description: 自分の　ＨＰを　少し　削って 分身を　だす。 分身は　自分の　身代わりに　なる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: damage_ratio
+  ratioMaxHp: 0.25
+  target: self
+- type: apply_status
+  statusId: substitute
+  target: self
 tags: []

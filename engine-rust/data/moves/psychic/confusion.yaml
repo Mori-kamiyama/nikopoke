@@ -17,6 +17,4 @@ steps:
   - type: apply_status
     statusId: confusion
     target: target
-- type: manual
-  manualReason: Multi-turn trapping/binding effects are not fully supported
 tags: []

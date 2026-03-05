@@ -50,7 +50,8 @@ fn random_move_uses_self_moves_and_consumes_pp() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("random_move", json!({ "pool": "self_moves" }))],
+        description: None,
+        steps: vec![effect("random_move", json!({ "pool": "self_moves" }))],
         tags: Vec::new(),
         crit_rate: None,
     });
@@ -63,7 +64,8 @@ fn random_move_uses_self_moves_and_consumes_pp() {
         power: None,
         accuracy: None,
         priority: Some(0),
-        effects: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.5 }))],
+        description: None,
+        steps: vec![effect("damage_ratio", json!({ "ratioMaxHp": 0.5 }))],
         tags: Vec::new(),
         crit_rate: None,
     });

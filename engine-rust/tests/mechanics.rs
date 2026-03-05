@@ -191,6 +191,7 @@ fn test_protect_reset_on_failure() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effect = Effect {
@@ -259,6 +260,7 @@ fn test_parental_bond() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let mut data = Map::new();

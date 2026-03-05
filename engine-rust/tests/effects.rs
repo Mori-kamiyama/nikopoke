@@ -83,6 +83,7 @@ fn modify_damage_scales_last_damage_event() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![
@@ -114,6 +115,7 @@ fn crit_scales_last_damage_event() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![
@@ -158,6 +160,7 @@ fn cure_all_status_clears_statuses() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![effect("cure_all_status", json!({ "target": "target" }))];
@@ -184,6 +187,7 @@ fn lock_move_forces_specific_move() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![effect(
@@ -233,6 +237,7 @@ fn self_switch_marks_pending_switch() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![effect("self_switch", json!({}))];
@@ -284,6 +289,7 @@ fn force_switch_randomly_switches_target() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![effect("force_switch", json!({ "target": "target" }))];
@@ -317,6 +323,7 @@ fn force_switch_with_only_one_pokemon_logs_failure() {
         bypass_substitute: false,
         ignore_substitute: false,
         is_sound: false,
+    last_damage: None,
     };
 
     let effects = vec![effect("force_switch", json!({ "target": "target" }))];
