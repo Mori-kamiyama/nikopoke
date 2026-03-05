@@ -343,9 +343,15 @@ pub fn apply_event(state: &BattleState, event: &BattleEvent) -> BattleState {
                 if *slot < player.team.len() {
                     if let Some(outgoing) = player.team.get_mut(player.active_slot) {
                         outgoing.stages = StatStages::default();
-                        // Non-volatile statuses that persist on switch (sleep is explicitly NOT included - cured on switch)
-                        let non_volatile = ["burn", "poison", "toxic", "paralysis", "freeze"];
+                        // Non-volatile statuses that persist on switch.
+                        let non_volatile = ["burn", "poison", "toxic", "paralysis", "freeze", "sleep"];
                         outgoing.statuses.retain(|s| non_volatile.contains(&s.id.as_str()));
+                        for status in &mut outgoing.statuses {
+                            if status.id == "toxic" {
+                                // Toxic ramp resets when switching out.
+                                status.data.remove("counter");
+                            }
+                        }
                         if let Some(original) = outgoing.ability_data.get("originalAbility").and_then(|v| v.as_str()) {
                             outgoing.ability = Some(original.to_string());
                         }

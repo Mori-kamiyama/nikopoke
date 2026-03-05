@@ -10,6 +10,7 @@ use crate::core::utils::{get_active_creature, get_active_creature_mut, stage_mul
 use crate::data::moves::{MoveData, MoveDatabase};
 use crate::data::type_chart::TypeChart;
 use serde_json::{Map, Value};
+use std::collections::HashSet;
 
 #[derive(Clone, Debug)]
 pub struct BattleOptions {
@@ -100,7 +101,29 @@ impl BattleEngine {
             next = apply_event(&next, &event);
         }
 
-        let mut ordered: Vec<OrderedAction> = actions
+        let mut seen_action_players = HashSet::new();
+        let filtered_actions: Vec<Action> = actions
+            .iter()
+            .filter_map(|action| {
+                if seen_action_players.insert(action.player_id.clone()) {
+                    Some(action.clone())
+                } else {
+                    let player_name = next
+                        .players
+                        .iter()
+                        .find(|p| p.id == action.player_id)
+                        .map(|p| p.name.clone())
+                        .unwrap_or_else(|| action.player_id.clone());
+                    next.log.push(format!(
+                        "{}の 追加アクションは シングルバトルでは 無視される。",
+                        player_name
+                    ));
+                    None
+                }
+            })
+            .collect();
+
+        let mut ordered: Vec<OrderedAction> = filtered_actions
             .iter()
             .map(|action| {
                 if action.action_type == ActionType::Switch {
@@ -140,10 +163,16 @@ impl BattleEngine {
             })
             .collect();
 
+        let trick_room_active = next.field.global.iter().any(|effect| effect.id == "trick_room");
         ordered.sort_by(|a, b| {
+            let speed_order = if trick_room_active {
+                a.speed.cmp(&b.speed)
+            } else {
+                b.speed.cmp(&a.speed)
+            };
             b.priority
                 .cmp(&a.priority)
-                .then_with(|| b.speed.cmp(&a.speed))
+                .then_with(|| speed_order)
                 .then_with(|| a.rand.partial_cmp(&b.rand).unwrap_or(std::cmp::Ordering::Equal))
         });
 
@@ -674,12 +703,120 @@ pub fn is_battle_over(state: &BattleState) -> bool {
     false
 }
 
+pub fn determine_winner(state: &BattleState) -> Option<String> {
+    if state.players.is_empty() {
+        return None;
+    }
+
+    let alive_by_player: Vec<bool> = state
+        .players
+        .iter()
+        .map(|player| player.team.iter().any(|creature| creature.hp > 0))
+        .collect();
+    let alive_count = alive_by_player.iter().filter(|alive| **alive).count();
+
+    if alive_count == 1 {
+        return alive_by_player
+            .iter()
+            .enumerate()
+            .find_map(|(index, alive)| if *alive { Some(state.players[index].id.clone()) } else { None });
+    }
+
+    if alive_count != 0 || state.players.len() != 2 {
+        return None;
+    }
+
+    // Simultaneous faint rule fallback:
+    // the creature that would be processed first faints first and loses.
+    let p1 = &state.players[0];
+    let p2 = &state.players[1];
+    let p1_speed = creature_speed(state, &p1.id);
+    let p2_speed = creature_speed(state, &p2.id);
+    if p1_speed == p2_speed {
+        return None;
+    }
+
+    let trick_room_active = state.field.global.iter().any(|effect| effect.id == "trick_room");
+    let first_faint_id = if trick_room_active {
+        if p1_speed < p2_speed {
+            &p1.id
+        } else {
+            &p2.id
+        }
+    } else if p1_speed > p2_speed {
+        &p1.id
+    } else {
+        &p2.id
+    };
+
+    if first_faint_id == &p1.id {
+        Some(p2.id.clone())
+    } else {
+        Some(p1.id.clone())
+    }
+}
+
+pub fn determine_timeout_winner(state: &BattleState) -> Option<String> {
+    if state.players.len() != 2 {
+        return None;
+    }
+
+    #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
+    struct TimeoutScore {
+        alive_count: i32,
+        hp_ratio_milli_sum: i64,
+        total_hp: i32,
+    }
+
+    let score = |player: &crate::core::state::PlayerState| -> TimeoutScore {
+        let mut alive_count = 0;
+        let mut hp_ratio_milli_sum = 0_i64;
+        let mut total_hp = 0_i32;
+        for creature in &player.team {
+            let hp = creature.hp.max(0);
+            total_hp += hp;
+            if hp > 0 {
+                alive_count += 1;
+            }
+            let max_hp = creature.max_hp.max(1) as i64;
+            hp_ratio_milli_sum += (hp as i64 * 1000) / max_hp;
+        }
+        TimeoutScore {
+            alive_count,
+            hp_ratio_milli_sum,
+            total_hp,
+        }
+    };
+
+    let p1 = &state.players[0];
+    let p2 = &state.players[1];
+    let s1 = score(p1);
+    let s2 = score(p2);
+
+    use std::cmp::Ordering;
+    match s1.cmp(&s2) {
+        Ordering::Greater => Some(p1.id.clone()),
+        Ordering::Less => Some(p2.id.clone()),
+        Ordering::Equal => None,
+    }
+}
+
 fn creature_speed(state: &BattleState, player_id: &str) -> i32 {
     let creature = get_active_creature(state, player_id);
     let Some(creature) = creature else {
         return 0;
     };
     let mut speed = creature.speed as f32 * stage_multiplier(creature.stages.spe);
+    let side_tailwind = state
+        .field
+        .sides
+        .get(player_id)
+        .map(|effects| effects.iter().any(|effect| effect.id == "tailwind"))
+        .unwrap_or(false);
+    let global_tailwind = state.field.global.iter().any(|effect| effect.id == "tailwind");
+    if side_tailwind || global_tailwind {
+        speed *= 2.0;
+    }
     if creature.statuses.iter().any(|s| s.id == "paralysis") {
         speed *= 0.5;
     }

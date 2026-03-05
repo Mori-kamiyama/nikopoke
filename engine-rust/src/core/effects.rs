@@ -119,7 +119,18 @@ fn apply_manual_effect(effect: &Effect, ctx: &EffectContext<'_>) -> Vec<BattleEv
             meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
         }];
     }
-    Vec::new()
+    let move_name = ctx
+        .move_data
+        .and_then(|m| m.name.as_deref())
+        .unwrap_or("manual move");
+    vec![BattleEvent::Log {
+        message: if reason.is_empty() {
+            format!("[MANUAL] {} has unresolved manual behavior.", move_name)
+        } else {
+            format!("[MANUAL] {}: {}", move_name, reason)
+        },
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
 }
 
 fn apply_protect(state: &BattleState, _effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
@@ -135,7 +146,7 @@ fn apply_protect(state: &BattleState, _effect: &Effect, ctx: &mut EffectContext<
 
     let mut chance = 1.0;
     for _ in 0..success_count {
-        chance *= 0.5;
+        chance /= 3.0;
     }
 
     if (ctx.rng)() > chance {
@@ -169,10 +180,11 @@ fn apply_protect(state: &BattleState, _effect: &Effect, ctx: &mut EffectContext<
 }
 
 fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let target_id = resolve_target(effect.data.get("target"), ctx);
     let Some(attacker) = get_active_creature(state, &ctx.attacker_player_id) else {
         return Vec::new();
     };
-    let Some(target) = get_active_creature(state, &ctx.target_player_id) else {
+    let Some(target) = get_active_creature(state, &target_id) else {
         return Vec::new();
     };
 
@@ -202,7 +214,6 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
 
     let power = value_i32(effect.data.get("power"), state, ctx).unwrap_or(0);
     let attacker_id = ctx.attacker_player_id.clone();
-    let target_id = ctx.target_player_id.clone();
     
     // Pass false for is_secondary_hit, let calc_damage handle crit logic
     let (amount, is_crit) = calc_damage(power, state, &attacker_id, &target_id, ctx, false);
@@ -234,10 +245,10 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     }
 
     let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
-    meta.insert("target".to_string(), Value::String(ctx.target_player_id.clone()));
+    meta.insert("target".to_string(), Value::String(target_id.clone()));
     meta.insert("cancellable".to_string(), Value::Bool(true));
     events.push(BattleEvent::Damage {
-        target_id: ctx.target_player_id.clone(),
+        target_id: target_id.clone(),
         amount,
         meta,
     });
@@ -967,9 +978,70 @@ fn apply_item_status(state: &BattleState, status_id: &str, target_id: &str, ctx:
 fn value_f64(value: Option<&Value>, state: &BattleState, ctx: &EffectContext<'_>) -> Option<f64> {
     match value? {
         Value::Number(num) => num.as_f64(),
-        Value::String(raw) => resolve_variable(raw, state, ctx).or_else(|| raw.parse::<f64>().ok()),
+        Value::String(raw) => eval_expression(raw, state, ctx),
         _ => None,
     }
+}
+
+fn eval_expression(raw: &str, state: &BattleState, ctx: &EffectContext<'_>) -> Option<f64> {
+    let s = raw.trim();
+    if s.is_empty() {
+        return None;
+    }
+
+    // 1. Variable or Float (if not starting with paren)
+    if !s.starts_with('(') {
+        if let Some(v) = resolve_variable(s, state, ctx) {
+            return Some(v);
+        }
+        return s.parse::<f64>().ok();
+    }
+
+    // 2. Parentheses ( (a op b) )
+    if s.starts_with('(') && s.ends_with(')') {
+        let inner = s[1..s.len() - 1].trim();
+
+        // Find top-level operator
+        let mut depth = 0;
+        let mut op_idx = None;
+        let mut found_op = ' ';
+
+        for (i, c) in inner.char_indices().rev() {
+            match c {
+                ')' => depth += 1,
+                '(' => depth -= 1,
+                '+' | '-' | '*' | '/' | '^' if depth == 0 => {
+                    op_idx = Some(i);
+                    found_op = c;
+                    break;
+                }
+                _ => {}
+            }
+        }
+
+        if let Some(idx) = op_idx {
+            let left = eval_expression(&inner[..idx], state, ctx)?;
+            let right = eval_expression(&inner[idx + 1..], state, ctx)?;
+            return match found_op {
+                '+' => Some(left + right),
+                '-' => Some(left - right),
+                '*' => Some(left * right),
+                '/' => {
+                    if right != 0.0 {
+                        Some(left / right)
+                    } else {
+                        Some(0.0)
+                    }
+                }
+                '^' => Some(left.powf(right)),
+                _ => Some(left),
+            };
+        } else {
+            return eval_expression(inner, state, ctx);
+        }
+    }
+
+    None
 }
 
 fn value_i32(value: Option<&Value>, state: &BattleState, ctx: &EffectContext<'_>) -> Option<i32> {
@@ -1319,6 +1391,12 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
     let mut atk_stage = stage_key_offense;
     let mut def_stage = stage_key_defense;
     
+    // 急所の場合:
+    // - 攻撃側の攻撃/特攻マイナスランクを無視
+    // - 防御側の防御/特防プラスランクを無視
+    if is_crit && atk_stage < 0 {
+        atk_stage = 0;
+    }
     // 急所の場合、相手の防御・特防上昇ランクを無視（0として扱う）
     if is_crit && def_stage > 0 {
         def_stage = 0;
@@ -1366,7 +1444,9 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
 
     let level = attacker.level as f32;
     let base = (((2.0 * level / 5.0 + 2.0) * move_power * attack / defense) / 50.0 + 2.0).max(1.0);
-    let roll = 0.85 + (1.0 - 0.85) * (ctx.rng)() as f32;
+    // Damage roll uses the official 16-step range [85, 100].
+    let roll_index = (((ctx.rng)() * 16.0).floor() as i32).clamp(0, 15);
+    let roll = (85 + roll_index) as f32 / 100.0;
 
     let mut modifier = 1.0;
     if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
@@ -1382,6 +1462,25 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
             }
         }
         modifier *= effectiveness;
+    }
+
+    // 壁補正（リフレクター/ひかりのかべ/オーロラベール）
+    // まず target 側の side 効果を参照し、無ければ global も参照する。
+    let target_side_effects = state.field.sides.get(target_id);
+    let side_has = |status_id: &str| {
+        target_side_effects
+            .map(|effects| effects.iter().any(|e| e.id == status_id))
+            .unwrap_or(false)
+            || state.field.global.iter().any(|e| e.id == status_id)
+    };
+    if !is_crit {
+        let has_aurora_veil = side_has("aurora_veil");
+        if category == "physical" && (side_has("reflect") || has_aurora_veil) {
+            modifier *= 0.5;
+        }
+        if category == "special" && (side_has("light_screen") || has_aurora_veil) {
+            modifier *= 0.5;
+        }
     }
 
     if is_crit {

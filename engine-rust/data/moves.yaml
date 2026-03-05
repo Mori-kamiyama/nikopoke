@@ -9,9 +9,10 @@ yawn:
   priority: 0
   description: 大きな　あくびで　眠気を　誘う。 次の　ターンに 相手を　眠り状態に　する。
   steps:
-  - type: delayed_inflict_status
-    target: opponent
-    status: sleep
+  - type: apply_status
+    statusId: yawn
+    target: target
+    chance: 1
   tags: []
 morning_sun:
   id: morning_sun
@@ -24,10 +25,8 @@ morning_sun:
   priority: 0
   description: 自分の　ＨＰを　回復する。 天気に　よって 回復の　量が　変化する。
   steps:
-  - type: weather_dependent_heal
-    normal: 0.5
-    sunny: 0.667
-    other: 0.25
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
   tags: []
 encore:
@@ -41,8 +40,11 @@ encore:
   priority: 0
   description: 相手が　最後に　使った技を ３ターンの　あいだ ずっと　ださせる。
   steps:
-  - type: inflict_condition
-    condition: encore
+  - type: lock_move
+    target: target
+    duration: 3
+    data:
+      mode: force_last_move
   tags: []
 pain_split:
   id: pain_split
@@ -55,7 +57,8 @@ pain_split:
   priority: 0
   description: 自分の　ＨＰと　相手の　ＨＰを あわせて　それを　自分と　相手で なかよく　わける。
   steps:
-  - type: equalize_hp
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 swagger:
   id: swagger
@@ -68,13 +71,13 @@ swagger:
   priority: 0
   description: 相手を　怒らせて　混乱させる。 怒りで　相手の　攻撃は ぐーんと　あがってしまう。
   steps:
+  - type: apply_status
+    statusId: confusion
+    target: target
   - type: modify_stage
     target: target
     stages:
       atk: 2
-  - type: apply_status
-    statusId: confusion
-    target: target
   tags: []
 screech:
   id: screech
@@ -91,7 +94,6 @@ screech:
     target: target
     stages:
       def: -2
-  - type: ignore_substitute
   tags: []
 sing:
   id: sing
@@ -135,7 +137,8 @@ after_you:
   priority: 0
   description: 相手の　行動を　サポートして 自分の　行動の　あとに 続けて　動けるように　する。
   steps:
-  - type: targetNextAct
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 noble_roar:
   id: noble_roar
@@ -153,7 +156,6 @@ noble_roar:
     stages:
       atk: -1
       spa: -1
-  - type: ignore_substitute
   tags: []
 double_team:
   id: double_team
@@ -166,11 +168,10 @@ double_team:
   priority: 0
   description: 素早い　動きで　分身を　つくり 相手を　まどわせて 回避率を　あげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: evasion
-    amount: 1
-    isStage: true
+    stages:
+      evasion: 1
   tags: []
 harden:
   id: harden
@@ -183,11 +184,10 @@ harden:
   priority: 0
   description: 全身に　力を　こめて 体を　硬くして 自分の　防御を　あげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: def
-    amount: 1
-    isStage: true
+    stages:
+      def: 1
   tags: []
 disable:
   id: disable
@@ -200,9 +200,8 @@ disable:
   priority: 0
   description: 相手の　動きを　とめて 直前に　だしていた　技を ４ターンの　あいだ　使えなくする。
   steps:
-  - type: disableLastMove
-    turns: 4
-    target: opponent
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 shell_smash:
   id: shell_smash
@@ -235,10 +234,9 @@ focus_energy:
   priority: 0
   description: 深く　息を　吸い　気合を　こめる。 自分の　攻撃が 急所に　当たりやすくなる。
   steps:
-  - type: critRate
-    amount: 2
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
-  critRate: 2
 tickle:
   id: tickle
   name: くすぐる
@@ -252,12 +250,9 @@ tickle:
   steps:
   - type: modify_stage
     target: target
-    stat: atk
-    amount: -1
-  - type: modify_stage
-    target: target
-    stat: def
-    amount: -1
+    stages:
+      atk: -1
+      def: -1
   tags: []
 mean_look:
   id: mean_look
@@ -270,11 +265,8 @@ mean_look:
   priority: 0
   description: 吸いこまれるような　黒い　まなざしで じっと　みつめて　相手を 戦闘から　逃げられなくする。
   steps:
-  - type: trap
-    target: opponent
-    condition:
-      type: notType
-      notType: ghost
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 endure:
   id: endure
@@ -288,17 +280,6 @@ endure:
   description: 攻撃を　受けても ＨＰを　必ず　１だけ　残せる。 連続で　だすと　失敗しやすい。
   steps:
   - type: protect
-    effect: endure
-  - type: volatileStatus
-    target: user
-    volatileStatus: endure
-  - type: moveBatonPassHealBlockPrevention
-    prevent:
-    - heal
-    - batonpass
-  - type: accuracyDown
-    target: user
-    amount: 66
   tags: []
 scary_face:
   id: scary_face
@@ -327,8 +308,26 @@ revival_blessing:
   priority: 0
   description: 手持ちの『ひんし』状態のポケモンを、最大HPの半分だけ回復させる。
   steps:
-  - type: manual
-    manualReason: 手持ちの『ひんし』状態のポケモンを、最大HPの半分だけ回復させる。
+  - type: damage
+    power: 0
+  tags: []
+shed_tail:
+  id: shed_tail
+  name: しっぽきり
+  type: normal
+  category: status
+  pp: 10
+  power: 0
+  accuracy: null
+  priority: 0
+  description: '自分のHPを最大HPの半分だけ減らして『みがわり』状態となり、
+
+    『みがわり』状態のまま手持ちのポケモンに入れ替わる。
+
+    『みがわり』のHPは最大HPの1/4になる。'
+  steps:
+  - type: damage
+    power: 0
   tags: []
 tail_whip:
   id: tail_whip
@@ -341,10 +340,10 @@ tail_whip:
   priority: 0
   description: しっぽを　左右に　かわいく　ふって 油断を　誘う。 相手の　防御を　さげる。
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: target
-    stat: def
-    amount: -1
+    stages:
+      def: -1
   tags: []
 safeguard:
   id: safeguard
@@ -357,10 +356,8 @@ safeguard:
   priority: 0
   description: ５ターンの　あいだ 不思議な　力に　守られて 状態異常に　ならなくなる。
   steps:
-  - type: applyStatusCondition
-    target: alliedSide
-    statusCondition: safeguard
-    turns: 5
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 psych_up:
   id: psych_up
@@ -373,8 +370,8 @@ psych_up:
   priority: 0
   description: 自分に　暗示を　かけることで 能力変化の　状態を 相手と　同じにする。
   steps:
-  - type: copy_stats
-    target: opponent
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 recover:
   id: recover
@@ -387,8 +384,8 @@ recover:
   priority: 0
   description: 細胞を　再生させて 自分の　最大ＨＰの 半分の　ＨＰを　回復する。
   steps:
-  - type: heal
-    ratioMaxHp: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
   tags: []
 growth:
@@ -407,16 +404,6 @@ growth:
     stages:
       atk: 1
       spa: 1
-  - type: condition
-    condition:
-      type: weather
-      weather: sunnyday
-    steps:
-    - type: modify_stage
-      target: self
-      stages:
-        atk: 1
-        spa: 1
   tags: []
 stockpile:
   id: stockpile
@@ -434,8 +421,6 @@ stockpile:
     stages:
       def: 1
       spd: 1
-  - type: manual
-    manualReason: Stores energy up to three times for use with Spit Up and Swallow.
   tags: []
 minimize:
   id: minimize
@@ -452,25 +437,6 @@ minimize:
     target: self
     stages:
       evasion: 2
-  - type: conditional
-    condition:
-      type: move_in_effect
-      moves:
-      - thunder-dive
-      - body-slam
-      - stomp
-      - dragon-rush
-      - hard-roller
-      - hyper-dark-crasher
-      - flying-press
-      - heat-stamp
-      - heavy-slam
-    success:
-    - type: ignore_evasion
-      target: attacker
-    - type: modify_damage
-      multiplier: 2
-      target: attacker
   tags: []
 supersonic:
   id: supersonic
@@ -486,11 +452,7 @@ supersonic:
   - type: apply_status
     statusId: confusion
     target: target
-    minTurns: 1
-    maxTurns: 4
-  - type: ignore_substitute
-  tags:
-  - sound
+  tags: []
 acupressure:
   id: acupressure
   name: つぼをつく
@@ -502,16 +464,8 @@ acupressure:
   priority: 0
   description: つぼおしで　体を　活性化させる。 能力の　どれか　１つを ぐーんと　あげる。
   steps:
-  - type: boostRandom
-    amount: 2
-    stat:
-    - attack
-    - defense
-    - specialAttack
-    - specialDefense
-    - speed
-    - evasion
-    - accuracy
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 swords_dance:
   id: swords_dance
@@ -524,11 +478,10 @@ swords_dance:
   priority: 0
   description: 戦いの舞を　激しく　おどって 気合を　高める。 自分の　攻撃を　ぐーんと　あげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: atk
-    amount: 2
-    isStage: true
+    stages:
+      atk: 2
   tags: []
 confide:
   id: confide
@@ -545,9 +498,7 @@ confide:
     target: target
     stages:
       spa: -1
-  tags:
-  - bypassSubstitute
-  - sound
+  tags: []
 entrainment:
   id: entrainment
   name: なかまづくり
@@ -559,11 +510,8 @@ entrainment:
   priority: 0
   description: 不思議な　リズムで　おどる。 動きを　まねさせて　自分と　相手の 特性を　同じに　する。
   steps:
-  - type: abilityChange
-    target: opponent
-    abilitySource: user
-    condition:
-      type: targetNotDynamax
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 slack_off:
   id: slack_off
@@ -576,8 +524,8 @@ slack_off:
   priority: 0
   description: 怠けて　やすむ。 自分の　ＨＰを　最大ＨＰの 半分　回復する。
   steps:
-  - type: heal
-    ratioMaxHp: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
   tags: []
 leer:
@@ -591,10 +539,10 @@ leer:
   priority: 0
   description: '鋭い　目つきで　おびえさせて 相手の　防御を　さげる。 '
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: target
-    stat: def
-    amount: -1
+    stages:
+      def: -1
   tags: []
 wish:
   id: wish
@@ -607,13 +555,14 @@ wish:
   priority: 0
   description: 次の　ターンに 自分の　ＨＰを　最大ＨＰの 半分　回復する。
   steps:
-  - type: futureMove
-    move:
-      type: heal
-      target: user
-      amount: 0.5maxHP
-  tags:
-  - heal
+  - type: delay
+    target: self
+    turns: 1
+    steps:
+    - type: damage_ratio
+      ratioMaxHp: -0.5
+      target: self
+  tags: []
 sleep_talk:
   id: sleep_talk
   name: ねごと
@@ -625,16 +574,8 @@ sleep_talk:
   priority: 0
   description: 自分が　おぼえている　技の　うち どれか　１つを　くりだす。 自分が　寝ているときだけ　使える。
   steps:
-  - type: condition
-    if:
-    - subject: source
-      condition: has_status
-      status: sleep
-    then:
-    - type: use_random_move
-      from: user
-      excludes:
-      - sleep_talk
+  - type: random_move
+    pool: self_moves
   tags: []
 happy_hour:
   id: happy_hour
@@ -647,8 +588,8 @@ happy_hour:
   priority: 0
   description: ハッピータイムの　技を　使うと 戦闘の　あとで　もらえる お金が　倍になる。
   steps:
-  - type: modify_money_reward
-    multiplier: 2
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 splash:
   id: splash
@@ -661,7 +602,8 @@ splash:
   priority: 0
   description: '攻撃もせずに　ピョン　ピョンと 跳ねるだけで　なにも　おこらない……。 '
   steps:
-  - type: nothing
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 belly_drum:
   id: belly_drum
@@ -674,13 +616,8 @@ belly_drum:
   priority: 0
   description: 自分の　ＨＰを　最大ＨＰの 半分　減らして　自分の　攻撃を 最大に　あげる。
   steps:
-  - type: hp_drain
-    target: user
-    drain_percentage: 50
-  - type: stat_boost
-    stat: atk
-    amount: 6
-    target: user
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 baton_pass:
   id: baton_pass
@@ -693,8 +630,7 @@ baton_pass:
   priority: 0
   description: 控えの　ポケモンと　入れ替わる。 能力変化は　替わった ポケモンが　そのまま　受けつぐ。
   steps:
-  - type: switch_pokemon
-    transfer_effects: true
+  - type: self_switch
   tags: []
 teeter_dance:
   id: teeter_dance
@@ -710,8 +646,6 @@ teeter_dance:
   - type: apply_status
     statusId: confusion
     target: target
-    minTurns: 1
-    maxTurns: 4
   tags: []
 work_up:
   id: work_up
@@ -724,12 +658,11 @@ work_up:
   priority: 0
   description: '自分を　奮いたてて 攻撃と　特攻を　あげる。 '
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat:
-    - atk
-    - spa
-    amount: 1
+    stages:
+      atk: 1
+      spa: 1
   tags: []
 roar:
   id: roar
@@ -743,10 +676,6 @@ roar:
   description: 相手を　逃がして 控えの　ポケモンを　ひきずりだす。 野生の　場合は　戦闘が　終わる。
   steps:
   - type: force_switch
-    ignore_protect: true
-    ignore_substitute: true
-    fail_if_dynamax: true
-    manualReason: 野生ポケモンで自分のレベルより高い場合は失敗する処理は未実装
   tags: []
 stuff_cheeks:
   id: stuff_cheeks
@@ -759,8 +688,6 @@ stuff_cheeks:
   priority: 0
   description: 持っている　きのみを　食べて 防御を　ぐーんと　あげる。
   steps:
-  - type: consume_berry
-    target: self
   - type: modify_stage
     target: self
     stages:
@@ -777,7 +704,8 @@ copycat:
   priority: 0
   description: 直前に　でた　技を　まねして 同じ　技を　だす。 技が　でていないと　失敗する。
   steps:
-  - type: copyLastMove
+  - type: random_move
+    pool: self_moves
   tags: []
 protect:
   id: protect
@@ -791,10 +719,6 @@ protect:
   description: 相手の　攻撃を まったく　受けない。 連続で　だすと　失敗しやすい。
   steps:
   - type: protect
-  - type: volatileStatus
-    target: user
-    volatileStatus: protect
-  - type: failConsecutive
   tags: []
 substitute:
   id: substitute
@@ -807,12 +731,12 @@ substitute:
   priority: 0
   description: 自分の　ＨＰを　少し　削って 分身を　だす。 分身は　自分の　身代わりに　なる。
   steps:
-  - type: hpLoss
-    target: user
-    amount: 0.25
-  - type: createSubstitute
-  - type: manual
-    manualReason: Substitute takes damage and protects from status.  Sound moves bypass. Substitute is immune to status.
+  - type: damage_ratio
+    ratioMaxHp: 0.25
+    target: self
+  - type: apply_status
+    statusId: substitute
+    target: self
   tags: []
 milk_drink:
   id: milk_drink
@@ -825,8 +749,8 @@ milk_drink:
   priority: 0
   description: 最大ＨＰの　半分 自分の　ＨＰを　回復する。 仲間に　ＨＰを　わけることも　できる。
   steps:
-  - type: heal
-    ratioMaxHp: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
   tags: []
 fillet_away:
@@ -842,9 +766,8 @@ fillet_away:
 
     自分の『こうげき』『とくこう』『すばやさ』ランクが2段階ずつ上がる。'
   steps:
-  - type: hp_loss
-    target: self
-    percent: 0.5
+  - type: damage
+    power: 0
   - type: modify_stage
     target: self
     stages:
@@ -863,8 +786,8 @@ metronome:
   priority: 0
   description: 指をふり　自分の　脳を　刺激して すべての　技の　なかから どれか　１つを　くりだす。
   steps:
-  - type: manual
-    manualReason: Randomly selects and uses any move in the game.
+  - type: random_move
+    pool: self_moves
   tags: []
 lock_on:
   id: lock_on
@@ -877,7 +800,8 @@ lock_on:
   priority: 0
   description: 照準を　しっかり　あわせて 次の　攻撃が　必ず 相手に　当たるように　する。
   steps:
-  - type: ensureNextHit
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 thrash:
   id: thrash
@@ -890,18 +814,9 @@ thrash:
   priority: 0
   description: ２ー３ターンの　あいだ 暴れまくって　相手を　攻撃する。 暴れたあとは　混乱する。
   steps:
-  - type: repeat
-    minTurns: 2
-    maxTurns: 3
-    move:
-      type: damage
-      power: 120
-      accuracy: 1.0
-  - type: status
-    target: user
-    status: confusion
-    minTurns: 1
-    maxTurns: 4
+  - type: damage
+    power: 120
+    accuracy: 1.0
   tags:
   - contact
 super_fang:
@@ -915,13 +830,8 @@ super_fang:
   priority: 0
   description: 鋭い　前歯で 激しく　かみついて　攻撃する。 相手の　ＨＰは　半分に　なる。
   steps:
-  - type: damage
-  - type: hp_fraction
-    fraction: 0.5
-    target: opponent
-  - type: immunity
-    immuneTypes:
-    - ghost
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 strength:
@@ -954,13 +864,6 @@ retaliate:
   - type: damage
     power: 70
     accuracy: 1.0
-  - type: condition
-    condition: ally_fainted_last_turn
-    then:
-    - type: damage
-      power: 140
-      accuracy: 1.0
-    else: []
   tags:
   - contact
 facade:
@@ -977,12 +880,6 @@ facade:
   - type: damage
     power: 70
     accuracy: 1.0
-  - type: conditionMultiplier
-    multiplier: 2.0
-    condition:
-    - poisoned
-    - paralyzed
-    - burned
   tags:
   - contact
 endeavor:
@@ -996,8 +893,8 @@ endeavor:
   priority: 0
   description: 相手の　ＨＰが　自分の　ＨＰと 同じくらいに　なるように ダメージを　与える。
   steps:
-  - type: damage
-    formula: currentHpDiff
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 slash:
@@ -1031,7 +928,6 @@ giga_impact:
   - type: damage
     power: 150
     accuracy: 0.9
-  - type: recharge
   tags:
   - contact
 rapid_spin:
@@ -1048,19 +944,10 @@ rapid_spin:
   - type: damage
     power: 50
     accuracy: 1.0
-  - type: remove_target_state
-    states:
-    - binding
-    - leech_seed
-    - spikes
-    - toxic_spikes
-    - stealth_rock
-    - sticky_web
   - type: modify_stage
-    target: user
+    target: target
     stages:
       spe: 1
-    chance: 1.0
   tags:
   - contact
 bind:
@@ -1077,15 +964,8 @@ bind:
   - type: damage
     power: 15
     accuracy: 0.85
-  - type: trap
-    turns:
-    - 4
-    - 5
-    damage:
-      type: hp_ratio
-      value: 0.125
-    condition:
-      invertedType: ghost
+  - type: manual
+    manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
   tags:
   - contact
 extreme_speed:
@@ -1103,7 +983,6 @@ extreme_speed:
     power: 80
     accuracy: 1.0
   tags:
-  - always_first
   - contact
 flail:
   id: flail
@@ -1116,16 +995,8 @@ flail:
   priority: 0
   description: じたばた　暴れて　攻撃する。 自分の　ＨＰが　少ないほど 技の　威力は　あがる。
   steps:
-  - type: damage
-  - type: dynamicPower
-    condition:
-      type: relativeHP
-      target: user
-      min: 0
-      max: 1
-    power:
-      min: 20
-      max: 200
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 self_destruct:
@@ -1142,7 +1013,6 @@ self_destruct:
   - type: damage
     power: 200
     accuracy: 1.0
-  - type: selfKO
   tags: []
 double_edge:
   id: double_edge
@@ -1158,8 +1028,9 @@ double_edge:
   - type: damage
     power: 120
     accuracy: 1.0
-  - type: recoil
-    recoilRatio: 0.33
+  - type: damage_ratio
+    ratioMaxHp: 0.33
+    target: self
   tags:
   - contact
 headbutt:
@@ -1179,7 +1050,8 @@ headbutt:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags:
   - contact
@@ -1210,12 +1082,14 @@ double_hit:
   priority: 0
   description: しっぽなどを　使い 相手を　たたいて　攻撃する。 ２回連続で　ダメージを　与える。
   steps:
-  - type: damage
-    power: 35
-    accuracy: 0.9
-  - type: damage
-    power: 35
-    accuracy: 0.9
+  - type: repeat
+    times:
+      min: 2
+      max: 2
+    steps:
+    - type: damage
+      power: 35
+      accuracy: 0.9
   tags:
   - contact
 quick_attack:
@@ -1233,7 +1107,6 @@ quick_attack:
     power: 40
     accuracy: 1.0
   tags:
-  - always_first
   - contact
 take_down:
   id: take_down
@@ -1249,8 +1122,9 @@ take_down:
   - type: damage
     power: 90
     accuracy: 0.85
-  - type: recoil
-    recoilDamage: 0.25
+  - type: damage_ratio
+    ratioMaxHp: 0.25
+    target: self
   tags:
   - contact
 fake_out:
@@ -1267,17 +1141,12 @@ fake_out:
   - type: damage
     power: 40
     accuracy: 1.0
-  - type: condition
-    condition:
-      type: can_flinch
+  - type: chance
+    p: 1.0
     then:
-    - type: chance
-      p: 1.0
-      then:
-      - type: apply_status
-        statusId: flinch
-        target: target
-    else: []
+    - type: apply_status
+      statusId: flinch
+      target: target
   tags:
   - contact
 body_slam:
@@ -1300,8 +1169,6 @@ body_slam:
     - type: apply_status
       statusId: paralysis
       target: target
-  - type: manual
-    manualReason: If the target has used Minimize, this move ignores accuracy checks and doubles its damage.
   tags:
   - contact
 guillotine:
@@ -1317,9 +1184,6 @@ guillotine:
   steps:
   - type: ohko
     baseAccuracy: 0.3
-    condition:
-      type: level
-      comparator: lessThanEqual
   tags:
   - contact
 feint:
@@ -1336,17 +1200,6 @@ feint:
   - type: damage
     power: 30
     accuracy: 1.0
-  - type: removeTargetMoveEffect
-    moveEffect:
-    - protect
-    - detect
-    - wide-guard
-    - quick-guard
-    - spiky-shield
-    - baneful-bunker
-    - obstruct
-    - silk-trap
-    - burning-bulwark
   tags:
   - contact
 stomp:
@@ -1369,8 +1222,6 @@ stomp:
     - type: apply_status
       statusId: flinch
       target: target
-  - type: manual
-    manualReason: Always hits if target used Minimize and doubles damage.
   tags:
   - contact
 covet:
@@ -1387,9 +1238,6 @@ covet:
   - type: damage
     power: 60
     accuracy: 1.0
-  - type: manual
-    manualReason: Takes the target’s item. If the user already has an item, this move will fail. In trainer battles, the item
-      is lost after the battle.
   tags:
   - contact
 fury_attack:
@@ -1426,8 +1274,6 @@ struggle:
   steps:
   - type: damage
     power: 50
-  - type: recoil
-    recoilPercent: 25
   tags:
   - contact
 snore:
@@ -1441,23 +1287,16 @@ snore:
   priority: 0
   description: 自分が　寝ているときに 雑音を　だして　攻撃する。 相手を　ひるませることが　ある。
   steps:
-  - type: condition
-    condition: user_status
-    statusId: sleep
+  - type: damage
+    power: 50
+    accuracy: 1.0
+  - type: chance
+    p: 0.3
     then:
-    - type: damage
-      power: 50
-      accuracy: 1.0
-    - type: chance
-      p: 0.3
-      then:
-      - type: apply_status
-        statusId: flinch
-        target: target
-    else:
-    - type: fail
-  tags:
-  - sound
+    - type: apply_status
+      statusId: flinch
+      target: target
+  tags: []
 weather_ball:
   id: weather_ball
   name: ウェザーボール
@@ -1472,8 +1311,6 @@ weather_ball:
   - type: damage
     power: 50
     accuracy: 1.0
-  - type: weatherBallTypeChange
-  - type: weatherBallPowerBoost
   tags: []
 echoed_voice:
   id: echoed_voice
@@ -1489,16 +1326,7 @@ echoed_voice:
   - type: damage
     power: 40
     accuracy: 1.0
-  - type: boostMovePower
-    multiplier: 2.0
-    maxBoosts: 2
-    condition:
-      type: moveUsedConsecutively
-      move: echoed_voice
-      user: any
-  - type: bypassSubstitute
-  tags:
-  - sound
+  tags: []
 uproar:
   id: uproar
   name: さわぐ
@@ -1513,11 +1341,6 @@ uproar:
   - type: damage
     power: 90
     accuracy: 1.0
-  - type: multiTurn
-    turns: 3
-    then:
-    - type: preventStatus
-      status: sleep
   tags: []
 swift:
   id: swift
@@ -1532,8 +1355,6 @@ swift:
   steps:
   - type: damage
     power: 60
-  - type: accuracy_change
-    fixedValue: 10000
   tags: []
 hyper_voice:
   id: hyper_voice
@@ -1549,9 +1370,7 @@ hyper_voice:
   - type: damage
     power: 90
     accuracy: 1.0
-  - type: ignoreSubstitute
-  tags:
-  - sound
+  tags: []
 hyper_beam:
   id: hyper_beam
   name: はかいこうせん
@@ -1566,7 +1385,6 @@ hyper_beam:
   - type: damage
     power: 150
     accuracy: 0.9
-  - type: recharge
   tags: []
 boomburst:
   id: boomburst
@@ -1582,9 +1400,7 @@ boomburst:
   - type: damage
     power: 140
     accuracy: 1.0
-  - type: ignoreSubstitute
-  tags:
-  - sound
+  tags: []
 no_retreat:
   id: no_retreat
   name: はいすいのじん
@@ -1604,9 +1420,6 @@ no_retreat:
       spa: 1
       spd: 1
       spe: 1
-  - type: trap
-    target: self
-  - type: fail_if_used_before
   tags: []
 bulk_up:
   id: bulk_up
@@ -1637,9 +1450,7 @@ detect:
   description: 相手の　攻撃を まったく　受けない。 連続で　だすと　失敗しやすい。
   steps:
   - type: protect
-  - type: failConsecutive
-  tags:
-  - protect
+  tags: []
 hammer_arm:
   id: hammer_arm
   name: アームハンマー
@@ -1655,7 +1466,7 @@ hammer_arm:
     power: 100
     accuracy: 0.9
   - type: modify_stage
-    target: user
+    target: self
     stages:
       spe: -1
   tags:
@@ -1677,10 +1488,10 @@ rock_smash:
   - type: chance
     p: 0.5
     then:
-    - type: modify_stat
-      stat: def
-      target: target
-      amount: -1
+    - type: modify_stage
+      target: self
+      stages:
+        def: -1
   tags:
   - contact
 close_combat:
@@ -1698,7 +1509,7 @@ close_combat:
     power: 120
     accuracy: 1.0
   - type: modify_stage
-    target: user
+    target: self
     stages:
       def: -1
       spd: -1
@@ -1715,9 +1526,8 @@ counter:
   priority: -5
   description: 相手から　受けた　物理攻撃の ダメージを　２倍に　して 同じ　相手に　返す。
   steps:
-  - type: counter
-    damageCategory: physical
-    multiplier: 2.0
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 axe_kick:
@@ -1736,19 +1546,6 @@ axe_kick:
   - type: damage
     power: 120
     accuracy: 0.9
-  - type: chance
-    chance: 0.3
-    steps:
-    - type: inflict_status
-      status: confusion
-      turns:
-        min: 1
-        max: 4
-  - type: condition
-    condition: miss
-    steps:
-    - type: recoil
-      recoil: 0.5
   tags:
   - contact
 brick_break:
@@ -1765,7 +1562,6 @@ brick_break:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: remove_screens
   tags:
   - contact
 focus_punch:
@@ -1779,17 +1575,9 @@ focus_punch:
   priority: -3
   description: 精神を　高めて　パンチを　くりだす。 技を　だすまでに 攻撃を　受けると　失敗する。
   steps:
-  - type: condition
-    condition: focus
   - type: damage
     power: 150
     accuracy: 1.0
-    onFail:
-      type: fail
-  - type: ability
-    ability: iron_fist
-    multiplier: 1.2
-    affect: damage
   tags:
   - contact
 reversal:
@@ -1803,11 +1591,8 @@ reversal:
   priority: 0
   description: 力を　ふりしぼり　攻撃する。 自分の　ＨＰが　少ないほど 技の　威力は　あがる。
   steps:
-  - type: damage
-  - type: hpBasedPower
-    minPower: 20
-    maxPower: 200
-    attacker: true
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 cross_chop:
@@ -1838,21 +1623,8 @@ low_kick:
   priority: 0
   description: 足を　強く　けり 相手を　転ばせて　攻撃する。 相手が　重いほど　威力が　あがる。
   steps:
-  - type: damage
-  - type: weightBasedDamage
-    weights:
-    - maxWeight: 10
-      power: 20
-    - maxWeight: 25
-      power: 40
-    - maxWeight: 50
-      power: 60
-    - maxWeight: 100
-      power: 80
-    - maxWeight: 200
-      power: 100
-    - maxWeight: 99999
-      power: 120
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 arm_thrust:
@@ -1866,13 +1638,14 @@ arm_thrust:
   priority: 0
   description: ひらいた　両手で 相手を　つっぱって　攻撃する。 ２ー５回の　あいだ　連続で　だす。
   steps:
-  - type: damage
-    power: 15
-    accuracy: 1.0
   - type: repeat
     times:
       min: 2
       max: 5
+    steps:
+    - type: damage
+      power: 15
+      accuracy: 1.0
   tags:
   - contact
 high_jump_kick:
@@ -1889,11 +1662,6 @@ high_jump_kick:
   - type: damage
     power: 130
     accuracy: 0.9
-  - type: condition
-    condition: miss
-    effect:
-      type: recoil
-      recoilDamage: 0.5
   tags:
   - contact
 circle_throw:
@@ -1910,7 +1678,6 @@ circle_throw:
   - type: damage
     power: 60
     accuracy: 0.9
-  - type: forceSwitch
   tags:
   - contact
 triple_kick:
@@ -1926,15 +1693,12 @@ triple_kick:
   steps:
   - type: repeat
     times:
-      min: 1
+      min: 3
       max: 3
-    interruptCondition: miss
     steps:
     - type: damage
       power: 10
       accuracy: 0.9
-    - type: modifySelfNextDamage
-      multiplier: 1.0
   tags:
   - contact
 drain_punch:
@@ -1951,9 +1715,9 @@ drain_punch:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: drain
-    target: user
-    factor: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags:
   - contact
 double_kick:
@@ -1967,12 +1731,14 @@ double_kick:
   priority: 0
   description: ２本の　足で　相手を　けとばして 攻撃する。２回連続で ダメージを　与える。
   steps:
-  - type: damage
-    power: 30
-    accuracy: 1.0
-  - type: damage
-    power: 30
-    accuracy: 1.0
+  - type: repeat
+    times:
+      min: 2
+      max: 2
+    steps:
+    - type: damage
+      power: 30
+      accuracy: 1.0
   tags:
   - contact
 force_palm:
@@ -1994,7 +1760,7 @@ force_palm:
     then:
     - type: apply_status
       statusId: paralysis
-      target: opponent
+      target: target
   tags:
   - contact
 upper_hand:
@@ -2013,10 +1779,6 @@ upper_hand:
   - type: damage
     power: 65
     accuracy: 1.0
-  - type: manual
-    manualReason: Move fails if the target is not using a priority move or has already acted.
-  - type: flinch
-    chance: 1.0
   tags:
   - contact
 superpower:
@@ -2034,7 +1796,7 @@ superpower:
     power: 120
     accuracy: 1.0
   - type: modify_stage
-    target: user
+    target: self
     stages:
       atk: -1
       def: -1
@@ -2057,9 +1819,6 @@ dynamic_punch:
   - type: apply_status
     statusId: confusion
     target: target
-    chance: 1
-  - type: manual
-    manualReason: Variable turn confusion is not supported
   tags:
   - contact
 body_press:
@@ -2076,8 +1835,6 @@ body_press:
   - type: damage
     power: 80
     accuracy: 1.0
-    defensiveStat: defense
-    offensiveStat: defense
   tags:
   - contact
 mach_punch:
@@ -2096,7 +1853,6 @@ mach_punch:
     accuracy: 1.0
   tags:
   - contact
-  - priority
 low_sweep:
   id: low_sweep
   name: ローキック
@@ -2111,11 +1867,10 @@ low_sweep:
   - type: damage
     power: 65
     accuracy: 1.0
-  - type: modify_stat
-    target: target
-    stat: spe
-    amount: -1
-    chance: 1.0
+  - type: modify_stage
+    target: self
+    stages:
+      spe: -1
   tags:
   - contact
 final_gambit:
@@ -2129,10 +1884,8 @@ final_gambit:
   priority: 0
   description: 命懸けで　相手を　攻撃する。 自分は　ひんしに　なるが　相手に ＨＰ分の　ダメージを　与える。
   steps:
-  - type: damage
-    formula: user_current_hp
-    ignoreTypeMatchup: true
-  - type: self_destruct
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 focus_blast:
   id: focus_blast
@@ -2151,11 +1904,10 @@ focus_blast:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 vacuum_wave:
   id: vacuum_wave
@@ -2171,8 +1923,7 @@ vacuum_wave:
   - type: damage
     power: 40
     accuracy: 1.0
-  tags:
-  - always_first
+  tags: []
 aura_sphere:
   id: aura_sphere
   name: はどうだん
@@ -2186,7 +1937,6 @@ aura_sphere:
   steps:
   - type: damage
     power: 80
-  - type: accuracy_always_hit
   tags: []
 tailwind:
   id: tailwind
@@ -2199,12 +1949,9 @@ tailwind:
   priority: 0
   description: 激しく　吹きあれる 風の渦を　つくり　４ターンの　あいだ 味方　全員の　素早さを　あげる。
   steps:
-  - type: boostStats
-    target: allAlly
-    stats:
-    - speed
-    amount: 2
-    turns: 4
+  - type: apply_field_status
+    statusId: tailwind
+    duration: 4
   tags: []
 defog:
   id: defog
@@ -2221,8 +1968,6 @@ defog:
     target: target
     stages:
       evasion: -1
-  - type: manual
-    manualReason: Removes field effects from the enemy field.
   tags: []
 roost:
   id: roost
@@ -2235,11 +1980,9 @@ roost:
   priority: 0
   description: 地面に　降りて　体を　やすめる。 最大ＨＰの　半分の ＨＰを　回復する。
   steps:
-  - type: heal
-    ratioMaxHp: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
-  - type: manual
-    manualReason: Changes the user's type to non-flying for the turn.
   tags: []
 feather_dance:
   id: feather_dance
@@ -2252,11 +1995,10 @@ feather_dance:
   priority: 0
   description: 羽毛を　ふりまいて 相手の　体に　からませる。 相手の　攻撃を　がくっと　さげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: target
-    stat: atk
-    amount: -2
-    isStage: true
+    stages:
+      atk: -2
   tags: []
 acrobatics:
   id: acrobatics
@@ -2272,13 +2014,30 @@ acrobatics:
   - type: damage
     power: 55
     accuracy: 1.0
-    condition:
-      subject: user
-      test: hasNoItem
-    onCondition:
-      multiplier: 2.0
   tags:
   - contact
+sky_attack:
+  id: sky_attack
+  name: ゴッドバード
+  type: flying
+  category: physical
+  pp: 5
+  power: 140
+  accuracy: 0.9
+  priority: 0
+  description: ２ターン目に　相手を　攻撃する。 たまに　ひるませる。 急所にも　当たりやすい。
+  steps:
+  - type: damage
+    power: 140
+    accuracy: 0.9
+  - type: chance
+    p: 0.3
+    then:
+    - type: apply_status
+      statusId: flinch
+      target: target
+  tags: []
+  critRate: 1
 fly:
   id: fly
   name: そらをとぶ
@@ -2290,16 +2049,6 @@ fly:
   priority: 0
   description: １ターン目で　空へ　飛び ２ターン目に　相手を　攻撃する。 知っている　街に　飛ぶことも　できる。
   steps:
-  - type: charge
-    chargeType: fly
-    immuneTo:
-    - rock_throw
-    - gust
-    - thunder
-    - thousand_arrows
-    - sky_uppercut
-    - twister
-    - hurricane
   - type: damage
     power: 90
     accuracy: 0.95
@@ -2316,12 +2065,14 @@ dual_wingbeat:
   priority: 0
   description: 翼を　相手に　ぶつけて 攻撃する。　２回連続で ダメージを　与える。
   steps:
-  - type: damage
-    power: 40
-    accuracy: 0.9
-  - type: damage
-    power: 40
-    accuracy: 0.9
+  - type: repeat
+    times:
+      min: 2
+      max: 2
+    steps:
+    - type: damage
+      power: 40
+      accuracy: 0.9
   tags:
   - contact
 pluck:
@@ -2338,8 +2089,6 @@ pluck:
   - type: damage
     power: 60
     accuracy: 1.0
-  - type: stealBerry
-  - type: useBerry
   tags:
   - contact
 peck:
@@ -2387,7 +2136,6 @@ aerial_ace:
   steps:
   - type: damage
     power: 60
-    alwaysHits: true
   tags:
   - contact
 bounce:
@@ -2401,22 +2149,9 @@ bounce:
   priority: 0
   description: 空高く　飛び跳ねて ２ターン目に　相手を　攻撃する。 まひ状態に　することが　ある。
   steps:
-  - type: charge
-    chargeMessage: はねまわっている!
-    nextTurnEffect:
-      type: damage
-      power: 85
-      accuracy: 0.85
-    immuneTo:
-    - attack
-    - except
-    - smack-down
-    - gust
-    - thunder
-    - thousand-arrows
-    - sky-uppercut
-    - twister
-    - hurricane
+  - type: damage
+    power: 85
+    accuracy: 0.85
   - type: chance
     p: 0.3
     then:
@@ -2455,8 +2190,9 @@ brave_bird:
   - type: damage
     power: 120
     accuracy: 1.0
-  - type: recoil
-    recoilPercent: 0.33
+  - type: damage_ratio
+    ratioMaxHp: 0.33
+    target: self
   tags:
   - contact
 air_cutter:
@@ -2492,7 +2228,8 @@ air_slash:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags: []
 gust:
@@ -2509,20 +2246,6 @@ gust:
   - type: damage
     power: 40
     accuracy: 1.0
-  - type: modifyDamage
-    multiplier: 2.0
-    condition:
-      target: opponent
-      moveBeingUsed:
-      - fly
-      - bounce
-      - free-fall
-  - type: bypassProtection
-    condition:
-      moveBeingUsed:
-      - fly
-      - bounce
-      - free-fall
   tags: []
 bleakwind_storm:
   id: bleakwind_storm
@@ -2538,18 +2261,6 @@ bleakwind_storm:
   - type: damage
     power: 100
     accuracy: 0.8
-  - type: chance
-    chance: 0.3
-    steps:
-    - type: stat_down
-      stat: speed
-      amount: 1
-      target: opponent
-  - type: weather_check
-    weather: rain
-    success:
-      type: accuracy_override
-      accuracy: 1.0
   tags: []
 hurricane:
   id: hurricane
@@ -2571,10 +2282,6 @@ hurricane:
     - type: apply_status
       statusId: confusion
       target: target
-      minTurns: 2
-      maxTurns: 5
-  - type: manual
-    manualReason: Weather-dependent accuracy and interaction with moves like Fly/Bounce/Free Fall are not supported
   tags: []
 gastro_acid:
   id: gastro_acid
@@ -2587,7 +2294,8 @@ gastro_acid:
   priority: 0
   description: 胃液を　相手の 体に　吐きつける。ついた　胃液は 相手の　特性の　効果を　消す。
   steps:
-  - type: disableAbility
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 baneful_bunker:
   id: baneful_bunker
@@ -2601,11 +2309,7 @@ baneful_bunker:
   description: 相手の　攻撃を　防ぐと 同時に　触れた　相手に 毒を　与えてしまう。
   steps:
   - type: protect
-  - type: contact_poison
-    chance: 100
-  tags:
-  - contact
-  - protect
+  tags: []
 coil:
   id: coil
   name: とぐろをまく
@@ -2617,17 +2321,12 @@ coil:
   priority: 0
   description: とぐろを　まいて　集中する。 自分の　攻撃と　防御と 命中率を　あげる。
   steps:
-  - type: modify_stats
-    modifiers:
-    - stat: atk
-      amount: 1
-      target: self
-    - stat: def
-      amount: 1
-      target: self
-    - stat: accuracy
-      amount: 1
-      target: self
+  - type: modify_stage
+    target: self
+    stages:
+      atk: 1
+      def: 1
+      accuracy: 1
   tags: []
 acid_armor:
   id: acid_armor
@@ -2640,11 +2339,10 @@ acid_armor:
   priority: 0
   description: '細胞の　変化で　液状に　なり 自分の　防御を　ぐーんと　あげる。 '
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: def
-    amount: 2
-    modifier: stage
+    stages:
+      def: 2
   tags: []
 poison_gas:
   id: poison_gas
@@ -2660,11 +2358,6 @@ poison_gas:
   - type: apply_status
     statusId: poison
     target: target
-    condition:
-      type: immune_to_type
-      types:
-      - poison
-      - steel
   tags: []
 toxic:
   id: toxic
@@ -2678,7 +2371,7 @@ toxic:
   description: 相手を　猛毒の　状態に　する。 ターンが　すすむほど 毒の　ダメージが　増えていく。
   steps:
   - type: apply_status
-    statusId: badly_poisoned
+    statusId: poison
     target: target
   tags: []
 poison_powder:
@@ -2695,9 +2388,6 @@ poison_powder:
   - type: apply_status
     statusId: poison
     target: target
-    condition:
-      type: can_apply_status
-      statusId: poison
   tags: []
 toxic_spikes:
   id: toxic_spikes
@@ -2710,9 +2400,9 @@ toxic_spikes:
   priority: 0
   description: 相手の　足下に　どくびしを しかける。交代で　でてきた　相手の ポケモンに　毒を　おわせる。
   steps:
-  - type: entryHazard
-    hazard: toxicSpikes
-    layers: 1
+  - type: apply_field_status
+    statusId: toxic_spikes
+    stack: true
   tags: []
 cross_poison:
   id: cross_poison
@@ -2756,7 +2446,7 @@ gunk_shot:
     then:
     - type: apply_status
       statusId: poison
-      target: opponent
+      target: target
   tags: []
 poison_jab:
   id: poison_jab
@@ -2798,7 +2488,7 @@ poison_fang:
     p: 0.5
     then:
     - type: apply_status
-      statusId: badly_poisoned
+      statusId: poison
       target: target
   tags:
   - contact
@@ -2817,10 +2507,9 @@ acid_spray:
     power: 40
     accuracy: 1.0
   - type: modify_stage
-    target: target
-    stat: spd
-    amount: -2
-    chance: 1.0
+    target: self
+    stages:
+      spd: -2
   tags: []
 clear_smog:
   id: clear_smog
@@ -2835,8 +2524,6 @@ clear_smog:
   steps:
   - type: damage
     power: 50
-  - type: resetStatModifiers
-    target: opponent
   tags: []
 belch:
   id: belch
@@ -2849,8 +2536,6 @@ belch:
   priority: 0
   description: 相手に　向かって　ゲップを 浴びせて　ダメージを　与える。 きのみを　食べないと　だせない。
   steps:
-  - type: berryCheck
-    hasBerry: true
   - type: damage
     power: 120
     accuracy: 0.9
@@ -2874,7 +2559,7 @@ sludge_bomb:
     then:
     - type: apply_status
       statusId: poison
-      target: opponent
+      target: target
   tags: []
 venoshock:
   id: venoshock
@@ -2890,14 +2575,6 @@ venoshock:
   - type: damage
     power: 65
     accuracy: 1.0
-  - type: condition
-    condition: poisoned
-    then:
-    - type: damage
-      power: 65
-      accuracy: 1.0
-      multiplier: 2.0
-    else: []
   tags: []
 acid:
   id: acid
@@ -2916,11 +2593,10 @@ acid:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 sand_attack:
   id: sand_attack
@@ -2949,31 +2625,10 @@ spikes:
   priority: 0
   description: 相手の　足下に　まきびしを しかける。交代で　でてきた　相手の ポケモンに　ダメージを　与える。
   steps:
-  - type: entryHazard
-    hazard: spikes
-    layers: 3
-    damage:
-    - condition:
-        layers: 1
-      type: hpBasedDamage
-      numerator: 1
-      denominator: 8
-    - condition:
-        layers: 2
-      type: hpBasedDamage
-      numerator: 1
-      denominator: 6
-    - condition:
-        layers: 3
-      type: hpBasedDamage
-      numerator: 1
-      denominator: 4
-    immuneTypes:
-    - flying
-    immuneAbilities:
-    - levitate
-  tags:
-  - entry-hazard
+  - type: apply_field_status
+    statusId: spikes
+    stack: true
+  tags: []
 dig:
   id: dig
   name: あなをほる
@@ -2985,12 +2640,6 @@ dig:
   priority: 0
   description: １ターン目に　潜り　２ターン目で 相手を　攻撃する。 洞窟からの　脱出も　できる。
   steps:
-  - type: charge
-    effect:
-      type: protected
-      moveExceptions:
-      - earthquake
-      - magnitude
   - type: damage
     power: 80
     accuracy: 1.0
@@ -3010,11 +2659,6 @@ earthquake:
   - type: damage
     power: 100
     accuracy: 1.0
-  - type: modifyDamage
-    condition:
-      target: opponent
-      move: dig
-    multiplier: 2.0
   tags: []
 stomping_tantrum:
   id: stomping_tantrum
@@ -3030,11 +2674,6 @@ stomping_tantrum:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: condition
-    condition: lastMoveFailed
-    then:
-    - type: damage
-      multiplier: 2.0
   tags:
   - contact
 bulldoze:
@@ -3052,11 +2691,26 @@ bulldoze:
     power: 60
     accuracy: 1.0
   - type: modify_stage
-    target: target
-    stat: spe
-    amount: -1
-    chance: 1.0
+    target: self
+    stages:
+      spe: -1
   tags: []
+high_horsepower:
+  id: high_horsepower
+  name: １０まんばりき
+  type: ground
+  category: physical
+  pp: 10
+  power: 95
+  accuracy: 0.95
+  priority: 0
+  description: 全身を　使って 相手に　猛アタックする。
+  steps:
+  - type: damage
+    power: 95
+    accuracy: 0.95
+  tags:
+  - contact
 fissure:
   id: fissure
   name: じわれ
@@ -3068,20 +2722,8 @@ fissure:
   priority: 0
   description: 地割れの　裂け目に 相手を　落として　攻撃する。 当たれば　一撃で　ひんしに　する。
   steps:
-  - type: damage
   - type: ohko
     baseAccuracy: 0.3
-    condition:
-      type: levelDiff
-      target: target
-      comparator: lessThanEqual
-      levelDiff: 0
-    failureCondition:
-      type: targetTypeMatch
-      targetType: flying
-    failureCondition2:
-      type: targetStatus
-      status: dynamax
   tags: []
 sand_tomb:
   id: sand_tomb
@@ -3097,15 +2739,8 @@ sand_tomb:
   - type: damage
     power: 35
     accuracy: 0.85
-  - type: trap
-    turns:
-    - 4
-    - 5
-    damagePercent: 0.125
-    affectedByProtect: true
-    canEscape: false
-    exceptionTypes:
-    - ghost
+  - type: manual
+    manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
   tags: []
 drill_run:
   id: drill_run
@@ -3140,18 +2775,11 @@ headlong_rush:
   - type: damage
     power: 120
     accuracy: 1.0
-  - type: stat_decrease
-    stat: defense
-    amount: 1
-    target: user
-  - type: stat_decrease
-    stat: special_defense
-    amount: 1
-    target: user
-  - type: ability_modifier
-    ability: iron_fist
-    parameter: power
-    multiplier: 1.2
+  - type: modify_stage
+    target: self
+    stages:
+      def: -1
+      spd: -1
   tags:
   - contact
 bone_rush:
@@ -3165,9 +2793,6 @@ bone_rush:
   priority: 0
   description: 硬い　ホネで 相手を　なぐりつけて　攻撃する。 ２ー５回の　あいだ　連続で　だす。
   steps:
-  - type: damage
-    power: 25
-    accuracy: 0.9
   - type: repeat
     times:
       min: 2
@@ -3194,11 +2819,10 @@ earth_power:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 mud_slap:
   id: mud_slap
@@ -3215,10 +2839,9 @@ mud_slap:
     power: 20
     accuracy: 1.0
   - type: modify_stage
-    target: target
-    stat: accuracy
-    amount: -1
-    chance: 1.0
+    target: self
+    stages:
+      accuracy: -1
   tags: []
 sandsear_storm:
   id: sandsear_storm
@@ -3234,14 +2857,6 @@ sandsear_storm:
   - type: damage
     power: 100
     accuracy: 0.8
-  - type: status
-    target: opponent
-    status: burn
-    chance: 0.2
-  - type: accuracy_override
-    condition:
-      weather: rain
-    accuracy: 1.0
   tags: []
 scorching_sands:
   id: scorching_sands
@@ -3263,15 +2878,6 @@ scorching_sands:
     - type: apply_status
       statusId: burn
       target: target
-  - type: condition
-    if:
-      type: has_status
-      statusId: freeze
-      target: user
-    then:
-    - type: remove_status
-      statusId: freeze
-      target: user
   tags: []
 mud_shot:
   id: mud_shot
@@ -3288,10 +2894,9 @@ mud_shot:
     power: 55
     accuracy: 0.95
   - type: modify_stage
-    target: target
+    target: self
     stages:
       spe: -1
-    chance: 1.0
   tags: []
 stealth_rock:
   id: stealth_rock
@@ -3304,8 +2909,8 @@ stealth_rock:
   priority: 0
   description: 相手の　周りに　無数の　岩を 浮かべて　交代で　でてきた　相手の ポケモンに　ダメージを　与える。
   steps:
-  - type: entryHazard
-    hazardType: stealthRock
+  - type: apply_field_status
+    statusId: stealth_rock
   tags: []
 sandstorm:
   id: sandstorm
@@ -3318,28 +2923,9 @@ sandstorm:
   priority: 0
   description: ５ターンの　あいだ　砂あらしで いわ　じめん　はがねタイプ　以外の ポケモンに　ダメージを　与える。
   steps:
-  - type: weather
-    weather: sandstorm
-    turns: 5
-  - type: damage
-    effect: residual
-    target: opponent
-    condition:
-      type: notType
-      types:
-      - rock
-      - ground
-      - steel
-    damage:
-      type: percentMaxHP
-      value: 0.0625
-  - type: boost
-    stat: specialDefense
-    amount: 1.5
-    condition:
-      type: hasType
-      types:
-      - rock
+  - type: apply_field_status
+    statusId: sandstorm
+    duration: 5
   tags: []
 rock_polish:
   id: rock_polish
@@ -3352,11 +2938,10 @@ rock_polish:
   priority: 0
   description: 自分の　体を　磨いて　空気の 抵抗を　少なくする。素早さを ぐーんと　あげることが　できる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: spe
-    amount: 2
-    isStage: true
+    stages:
+      spe: 2
   tags: []
 accelerock:
   id: accelerock
@@ -3373,7 +2958,6 @@ accelerock:
     power: 40
     accuracy: 1.0
   tags:
-  - alwaysFirst
   - contact
 rock_throw:
   id: rock_throw
@@ -3407,7 +2991,8 @@ rock_slide:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags: []
 rock_tomb:
@@ -3425,8 +3010,7 @@ rock_tomb:
     power: 60
     accuracy: 0.95
   - type: modify_stage
-    target: target
-    chance: 1.0
+    target: self
     stages:
       spe: -1
   tags: []
@@ -3444,22 +3028,6 @@ rollout:
   - type: damage
     power: 30
     accuracy: 0.9
-  - type: repeat
-    maxTurns: 5
-    hitFunc:
-      type: damage
-      power:
-        type: scale
-        multiplier: 2
-        maxPower: 480
-      accuracy: 0.9
-  - type: condition
-    condition:
-      type: hasMoveEffect
-      move: まるくなる
-    'true':
-      type: modifyNextPower
-      multiplier: 2
   tags:
   - contact
 stone_edge:
@@ -3516,7 +3084,7 @@ ancient_power:
     p: 0.1
     then:
     - type: modify_stage
-      target: user
+      target: target
       stages:
         atk: 1
         def: 1
@@ -3550,12 +3118,6 @@ meteor_beam:
   priority: 0
   description: １ターン目に　宇宙の　力を 集めることで　特攻が　あがり ２ターン目に　相手を　攻撃する。
   steps:
-  - type: charge
-    chargeSteps:
-    - type: boost
-      stat: specialAttack
-      amount: 1
-      chance: 1
   - type: damage
     power: 120
     accuracy: 0.9
@@ -3573,8 +3135,8 @@ string_shot:
   steps:
   - type: modify_stage
     target: target
-    stat: spe
-    amount: -2
+    stages:
+      spe: -2
   tags: []
 quiver_dance:
   id: quiver_dance
@@ -3589,11 +3151,10 @@ quiver_dance:
   steps:
   - type: modify_stage
     target: self
-    stat:
-    - spa
-    - spd
-    - spe
-    amount: 1
+    stages:
+      spa: 1
+      spd: 1
+      spe: 1
   tags: []
 sticky_web:
   id: sticky_web
@@ -3606,8 +3167,8 @@ sticky_web:
   priority: 0
   description: 相手の　周りに　ねばねばした ネットを　はりめぐらせ　交代で でてきた　相手の　素早さを　さげる。
   steps:
-  - type: entryHazard
-    hazard: stickyWeb
+  - type: apply_field_status
+    statusId: sticky_web
   tags: []
 tail_glow:
   id: tail_glow
@@ -3620,10 +3181,10 @@ tail_glow:
   priority: 0
   description: 点滅する　光を　眺めて 自分の　精神を　統一し 特攻を　ぐぐーんと　あげる。
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: self
-    stat: spa
-    amount: 3
+    stages:
+      spa: 3
   tags: []
 leech_life:
   id: leech_life
@@ -3639,9 +3200,9 @@ leech_life:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: drain
-    target: user
-    ratio: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags:
   - contact
 x_scissor:
@@ -3674,9 +3235,6 @@ first_impression:
   - type: damage
     power: 90
     accuracy: 1.0
-  - type: condition
-    condition: firstTurnOnly
-    success: 1.0
   tags:
   - contact
 fell_stinger:
@@ -3693,12 +3251,6 @@ fell_stinger:
   - type: damage
     power: 50
     accuracy: 1.0
-  - type: conditional
-    condition: target_koed
-    success:
-    - type: stat_boost
-      stat: attack
-      amount: 3
   tags:
   - contact
 lunge:
@@ -3715,11 +3267,10 @@ lunge:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: modify_stat
-    target: target
-    stat: atk
-    amount: -1
-    chance: 1.0
+  - type: modify_stage
+    target: self
+    stages:
+      atk: -1
   tags:
   - contact
 u_turn:
@@ -3758,8 +3309,7 @@ pin_missile:
     - type: damage
       power: 25
       accuracy: 0.95
-  tags:
-  - multiHit
+  tags: []
 megahorn:
   id: megahorn
   name: メガホーン
@@ -3790,9 +3340,6 @@ fury_cutter:
   - type: damage
     power: 40
     accuracy: 0.95
-  - type: manual
-    manualReason: Power doubles every turn this move is used in succession after the first, maxing out after five turns. Power
-      resets if the move misses or is not used consecutively.
   tags:
   - contact
 pollen_puff:
@@ -3806,8 +3353,9 @@ pollen_puff:
   priority: 0
   description: 敵には　爆発する　だんごを 使って　攻撃。　味方には 回復する　だんごを　与える。
   steps:
-  - type: manual
-    manualReason: Damages opponents, but heals allies for 50% of their max HP.
+  - type: damage
+    power: 90
+    accuracy: 1.0
   tags: []
 infestation:
   id: infestation
@@ -3823,16 +3371,8 @@ infestation:
   - type: damage
     power: 20
     accuracy: 1.0
-  - type: trap
-    turns:
-    - 4
-    - 5
-    ailment: bound
-  - type: residualDamage
-    percentDamage: 12.5
-    turns:
-    - 4
-    - 5
+  - type: manual
+    manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
   tags: []
 bug_buzz:
   id: bug_buzz
@@ -3852,11 +3392,10 @@ bug_buzz:
     p: 0.1
     then:
     - type: modify_stage
-      target: target
+      target: self
       stages:
         spd: -1
-  tags:
-  - sound
+  tags: []
 confuse_ray:
   id: confuse_ray
   name: あやしいひかり
@@ -3871,10 +3410,6 @@ confuse_ray:
   - type: apply_status
     statusId: confusion
     target: target
-    options:
-      turns:
-        min: 1
-        max: 4
   tags: []
 curse:
   id: curse
@@ -3887,33 +3422,8 @@ curse:
   priority: 0
   description: 使う　ポケモンが ゴーストタイプと　それ以外　とでは 効果が　変わる。
   steps:
-  - type: condition
-    target: user
-    condition: type
-    parameters:
-      type: ghost
-    'true':
-    - type: damage
-      target: user
-      damageType: hp
-      amount: 0.5
-      maxHp: true
-    - type: inflictCondition
-      target: opponent
-      condition: curse
-    'false':
-    - type: statModifier
-      target: user
-      stat: speed
-      amount: -1
-    - type: statModifier
-      target: user
-      stat: attack
-      amount: 1
-    - type: statModifier
-      target: user
-      stat: defense
-      amount: 1
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 destiny_bond:
   id: destiny_bond
@@ -3926,7 +3436,8 @@ destiny_bond:
   priority: 0
   description: 技を　だしたあと　攻撃を　受けて ひんしに　なったとき 攻撃　相手も　ひんしに　する。
   steps:
-  - type: destinyBond
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 astonish:
   id: astonish
@@ -3945,7 +3456,8 @@ astonish:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags:
   - contact
@@ -3964,7 +3476,6 @@ shadow_sneak:
     power: 40
     accuracy: 1.0
   tags:
-  - always_first
   - contact
 spirit_shackle:
   id: spirit_shackle
@@ -3980,10 +3491,6 @@ spirit_shackle:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: trap
-    condition:
-      type: notType
-      notType: ghost
   tags: []
 phantom_force:
   id: phantom_force
@@ -3996,11 +3503,9 @@ phantom_force:
   priority: 0
   description: １ターンめで　どこかに　消えて ２ターンめに　相手を　攻撃する。 守りを　無視して　攻撃できる。
   steps:
-  - type: vanish
   - type: damage
     power: 90
     accuracy: 1.0
-    protectBypass: true
   tags:
   - contact
 lick:
@@ -4055,7 +3560,6 @@ shadow_punch:
   steps:
   - type: damage
     power: 60
-  - type: ignore evasion and accuracy
   tags:
   - contact
 rage_fist:
@@ -4074,14 +3578,6 @@ rage_fist:
   - type: damage
     power: 50
     accuracy: 1.0
-  - type: dynamicPower
-    multiplier: 50
-    condition:
-      type: timesHitByMove
-    maxPower: 350
-  - type: abilityBoost
-    ability: iron_fist
-    multiplier: 1.2
   tags:
   - contact
 poltergeist:
@@ -4098,10 +3594,6 @@ poltergeist:
   - type: damage
     power: 110
     accuracy: 0.9
-  - type: condition
-    condition: target_item
-    parameter: exists
-    failure: fail
   tags: []
 bitter_malice:
   id: bitter_malice
@@ -4117,11 +3609,6 @@ bitter_malice:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: stat_down
-    target: opponent
-    stat: atk
-    amount: 1
-    chance: 1.0
   tags: []
 shadow_ball:
   id: shadow_ball
@@ -4140,11 +3627,10 @@ shadow_ball:
   - type: chance
     p: 0.2
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 moongeist_beam:
   id: moongeist_beam
@@ -4160,7 +3646,6 @@ moongeist_beam:
   - type: damage
     power: 100
     accuracy: 1.0
-  - type: ignoreAbility
   tags: []
 hex:
   id: hex
@@ -4176,16 +3661,6 @@ hex:
   - type: damage
     power: 65
     accuracy: 1.0
-    condition:
-      target: opponent
-      affectedByStatus: true
-  - type: condition
-    condition: powerBoost
-    target: source
-    multiplier: 2
-    conditionSource:
-      target: opponent
-      affectedByStatus: true
   tags: []
 metal_sound:
   id: metal_sound
@@ -4200,10 +3675,9 @@ metal_sound:
   steps:
   - type: modify_stage
     target: target
-    stat: spd
-    amount: -2
-  tags:
-  - sound
+    stages:
+      spd: -2
+  tags: []
 shift_gear:
   id: shift_gear
   name: ギアチェンジ
@@ -4217,12 +3691,9 @@ shift_gear:
   steps:
   - type: modify_stage
     target: self
-    stat: atk
-    amount: 1
-  - type: modify_stage
-    target: self
-    stat: spe
-    amount: 2
+    stages:
+      atk: 1
+      spe: 2
   tags: []
 iron_defense:
   id: iron_defense
@@ -4235,11 +3706,10 @@ iron_defense:
   priority: 0
   description: 皮膚を　鉄のように 硬くする　ことで 自分の　防御を　ぐーんと　あげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: def
-    amount: 2
-    isStage: true
+    stages:
+      def: 2
   tags: []
 iron_tail:
   id: iron_tail
@@ -4258,11 +3728,10 @@ iron_tail:
   - type: chance
     p: 0.3
     then:
-    - type: modify_stat
-      target: target
-      stat: def
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        def: -1
   tags:
   - contact
 iron_head:
@@ -4282,7 +3751,8 @@ iron_head:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags:
   - contact
@@ -4304,7 +3774,7 @@ meteor_mash:
     p: 0.2
     then:
     - type: modify_stage
-      target: user
+      target: target
       stages:
         atk: 1
   tags:
@@ -4320,8 +3790,8 @@ gyro_ball:
   priority: 0
   description: 体を　高速に　回転させて 体当たりする。相手より　素早さが 低いほど　強い。
   steps:
-  - type: damage
-  - type: gyroBallDamage
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 smart_strike:
@@ -4337,7 +3807,6 @@ smart_strike:
   steps:
   - type: damage
     power: 70
-  - type: ignore_evasion
   tags:
   - contact
 hard_press:
@@ -4354,9 +3823,6 @@ hard_press:
   - type: damage
     power: 0
     accuracy: 1.0
-    dynamicPower:
-      type: target_hp_ratio
-      maxPower: 100
   tags:
   - contact
 bullet_punch:
@@ -4375,7 +3841,6 @@ bullet_punch:
     accuracy: 1.0
   tags:
   - contact
-  - priority
 heavy_slam:
   id: heavy_slam
   name: ヘビーボンバー
@@ -4387,32 +3852,8 @@ heavy_slam:
   priority: 0
   description: 重たい　体で　相手に　ぶつかって 攻撃する。自分が　相手より 重いほど　威力が　あがる。
   steps:
-  - type: damage
-  - type: weight_based_damage
-    weights:
-    - ratio: 0.2
-      power: 120
-    - ratio: 0.25
-      power: 100
-    - ratio: 0.333
-      power: 80
-    - ratio: 0.5
-      power: 60
-    - ratio: 1.0
-      power: 40
-  - type: always_hit
-    condition:
-      target: opponent
-      has_move: minimize
-  - type: increase_damage
-    multiplier: 2.0
-    condition:
-      target: opponent
-      has_move: minimize
-  - type: fail
-    condition:
-      target: opponent
-      is_dynamaxed: true
+  - type: manual
+    manualReason: No supported effects inferred
   tags:
   - contact
 metal_claw:
@@ -4433,7 +3874,7 @@ metal_claw:
     p: 0.1
     then:
     - type: modify_stage
-      target: user
+      target: target
       stages:
         atk: 1
   tags:
@@ -4470,13 +3911,8 @@ tachyon_cutter:
   steps:
   - type: damage
     power: 50
-    accuracy: 1.0
-  - type: damage
-    power: 50
-    accuracy: 1.0
-  tags:
-  - alwaysHits
-  - multiHit
+    accuracy: 0.0
+  tags: []
 steel_beam:
   id: steel_beam
   name: てっていこうせん
@@ -4491,9 +3927,21 @@ steel_beam:
   - type: damage
     power: 140
     accuracy: 0.95
-  - type: recoil
-    recoilType: percentMaxHP
-    percentMaxHP: 0.5
+  tags: []
+doom_desire:
+  id: doom_desire
+  name: はめつのねがい
+  type: steel
+  category: special
+  pp: 5
+  power: 140
+  accuracy: 1.0
+  priority: 0
+  description: 技を　使った　２ターン後に 無数の　光の　束で 相手を　攻撃する。
+  steps:
+  - type: damage
+    power: 140
+    accuracy: 1.0
   tags: []
 flash_cannon:
   id: flash_cannon
@@ -4512,11 +3960,10 @@ flash_cannon:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 will_o_wisp:
   id: will_o_wisp
@@ -4532,10 +3979,6 @@ will_o_wisp:
   - type: apply_status
     statusId: burn
     target: target
-    condition:
-      type: immune_type
-      types:
-      - fire
   tags: []
 sunny_day:
   id: sunny_day
@@ -4548,19 +3991,9 @@ sunny_day:
   priority: 0
   description: ５ターンの　あいだ　日差しを 強くして　ほのおタイプの 技の　威力を　あげる。
   steps:
-  - type: weather
-    weather: sunny
-    turns: 5
-  - type: modifyDamage
-    multiplier: 1.5
-    moveTypes:
-    - fire
-  - type: modifyDamage
-    multiplier: 0.5
-    moveTypes:
-    - water
-  - type: preventStatus
-    status: freeze
+  - type: apply_field_status
+    statusId: sun
+    duration: 5
   tags: []
 flame_wheel:
   id: flame_wheel
@@ -4582,15 +4015,6 @@ flame_wheel:
     - type: apply_status
       statusId: burn
       target: target
-  - type: if
-    condition:
-      type: has_status
-      statusId: freeze
-      target: user
-    then:
-    - type: remove_status
-      statusId: freeze
-      target: user
   tags:
   - contact
 pyro_ball:
@@ -4613,8 +4037,6 @@ pyro_ball:
     - type: apply_status
       statusId: burn
       target: target
-  - type: manual
-    manualReason: Cures user of freeze condition.
   tags: []
 sacred_fire:
   id: sacred_fire
@@ -4636,14 +4058,6 @@ sacred_fire:
     - type: apply_status
       statusId: burn
       target: target
-  - type: condition
-    if:
-    - type: self_status
-      statusId: freeze
-    then:
-    - type: remove_status
-      statusId: freeze
-      target: self
   tags: []
 flame_charge:
   id: flame_charge
@@ -4660,10 +4074,9 @@ flame_charge:
     power: 50
     accuracy: 1.0
   - type: modify_stage
-    target: user
+    target: target
     stages:
       spe: 1
-    chance: 1.0
   tags:
   - contact
 flare_blitz:
@@ -4680,23 +4093,15 @@ flare_blitz:
   - type: damage
     power: 120
     accuracy: 1.0
-  - type: recoil
-    damagePercent: 0.33
+  - type: damage_ratio
+    ratioMaxHp: 0.33
+    target: self
   - type: chance
     p: 0.1
     then:
     - type: apply_status
       statusId: burn
       target: target
-  - type: condition
-    condition:
-      type: has_status
-      statusId: freeze
-      target: user
-    then:
-    - type: cure_status
-      statusId: freeze
-      target: user
   tags:
   - contact
 blaze_kick:
@@ -4740,15 +4145,14 @@ fire_fang:
     p: 0.1
     then:
     - type: apply_status
+      statusId: flinch
+      target: target
+  - type: chance
+    p: 0.1
+    then:
+    - type: apply_status
       statusId: burn
       target: target
-    else:
-    - type: chance
-      p: 0.1
-      then:
-      - type: apply_status
-        statusId: flinch
-        target: target
   tags:
   - contact
 fire_punch:
@@ -4771,15 +4175,6 @@ fire_punch:
     - type: apply_status
       statusId: burn
       target: target
-  - type: conditional
-    condition:
-      type: ability
-      abilityId: iron_fist
-      target: source
-    then:
-    - type: modify_move
-      key: power
-      multiplier: 1.2
   tags:
   - contact
 temper_flare:
@@ -4798,11 +4193,6 @@ temper_flare:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: condition
-    condition: lastMoveFailed
-    then:
-      type: damageMultiplier
-      multiplier: 2.0
   tags:
   - contact
 overheat:
@@ -4820,10 +4210,9 @@ overheat:
     power: 130
     accuracy: 0.9
   - type: modify_stage
-    target: user
+    target: self
     stages:
       spa: -2
-    chance: 1.0
   tags: []
 flamethrower:
   id: flamethrower
@@ -4842,7 +4231,7 @@ flamethrower:
   - type: chance
     p: 0.1
     then:
-    - type: inflict_status
+    - type: apply_status
       statusId: burn
       target: target
   tags: []
@@ -4860,14 +4249,9 @@ burning_jealousy:
   - type: damage
     power: 70
     accuracy: 1.0
-  - type: conditional
-    condition:
-      type: stat_increased_this_turn
-      target: target
-    success:
-    - type: apply_status
-      statusId: burn
-      target: target
+  - type: apply_status
+    statusId: burn
+    target: target
   tags: []
 fire_blast:
   id: fire_blast
@@ -4909,7 +4293,7 @@ heat_wave:
     then:
     - type: apply_status
       statusId: burn
-      target: opponent
+      target: target
   tags: []
 torch_song:
   id: torch_song
@@ -4926,13 +4310,10 @@ torch_song:
     power: 80
     accuracy: 1.0
   - type: modify_stage
-    target: self
+    target: target
     stages:
       spa: 1
-    chance: 1.0
-  tags:
-  - bypass-substitute
-  - sound
+  tags: []
 eruption:
   id: eruption
   name: ふんか
@@ -4945,8 +4326,8 @@ eruption:
   description: 怒りを　爆発させて　相手を 攻撃する。自分の　ＨＰが 少ないほど　技の　威力は　さがる。
   steps:
   - type: damage
-  - type: manual
-    manualReason: The power of this move decreases as the user's HP decreases. (Power = 150 * (current HP / max HP))
+    power: 150
+    accuracy: 1.0
   tags: []
 fire_spin:
   id: fire_spin
@@ -4962,14 +4343,8 @@ fire_spin:
   - type: damage
     power: 35
     accuracy: 0.85
-  - type: trap
-    turns:
-    - 4
-    - 5
-  - type: residualDamage
-    percentHp: 0.125
-    condition:
-      invertedType: ghost
+  - type: manual
+    manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
   tags: []
 fiery_dance:
   id: fiery_dance
@@ -4989,7 +4364,7 @@ fiery_dance:
     p: 0.5
     then:
     - type: modify_stage
-      target: user
+      target: target
       stages:
         spa: 1
   tags: []
@@ -5007,11 +4382,10 @@ mystical_fire:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: modify_stat
-    target: target
-    stat: spa
-    amount: -1
-    chance: 1.0
+  - type: modify_stage
+    target: self
+    stages:
+      spa: -1
   tags: []
 burn_up:
   id: burn_up
@@ -5027,26 +4401,6 @@ burn_up:
   - type: damage
     power: 130
     accuracy: 1.0
-  - type: condition
-    condition: user_has_type
-    params:
-      type: fire
-    success:
-      type: remove_type
-      target: user
-      params:
-        type: fire
-    failure:
-      type: fail
-  - type: condition
-    condition: user_has_status
-    params:
-      status: freeze
-    success:
-      type: remove_status
-      target: user
-      params:
-        status: freeze
   tags: []
 inferno:
   id: inferno
@@ -5065,7 +4419,6 @@ inferno:
   - type: apply_status
     statusId: burn
     target: target
-    chance: 1
   tags: []
 aqua_ring:
   id: aqua_ring
@@ -5078,8 +4431,8 @@ aqua_ring:
   priority: 0
   description: 自分の　体の　周りを 水で　つくった　ベールで　おおう。 毎ターン　ＨＰを　回復する。
   steps:
-  - type: addVolatileStatus
-    id: aqua_ring
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 rain_dance:
   id: rain_dance
@@ -5092,9 +4445,9 @@ rain_dance:
   priority: 0
   description: ５ターンの　あいだ　雨を　降らせて みずタイプの 技の　威力を　あげる。
   steps:
-  - type: weather
-    weather: rain
-    turns: 5
+  - type: apply_field_status
+    statusId: rain
+    duration: 5
   tags: []
 withdraw:
   id: withdraw
@@ -5111,8 +4464,7 @@ withdraw:
     target: self
     stages:
       def: 1
-  tags:
-  - defensive
+  tags: []
 aqua_cutter:
   id: aqua_cutter
   name: アクアカッター
@@ -5128,7 +4480,6 @@ aqua_cutter:
     power: 70
     accuracy: 1.0
   tags: []
-  critRate: 1
 aqua_jet:
   id: aqua_jet
   name: アクアジェット
@@ -5144,7 +4495,6 @@ aqua_jet:
     power: 40
     accuracy: 1.0
   tags:
-  - always_first
   - contact
 aqua_step:
   id: aqua_step
@@ -5161,10 +4511,9 @@ aqua_step:
     power: 80
     accuracy: 1.0
   - type: modify_stage
-    target: self
+    target: target
     stages:
       spe: 1
-    chance: 1.0
   tags:
   - contact
 aqua_tail:
@@ -5199,11 +4548,11 @@ liquidation:
     accuracy: 1.0
   - type: chance
     p: 0.2
-    steps:
+    then:
     - type: modify_stage
-      target: target
-      stat: def
-      amount: -1
+      target: self
+      stages:
+        def: -1
   tags:
   - contact
 flip_turn:
@@ -5237,9 +4586,6 @@ jet_punch:
   - type: damage
     power: 60
     accuracy: 1.0
-  - type: abilityBoost
-    ability: iron_fist
-    multiplier: 1.2
   tags:
   - contact
 waterfall:
@@ -5259,7 +4605,8 @@ waterfall:
   - type: chance
     p: 0.2
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags:
   - contact
@@ -5274,13 +4621,6 @@ dive:
   priority: 0
   description: １ターン目で　潜り　２ターン目に 浮きあがって　攻撃する。
   steps:
-  - type: charge
-    effect:
-      type: protect
-      condition: underwater
-      exceptions:
-      - surf
-      - whirlpool
   - type: damage
     power: 80
     accuracy: 1.0
@@ -5300,14 +4640,8 @@ whirlpool:
   - type: damage
     power: 35
     accuracy: 0.85
-  - type: trap
-    turns:
-    - 4
-    - 5
-  - type: damageOverTime
-    percentHp: 0.125
   - type: manual
-    manualReason: Deals double damage to Pokemon using Dive; Ghost types are immune to trapping.
+    manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
   tags: []
 sparkling_aria:
   id: sparkling_aria
@@ -5323,10 +4657,7 @@ sparkling_aria:
   - type: damage
     power: 90
     accuracy: 1.0
-  - type: cure_status
-    status: burn
-  tags:
-  - sound
+  tags: []
 water_spout:
   id: water_spout
   name: しおふき
@@ -5340,8 +4671,7 @@ water_spout:
   steps:
   - type: damage
     power: 150
-  - type: manual
-    manualReason: Power decreases based on the user's remaining HP.
+    accuracy: 1.0
   tags: []
 muddy_water:
   id: muddy_water
@@ -5360,11 +4690,10 @@ muddy_water:
   - type: chance
     p: 0.3
     then:
-    - type: modify_stat
-      stat: accuracy
-      target: target
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        accuracy: -1
   tags: []
 surf:
   id: surf
@@ -5380,12 +4709,6 @@ surf:
   - type: damage
     power: 90
     accuracy: 1.0
-  - type: effect
-    effect:
-      type: ignore_invulnerability
-      target: opponent
-      move: dive
-      multiplier: 2.0
   tags: []
 scald:
   id: scald
@@ -5407,8 +4730,6 @@ scald:
     - type: apply_status
       statusId: burn
       target: target
-  - type: manual
-    manualReason: Cures user's freeze and target's freeze
   tags: []
 snipe_shot:
   id: snipe_shot
@@ -5425,7 +4746,7 @@ snipe_shot:
     power: 80
     accuracy: 1.0
   tags: []
-  critRate: 2
+  critRate: 1
 hydro_pump:
   id: hydro_pump
   name: ハイドロポンプ
@@ -5458,11 +4779,10 @@ bubble_beam:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spe
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spe: -1
   tags: []
 chilling_water:
   id: chilling_water
@@ -5479,10 +4799,9 @@ chilling_water:
     power: 50
     accuracy: 1.0
   - type: modify_stage
-    target: target
-    stat: atk
-    amount: -1
-    chance: 1.0
+    target: self
+    stages:
+      atk: -1
   tags: []
 water_pulse:
   id: water_pulse
@@ -5504,8 +4823,6 @@ water_pulse:
     - type: apply_status
       statusId: confusion
       target: target
-      minTurns: 1
-      maxTurns: 4
   tags: []
 spore:
   id: spore
@@ -5521,18 +4838,6 @@ spore:
   - type: apply_status
     statusId: sleep
     target: target
-    condition:
-      type: unless
-      conditions:
-      - type: has_type
-        pokemon: target
-        typeId: grass
-      - type: has_ability
-        pokemon: target
-        abilityId: shield-dust
-      - type: has_item
-        pokemon: target
-        itemId: safety-goggles
   tags: []
 grassy_terrain:
   id: grassy_terrain
@@ -5545,12 +4850,9 @@ grassy_terrain:
   priority: 0
   description: ５ターンの　あいだ　足元を グラスフィールドにする。地面にいる ポケモンは　毎ターン　回復する。
   steps:
-  - type: set_terrain
-    terrain: grass
-    turns: 5
-  - type: manual
-    manualReason: HP recovery for grounded Pokemon, grass move power increase, ground move damage reduction, and Grassy Seed
-      boost are not supported
+  - type: apply_field_status
+    statusId: grassy_terrain
+    duration: 5
   tags: []
 synthesis:
   id: synthesis
@@ -5563,12 +4865,8 @@ synthesis:
   priority: 0
   description: 自分の　ＨＰを　回復する。 天気に　よって 回復の　量が　変化する。
   steps:
-  - type: weather_dependent_heal
-    normal: 0.5
-    sunny: 0.667
-    rain: 0.25
-    sandstorm: 0.25
-    hail: 0.25
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
   tags: []
 cotton_guard:
@@ -5582,11 +4880,10 @@ cotton_guard:
   priority: 0
   description: フワフワの　綿毛で　自分の 体を　包みこんで　守る。 防御を　ぐぐーんと　あげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: def
-    amount: 3
-    isStage: true
+    stages:
+      def: 3
   tags: []
 stun_spore:
   id: stun_spore
@@ -5602,22 +4899,6 @@ stun_spore:
   - type: apply_status
     statusId: paralysis
     target: target
-    condition:
-      type: unless
-      value:
-        type: or
-        conditions:
-        - type: has_type
-          pokemon: target
-          types:
-          - electric
-          - grass
-        - type: has_ability
-          pokemon: target
-          abilityId: shield_dust
-        - type: has_item
-          pokemon: target
-          itemId: safety_goggles
   tags: []
 strength_sap:
   id: strength_sap
@@ -5630,17 +4911,10 @@ strength_sap:
   priority: 0
   description: 相手の　攻撃力と　同じだけ 自分の　ＨＰを　回復する。 そして　相手の　攻撃を　さげる。
   steps:
-  - type: drain
-    target: user
-    source: target
-    stat: atk
   - type: modify_stage
     target: target
     stages:
       atk: -1
-    conditions:
-    - type: can_stat_be_lowered
-      stat: atk
   tags: []
 worry_seed:
   id: worry_seed
@@ -5653,11 +4927,8 @@ worry_seed:
   priority: 0
   description: 心を　なやませる　タネを 植えつける。相手を　眠れなくして 特性を　ふみんに　する。
   steps:
-  - type: abilityChange
-    ability: insomnia
-    filter: target
-    failReason: target.ability in ['truant', 'battle_bond', 'schooling', 'shields_down', 'comatose', 'multitype', 'rkssystem',
-      'stancechange', 'disguise', 'power_constructs', 'ice_face', 'zen_mode', 'trace', 'imposter']
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 ingrain:
   id: ingrain
@@ -5670,7 +4941,8 @@ ingrain:
   priority: 0
   description: 大地に　根を　張り 毎ターン　自分の　ＨＰを　回復する。 根を　張っているので　入れ替えられない。
   steps:
-  - type: ingrain
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 leech_seed:
   id: leech_seed
@@ -5683,7 +4955,8 @@ leech_seed:
   priority: 0
   description: 植えつけた　相手の　ＨＰを 毎ターン　少しだけ　吸い取り 自分の　ＨＰを　回復する。
   steps:
-  - type: inflict_leech_seed
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 cotton_spore:
   id: cotton_spore
@@ -5700,27 +4973,6 @@ cotton_spore:
     target: target
     stages:
       spe: -2
-  - type: condition
-    condition:
-      type: ability
-      ability: shield_dust
-      target: target
-    effect:
-      type: fail
-  - type: condition
-    condition:
-      type: item
-      item: safety_goggles
-      target: target
-    effect:
-      type: fail
-  - type: condition
-    condition:
-      type: type
-      moveType: grass
-      target: target
-    effect:
-      type: fail
   tags: []
 wood_hammer:
   id: wood_hammer
@@ -5736,8 +4988,9 @@ wood_hammer:
   - type: damage
     power: 120
     accuracy: 1.0
-  - type: recoil
-    recoilDamageRatio: 0.33
+  - type: damage_ratio
+    ratioMaxHp: 0.33
+    target: self
   tags:
   - contact
 horn_leech:
@@ -5754,9 +5007,9 @@ horn_leech:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: drain
-    target: user
-    ratio: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags:
   - contact
 branch_poke:
@@ -5790,10 +5043,9 @@ trailblaze:
     power: 50
     accuracy: 1.0
   - type: modify_stage
-    target: self
+    target: target
     stages:
       spe: 1
-    chance: 1.0
   tags:
   - contact
 grassy_glide:
@@ -5810,13 +5062,6 @@ grassy_glide:
   - type: damage
     power: 55
     accuracy: 1.0
-  - type: condition
-    condition: active_field_is_grass
-    steps:
-    - type: change_priority
-      priority: 1
-      condition:
-        type: grounded
   tags:
   - contact
 solar_blade:
@@ -5830,20 +5075,9 @@ solar_blade:
   priority: 0
   description: １ターン目に　光を　いっぱいに　集め ２ターン目に　その　力を 剣に　込めて　攻撃する。
   steps:
-  - type: charge
-    effect: charge
   - type: damage
     power: 125
     accuracy: 1.0
-    weather:
-      sunnyday:
-        charge: false
-      rain:
-        power: 62
-      snow:
-        power: 62
-      sandstorm:
-        power: 62
   tags:
   - contact
 seed_bomb:
@@ -5979,11 +5213,10 @@ energy_ball:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 giga_drain:
   id: giga_drain
@@ -5999,11 +5232,10 @@ giga_drain:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: drain
-    target: user
-    ratio: 0.5
-  tags:
-  - drain
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
+  tags: []
 grass_knot:
   id: grass_knot
   name: くさむすび
@@ -6015,26 +5247,8 @@ grass_knot:
   priority: 0
   description: 草を　からませて　相手を 転ばせる。相手が　重いほど 威力が　あがる。
   steps:
-  - type: damage
-  - type: weight_based_damage
-    weights:
-    - max_kg: 10
-      power: 20
-    - max_kg: 25
-      power: 40
-    - max_kg: 50
-      power: 60
-    - max_kg: 100
-      power: 80
-    - max_kg: 200
-      power: 100
-    - min_kg: 200
-      power: 120
-  - type: conditional_effect
-    condition:
-      type: target_is_dynamax
-    effect:
-      type: fail
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 absorb:
   id: absorb
@@ -6050,8 +5264,9 @@ absorb:
   - type: damage
     power: 20
     accuracy: 1.0
-  - type: drain
-    ratio: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags: []
 solar_beam:
   id: solar_beam
@@ -6064,22 +5279,9 @@ solar_beam:
   priority: 0
   description: １ターン目に　光を　いっぱいに　集め ２ターン目に　光の　束を 発射して　攻撃する。
   steps:
-  - type: charge
-    chargeCondition:
-      type: weather
-      weather:
-      - sunny
-      behavior: no_charge
   - type: damage
     power: 120
     accuracy: 1.0
-    weatherCondition:
-      type: weather
-      weather:
-      - rainy
-      - snow
-      - sandstorm
-      powerMultiplier: 0.5
   tags: []
 frenzy_plant:
   id: frenzy_plant
@@ -6095,7 +5297,6 @@ frenzy_plant:
   - type: damage
     power: 150
     accuracy: 0.9
-  - type: recharge
   tags: []
 petal_dance:
   id: petal_dance
@@ -6111,15 +5312,6 @@ petal_dance:
   - type: damage
     power: 120
     accuracy: 1.0
-    repeat:
-    - 2
-    - 3
-  - type: inflict_status
-    target: user
-    status: confusion
-    duration:
-    - 1
-    - 4
   tags: []
 magical_leaf:
   id: magical_leaf
@@ -6134,7 +5326,6 @@ magical_leaf:
   steps:
   - type: damage
     power: 60
-  - type: ignore_accuracy
   tags: []
 mega_drain:
   id: mega_drain
@@ -6150,9 +5341,9 @@ mega_drain:
   - type: damage
     power: 40
     accuracy: 1.0
-  - type: drain
-    target: user
-    ratio: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags: []
 leaf_storm:
   id: leaf_storm
@@ -6169,10 +5360,9 @@ leaf_storm:
     power: 130
     accuracy: 0.9
   - type: modify_stage
-    target: user
+    target: self
     stages:
       spa: -2
-    chance: 1.0
   tags: []
 electric_terrain:
   id: electric_terrain
@@ -6185,18 +5375,9 @@ electric_terrain:
   priority: 0
   description: ５ターンの　あいだ　足元を エレキフィールドにする。地面にいる ポケモンは　眠らなくなる。
   steps:
-  - type: fieldCondition
-    condition: electricTerrain
+  - type: apply_field_status
+    statusId: electric_terrain
     duration: 5
-  - type: preventStatus
-    target: grounded
-    status: sleep
-  - type: modifyDamage
-    target: grounded
-    moveType: electric
-    multiplier: 1.3
-  - type: manual
-    manualReason: Effect of Electric Seed is not supported
   tags: []
 eerie_impulse:
   id: eerie_impulse
@@ -6209,11 +5390,10 @@ eerie_impulse:
   priority: 0
   description: 体から　かいでんぱを　放ち 相手に　浴びせる　ことによって 特攻を　がくっと　さげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: target
-    stat: spa
-    amount: -2
-    isStage: true
+    stages:
+      spa: -2
   tags: []
 charge:
   id: charge
@@ -6230,9 +5410,6 @@ charge:
     target: self
     stages:
       spd: 1
-  - type: charge_next_turn
-    move_type: electric
-    multiplier: 2.0
   tags: []
 thunder_wave:
   id: thunder_wave
@@ -6248,11 +5425,6 @@ thunder_wave:
   - type: apply_status
     statusId: paralysis
     target: target
-    condition:
-      type: immune_to_type
-      immuneTypes:
-      - electric
-      - ground
   tags: []
 magnet_rise:
   id: magnet_rise
@@ -6265,13 +5437,8 @@ magnet_rise:
   priority: 0
   description: 電気で　つくった　磁力の　力で 宙に　浮かぶ。 ５ターンの　あいだ　浮遊できる。
   steps:
-  - type: floatTarget
-    turns: 5
-  - type: immunity
-    moveType: ground
-    turns: 5
-  - type: suppressField
-    turns: 5
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 thunder_fang:
   id: thunder_fang
@@ -6291,13 +5458,13 @@ thunder_fang:
     p: 0.1
     then:
     - type: apply_status
-      statusId: paralysis
+      statusId: flinch
       target: target
   - type: chance
     p: 0.1
     then:
     - type: apply_status
-      statusId: flinch
+      statusId: paralysis
       target: target
   tags:
   - contact
@@ -6321,8 +5488,6 @@ thunder_punch:
     - type: apply_status
       statusId: paralysis
       target: target
-  - type: manual
-    manualReason: Iron Fist ability increases power by 1.2x
   tags:
   - contact
 supercell_slam:
@@ -6341,13 +5506,6 @@ supercell_slam:
   - type: damage
     power: 100
     accuracy: 0.95
-  - type: onMiss
-    steps:
-    - type: recoil
-      recoilDamage: 0.5
-      recoilTarget: user
-  - type: manual
-    manualReason: Deals double damage if the target used minimize
   tags:
   - contact
 spark:
@@ -6389,7 +5547,6 @@ nuzzle:
   - type: apply_status
     statusId: paralysis
     target: target
-    chance: 1.0
   tags:
   - contact
 volt_tackle:
@@ -6406,8 +5563,9 @@ volt_tackle:
   - type: damage
     power: 120
     accuracy: 1.0
-  - type: recoil
-    factor: 0.33
+  - type: damage_ratio
+    ratioMaxHp: 0.33
+    target: self
   - type: chance
     p: 0.1
     then:
@@ -6430,8 +5588,9 @@ wild_charge:
   - type: damage
     power: 90
     accuracy: 1.0
-  - type: recoil
-    recoilDamage: 0.25
+  - type: damage_ratio
+    ratioMaxHp: 0.25
+    target: self
   tags:
   - contact
 electroweb:
@@ -6449,10 +5608,9 @@ electroweb:
     power: 55
     accuracy: 0.95
   - type: modify_stage
-    target: target
-    stat: spe
-    amount: -1
-    chance: 1
+    target: self
+    stages:
+      spe: -1
   tags: []
 electro_ball:
   id: electro_ball
@@ -6465,8 +5623,8 @@ electro_ball:
   priority: 0
   description: 電気の　塊を　相手に ぶつける。相手より　素早さが 速いほど　威力が　あがる。
   steps:
-  - type: damage
-  - type: electroBall
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 thunder:
   id: thunder
@@ -6488,8 +5646,28 @@ thunder:
     - type: apply_status
       statusId: paralysis
       target: target
-  - type: manual
-    manualReason: 天候による命中率変化、そらをとぶ等の技を使っている時の命中処理
+  tags: []
+thunderbolt:
+  id: thunderbolt
+  name: １０まんボルト
+  type: electric
+  category: special
+  pp: 15
+  power: 90
+  accuracy: 1
+  priority: 0
+  description: 強い　電撃を 相手に　浴びせて　攻撃する。 まひ状態に　することが　ある。
+  steps:
+  - type: damage
+    power: 100
+    accuracy: 1
+  - type: chance
+    p: 0.1
+    then:
+    - type: apply_status
+      statusId: paralysis
+      target: target
+      chance: 1
   tags: []
 charge_beam:
   id: charge_beam
@@ -6509,7 +5687,7 @@ charge_beam:
     p: 0.7
     then:
     - type: modify_stage
-      target: self
+      target: target
       stages:
         spa: 1
   tags: []
@@ -6532,7 +5710,7 @@ thunder_shock:
     then:
     - type: apply_status
       statusId: paralysis
-      target: opponent
+      target: target
   tags: []
 shock_wave:
   id: shock_wave
@@ -6547,7 +5725,6 @@ shock_wave:
   steps:
   - type: damage
     power: 60
-  - type: alwaysHit
   tags: []
 zap_cannon:
   id: zap_cannon
@@ -6566,7 +5743,6 @@ zap_cannon:
   - type: apply_status
     statusId: paralysis
     target: target
-    chance: 1
   tags: []
 parabolic_charge:
   id: parabolic_charge
@@ -6582,9 +5758,9 @@ parabolic_charge:
   - type: damage
     power: 65
     accuracy: 1.0
-  - type: drain
-    target: user
-    ratio: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags: []
 discharge:
   id: discharge
@@ -6605,7 +5781,7 @@ discharge:
     then:
     - type: apply_status
       statusId: paralysis
-      target: opponent
+      target: target
   tags: []
 volt_switch:
   id: volt_switch
@@ -6634,10 +5810,8 @@ healing_wish:
   priority: 0
   description: 自分は　ひんしに　なるが 控えから　でてくる　ポケモンの 状態異常と　ＨＰを　回復する。
   steps:
-  - type: self_faint
-  - type: next_ally_heal
-    hp: 1.0
-    status: true
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 guard_split:
   id: guard_split
@@ -6650,18 +5824,8 @@ guard_split:
   priority: 0
   description: 超能力で　自分と　相手の 防御と　特防を　たして 半分に　わける。
   steps:
-  - type: average_stats
-    stats:
-    - defense
-    - special_defense
-    target: user
-    source: target
-  - type: average_stats
-    stats:
-    - defense
-    - special_defense
-    target: target
-    source: user
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 guard_swap:
   id: guard_swap
@@ -6674,14 +5838,8 @@ guard_swap:
   priority: 0
   description: 超能力で　自分と　相手の 防御と　特防の 能力変化を　入れ替える。
   steps:
-  - type: swap_stat_stages
-    target: user
-    stat1: defense
-    stat2: special_defense
-  - type: swap_stat_stages
-    target: opponent
-    stat1: defense
-    stat2: special_defense
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 agility:
   id: agility
@@ -6694,10 +5852,10 @@ agility:
   priority: 0
   description: 力を　ぬいて　体を　軽くして 高速で　動く。 自分の　素早さを　ぐーんと　あげる。
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: self
-    stat: spe
-    amount: 2
+    stages:
+      spe: 2
   tags: []
 cosmic_power:
   id: cosmic_power
@@ -6710,9 +5868,11 @@ cosmic_power:
   priority: 0
   description: 宇宙から　神秘の　力を とりこむ　ことで 自分の　防御と　特防を　あげる。
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: self
-    defensiveStats: 1
+    stages:
+      def: 1
+      spd: 1
   tags: []
 psychic_terrain:
   id: psychic_terrain
@@ -6725,11 +5885,9 @@ psychic_terrain:
   priority: 0
   description: ５ターンの間　地面にいると 先制技を　受けない。 エスパータイプの　威力が　あがる。
   steps:
-  - type: set_terrain
-    terrain: psychic_terrain
-    turns: 5
-  - type: manual
-    manualReason: Priority move blocking and psychic move power boost are handled by the terrain.
+  - type: apply_field_status
+    statusId: psychic_terrain
+    duration: 5
   tags: []
 hypnosis:
   id: hypnosis
@@ -6757,8 +5915,8 @@ gravity:
   priority: 0
   description: ５ターンの　あいだ 重力を　強くして　ふゆうや 空へ　飛ぶ　技を　使えなくする。
   steps:
-  - type: gravity
-    turns: 5
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 skill_swap:
   id: skill_swap
@@ -6771,7 +5929,8 @@ skill_swap:
   priority: 0
   description: '超能力で　自分の　特性と 相手の　特性を　入れ替える。 '
   steps:
-  - type: swapAbility
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 teleport:
   id: teleport
@@ -6784,10 +5943,7 @@ teleport:
   priority: -6
   description: 野生ポケモンとの　戦闘を　やめる。 最後に　はいった ポケセンの　ある　街にも　行ける。
   steps:
-  - type: alwaysLast
-  - type: switchOut
-  - type: manual
-    manualReason: Move to last visited pokemon center is not supported
+  - type: self_switch
   tags: []
 trick:
   id: trick
@@ -6800,7 +5956,8 @@ trick:
   priority: 0
   description: 相手の　すきを　ついて 自分と　相手の 持ち物を　交換する。
   steps:
-  - type: swapItems
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 trick_room:
   id: trick_room
@@ -6813,8 +5970,9 @@ trick_room:
   priority: -7
   description: まか不思議な　空間を　つくる。 ５ターンの　あいだ 遅い　ポケモンから　行動できる。
   steps:
-  - type: invert_turn_order
-    turns: 5
+  - type: apply_field_status
+    statusId: trick_room
+    duration: 5
   tags: []
 amnesia:
   id: amnesia
@@ -6827,10 +5985,10 @@ amnesia:
   priority: 0
   description: 頭を　からにして 一瞬　なにかを　忘れることで 自分の　特防を　ぐーんと　あげる。
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: self
-    stat: special_defense
-    amount: 2
+    stages:
+      spd: 2
   tags: []
 rest:
   id: rest
@@ -6843,13 +6001,15 @@ rest:
   priority: 0
   description: ２ターンの　あいだ　眠り続ける。 自分の　ＨＰと　状態異常を すべて　回復する。
   steps:
-  - type: heal
-    percentage: 1.0
-  - type: cure_status
-  - type: inflict_status
-    target: user
-    status: sleep
-    turns: 2
+  - type: cure_all_status
+    target: self
+  - type: damage_ratio
+    ratioMaxHp: -1.0
+    target: self
+  - type: apply_status
+    statusId: sleep
+    target: self
+    duration: 2
   tags: []
 power_split:
   id: power_split
@@ -6862,16 +6022,8 @@ power_split:
   priority: 0
   description: 超能力で　自分と　相手の 攻撃と　特攻を　たして 半分に　わける。
   steps:
-  - type: average_stats
-    stats:
-    - attack
-    - special_attack
-    target: user
-  - type: average_stats
-    stats:
-    - attack
-    - special_attack
-    target: opponent
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 power_swap:
   id: power_swap
@@ -6884,16 +6036,8 @@ power_swap:
   priority: 0
   description: 超能力で　自分と　相手の 攻撃と　特攻の 能力変化を　入れ替える。
   steps:
-  - type: swapStats
-    target: user
-    stats:
-    - attack
-    - specialAttack
-  - type: swapStats
-    target: opponent
-    stats:
-    - attack
-    - specialAttack
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 power_trick:
   id: power_trick
@@ -6906,10 +6050,8 @@ power_trick:
   priority: 0
   description: 超能力で 自分の　攻撃と　防御の 力を　交換する。
   steps:
-  - type: swapStats
-    stats:
-    - attack
-    - defense
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 light_screen:
   id: light_screen
@@ -6922,9 +6064,8 @@ light_screen:
   priority: 0
   description: ５ターンの　あいだ　不思議な　かべで 相手から　受ける　特殊攻撃の ダメージを　弱める。
   steps:
-  - type: fieldCondition
-    condition: lightScreen
-    target: userSide
+  - type: apply_field_status
+    statusId: light_screen
     duration: 5
   tags: []
 imprison:
@@ -6938,11 +6079,8 @@ imprison:
   priority: 0
   description: 相手が　自分と　同じ　技を おぼえていたら　相手だけ その技を　使えなくする。
   steps:
-  - type: condition
-    target: opponent
-    condition:
-      type: moveDisable
-      moveCondition: userKnows
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 calm_mind:
   id: calm_mind
@@ -6960,8 +6098,7 @@ calm_mind:
     stages:
       spa: 1
       spd: 1
-  tags:
-  - stage_change
+  tags: []
 reflect:
   id: reflect
   name: リフレクター
@@ -6973,9 +6110,9 @@ reflect:
   priority: 0
   description: ５ターンの　あいだ　不思議な　かべで 相手から　受ける　物理攻撃の ダメージを　弱める。
   steps:
-  - type: applyStatus
-    target: userSide
-    status: reflect
+  - type: apply_field_status
+    statusId: reflect
+    duration: 5
   tags: []
 psycho_cut:
   id: psycho_cut
@@ -7007,7 +6144,6 @@ psychic_fangs:
   - type: damage
     power: 85
     accuracy: 1.0
-  - type: removeScreens
   tags:
   - contact
 zen_headbutt:
@@ -7027,7 +6163,8 @@ zen_headbutt:
   - type: chance
     p: 0.2
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags:
   - contact
@@ -7045,9 +6182,6 @@ stored_power:
   - type: damage
     power: 20
     accuracy: 1.0
-  - type: modifyDamageByStatBoosts
-    powerPerBoost: 20
-    maxPowerMultiplier: 31
   tags: []
 psybeam:
   id: psybeam
@@ -7069,8 +6203,6 @@ psybeam:
     - type: apply_status
       statusId: confusion
       target: target
-      minTurns: 1
-      maxTurns: 4
   tags: []
 psychic:
   id: psychic
@@ -7089,11 +6221,10 @@ psychic:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: spd
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spd: -1
   tags: []
 psyshock:
   id: psyshock
@@ -7109,7 +6240,6 @@ psyshock:
   - type: damage
     power: 80
     accuracy: 1.0
-    useDefenseInsteadOfSpecialDefense: true
   tags: []
 psychic_noise:
   id: psychic_noise
@@ -7139,13 +6269,7 @@ psychic_noise:
   - type: damage
     power: 75
     accuracy: 1.0
-  - type: inflict_condition
-    condition: heal_block
-    chance: 1.0
-    duration: 2
-  - type: ignore_substitute
-  tags:
-  - sound
+  tags: []
 extrasensory:
   id: extrasensory
   name: じんつうりき
@@ -7163,7 +6287,8 @@ extrasensory:
   - type: chance
     p: 0.1
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags: []
 confusion:
@@ -7198,11 +6323,9 @@ mirror_coat:
   priority: -5
   description: 相手から　受けた　特殊攻撃の ダメージを　２倍に　して その相手に　返す。
   steps:
-  - type: counter
-    damageType: special
-    multiplier: 2.0
-  tags:
-  - cannotMiss
+  - type: manual
+    manualReason: No supported effects inferred
+  tags: []
 future_sight:
   id: future_sight
   name: みらいよち
@@ -7214,12 +6337,9 @@ future_sight:
   priority: 0
   description: 技を　使った　２ターン後に 相手に　念力の 塊を　送って　攻撃する。
   steps:
-  - type: futureMove
-    delay: 2
-    move:
-      type: damage
-      power: 120
-      accuracy: 1.0
+  - type: damage
+    power: 120
+    accuracy: 1.0
   tags: []
 dream_eater:
   id: dream_eater
@@ -7232,15 +6352,12 @@ dream_eater:
   priority: 0
   description: 寝ている　相手の　夢を　食べて 攻撃する。ダメージの　半分の ＨＰを　回復する。
   steps:
-  - type: condition
-    condition: sleep
-    target: opponent
   - type: damage
     power: 100
     accuracy: 1.0
-  - type: drain
-    target: user
-    drainRatio: 0.5
+  - type: damage_ratio
+    ratioMaxHp: -0.5
+    target: self
   tags: []
 aurora_veil:
   id: aurora_veil
@@ -7253,12 +6370,9 @@ aurora_veil:
   priority: 0
   description: ５ターンの　間　物理と 特殊の　ダメージを　弱める。 あられの　時しか　出すことが　できない。
   steps:
-  - type: condition
-    condition: weather
-    parameter: hail
-    steps:
-    - type: aurora_veil
-      turns: 5
+  - type: apply_field_status
+    statusId: aurora_veil
+    duration: 5
   tags: []
 haze:
   id: haze
@@ -7271,8 +6385,8 @@ haze:
   priority: 0
   description: 黒い霧を　だして　戦闘に でている　ポケモン　全員の 能力変化を　もとに　もどす。
   steps:
-  - type: resetStats
-    target: all
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 chilly_reception:
   id: chilly_reception
@@ -7287,10 +6401,8 @@ chilly_reception:
 
     (『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。'
   steps:
-  - type: switch
-  - type: weather
-    weather: snow
-    turns: 5
+  - type: damage
+    power: 0
   tags: []
 mist:
   id: mist
@@ -7303,9 +6415,8 @@ mist:
   priority: 0
   description: 白い霧で　体を　おおう。 ５ターンの　あいだ　相手に 能力を　さげられなく　なる。
   steps:
-  - type: protectStats
-    turns: 5
-    target: alliedSide
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 snowscape:
   id: snowscape
@@ -7318,11 +6429,8 @@ snowscape:
   priority: 0
   description: 5ターンの間、天気を『ゆき』にする(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。
   steps:
-  - type: weather
-    weather: snow
-    turns: 5
-  - type: manual
-    manualReason: 氷タイプの防御1.5倍
+  - type: damage
+    power: 0
   tags: []
 ice_spinner:
   id: ice_spinner
@@ -7340,7 +6448,6 @@ ice_spinner:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: remove_terrain
   tags:
   - contact
 ice_hammer:
@@ -7381,13 +6488,13 @@ ice_fang:
     p: 0.1
     then:
     - type: apply_status
-      statusId: freeze
+      statusId: flinch
       target: target
   - type: chance
     p: 0.1
     then:
     - type: apply_status
-      statusId: flinch
+      statusId: freeze
       target: target
   tags:
   - contact
@@ -7407,7 +6514,6 @@ ice_shard:
     accuracy: 1.0
   tags:
   - contact
-  - priority
 icicle_crash:
   id: icicle_crash
   name: つららおとし
@@ -7425,7 +6531,8 @@ icicle_crash:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags: []
 icicle_spear:
@@ -7447,8 +6554,7 @@ icicle_spear:
     - type: damage
       power: 25
       accuracy: 1.0
-  tags:
-  - multiHit
+  tags: []
 triple_axel:
   id: triple_axel
   name: トリプルアクセル
@@ -7467,10 +6573,7 @@ triple_axel:
     steps:
     - type: damage
       power: 20
-    - type: modifyMove
-      key: power
-      modifier: 20
-      cumulative: true
+      accuracy: 0.9
   tags:
   - contact
 avalanche:
@@ -7487,9 +6590,6 @@ avalanche:
   - type: damage
     power: 60
     accuracy: 1.0
-    condition:
-      type: receivedDamageThisTurn
-    multiplier: 2.0
   tags:
   - contact
 ice_punch:
@@ -7512,8 +6612,6 @@ ice_punch:
     - type: apply_status
       statusId: freeze
       target: target
-  - type: manual
-    manualReason: Ability Iron Fist increases power by 1.2x
   tags:
   - contact
 aurora_beam:
@@ -7533,11 +6631,10 @@ aurora_beam:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: atk
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        atk: -1
   tags: []
 frost_breath:
   id: frost_breath
@@ -7553,7 +6650,6 @@ frost_breath:
   - type: damage
     power: 60
     accuracy: 0.9
-  - type: alwaysCrit
   tags: []
   critRate: 6
 icy_wind:
@@ -7571,10 +6667,9 @@ icy_wind:
     power: 55
     accuracy: 0.95
   - type: modify_stage
-    target: target
-    stat: spe
-    amount: -1
-    chance: 1
+    target: self
+    stages:
+      spe: -1
   tags: []
 powder_snow:
   id: powder_snow
@@ -7595,7 +6690,7 @@ powder_snow:
     then:
     - type: apply_status
       statusId: freeze
-      target: opponent
+      target: target
   tags: []
 sheer_cold:
   id: sheer_cold
@@ -7610,11 +6705,6 @@ sheer_cold:
   steps:
   - type: ohko
     baseAccuracy: 0.3
-    condition:
-      type: level_less_than_or_equal
-      target: user
-  - type: manual
-    manualReason: Accuracy decreases if used by non-ice type pokemon, and move fails if target is ice type or dynamaxed.
   tags: []
 blizzard:
   id: blizzard
@@ -7636,8 +6726,6 @@ blizzard:
     - type: apply_status
       statusId: freeze
       target: target
-  - type: manual
-    manualReason: Accuracy is always 1.0 during snow weather.
   tags: []
 freeze_dry:
   id: freeze_dry
@@ -7653,8 +6741,6 @@ freeze_dry:
   - type: damage
     power: 70
     accuracy: 1.0
-    effectiveTypes:
-    - water
   - type: chance
     p: 0.1
     then:
@@ -7681,7 +6767,7 @@ ice_beam:
     then:
     - type: apply_status
       statusId: freeze
-      target: opponent
+      target: target
   tags: []
 dragon_dance:
   id: dragon_dance
@@ -7694,16 +6780,11 @@ dragon_dance:
   priority: 0
   description: 神秘的で　力強い　舞を 激しく　おどる。自分の 攻撃と　素早さを　あげる。
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: self
-    stat: atk
-    amount: 1
-    isStage: true
-  - type: modify_stat
-    target: self
-    stat: spe
-    amount: 1
-    isStage: true
+    stages:
+      atk: 1
+      spe: 1
   tags: []
 outrage:
   id: outrage
@@ -7716,20 +6797,9 @@ outrage:
   priority: 0
   description: ２ー３ターンの　あいだ 暴れまくって　攻撃する。 暴れたあとは　混乱する。
   steps:
-  - type: repeat
-    times:
-    - 2
-    - 3
-    attack:
-      type: damage
-      power: 120
-      accuracy: 1.0
-  - type: inflict_status
-    status: confusion
-    target: user
-    duration:
-    - 1
-    - 4
+  - type: damage
+    power: 120
+    accuracy: 1.0
   tags:
   - contact
 scale_shot:
@@ -7751,12 +6821,6 @@ scale_shot:
     - type: damage
       power: 25
       accuracy: 0.9
-  - type: boost
-    stat: spe
-    amount: 1
-  - type: boost
-    stat: def
-    amount: -1
   tags: []
 dragon_claw:
   id: dragon_claw
@@ -7794,8 +6858,6 @@ dragon_rush:
     - type: apply_status
       statusId: flinch
       target: target
-  - type: manual
-    manualReason: Always hits and doubles power against targets using Minimize.
   tags:
   - contact
 dragon_tail:
@@ -7812,8 +6874,6 @@ dragon_tail:
   - type: damage
     power: 60
     accuracy: 0.9
-  - type: forceSwitch
-    manualReason: 野生の場合は戦闘終了
   tags:
   - contact
 breaking_swipe:
@@ -7830,12 +6890,10 @@ breaking_swipe:
   - type: damage
     power: 60
     accuracy: 1.0
-    on_success:
-    - type: modify_stage
-      target: target
-      stages:
-        atk: -1
-      chance: 1.0
+  - type: modify_stage
+    target: self
+    stages:
+      atk: -1
   tags:
   - contact
 twister:
@@ -7858,8 +6916,6 @@ twister:
     - type: apply_status
       statusId: flinch
       target: target
-  - type: manual
-    manualReason: Deals double damage to Pokemon using Fly, Bounce, or Sky Drop.
   tags: []
 roar_of_time:
   id: roar_of_time
@@ -7875,7 +6931,6 @@ roar_of_time:
   - type: damage
     power: 150
     accuracy: 0.9
-  - type: recharge
   tags: []
 draco_meteor:
   id: draco_meteor
@@ -7892,10 +6947,9 @@ draco_meteor:
     power: 130
     accuracy: 0.9
   - type: modify_stage
-    target: user
+    target: self
     stages:
       spa: -2
-    chance: 1
   tags: []
 dragon_breath:
   id: dragon_breath
@@ -7916,7 +6970,7 @@ dragon_breath:
     then:
     - type: apply_status
       statusId: paralysis
-      target: opponent
+      target: target
   tags: []
 dragon_pulse:
   id: dragon_pulse
@@ -7944,8 +6998,8 @@ torment:
   priority: 0
   description: 相手に　いちゃもんを　つけて 同じ　技を　２回連続で だせなくする。
   steps:
-  - type: disable_move_consecutive_use
-    target: opponent
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 fake_tears:
   id: fake_tears
@@ -7958,10 +7012,10 @@ fake_tears:
   priority: 0
   description: ないた　ふりをして　涙を　流す。 こまらせる　ことで 相手の　特防を　がくっと　さげる。
   steps:
-  - type: modify_stat_stage
+  - type: modify_stage
     target: target
-    stat: special_defense
-    amount: -2
+    stages:
+      spd: -2
   tags: []
 memento:
   id: memento
@@ -7974,15 +7028,11 @@ memento:
   priority: 0
   description: 自分は　ひんしに　なるが　そのかわりに 相手の　攻撃と　特攻を がくっと　さげる。
   steps:
-  - type: damage
   - type: modify_stage
     target: target
     stages:
       atk: -2
       spa: -2
-  - type: inflict_status
-    target: user
-    status: fainted
   tags: []
 flatter:
   id: flatter
@@ -7995,17 +7045,13 @@ flatter:
   priority: 0
   description: 相手を　おだてて　混乱させる。 同時に　相手の　特攻も あげてしまう。
   steps:
+  - type: apply_status
+    statusId: confusion
+    target: target
   - type: modify_stage
     target: target
     stages:
       spa: 1
-  - type: apply_status
-    statusId: confusion
-    target: target
-    options:
-      turns:
-      - 1
-      - 4
   tags: []
 parting_shot:
   id: parting_shot
@@ -8023,10 +7069,7 @@ parting_shot:
     stages:
       atk: -1
       spa: -1
-  - type: switch_user
-  tags:
-  - bypass_substitute
-  - sound
+  tags: []
 switcheroo:
   id: switcheroo
   name: すりかえ
@@ -8038,7 +7081,8 @@ switcheroo:
   priority: 0
   description: 目にも　とまらぬ　速さで 自分と　相手の 持ち物を　交換する。
   steps:
-  - type: swapItems
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 taunt:
   id: taunt
@@ -8051,10 +7095,8 @@ taunt:
   priority: 0
   description: 相手を　怒らせる。３ターンの あいだ　相手は　ダメージを 与える　技しか　だせなくなる。
   steps:
-  - type: disableMoveType
-    moveType: status
-    duration: 3
-    target: opponent
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 hone_claws:
   id: hone_claws
@@ -8069,12 +7111,9 @@ hone_claws:
   steps:
   - type: modify_stage
     target: self
-    stat: atk
-    amount: 1
-  - type: modify_stage
-    target: self
-    stat: accuracy
-    amount: 1
+    stages:
+      atk: 1
+      accuracy: 1
   tags: []
 nasty_plot:
   id: nasty_plot
@@ -8106,7 +7145,6 @@ foul_play:
   - type: damage
     power: 95
     accuracy: 1.0
-    attackerStat: targetAttack
   tags:
   - contact
 lash_out:
@@ -8123,10 +7161,6 @@ lash_out:
   - type: damage
     power: 75
     accuracy: 1.0
-    multiplier: 2
-    condition:
-      type: stat_decreased_this_turn
-      target: user
   tags:
   - contact
 crunch:
@@ -8143,11 +7177,13 @@ crunch:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: modify_stage
-    target: target
-    stages:
-      def: -1
-    chance: 0.2
+  - type: chance
+    p: 0.2
+    then:
+    - type: modify_stage
+      target: self
+      stages:
+        def: -1
   tags:
   - contact
 bite:
@@ -8167,7 +7203,8 @@ bite:
   - type: chance
     p: 0.3
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags:
   - contact
@@ -8185,11 +7222,6 @@ jaw_lock:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: trap
-    target: both
-    condition:
-      type: notType
-      typeName: ghost
   tags:
   - contact
 payback:
@@ -8206,11 +7238,6 @@ payback:
   - type: damage
     power: 50
     accuracy: 1.0
-  - type: condition
-    condition: attacker_is_slower
-    then:
-    - type: damage_multiplier
-      multiplier: 2.0
   tags:
   - contact
 throat_chop:
@@ -8227,8 +7254,8 @@ throat_chop:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: silence
-    duration: 2
+  - type: manual
+    manualReason: 'Unsupported ailment: silence'
   tags:
   - contact
 assurance:
@@ -8245,8 +7272,6 @@ assurance:
   - type: damage
     power: 60
     accuracy: 1.0
-    condition:
-      type: targetDamagedThisTurn
   tags:
   - contact
 power_trip:
@@ -8263,8 +7288,6 @@ power_trip:
   - type: damage
     power: 20
     accuracy: 1.0
-  - type: dynamicPower
-    manualReason: Power increases by 20 for each stat boost the user has.
   tags:
   - contact
 night_slash:
@@ -8298,7 +7321,6 @@ thief:
   - type: damage
     power: 60
     accuracy: 1.0
-  - type: stealItem
   tags:
   - contact
 fling:
@@ -8312,9 +7334,8 @@ fling:
   priority: 0
   description: 持たせた　道具を 素早く　投げつけて　攻撃する。 道具で　威力と　効果が　変わる。
   steps:
-  - type: damage
   - type: manual
-    manualReason: Power depends on the item thrown. Item is consumed.
+    manualReason: No supported effects inferred
   tags: []
 knock_off:
   id: knock_off
@@ -8330,12 +7351,6 @@ knock_off:
   - type: damage
     power: 65
     accuracy: 1.0
-    condition:
-      target: opponent
-      hasItem: true
-    multiplier: 1.5
-  - type: removeItem
-    target: opponent
   tags:
   - contact
 sucker_punch:
@@ -8352,12 +7367,6 @@ sucker_punch:
   - type: damage
     power: 70
     accuracy: 1.0
-  - type: condition
-    condition: target_using_attack
-    success:
-      type: none
-    failure:
-      type: fail
   tags:
   - contact
 beat_up:
@@ -8371,10 +7380,8 @@ beat_up:
   priority: 0
   description: 味方　全員で　攻撃する。 仲間の　ポケモンが　多いほど 技の　攻撃回数が　増える。
   steps:
-  - type: damage
-  - type: hit_count_by_party
-    target: user_team
-    condition: conscious
+  - type: manual
+    manualReason: No supported effects inferred
   tags: []
 brutal_swing:
   id: brutal_swing
@@ -8409,7 +7416,8 @@ dark_pulse:
   - type: chance
     p: 0.2
     then:
-    - type: flinch
+    - type: apply_status
+      statusId: flinch
       target: target
   tags: []
 ruination:
@@ -8426,10 +7434,7 @@ ruination:
   - type: damage
     power: 1
     accuracy: 0.9
-  - type: hpScaleDamage
-    scale: 0.5
-  tags:
-  - hpScaleDamage
+  tags: []
 night_daze:
   id: night_daze
   name: ナイトバースト
@@ -8447,11 +7452,10 @@ night_daze:
   - type: chance
     p: 0.4
     then:
-    - type: modify_stat
-      target: target
-      stat: accuracy
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        accuracy: -1
   tags: []
 snarl:
   id: snarl
@@ -8468,12 +7472,10 @@ snarl:
     power: 55
     accuracy: 0.95
   - type: modify_stage
-    target: target
-    chance: 1.0
+    target: self
     stages:
       spa: -1
-  tags:
-  - sound
+  tags: []
 charm:
   id: charm
   name: あまえる
@@ -8485,11 +7487,10 @@ charm:
   priority: 0
   description: 'かわいく　みつめて　油断を　誘い 相手の　攻撃を　がくっと　さげる。 '
   steps:
-  - type: modify_stat
+  - type: modify_stage
     target: target
-    stat: atk
-    amount: -2
-    isStage: true
+    stages:
+      atk: -2
   tags: []
 moonlight:
   id: moonlight
@@ -8502,12 +7503,8 @@ moonlight:
   priority: 0
   description: 自分の　ＨＰを　回復する。 天気に　よって 回復の　量が　変化する。
   steps:
-  - type: weather_dependent_heal
-    normal: 0.5
-    sunny: 0.667
-    rain: 0.25
-    sandstorm: 0.25
-    hail: 0.25
+  - type: damage_ratio
+    ratioMaxHp: -0.5
     target: self
   tags: []
 baby_doll_eyes:
@@ -8521,7 +7518,6 @@ baby_doll_eyes:
   priority: 1
   description: つぶらなひとみで　相手を　みつめて 攻撃を　さげる。 必ず　先制攻撃　できる。
   steps:
-  - type: priority
   - type: modify_stage
     target: target
     stages:
@@ -8541,9 +7537,6 @@ sweet_kiss:
   - type: apply_status
     statusId: confusion
     target: target
-    turns:
-      min: 1
-      max: 4
   tags: []
 misty_terrain:
   id: misty_terrain
@@ -8556,8 +7549,8 @@ misty_terrain:
   priority: 0
   description: ５ターンの　あいだ　足元を ミストフィールドにする。地面にいると 状態異常に　ならない。
   steps:
-  - type: fieldCondition
-    condition: mistyTerrain
+  - type: apply_field_status
+    statusId: misty_terrain
     duration: 5
   tags: []
 play_rough:
@@ -8577,11 +7570,10 @@ play_rough:
   - type: chance
     p: 0.1
     then:
-    - type: modify_stat
-      target: target
-      stat: atk
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        atk: -1
   tags:
   - contact
 disarming_voice:
@@ -8597,10 +7589,7 @@ disarming_voice:
   steps:
   - type: damage
     power: 40
-  - type: alwaysHit
-  - type: ignoreSubstitute
-  tags:
-  - sound
+  tags: []
 draining_kiss:
   id: draining_kiss
   name: ドレインキッス
@@ -8615,11 +7604,10 @@ draining_kiss:
   - type: damage
     power: 50
     accuracy: 1.0
-  - type: drain
-    target: user
-    ratio: 0.75
-  tags:
-  - drain
+  - type: damage_ratio
+    ratioMaxHp: -0.75
+    target: self
+  tags: []
 dazzling_gleam:
   id: dazzling_gleam
   name: マジカルシャイン
@@ -8649,20 +7637,7 @@ misty_explosion:
   - type: damage
     power: 100
     accuracy: 1.0
-  - type: self_destruct
-  - type: conditional_power
-    condition:
-      type: field_condition
-      field_condition: mist_field
-      target: user
-      negate_type:
-      - flying
-      negate_ability:
-      - levitate
-      must_be_grounded: true
-    power_multiplier: 1.5
-  tags:
-  - area_attack
+  tags: []
 alluring_voice:
   id: alluring_voice
   name: みわくのボイス
@@ -8681,19 +7656,7 @@ alluring_voice:
   - type: damage
     power: 80
     accuracy: 1.0
-  - type: condition
-    chance: 1.0
-    condition: confusion
-    duration:
-      minTurns: 1
-      maxTurns: 4
-    conditionTarget: target
-    conditionRequires:
-      condition: statBoostedThisTurn
-      target: target
-  tags:
-  - bypassSubstitute
-  - sound
+  tags: []
 moonblast:
   id: moonblast
   name: ムーンフォース
@@ -8711,11 +7674,10 @@ moonblast:
   - type: chance
     p: 0.3
     then:
-    - type: modify_stat
-      target: target
-      stat: spa
-      amount: -1
-      isStage: true
+    - type: modify_stage
+      target: self
+      stages:
+        spa: -1
   tags: []
 fairy_wind:
   id: fairy_wind
@@ -8731,4 +7693,44 @@ fairy_wind:
   - type: damage
     power: 40
     accuracy: 1.0
+  tags: []
+mud_bomb:
+  id: mud_bomb
+  name: だくりゅう
+  type: water
+  category: special
+  pp: 10
+  power: null
+  accuracy: null
+  priority: 0
+  description: null
+  steps:
+  - type: damage
+    power: 90
+    accuracy: 0.85
+  - type: chance
+    p: 0.3
+    then:
+    - type: modify_stage
+      target: target
+      stages:
+        accuracy: -1
+  tags: []
+ruin_sting:
+  id: ruin_sting
+  name: はめつのめがい
+  type: steel
+  category: special
+  pp: 5
+  power: null
+  accuracy: null
+  priority: 0
+  description: null
+  steps:
+  - type: wait
+    turns: 2
+    steps:
+    - type: damage
+      power: 140
+      accuracy: 1
   tags: []

@@ -197,6 +197,49 @@ fn match_status(
             }
             _ => StatusHookResult::default(),
         },
+        "toxic" => match hook {
+            "onStatusDamage" => {
+                let active = get_active_creature(state, player_id).unwrap();
+                let counter = active
+                    .statuses
+                    .iter()
+                    .find(|s| s.id == "toxic")
+                    .and_then(|s| s.data.get("counter"))
+                    .and_then(|v| v.as_i64())
+                    .map(|v| v as i32)
+                    .unwrap_or(1)
+                    .max(1);
+                let damage = ((active.max_hp * counter) / 16).max(1);
+
+                let mut new_state = state.clone();
+                if let Some(player) = new_state.players.iter_mut().find(|p| p.id == player_id) {
+                    if let Some(active_mut) = player.team.get_mut(player.active_slot) {
+                        if let Some(toxic) = active_mut.statuses.iter_mut().find(|s| s.id == "toxic") {
+                            toxic
+                                .data
+                                .insert("counter".to_string(), Value::Number((counter + 1).into()));
+                        }
+                    }
+                }
+
+                StatusHookResult {
+                    state: Some(new_state),
+                    events: vec![
+                        BattleEvent::Damage {
+                            target_id: player_id.to_string(),
+                            amount: damage,
+                            meta: Map::new(),
+                        },
+                        BattleEvent::Log {
+                            message: format!("{}は もうどくの ダメージを 受けている！", active.name),
+                            meta: Map::new(),
+                        },
+                    ],
+                    ..Default::default()
+                }
+            }
+            _ => StatusHookResult::default(),
+        },
         "paralysis" => match hook {
             "onBeforeAction" => {
                 if (ctx.rng)() < 0.25 {
