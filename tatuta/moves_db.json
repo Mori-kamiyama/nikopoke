@@ -15357,14 +15357,12 @@
           "type": "apply_status",
           "statusId": "yawn",
           "target": "target",
-          "data": {
-            "turns": 1
-          }
+          "chance": 1
         }
       ],
       "tags": []
     },
-    "yaml": "id: yawn\nname: あくび\ntype: normal\ncategory: status\npp: 10\npower: null\naccuracy: null\npriority: 0\ndescription: 大きな　あくびで　眠気を　誘う。 次の　ターンに 相手を　眠り状態に　する。\nsteps:\n- type: apply_status\n  statusId: yawn\n  target: target\n  data:\n    turns: 1\ntags: []\n"
+    "yaml": "id: yawn\nname: あくび\ntype: normal\ncategory: status\npp: 10\npower: null\naccuracy: null\npriority: 0\ndescription: 大きな　あくびで　眠気を　誘う。 次の　ターンに 相手を　眠り状態に　する。\nsteps:\n- type: apply_status\n  statusId: yawn\n  target: target\n  chance: 1\ntags: []\n"
   },
   "yubi_o_furu": {
     "obj": {

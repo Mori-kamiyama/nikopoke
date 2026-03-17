@@ -7,6 +7,7 @@ const CORE_ORDER = [
   "power",
   "accuracy",
   "priority",
+  "critRate",
   "description",
   "steps",
   "tags",
@@ -57,8 +58,11 @@ const STEP_TYPE_OPTIONS = [
   ["conditional", "条件分岐"],
   ["ohko", "一撃必殺"],
   ["remove_status", "状態異常回復"],
+  ["remove_field_status", "場の状態解除"],
+  ["disable_move", "技封じ"],
   ["delay", "遅延発動"],
   ["over_time", "継続効果"],
+  ["wait", "待機"],
   ["manual", "手動処理"],
 ];
 const TYPE_LABELS = new Map(TYPE_OPTIONS);
@@ -70,17 +74,20 @@ const STEP_CATEGORY_MAP = {
   apply_status: "status", remove_status: "status", modify_stage: "status",
   chance: "flow", conditional: "flow", repeat: "flow", delay: "flow", over_time: "flow",
   apply_field_status: "field", set_weather: "field",
+  remove_field_status: "field",
   protect: "special", force_switch: "special", self_switch: "special",
   lock_move: "special", random_move: "special", manual: "special",
+  disable_move: "special", wait: "flow",
 };
 
 const STEP_ICON_MAP = {
   damage: "⚔️", damage_ratio: "💥", ohko: "💀",
   apply_status: "🔮", remove_status: "💊", modify_stage: "📊",
   chance: "🎲", conditional: "❓", repeat: "🔄", delay: "⏳", over_time: "⏱️",
-  apply_field_status: "🌍", set_weather: "🌤️",
+  apply_field_status: "🌍", set_weather: "🌤️", remove_field_status: "🧹",
   protect: "🛡️", force_switch: "↩️", self_switch: "🔀",
   lock_move: "🔒", random_move: "🎰", manual: "🔧",
+  disable_move: "🚫", wait: "⌛",
 };
 
 const STATUS_OPTIONS = [
@@ -93,6 +100,32 @@ const STATUS_OPTIONS = [
   ["confusion", "こんらん"],
   ["flinch", "ひるみ"],
   ["yawn", "ねむけ"],
+  ["disable_move", "かなしばり"],
+  ["lock_move", "行動固定"],
+  ["substitute", "みがわり"],
+  ["telekinesis", "テレキネシス"],
+  ["fainted", "ひんし"],
+  ["fainted_ally_last_turn", "直前の味方ひんし"],
+  ["protect", "まもる"],
+  ["minimize", "ちいさくなる"],
+  ["ghost", "ゴースト状態"],
+  ["flying", "そらにいる"],
+  ["dive", "ダイビング中"],
+  ["insomnia", "ふみん"],
+  ["ally", "味方対象"],
+  ["atk_stage_up", "こうげき上昇中"],
+  ["def_stage_up", "ぼうぎょ上昇中"],
+  ["spa_stage_up", "とくこう上昇中"],
+  ["spd_stage_up", "とくぼう上昇中"],
+  ["spe_stage_up", "すばやさ上昇中"],
+  ["stat_boost", "能力上昇中"],
+  ["revenge_boost", "ふくしゅう1"],
+  ["revenge_boost_2", "ふくしゅう2"],
+  ["revenge_boost_3", "ふくしゅう3"],
+  ["revenge_boost_4", "ふくしゅう4"],
+  ["revenge_boost_5", "ふくしゅう5"],
+  ["revenge_boost_6", "ふくしゅう6"],
+  ["やけど", "やけど (旧表記)"],
 ];
 
 const TARGET_OPTIONS = [
@@ -123,19 +156,33 @@ const TAG_OPTIONS = [
   ["powder", "粉"],
   ["dance", "踊り"],
 ];
+const TAG_LABELS = new Map(TAG_OPTIONS);
 
 const FIELD_STATUS_OPTIONS = [
+  ["sun", "にほんばれ"],
   ["sunny", "ひざしがつよい"],
+  ["rain", "あまごい"],
   ["rainy", "あめ"],
   ["sandstorm", "すなあらし"],
+  ["snow", "ゆき"],
   ["snowscape", "ゆき"],
   ["electric_terrain", "エレキフィールド"],
+  ["grass_field", "くさのフィールド"],
   ["grassy_terrain", "グラスフィールド"],
   ["misty_terrain", "ミストフィールド"],
+  ["mist", "しろいきり"],
   ["psychic_terrain", "サイコフィールド"],
+  ["psycho_terrain", "サイコフィールド (旧表記)"],
+  ["trick_room", "トリックルーム"],
+  ["reflect", "リフレクター"],
+  ["light_screen", "ひかりのかべ"],
+  ["aurora_veil", "オーロラベール"],
+  ["tailwind", "おいかぜ"],
   ["stealth_rock", "ステロ"],
   ["spikes", "まきびし"],
   ["toxic_spikes", "どくびし"],
+  ["sticky_web", "ねばねばネット"],
+  ["echo_voice_power_up", "エコーボイス強化"],
 ];
 
 const STEP_SCHEMA = {
@@ -177,24 +224,22 @@ const STEP_SCHEMA = {
   repeat: {
     fields: [
       { key: "times", label: "回数", type: "minmax" },
-      { key: "effects", label: "繰り返すタスク", type: "nested_steps" },
+      { key: "steps", label: "繰り返すタスク", type: "nested_steps" },
     ],
   },
   apply_field_status: {
     fields: [
       { key: "statusId", label: "場の状態", type: "select", options: FIELD_STATUS_OPTIONS },
-      { key: "target", label: "対象", type: "select", options: [["field", "場"], ...TARGET_OPTIONS], default: "field" },
+      { key: "duration", label: "継続ターン", type: "number", default: 0 },
+      { key: "stack", label: "重ねがけ", type: "select", options: [["", "いいえ"], [true, "はい"]] },
+      { key: "data", label: "追加データ", type: "key_value" },
     ],
   },
   force_switch: {
-    fields: [
-      { key: "target", label: "対象", type: "select", options: TARGET_OPTIONS, default: "target" },
-    ],
+    fields: [],
   },
   self_switch: {
-    fields: [
-      { key: "target", label: "対象", type: "select", options: TARGET_OPTIONS, default: "self" },
-    ],
+    fields: [],
   },
   ohko: {
     fields: [
@@ -206,16 +251,36 @@ const STEP_SCHEMA = {
       { key: "target", label: "対象", type: "select", options: TARGET_OPTIONS, default: "self" },
     ],
   },
+  remove_field_status: {
+    fields: [
+      { key: "statusId", label: "場の状態", type: "select", options: FIELD_STATUS_OPTIONS },
+    ],
+  },
+  disable_move: {
+    fields: [
+      { key: "duration", label: "継続ターン", type: "number", default: 0 },
+      { key: "target", label: "対象", type: "select", options: [["", "未指定"], ...TARGET_OPTIONS], default: "target" },
+    ],
+  },
   delay: {
     fields: [
       { key: "afterTurns", label: "ターン後", type: "number", default: 1 },
-      { key: "effects", label: "発動タスク", type: "nested_steps" },
+      { key: "target", label: "対象", type: "select", options: [["", "未指定"], ...TARGET_OPTIONS] },
+      { key: "steps", label: "発動タスク", type: "nested_steps" },
     ],
   },
   over_time: {
     fields: [
-      { key: "duration", label: "継続ターン", type: "number", default: 5 },
-      { key: "effects", label: "毎ターンのタスク", type: "nested_steps" },
+      { key: "duration", label: "継続ターン", type: "number", default: 0 },
+      { key: "target", label: "対象", type: "select", options: [["", "未指定"], ...TARGET_OPTIONS] },
+      { key: "steps", label: "毎ターンのタスク", type: "nested_steps" },
+    ],
+  },
+  wait: {
+    fields: [
+      { key: "turns", label: "待機ターン", type: "number", default: 1 },
+      { key: "timing", label: "タイミング", type: "select", options: [["", "通常"], ["turn_start", "ターン開始時"]] },
+      { key: "steps", label: "待機後タスク", type: "nested_steps" },
     ],
   },
   protect: {
@@ -254,12 +319,18 @@ const el = {
   selectedMove: document.getElementById("selectedMove"),
   search: document.getElementById("search"),
   sortBy: document.getElementById("sortBy"),
+  filterType: document.getElementById("filterType"),
+  filterCategory: document.getElementById("filterCategory"),
   moveList: document.getElementById("moveList"),
   moveName: document.getElementById("moveName"),
   moveMeta: document.getElementById("moveMeta"),
   tags: document.getElementById("tags"),
   tagCheckboxes: document.getElementById("tagCheckboxes"),
   moveDescription: document.getElementById("moveDescription"),
+  overviewType: document.getElementById("overviewType"),
+  overviewNumbers: document.getElementById("overviewNumbers"),
+  overviewSteps: document.getElementById("overviewSteps"),
+  saveModeBadge: document.getElementById("saveModeBadge"),
   dslEditor: document.getElementById("dslEditor"),
   reloadYaml: document.getElementById("reloadYaml"),
   formatYaml: document.getElementById("formatYaml"),
@@ -268,6 +339,15 @@ const el = {
   scratchToYaml: document.getElementById("scratchToYaml"),
   exportYaml: document.getElementById("exportYaml"),
   markDoneNext: document.getElementById("markDoneNext"),
+  newMoveButton: document.getElementById("newMoveButton"),
+  newMoveModal: document.getElementById("newMoveModal"),
+  closeNewMove: document.getElementById("closeNewMove"),
+  newMoveId: document.getElementById("newMoveId"),
+  newMoveName: document.getElementById("newMoveName"),
+  newMoveType: document.getElementById("newMoveType"),
+  newMoveCategory: document.getElementById("newMoveCategory"),
+  newMoveTemplate: document.getElementById("newMoveTemplate"),
+  createMoveConfirm: document.getElementById("createMoveConfirm"),
   doneCount: document.getElementById("doneCount"),
   totalCount: document.getElementById("totalCount"),
   remainingCount: document.getElementById("remainingCount"),
@@ -280,6 +360,7 @@ const el = {
   fPower: document.getElementById("fPower"),
   fAccuracy: document.getElementById("fAccuracy"),
   fPriority: document.getElementById("fPriority"),
+  fCritRate: document.getElementById("fCritRate"),
   fTags: document.getElementById("fTags"),
   fDescription: document.getElementById("fDescription"),
   flowScript: document.getElementById("flowScript"),
@@ -310,7 +391,7 @@ function setSelectOptions(selectEl, options, selectedValue) {
   const hasSelected = options.some(([value]) => value === selectedValue);
   const html = options.map(([value, label]) => optionHtml(value, label, value === selectedValue)).join("");
   if (!hasSelected && selectedValue) {
-    selectEl.innerHTML = `${optionHtml(selectedValue, `カスタム: ${selectedValue}`, true)}${html}`;
+    selectEl.innerHTML = `${optionHtml(selectedValue, `未登録: ${selectedValue}`, true)}${html}`;
     return;
   }
   selectEl.innerHTML = html;
@@ -518,6 +599,14 @@ function normalizeStep(rawStep, index) {
     Object.entries(rawStep).forEach(([key, value]) => {
       if (key === "type") return;
       if (value === undefined || value === "") return;
+      if ((out.type === "repeat" || out.type === "delay" || out.type === "over_time") && (key === "steps" || key === "effects")) {
+        out.steps = normalizeSteps(value);
+        return;
+      }
+      if ((key === "then" || key === "else") && Array.isArray(value)) {
+        out[key] = normalizeSteps(value);
+        return;
+      }
       out[key] = value;
     });
     return out;
@@ -529,7 +618,7 @@ function normalizeStep(rawStep, index) {
 
   return {
     ...STEP_FALLBACK,
-    manualReason: `unsupported_step_at_${index + 1}`,
+    manualReason: `未対応ステップ (${index + 1}件目)`,
   };
 }
 
@@ -567,6 +656,7 @@ function normalizeMoveObject(rawMove, moveId) {
     power: source.power ?? null,
     accuracy: source.accuracy ?? null,
     priority: Number.isFinite(Number(source.priority)) ? Number(source.priority) : 0,
+    critRate: source.critRate ?? null,
     description: typeof source.description === "string" ? source.description : "",
     tags: normalizeTags(source.tags),
     steps: normalizeSteps(source.steps),
@@ -688,8 +778,8 @@ function schemaFieldInputHtml(field, value) {
     const obj = val || {};
     const rows = Object.entries(obj).map(([k, v]) => `
       <div class="kv-row">
-        <input class="kv-key" placeholder="key" value="${escapeHtml(k)}" />
-        <input class="kv-value" placeholder="value" value="${escapeHtml(v)}" />
+        <input class="kv-key" placeholder="キー" value="${escapeHtml(k)}" />
+        <input class="kv-value" placeholder="値" value="${escapeHtml(v)}" />
         <button class="icon-btn" data-action="remove-kv">×</button>
       </div>
     `).join("");
@@ -763,7 +853,7 @@ function stepCard(step = { ...STEP_FALLBACK }, index = 0) {
   const selectWithCustom =
     STEP_TYPE_LABELS.has(stepType) || !stepType
       ? stepTypeSelect
-      : `<select class="step-type">${optionHtml(stepType, `カスタム: ${stepType}`, true)}${STEP_TYPE_OPTIONS.map(
+      : `<select class="step-type">${optionHtml(stepType, `未登録: ${stepType}`, true)}${STEP_TYPE_OPTIONS.map(
         ([value, label]) => optionHtml(value, label, false)
       ).join("")}</select>`;
 
@@ -793,11 +883,16 @@ function stepCard(step = { ...STEP_FALLBACK }, index = 0) {
 function getVisibleMoveIds() {
   const query = el.search.value.trim().toLowerCase();
   const sortBy = el.sortBy.value;
+  const typeFilter = el.filterType?.value || "";
+  const categoryFilter = el.filterCategory?.value || "";
 
   const filtered = state.moveIds.filter((id) => {
     const move = state.moves[id];
     const text = `${id} ${String(move?.name || "").toLowerCase()}`;
-    return !query || text.includes(query);
+    if (query && !text.includes(query)) return false;
+    if (typeFilter && String(move?.type || "") !== typeFilter) return false;
+    if (categoryFilter && String(move?.category || "") !== categoryFilter) return false;
+    return true;
   });
 
   filtered.sort((a, b) => {
@@ -854,6 +949,13 @@ function updateMeta() {
   el.selectedMove.textContent = state.selectedId ? `選択中: ${state.selectedId}` : "-- 選択中";
 }
 
+function updateSaveModeBadge() {
+  const mode = IS_STATIC ? "Static" : supabase ? "Supabase" : "Local API";
+  if (el.saveModeBadge) {
+    el.saveModeBadge.textContent = `保存先: ${mode}`;
+  }
+}
+
 function fillTopLevel(move) {
   el.fName.value = move.name || "";
   setSelectOptions(el.fType, TYPE_OPTIONS, move.type || "");
@@ -862,6 +964,7 @@ function fillTopLevel(move) {
   el.fPower.value = move.power ?? "";
   el.fAccuracy.value = move.accuracy ?? "";
   el.fPriority.value = move.priority ?? 0;
+  el.fCritRate.value = move.critRate ?? "";
 
   const moveTags = Array.isArray(move.tags) ? move.tags : [];
   const knownTags = new Set(TAG_OPTIONS.map(([id]) => id));
@@ -889,6 +992,7 @@ function topLevelFromGui() {
     power: parseNumberOrNull(el.fPower.value),
     accuracy: parseNumberOrNull(el.fAccuracy.value),
     priority: parseNumberOrDefault(el.fPriority.value, 0),
+    critRate: parseNumberOrNull(el.fCritRate.value),
     description: el.fDescription.value,
     tags: tags,
   };
@@ -1087,22 +1191,25 @@ function generateFlowScript(move) {
           processSteps(step.else, elseId, `${id}E`);
         }
       } else if (step.type === "repeat") {
-        if (step.effects && step.effects.length > 0) {
+        const nested = step.steps || step.effects;
+        if (nested && nested.length > 0) {
           const repeatId = `${id}_rep`;
           lines.push(`${id} -- 繰り返し --> ${repeatId}{ }`);
-          processSteps(step.effects, repeatId, `${id}R`);
+          processSteps(nested, repeatId, `${id}R`);
         }
       } else if (step.type === "delay") {
-        if (step.effects && step.effects.length > 0) {
+        const nested = step.steps || step.effects;
+        if (nested && nested.length > 0) {
           const delayId = `${id}_del`;
           lines.push(`${id} -- 遅延発動 --> ${delayId}{ }`);
-          processSteps(step.effects, delayId, `${id}D`);
+          processSteps(nested, delayId, `${id}D`);
         }
       } else if (step.type === "over_time") {
-        if (step.effects && step.effects.length > 0) {
+        const nested = step.steps || step.effects;
+        if (nested && nested.length > 0) {
           const overId = `${id}_over`;
           lines.push(`${id} -- 毎ターン実行 --> ${overId}{ }`);
-          processSteps(step.effects, overId, `${id}O`);
+          processSteps(nested, overId, `${id}O`);
         }
       }
 
@@ -1144,16 +1251,56 @@ function refreshFlowPreviewFromGui() {
   renderFlowScript(move);
 }
 
+function summarizeStepKinds(steps) {
+  const counts = new Map();
+
+  const walk = (items) => {
+    normalizeSteps(items).forEach((step) => {
+      const stepType = step.type || "manual";
+      counts.set(stepType, (counts.get(stepType) || 0) + 1);
+      ["then", "else", "steps", "effects"].forEach((nestedKey) => {
+        if (Array.isArray(step[nestedKey])) {
+          walk(step[nestedKey]);
+        }
+      });
+    });
+  };
+
+  walk(steps);
+
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([stepType, count]) => `${formatLabel(STEP_TYPE_LABELS, stepType)} ×${count}`)
+    .join(" / ");
+}
+
+function formatTagLabel(tag) {
+  return TAG_LABELS.get(tag) || tag;
+}
+
 function renderMoveSummary(move, moveId) {
   el.moveName.textContent = move.name || moveId;
   el.moveMeta.textContent = `${moveId} | ${formatLabel(TYPE_LABELS, move.type)} | ${formatLabel(CATEGORY_LABELS, move.category)} | PP ${move.pp ?? "-"} | 優先度 ${move.priority ?? 0}`;
   el.moveDescription.textContent = move.description || "(説明なし)";
+  if (el.overviewType) {
+    el.overviewType.textContent = `${formatLabel(TYPE_LABELS, move.type)} / ${formatLabel(CATEGORY_LABELS, move.category)}`;
+  }
+  if (el.overviewNumbers) {
+    el.overviewNumbers.textContent = `PP ${move.pp ?? "-"} / 威力 ${move.power ?? "-"} / 命中 ${move.accuracy ?? "-"} / 優先度 ${move.priority ?? 0}`;
+    if (move.critRate !== null && move.critRate !== undefined) {
+      el.overviewNumbers.textContent += ` / 急所 ${move.critRate}`;
+    }
+  }
+  if (el.overviewSteps) {
+    el.overviewSteps.textContent = `${Array.isArray(move.steps) ? move.steps.length : 0} ステップ | ${summarizeStepKinds(move.steps) || "未設定"}`;
+  }
   el.tags.innerHTML = "";
 
   (move.tags || []).forEach((tag) => {
     const chip = document.createElement("span");
     chip.className = "chip";
-    chip.textContent = tag;
+    chip.textContent = formatTagLabel(tag);
     el.tags.appendChild(chip);
   });
 }
@@ -1184,6 +1331,43 @@ async function selectMove(moveId) {
   fillScratch(move);
   updateMeta();
   renderList();
+}
+
+function populateCreateMoveOptions() {
+  setSelectOptions(el.newMoveType, TYPE_OPTIONS, "");
+  setSelectOptions(el.newMoveCategory, CATEGORY_OPTIONS, "");
+  const templateOptions = [["", "空の技から始める"], ...state.moveIds.map((id) => [id, `${state.moves[id]?.name || id} (${id})`])];
+  setSelectOptions(el.newMoveTemplate, templateOptions, state.selectedId || "");
+}
+
+function buildNewMove() {
+  const moveId = (el.newMoveId?.value || "").trim();
+  if (!moveId) throw new Error("技IDを入力してください");
+  if (!/^[a-z0-9_]+$/i.test(moveId)) throw new Error("技IDは英数字とアンダースコアで入力してください");
+  if (state.moves[moveId]) throw new Error("同じ技IDがすでに存在します");
+
+  const templateId = (el.newMoveTemplate?.value || "").trim();
+  const template = templateId ? normalizeMoveObject(state.moves[templateId], templateId) : null;
+  const move = template ? { ...template } : normalizeMoveObject({}, moveId);
+  move.id = moveId;
+  move.name = (el.newMoveName?.value || "").trim() || move.name || moveId;
+  move.type = (el.newMoveType?.value || "").trim() || move.type || "";
+  move.category = (el.newMoveCategory?.value || "").trim() || move.category || "";
+  move.steps = Array.isArray(move.steps) && move.steps.length > 0 ? move.steps : [{ ...STEP_FALLBACK }];
+  return orderedMoveObject(move);
+}
+
+async function createMoveAndOpen() {
+  const move = buildNewMove();
+  state.moves[move.id] = move;
+  state.moveIds = uniqueStrings([...state.moveIds, move.id]).sort((a, b) => a.localeCompare(b, "ja"));
+  renderList();
+  updateMeta();
+  if (el.newMoveModal) {
+    el.newMoveModal.style.display = "none";
+  }
+  await selectMove(move.id);
+  toast(`新しい技を作成しました: ${move.id}`);
 }
 
 // Duplicate refreshMoves removed
@@ -1385,6 +1569,7 @@ function bindFlowAutoPreview() {
     el.fPower,
     el.fAccuracy,
     el.fPriority,
+    el.fCritRate,
     el.fTags,
     el.fDescription,
   ].forEach((field) => {
@@ -1397,6 +1582,9 @@ function bindFlowAutoPreview() {
 function setupLocalizedSelects() {
   setSelectOptions(el.fType, TYPE_OPTIONS, "");
   setSelectOptions(el.fCategory, CATEGORY_OPTIONS, "");
+  setSelectOptions(el.filterType, [["", "全タイプ"], ...TYPE_OPTIONS.filter(([value]) => value)], "");
+  setSelectOptions(el.filterCategory, [["", "全分類"], ...CATEGORY_OPTIONS.filter(([value]) => value)], "");
+  populateCreateMoveOptions();
 }
 
 async function bootstrap() {
@@ -1410,6 +1598,7 @@ async function bootstrap() {
       await selectMove(state.moveIds[0]);
     }
 
+    updateSaveModeBadge();
     toast("技データを読み込みました。");
   } catch (error) {
     toast(`初期化失敗: ${error.message}`, true);
@@ -1418,6 +1607,8 @@ async function bootstrap() {
 
 el.search.addEventListener("input", renderList);
 el.sortBy.addEventListener("change", renderList);
+el.filterType?.addEventListener("change", renderList);
+el.filterCategory?.addEventListener("change", renderList);
 
 el.reloadYaml.addEventListener("click", () => {
   if (!state.selectedId) return;
@@ -1475,6 +1666,24 @@ el.dslEditor.addEventListener("keydown", (event) => {
 
 el.markDoneNext?.addEventListener("click", markAsDoneAndNext);
 el.exportYaml?.addEventListener("click", exportAllMovesToYaml);
+el.newMoveButton?.addEventListener("click", () => {
+  populateCreateMoveOptions();
+  if (el.newMoveId) el.newMoveId.value = "";
+  if (el.newMoveName) el.newMoveName.value = "";
+  if (el.newMoveModal) el.newMoveModal.style.display = "flex";
+  el.newMoveId?.focus();
+});
+el.closeNewMove?.addEventListener("click", () => {
+  if (el.newMoveModal) el.newMoveModal.style.display = "none";
+});
+el.newMoveModal?.addEventListener("click", (event) => {
+  if (event.target === el.newMoveModal) {
+    el.newMoveModal.style.display = "none";
+  }
+});
+el.createMoveConfirm?.addEventListener("click", () => {
+  createMoveAndOpen().catch((error) => toast(error.message, true));
+});
 
 // Settings
 el.openSettings.addEventListener("click", () => {
@@ -1524,4 +1733,3 @@ const blocklyWorkspace = TatutaBlockly.injectWorkspace("blocklyDiv", () => {
 });
 
 bootstrap();
-
