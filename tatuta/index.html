@@ -32,8 +32,9 @@
       <div class="meta">
         <span id="moveCount">-- 件</span>
         <span id="selectedMove">-- 選択中</span>
+        <button id="newMoveButton" class="btn accent small">新規技を作成</button>
         <button id="exportYaml" class="btn primary small">データを書き出す (YAML)</button>
-        <button id="openSettings" class="btn secondary circle" title="Settings">⚙️</button>
+        <button id="openSettings" class="btn secondary circle" title="設定">⚙️</button>
       </div>
     </header>
 
@@ -44,15 +45,47 @@
           <button id="closeSettings" class="icon-btn">✕</button>
         </div>
         <div class="modal-body">
-          <p class="hint">Supabaseのプロジェクト設定(Settings > API)から取得した値を入力してください。</p>
+          <p class="hint">Supabase のプロジェクト設定から取得した値を入力してください。</p>
           <label>Supabase URL
             <input id="sUrl" type="url" placeholder="https://xxx.supabase.co" />
           </label>
-          <label>API Key (anon)
-            <input id="sKey" type="password" placeholder="your-anon-key" />
+          <label>公開 API キー
+            <input id="sKey" type="password" placeholder="anon key" />
           </label>
           <div class="modal-actions">
             <button id="saveSettings" class="btn primary">保存して再読込</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="newMoveModal" class="modal-overlay" style="display:none">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3>新しい技を作成</h3>
+          <button id="closeNewMove" class="icon-btn">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="hint">空の技を作るか、既存技を複製して土台にできます。保存するまでは編集中データとして保持されます。</p>
+          <label>新しい技ID
+            <input id="newMoveId" type="text" placeholder="例: blazing_loop" />
+          </label>
+          <label>表示名
+            <input id="newMoveName" type="text" placeholder="例: ブレイジングループ" />
+          </label>
+          <div class="modal-grid">
+            <label>タイプ
+              <select id="newMoveType"></select>
+            </label>
+            <label>分類
+              <select id="newMoveCategory"></select>
+            </label>
+          </div>
+          <label>複製元
+            <select id="newMoveTemplate"></select>
+          </label>
+          <div class="modal-actions">
+            <button id="createMoveConfirm" class="btn primary">作成して開く</button>
           </div>
         </div>
       </div>
@@ -66,6 +99,14 @@
             <option value="name">名前順</option>
             <option value="id">ID順</option>
             <option value="type">タイプ順</option>
+          </select>
+        </div>
+        <div class="filter-row">
+          <select id="filterType">
+            <option value="">全タイプ</option>
+          </select>
+          <select id="filterCategory">
+            <option value="">全分類</option>
           </select>
         </div>
         <div id="progressInfo" class="progress-info">
@@ -89,7 +130,38 @@
           <p id="moveDescription">--</p>
         </article>
 
+        <article class="block overview">
+          <div class="section-head">
+            <h3>編集サマリー</h3>
+            <span id="saveModeBadge" class="tiny badge">読込中</span>
+          </div>
+          <div class="overview-grid">
+            <div class="overview-card">
+              <span class="tiny">タイプ / 分類</span>
+              <strong id="overviewType">--</strong>
+            </div>
+            <div class="overview-card">
+              <span class="tiny">数値</span>
+              <strong id="overviewNumbers">--</strong>
+            </div>
+            <div class="overview-card">
+              <span class="tiny">フロー要約</span>
+              <strong id="overviewSteps">--</strong>
+            </div>
+          </div>
+        </article>
 
+        <article class="block guide">
+          <div class="section-head">
+            <h3>編集ガイド</h3>
+          </div>
+          <div class="guide-steps">
+            <div class="guide-step"><strong>1.</strong><span>既存技を選ぶか、新規技を作成します。</span></div>
+            <div class="guide-step"><strong>2.</strong><span>基本項目と Blockly で効果の流れを組みます。</span></div>
+            <div class="guide-step"><strong>3.</strong><span>ライブフローチャートと要約で意図を確認します。</span></div>
+            <div class="guide-step"><strong>4.</strong><span>必要なら YAML を直接整えて保存します。</span></div>
+          </div>
+        </article>
 
         <article class="block scratch">
           <div class="section-head">
@@ -103,6 +175,7 @@
             <label>威力 <input id="fPower" /></label>
             <label>命中 <input id="fAccuracy" /></label>
             <label>優先度 <input id="fPriority" /></label>
+            <label>急所ランク <input id="fCritRate" /></label>
             <div class="full">
               <label>タグ</label>
               <div id="tagCheckboxes" class="tag-checkboxes"></div>

@@ -39,7 +39,7 @@ body {
 }
 
 body {
-  font-family: "Lora", Georgia, serif;
+  font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", "Lora", Georgia, serif;
   color: var(--ink);
   background: radial-gradient(circle at 15% -10%, #f5d8cf 0%, #f8f3e6 36%, #ece8da 100%);
 }
@@ -140,6 +140,13 @@ body {
   margin-bottom: .7rem;
 }
 
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+  margin-bottom: .8rem;
+}
+
 .progress-info {
   background: rgba(20, 20, 19, .04);
   padding: .5rem .75rem;
@@ -165,7 +172,7 @@ select {
   background: #fff;
   color: var(--ink);
   padding: .58rem .72rem;
-  font: 500 .92rem/1.35 "Lora", Georgia, serif;
+  font: 500 .92rem/1.35 "Hiragino Sans", "Yu Gothic", "Noto Sans JP", "Lora", Georgia, serif;
 }
 
 input:focus,
@@ -243,6 +250,53 @@ textarea {
 
 .studio {
   padding: 1rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: .24rem .56rem;
+  border-radius: 999px;
+  border: 1px solid rgba(106, 155, 204, .25);
+  background: rgba(106, 155, 204, .14);
+  color: #36597f;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .7rem;
+}
+
+.overview-card {
+  padding: .82rem .9rem;
+  border-radius: 13px;
+  border: 1px solid rgba(20, 20, 19, .08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(244, 239, 229, .82));
+  display: flex;
+  flex-direction: column;
+  gap: .28rem;
+}
+
+.overview-card strong {
+  font: 700 .96rem/1.45 "Poppins", Arial, sans-serif;
+}
+
+.guide-steps {
+  display: grid;
+  gap: .6rem;
+}
+
+.guide-step {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: .6rem;
+  align-items: start;
+}
+
+.guide-step strong {
+  color: var(--accent-orange);
+  font: 700 1rem/1 "Poppins", Arial, sans-serif;
 }
 
 .move-head {
@@ -686,6 +740,12 @@ details[open]>.script-label::before {
     grid-template-columns: 1fr;
   }
 
+  .overview-grid,
+  .filter-row,
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+
   .field-row {
     grid-template-columns: 1fr;
   }
@@ -745,6 +805,12 @@ details[open]>.script-label::before {
   padding: 1.5rem;
 }
 
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+
 .modal-body label {
   display: block;
   margin-bottom: 1rem;
@@ -754,6 +820,10 @@ details[open]>.script-label::before {
 }
 
 .modal-body input {
+  margin-top: 0.4rem;
+}
+
+.modal-body select {
   margin-top: 0.4rem;
 }
 
