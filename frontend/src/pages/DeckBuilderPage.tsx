@@ -296,9 +296,14 @@ function sanitizeDeckPokemon(
         return null;
     }
 
-    const learnableMoves = new Set((learnsets[pokemon.speciesId] || []).filter((moveId) => moves[moveId]));
-    const sanitizedMoves = pokemon.moves.filter((moveId) => learnableMoves.has(moveId)).slice(0, 4);
-    const fallbackMoves = (learnsets[pokemon.speciesId] || []).filter((moveId) => moves[moveId]).slice(0, 4);
+    const sanitizedMoves = pokemon.moves
+        .filter((moveId, index, self) => self.indexOf(moveId) === index)
+        .filter((moveId) => moves[moveId])
+        .slice(0, 4);
+
+    const fallbackMoves = (learnsets[pokemon.speciesId] || [])
+        .filter((moveId) => moves[moveId])
+        .slice(0, 4);
 
     return {
         ...pokemon,
