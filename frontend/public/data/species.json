@@ -17,7 +17,8 @@
     "type": [
       "dark",
       "steel"
-    ]
+    ],
+    "weight_kg": 55
   },
   "buchii": {
     "abilities": [
@@ -30,14 +31,15 @@
       "hp": 90,
       "spa": 105,
       "spd": 115,
-      "spe": 60
+      "spe": 61
     },
     "id": "buchii",
     "name": "ぶっちー",
     "type": [
       "bug",
       "fairy"
-    ]
+    ],
+    "weight_kg": 38
   },
   "eiraku": {
     "abilities": [
@@ -45,19 +47,20 @@
       "compound_eyes"
     ],
     "baseStats": {
-      "atk": 115,
+      "atk": 80,
       "def": 100,
       "hp": 100,
-      "spa": 80,
-      "spd": 45,
-      "spe": 80
+      "spa": 120,
+      "spd": 35,
+      "spe": 85
     },
     "id": "eiraku",
     "name": "えいらく",
     "type": [
       "water",
       "normal"
-    ]
+    ],
+    "weight_kg": 68
   },
   "futo": {
     "abilities": [
@@ -65,19 +68,20 @@
       "own_tempo"
     ],
     "baseStats": {
-      "atk": 115,
-      "def": 90,
+      "atk": 85,
+      "def": 80,
       "hp": 105,
-      "spa": 70,
-      "spd": 60,
-      "spe": 80
+      "spa": 75,
+      "spd": 77,
+      "spe": 88
     },
     "id": "futo",
     "name": "ふうと",
     "type": [
       "fire",
       "normal"
-    ]
+    ],
+    "weight_kg": 92
   },
   "haruta": {
     "abilities": [
@@ -97,7 +101,8 @@
     "type": [
       "ice",
       "fairy"
-    ]
+    ],
+    "weight_kg": 57
   },
   "ikkun": {
     "abilities": [
@@ -117,7 +122,8 @@
     "type": [
       "rock",
       "poison"
-    ]
+    ],
+    "weight_kg": 88
   },
   "macchan": {
     "abilities": [
@@ -137,7 +143,8 @@
     "type": [
       "fighting",
       "dragon"
-    ]
+    ],
+    "weight_kg": 95
   },
   "machida": {
     "abilities": [
@@ -147,7 +154,7 @@
     "baseStats": {
       "atk": 94,
       "def": 100,
-      "hp": 90,
+      "hp": 94,
       "spa": 56,
       "spd": 56,
       "spe": 120
@@ -157,7 +164,8 @@
     "type": [
       "ground",
       "water"
-    ]
+    ],
+    "weight_kg": 75
   },
   "makocchan": {
     "abilities": [
@@ -165,19 +173,20 @@
       "sharpness"
     ],
     "baseStats": {
-      "atk": 50,
+      "atk": 55,
       "def": 50,
-      "hp": 85,
+      "hp": 97,
       "spa": 135,
-      "spd": 105,
-      "spe": 60
+      "spd": 125,
+      "spe": 58
     },
     "id": "makocchan",
     "name": "まこっちゃん",
     "type": [
       "poison",
       "fairy"
-    ]
+    ],
+    "weight_kg": 62
   },
   "michii": {
     "abilities": [
@@ -197,7 +206,8 @@
     "type": [
       "dark",
       "psychic"
-    ]
+    ],
+    "weight_kg": 45
   },
   "morimitu": {
     "abilities": [
@@ -207,7 +217,7 @@
     "baseStats": {
       "atk": 70,
       "def": 70,
-      "hp": 96,
+      "hp": 95,
       "spa": 110,
       "spd": 95,
       "spe": 80
@@ -217,7 +227,8 @@
     "type": [
       "fire",
       "flying"
-    ]
+    ],
+    "weight_kg": 42
   },
   "morimori": {
     "abilities": [
@@ -230,14 +241,15 @@
       "hp": 100,
       "spa": 70,
       "spd": 50,
-      "spe": 65
+      "spe": 72
     },
     "id": "morimori",
     "name": "もりもり",
     "type": [
       "ground",
       "normal"
-    ]
+    ],
+    "weight_kg": 133
   },
   "nisiki": {
     "abilities": [
@@ -257,7 +269,8 @@
     "type": [
       "psychic",
       "ghost"
-    ]
+    ],
+    "weight_kg": 33
   },
   "reosan": {
     "abilities": [
@@ -277,7 +290,8 @@
     "type": [
       "bug",
       "ghost"
-    ]
+    ],
+    "weight_kg": 255
   },
   "sena": {
     "abilities": [
@@ -285,19 +299,20 @@
       "technician"
     ],
     "baseStats": {
-      "atk": 105,
-      "def": 65,
-      "hp": 90,
-      "spa": 105,
-      "spd": 55,
-      "spe": 65
+      "atk": 113,
+      "def": 79,
+      "hp": 89,
+      "spa": 113,
+      "spd": 59,
+      "spe": 67
     },
     "id": "sena",
     "name": "せな",
     "type": [
       "electric",
       "steel"
-    ]
+    ],
+    "weight_kg": 82
   },
   "takaho": {
     "abilities": [
@@ -306,18 +321,19 @@
     ],
     "baseStats": {
       "atk": 105,
-      "def": 110,
+      "def": 115,
       "hp": 105,
       "spa": 60,
-      "spd": 55,
-      "spe": 80
+      "spd": 52,
+      "spe": 83
     },
     "id": "takaho",
     "name": "たかほ",
     "type": [
       "grass",
       "rock"
-    ]
+    ],
+    "weight_kg": 110
   },
   "tatuta": {
     "abilities": [
@@ -337,27 +353,29 @@
     "type": [
       "grass",
       "dragon"
-    ]
+    ],
+    "weight_kg": 89
   },
   "tomoki": {
     "abilities": [
       "download",
-      "oppotunist"
+      "opportunist"
     ],
     "baseStats": {
-      "atk": 110,
-      "def": 65,
+      "atk": 105,
+      "def": 60,
       "hp": 80,
-      "spa": 100,
-      "spd": 45,
-      "spe": 120
+      "spa": 107,
+      "spd": 50,
+      "spe": 118
     },
     "id": "tomoki",
     "name": "ともき",
     "type": [
       "ice",
       "flying"
-    ]
+    ],
+    "weight_kg": 48
   },
   "touma": {
     "abilities": [
@@ -377,7 +395,8 @@
     "type": [
       "dark",
       "fighting"
-    ]
+    ],
+    "weight_kg": 78
   },
   "ume": {
     "abilities": [
@@ -390,13 +409,14 @@
       "hp": 70,
       "spa": 110,
       "spd": 75,
-      "spe": 60
+      "spe": 61
     },
     "id": "ume",
     "name": "うめ",
     "type": [
       "electric",
       "ghost"
-    ]
+    ],
+    "weight_kg": 22
   }
 }
