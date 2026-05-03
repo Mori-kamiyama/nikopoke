@@ -1,5 +1,5 @@
 use crate::ai::{get_best_move_mcts, get_best_move_minimax};
-use crate::core::battle::{is_battle_over, step_battle, BattleOptions};
+use crate::core::battle::{is_battle_over, replace_fainted_pokemon, step_battle, BattleOptions};
 use crate::core::factory::{create_creature, CreateCreatureOptions, EVStats};
 use crate::core::state::{
     Action, ActionType, BattleHistory, BattleState, BattleTurn, CreatureState, FieldEffect,
@@ -109,6 +109,8 @@ struct CreatureStateWire {
     sp_attack: i32,
     sp_defense: i32,
     speed: i32,
+    #[serde(default)]
+    weight_kg: f64,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -209,6 +211,47 @@ fn default_moves(species_id: &str) -> Vec<String> {
         .collect()
 }
 
+fn normalize_requested_moves(species_id: &str, requested_moves: &[String]) -> Vec<String> {
+    let learnset = LEARNSETS_DB.get(species_id);
+
+    let mut selected = Vec::new();
+
+    for move_id in requested_moves {
+        if selected.len() >= 4 {
+            break;
+        }
+
+        if selected.iter().any(|selected_id| selected_id == move_id) {
+            continue;
+        }
+
+        if MOVE_DB.get(move_id.as_str()).is_some() {
+            selected.push(move_id.clone());
+        }
+    }
+
+    if selected.len() >= 4 {
+        return selected;
+    }
+
+    if let Some(learnset) = learnset {
+        for move_id in learnset {
+            if selected.len() >= 4 {
+                break;
+            }
+
+            if selected.iter().any(|selected_id| selected_id == move_id) {
+                continue;
+            }
+
+            if MOVE_DB.get(move_id.as_str()).is_some() {
+                selected.push(move_id.clone());
+            }
+        }
+    }
+
+    selected
+}
 impl From<Status> for StatusWire {
     fn from(status: Status) -> Self {
         Self {
@@ -272,6 +315,7 @@ impl From<CreatureState> for CreatureStateWire {
             sp_attack: creature.sp_attack,
             sp_defense: creature.sp_defense,
             speed: creature.speed,
+            weight_kg: creature.weight_kg,
         }
     }
 }
@@ -299,6 +343,7 @@ impl From<CreatureStateWire> for CreatureState {
             sp_attack: creature.sp_attack,
             sp_defense: creature.sp_defense,
             speed: creature.speed,
+            weight_kg: creature.weight_kg,
         }
     }
 }
@@ -472,12 +517,7 @@ pub fn create_creature_wasm(species_id: String, options: JsValue) -> Result<JsVa
         .ok_or_else(|| js_err(format!("Unknown species id: {}", species_id)))?;
 
     let requested_moves = options.moves.clone().unwrap_or_default();
-    let fallback_moves = default_moves(species_id.as_str());
-    let selected_moves = if requested_moves.is_empty() {
-        fallback_moves.clone()
-    } else {
-        requested_moves.clone()
-    };
+    let selected_moves = normalize_requested_moves(species_id.as_str(), &requested_moves);
 
     let evs = options.evs.clone().map(EVStats::from);
     let build_options = |moves: Vec<String>| CreateCreatureOptions {
@@ -496,6 +536,7 @@ pub fn create_creature_wasm(species_id: String, options: JsValue) -> Result<JsVa
         &MOVE_DB,
     )
     .or_else(|_| {
+        let fallback_moves = default_moves(species_id.as_str());
         create_creature(
             species,
             build_options(fallback_moves),
@@ -541,6 +582,19 @@ pub fn step_battle_wasm(
         record_history: options_wire.record_history.unwrap_or(true),
     };
     let next_state = step_battle(&state, &actions, &mut rng, options);
+    serde_wasm_bindgen::to_value(&BattleStateWire::from(next_state)).map_err(js_err)
+}
+
+#[wasm_bindgen(js_name = replaceFaintedPokemon)]
+pub fn replace_fainted_pokemon_wasm(
+    state: JsValue,
+    player_id: String,
+    slot: usize,
+) -> Result<JsValue, JsValue> {
+    let state_wire: BattleStateWire = serde_wasm_bindgen::from_value(state).map_err(js_err)?;
+    let state = BattleState::try_from(state_wire).map_err(js_err)?;
+    let mut rng = || Math::random();
+    let next_state = replace_fainted_pokemon(&state, player_id.as_str(), slot, &mut rng);
     serde_wasm_bindgen::to_value(&BattleStateWire::from(next_state)).map_err(js_err)
 }
 

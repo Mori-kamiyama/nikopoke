@@ -4,6 +4,7 @@ import { Check, X, ArrowLeft, Swords, Sliders } from 'lucide-react';
 import { loadAllData, getTypeColor } from '../lib/data';
 import { clearOnlineSession } from '../lib/p2p';
 import type { SpeciesData, MoveData, Learnset, Species, DeckPokemon, EVStats } from '../types/pokemon';
+import { getPokemonPreset, resolvePresetMoveIds } from '../lib/pokemonPresets';
 
 export default function DeckBuilderPage() {
     const navigate = useNavigate();
@@ -54,16 +55,18 @@ export default function DeckBuilderPage() {
     const handleSelectPokemon = (mon: Species) => {
         if (selectedPokemon.length >= 3) return;
         if (selectedPokemon.some(p => p.speciesId === mon.id)) return;
-
+    
+        const preset = getPokemonPreset(mon.id);
         const monLearnset = learnsets[mon.id] || [];
-        const validMoves = monLearnset.filter(m => moves[m]).slice(0, 4);
-
+        const presetMoves = resolvePresetMoveIds(preset, moves, monLearnset);
+    
         const newPokemon: DeckPokemon = {
             speciesId: mon.id,
-            moves: validMoves,
+            moves: presetMoves,
             ability: mon.abilities[0] || 'none',
+            evs: preset?.evs ?? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
         };
-
+    
         setSelectedPokemon([...selectedPokemon, newPokemon]);
     };
 

@@ -752,6 +752,13 @@ export default function BattlePage() {
     const player = getPlayer(localPlayerId)!;
     const ai = getPlayer(opponentPlayerId)!;
     const playerPokemon = player.team[player.activeSlot];
+    console.log('[battle] playerPokemon moves', {
+        speciesId: playerPokemon.speciesId,
+        name: playerPokemon.name,
+        moves: playerPokemon.moves,
+        movePp: playerPokemon.movePp,
+        moveNames: playerPokemon.moves?.map((moveId) => moves[moveId]?.name ?? `NOT FOUND: ${moveId}`),
+    });
     const aiPokemon = ai.team[ai.activeSlot];
     const playerSpecies = species[playerPokemon.speciesId];
     const aiSpecies = species[aiPokemon.speciesId];

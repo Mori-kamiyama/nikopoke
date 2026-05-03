@@ -237,24 +237,31 @@ function normalizeDeckPokemon(
     sameNameMoveIds: Map<string, string[]>,
 ): DeckPokemon {
     const learnableMoves = learnsets[pokemon.speciesId] ?? [];
+
     const selectedMoves = pokemon.moves
-        .filter((moveId, index, self) =>
-            self.indexOf(moveId) === index &&
-            learnableMoves.includes(moveId) &&
-            moves[moveId]
-        )
-        .map((moveId) => resolveCompatibleMoveId(pokemon.speciesId, moveId, moves, sameNameMoveIds))
+        .filter((moveId, index, self) => self.indexOf(moveId) === index)
+        .map((moveId) => {
+            if (moves[moveId]) {
+                return moveId;
+            }
+
+            return resolveCompatibleMoveId(pokemon.speciesId, moveId, moves, sameNameMoveIds);
+        })
         .filter((moveId): moveId is string => Boolean(moveId))
+        .filter((moveId, index, self) => self.indexOf(moveId) === index)
         .slice(0, 4);
 
     for (const moveId of learnableMoves) {
         if (selectedMoves.length >= 4) {
             break;
         }
+
         if (!moves[moveId]) {
             continue;
         }
+
         const compatibleMoveId = resolveCompatibleMoveId(pokemon.speciesId, moveId, moves, sameNameMoveIds);
+
         if (compatibleMoveId && !selectedMoves.includes(compatibleMoveId)) {
             selectedMoves.push(compatibleMoveId);
         }

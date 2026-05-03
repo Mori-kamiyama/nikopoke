@@ -21,6 +21,8 @@ pub struct SpeciesData {
     pub base_stats: BaseStats,
     #[serde(default)]
     pub abilities: Vec<String>,
+    #[serde(default, rename = "weight_kg")]
+    pub weight_kg: f64,
 }
 
 #[derive(Clone, Debug, Default)]
@@ -57,8 +59,17 @@ impl SpeciesDatabase {
         Ok(db)
     }
 
+    pub fn load_from_json_str(json: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let map: HashMap<String, SpeciesData> = serde_json::from_str(json)?;
+        let mut db = Self::new();
+        for (_, data) in map {
+            db.insert(data);
+        }
+        Ok(db)
+    }
+
     pub fn load_default() -> Result<Self, Box<dyn std::error::Error>> {
-        const DEFAULT_SPECIES_YAML: &str = include_str!("../../data/species.yaml");
-        Self::load_from_yaml_str(DEFAULT_SPECIES_YAML)
+        const DEFAULT_SPECIES_JSON: &str = include_str!("../../data/species.json");
+        Self::load_from_json_str(DEFAULT_SPECIES_JSON)
     }
 }

@@ -59,21 +59,19 @@ pub fn calc_stat(base: i32, is_hp: bool, level: i32, iv: i32, ev: i32) -> i32 {
 pub fn validate_moves(
     species_id: &str,
     requested_moves: &[String],
-    learnsets: &LearnsetDatabase,
+    _learnsets: &LearnsetDatabase,
     move_db: &MoveDatabase,
 ) -> Result<Vec<String>, String> {
     if requested_moves.is_empty() {
         return Ok(Vec::new());
     }
-    let learnable = learnsets
-        .get(species_id)
-        .ok_or_else(|| format!("No learnset found for species '{}'.", species_id))?;
 
     let unknown: Vec<String> = requested_moves
         .iter()
         .filter(|id| move_db.get(id.as_str()).is_none())
         .cloned()
         .collect();
+
     if !unknown.is_empty() {
         return Err(format!(
             "Unknown move id(s) for species '{}': {}",
@@ -82,21 +80,19 @@ pub fn validate_moves(
         ));
     }
 
-    let learnable_set: std::collections::HashSet<&String> = learnable.iter().collect();
-    let invalid: Vec<String> = requested_moves
-        .iter()
-        .filter(|id| !learnable_set.contains(id))
-        .cloned()
-        .collect();
-    if !invalid.is_empty() {
-        return Err(format!(
-            "Move(s) not allowed for species '{}': {}",
-            species_id,
-            invalid.join(", ")
-        ));
+    let mut selected = Vec::new();
+
+    for move_id in requested_moves {
+        if selected.len() >= 4 {
+            break;
+        }
+
+        if !selected.contains(move_id) {
+            selected.push(move_id.clone());
+        }
     }
 
-    Ok(requested_moves.to_vec())
+    Ok(selected)
 }
 
 pub fn create_creature(
@@ -151,5 +147,6 @@ pub fn create_creature(
         sp_attack,
         sp_defense,
         speed,
+        weight_kg: species.weight_kg,
     })
 }
