@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Check, X, ArrowLeft, Swords, Sliders } from 'lucide-react';
 import { loadAllData, getTypeColor } from '../lib/data';
+import { clearOnlineSession } from '../lib/p2p';
 import type { SpeciesData, MoveData, Learnset, Species, DeckPokemon, EVStats } from '../types/pokemon';
 
 export default function DeckBuilderPage() {
@@ -32,10 +33,14 @@ export default function DeckBuilderPage() {
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved) as DeckPokemon[];
-                    // Validate that species still exist
-                    const validPokemon = parsed.filter(p => species[p.speciesId]);
+                    const validPokemon = parsed
+                        .map((pokemon) => sanitizeDeckPokemon(pokemon, species, moves, learnsets))
+                        .filter((pokemon): pokemon is DeckPokemon => pokemon !== null);
                     if (validPokemon.length > 0) {
                         setSelectedPokemon(validPokemon);
+                        localStorage.setItem('savedDeck', JSON.stringify(validPokemon));
+                    } else {
+                        localStorage.removeItem('savedDeck');
                     }
                 } catch (e) {
                     console.error('Failed to load saved deck:', e);
@@ -112,9 +117,23 @@ export default function DeckBuilderPage() {
 
     const handleStartBattle = () => {
         if (selectedPokemon.length < 3) return;
-        sessionStorage.setItem('playerDeck', JSON.stringify(selectedPokemon));
+        const sanitizedDeck = selectedPokemon
+            .map((pokemon) => sanitizeDeckPokemon(pokemon, species, moves, learnsets))
+            .filter((pokemon): pokemon is DeckPokemon => pokemon !== null);
+
+        if (sanitizedDeck.length < 3 || sanitizedDeck.some((pokemon) => pokemon.moves.length === 0)) {
+            window.alert('デッキに古い技データが残っています。技を確認して保存し直してください。');
+            return;
+        }
+
+        setSelectedPokemon(sanitizedDeck);
+        if (mode === 'player') {
+            clearOnlineSession();
+        }
+        localStorage.setItem('savedDeck', JSON.stringify(sanitizedDeck));
+        sessionStorage.setItem('playerDeck', JSON.stringify(sanitizedDeck));
         sessionStorage.setItem('battleMode', mode);
-        navigate('/battle');
+        navigate(mode === 'player' ? '/online-lobby' : '/battle');
     };
 
     if (loading) {
@@ -261,6 +280,28 @@ export default function DeckBuilderPage() {
             </main>
         </div>
     );
+}
+
+function sanitizeDeckPokemon(
+    pokemon: DeckPokemon,
+    species: SpeciesData,
+    moves: MoveData,
+    learnsets: Learnset,
+): DeckPokemon | null {
+    const mon = species[pokemon.speciesId];
+    if (!mon) {
+        return null;
+    }
+
+    const learnableMoves = new Set((learnsets[pokemon.speciesId] || []).filter((moveId) => moves[moveId]));
+    const sanitizedMoves = pokemon.moves.filter((moveId) => learnableMoves.has(moveId)).slice(0, 4);
+    const fallbackMoves = (learnsets[pokemon.speciesId] || []).filter((moveId) => moves[moveId]).slice(0, 4);
+
+    return {
+        ...pokemon,
+        ability: mon.abilities.includes(pokemon.ability) ? pokemon.ability : (mon.abilities[0] || 'none'),
+        moves: sanitizedMoves.length > 0 ? sanitizedMoves : fallbackMoves,
+    };
 }
 
 function SelectedPokemonCard({

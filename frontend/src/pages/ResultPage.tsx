@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, Home, RotateCcw } from 'lucide-react';
+import { clearOnlineSession } from '../lib/p2p';
 
 interface BattleResult {
     winner: string;
     logs: string[];
+    localPlayerId?: string;
 }
 
 export default function ResultPage() {
@@ -35,7 +37,9 @@ export default function ResultPage() {
         );
     }
 
-    const isVictory = result.winner === 'player';
+    const battleMode = sessionStorage.getItem('battleMode') === 'player' ? 'player' : 'ai';
+    const localPlayerId = result.localPlayerId ?? 'player';
+    const isVictory = result.winner === localPlayerId;
 
     return (
         <div className="min-h-dvh bg-[var(--surface-0)] bg-grid-pattern flex flex-col items-center justify-center p-6">
@@ -73,6 +77,11 @@ export default function ResultPage() {
                     <button
                         onClick={() => {
                             sessionStorage.removeItem('battleResult');
+                            if (battleMode === 'player') {
+                                clearOnlineSession();
+                                navigate('/online-lobby');
+                                return;
+                            }
                             navigate('/deck-builder?mode=ai');
                         }}
                         className="w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2
@@ -86,6 +95,9 @@ export default function ResultPage() {
                         onClick={() => {
                             sessionStorage.removeItem('battleResult');
                             sessionStorage.removeItem('playerDeck');
+                            if (battleMode === 'player') {
+                                clearOnlineSession();
+                            }
                             navigate('/home');
                         }}
                         className="w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2
