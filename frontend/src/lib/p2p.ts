@@ -1,0 +1,474 @@
+import Peer, { type DataConnection } from 'peerjs';
+import type { DeckPokemon } from '../types/pokemon';
+import type { ActionWire, BattleStateWire } from './engine';
+
+export type OnlineRole = 'host' | 'guest';
+export type OnlineStatus =
+    | 'idle'
+    | 'hosting'
+    | 'joining'
+    | 'connected'
+    | 'ready'
+    | 'in_battle'
+    | 'disconnected'
+    | 'error';
+
+export interface OnlineSessionSnapshot {
+    role: OnlineRole | null;
+    status: OnlineStatus;
+    localPeerId: string | null;
+    hostPeerId: string | null;
+    remotePeerId: string | null;
+    localDeck: DeckPokemon[] | null;
+    remoteDeck: DeckPokemon[] | null;
+    latestState: BattleStateWire | null;
+    latestActions: ActionWire[] | null;
+    error: string | null;
+}
+
+type OnlineMessage =
+    | {
+        type: 'hello';
+        role: OnlineRole;
+        peerId: string;
+        deck: DeckPokemon[];
+    }
+    | {
+        type: 'start_battle';
+    }
+    | {
+        type: 'battle_init';
+        state: BattleStateWire;
+    }
+    | {
+        type: 'action_submit';
+        actorId: OnlineRole;
+        action: ActionWire;
+    }
+    | {
+        type: 'battle_update';
+        state: BattleStateWire;
+        actions: ActionWire[];
+    };
+
+type OnlineSessionEvent =
+    | {
+        type: 'snapshot';
+        snapshot: OnlineSessionSnapshot;
+    }
+    | {
+        type: 'start_battle';
+    }
+    | {
+        type: 'battle_init';
+        state: BattleStateWire;
+    }
+    | {
+        type: 'remote_action';
+        actorId: OnlineRole;
+        action: ActionWire;
+    }
+    | {
+        type: 'battle_update';
+        state: BattleStateWire;
+        actions: ActionWire[];
+    }
+    | {
+        type: 'peer_left';
+    }
+    | {
+        type: 'error';
+        message: string;
+    };
+
+interface OnlineSessionState {
+    role: OnlineRole | null;
+    status: OnlineStatus;
+    peer: Peer | null;
+    connection: DataConnection | null;
+    localPeerId: string | null;
+    hostPeerId: string | null;
+    remotePeerId: string | null;
+    localDeck: DeckPokemon[] | null;
+    remoteDeck: DeckPokemon[] | null;
+    latestState: BattleStateWire | null;
+    latestActions: ActionWire[] | null;
+    error: string | null;
+}
+
+const listeners = new Set<(event: OnlineSessionEvent) => void>();
+
+function createInitialState(): OnlineSessionState {
+    return {
+        role: null,
+        status: 'idle',
+        peer: null,
+        connection: null,
+        localPeerId: null,
+        hostPeerId: null,
+        remotePeerId: null,
+        localDeck: null,
+        remoteDeck: null,
+        latestState: null,
+        latestActions: null,
+        error: null,
+    };
+}
+
+let session = createInitialState();
+
+function toPlainData<T>(value: T): T {
+    if (value instanceof Map) {
+        const plainObject: Record<string, unknown> = {};
+        for (const [key, entryValue] of value.entries()) {
+            plainObject[String(key)] = toPlainData(entryValue);
+        }
+        return plainObject as T;
+    }
+
+    if (Array.isArray(value)) {
+        return value.map((entry) => toPlainData(entry)) as T;
+    }
+
+    if (value && typeof value === 'object') {
+        const plainObject: Record<string, unknown> = {};
+        for (const [key, entryValue] of Object.entries(value)) {
+            plainObject[key] = toPlainData(entryValue);
+        }
+        return plainObject as T;
+    }
+
+    return value;
+}
+
+function cloneDeck(deck: DeckPokemon[]): DeckPokemon[] {
+    return deck.map((pokemon) => ({
+        ...pokemon,
+        moves: [...pokemon.moves],
+        evs: pokemon.evs ? { ...pokemon.evs } : undefined,
+    }));
+}
+
+function getSnapshot(): OnlineSessionSnapshot {
+    return {
+        role: session.role,
+        status: session.status,
+        localPeerId: session.localPeerId,
+        hostPeerId: session.hostPeerId,
+        remotePeerId: session.remotePeerId,
+        localDeck: session.localDeck ? cloneDeck(session.localDeck) : null,
+        remoteDeck: session.remoteDeck ? cloneDeck(session.remoteDeck) : null,
+        latestState: session.latestState,
+        latestActions: session.latestActions ? [...session.latestActions] : null,
+        error: session.error,
+    };
+}
+
+function emit(event: OnlineSessionEvent): void {
+    listeners.forEach((listener) => listener(event));
+}
+
+function emitSnapshot(): void {
+    emit({
+        type: 'snapshot',
+        snapshot: getSnapshot(),
+    });
+}
+
+function setError(message: string): void {
+    session.error = message;
+    session.status = 'error';
+    emitSnapshot();
+    emit({
+        type: 'error',
+        message,
+    });
+}
+
+function sendMessage(message: OnlineMessage): void {
+    if (!session.connection || !session.connection.open) {
+        throw new Error('接続が確立していません。');
+    }
+    session.connection.send(toPlainData(message));
+}
+
+function sendHello(): void {
+    if (!session.role || !session.localPeerId || !session.localDeck) {
+        return;
+    }
+    sendMessage({
+        type: 'hello',
+        role: session.role,
+        peerId: session.localPeerId,
+        deck: cloneDeck(session.localDeck),
+    });
+}
+
+function handleIncomingMessage(raw: unknown): void {
+    if (!raw || typeof raw !== 'object' || !('type' in raw)) {
+        return;
+    }
+
+    const message = raw as OnlineMessage;
+    switch (message.type) {
+        case 'hello':
+            session.remotePeerId = message.peerId;
+            session.remoteDeck = cloneDeck(message.deck);
+            if (session.status !== 'in_battle') {
+                session.status = 'ready';
+            }
+            emitSnapshot();
+            return;
+        case 'start_battle':
+            session.status = 'in_battle';
+            emitSnapshot();
+            emit({ type: 'start_battle' });
+            return;
+        case 'battle_init':
+            session.status = 'in_battle';
+            session.latestState = toPlainData(message.state);
+            session.latestActions = null;
+            emitSnapshot();
+            emit({
+                type: 'battle_init',
+                state: toPlainData(message.state),
+            });
+            return;
+        case 'action_submit':
+            emit({
+                type: 'remote_action',
+                actorId: message.actorId,
+                action: message.action,
+            });
+            return;
+        case 'battle_update':
+            session.status = 'in_battle';
+            session.latestState = toPlainData(message.state);
+            session.latestActions = toPlainData([...message.actions]);
+            emitSnapshot();
+            emit({
+                type: 'battle_update',
+                state: toPlainData(message.state),
+                actions: toPlainData([...message.actions]),
+            });
+            return;
+    }
+}
+
+function attachConnection(connection: DataConnection): void {
+    session.connection = connection;
+    session.remotePeerId = connection.peer;
+    emitSnapshot();
+
+    connection.on('open', () => {
+        session.connection = connection;
+        session.remotePeerId = connection.peer;
+        session.status = 'connected';
+        session.error = null;
+        emitSnapshot();
+        sendHello();
+    });
+
+    connection.on('data', (message) => {
+        handleIncomingMessage(message);
+    });
+
+    connection.on('close', () => {
+        if (session.connection !== connection) {
+            return;
+        }
+        session.connection = null;
+        session.status = 'disconnected';
+        emitSnapshot();
+        emit({ type: 'peer_left' });
+    });
+
+    connection.on('error', (error) => {
+        setError(error.message);
+    });
+}
+
+function setupPeerCommon(peer: Peer): void {
+    peer.on('error', (error) => {
+        setError(error.message);
+    });
+    peer.on('disconnected', () => {
+        if (session.status !== 'error') {
+            session.status = 'disconnected';
+            emitSnapshot();
+        }
+    });
+}
+
+export function subscribeOnlineSession(
+    listener: (event: OnlineSessionEvent) => void,
+): () => void {
+    listeners.add(listener);
+    listener({
+        type: 'snapshot',
+        snapshot: getSnapshot(),
+    });
+    return () => {
+        listeners.delete(listener);
+    };
+}
+
+export function getOnlineSessionSnapshot(): OnlineSessionSnapshot {
+    return getSnapshot();
+}
+
+export function clearOnlineSession(): void {
+    try {
+        session.connection?.close();
+    } catch {
+        // ignore cleanup errors
+    }
+    try {
+        session.peer?.destroy();
+    } catch {
+        // ignore cleanup errors
+    }
+    session = createInitialState();
+    emitSnapshot();
+}
+
+export async function createHostSession(deck: DeckPokemon[]): Promise<string> {
+    clearOnlineSession();
+    session.role = 'host';
+    session.status = 'hosting';
+    session.localDeck = cloneDeck(deck);
+    emitSnapshot();
+
+    return await new Promise<string>((resolve, reject) => {
+        const peer = new Peer();
+        session.peer = peer;
+        emitSnapshot();
+        setupPeerCommon(peer);
+
+        peer.on('open', (peerId) => {
+            session.localPeerId = peerId;
+            session.hostPeerId = peerId;
+            session.error = null;
+            emitSnapshot();
+            resolve(peerId);
+        });
+
+        peer.on('connection', (connection) => {
+            if (session.connection && session.connection.open) {
+                connection.on('open', () => {
+                    connection.close();
+                });
+                return;
+            }
+            attachConnection(connection);
+        });
+
+        peer.on('error', (error) => {
+            reject(error);
+        });
+    });
+}
+
+export async function joinHostSession(
+    hostPeerId: string,
+    deck: DeckPokemon[],
+): Promise<void> {
+    clearOnlineSession();
+    session.role = 'guest';
+    session.status = 'joining';
+    session.hostPeerId = hostPeerId.trim();
+    session.localDeck = cloneDeck(deck);
+    emitSnapshot();
+
+    return await new Promise<void>((resolve, reject) => {
+        let resolved = false;
+        const peer = new Peer();
+        session.peer = peer;
+        emitSnapshot();
+        setupPeerCommon(peer);
+
+        const rejectOnce = (error: Error): void => {
+            if (resolved) {
+                return;
+            }
+            reject(error);
+        };
+
+        peer.on('open', (peerId) => {
+            session.localPeerId = peerId;
+            emitSnapshot();
+
+            const connection = peer.connect(session.hostPeerId!, {
+                reliable: true,
+            });
+            attachConnection(connection);
+            connection.on('open', () => {
+                if (resolved) {
+                    return;
+                }
+                resolved = true;
+                resolve();
+            });
+            connection.on('error', (error) => {
+                rejectOnce(error);
+            });
+        });
+
+        peer.on('error', (error) => {
+            rejectOnce(error);
+        });
+    });
+}
+
+export function startOnlineBattle(): void {
+    if (session.role !== 'host') {
+        throw new Error('ホストのみ対戦を開始できます。');
+    }
+    if (!session.connection?.open || !session.remoteDeck) {
+        throw new Error('相手の接続完了後に対戦を開始してください。');
+    }
+    session.status = 'in_battle';
+    session.latestActions = null;
+    emitSnapshot();
+    sendMessage({ type: 'start_battle' });
+}
+
+export function sendBattleInit(state: BattleStateWire): void {
+    session.status = 'in_battle';
+    const plainState = toPlainData(state);
+    session.latestState = plainState;
+    session.latestActions = null;
+    emitSnapshot();
+    sendMessage({
+        type: 'battle_init',
+        state: plainState,
+    });
+}
+
+export function sendBattleUpdate(
+    state: BattleStateWire,
+    actions: ActionWire[],
+): void {
+    const plainState = toPlainData(state);
+    const plainActions = toPlainData([...actions]);
+    session.status = 'in_battle';
+    session.latestState = plainState;
+    session.latestActions = plainActions;
+    emitSnapshot();
+    sendMessage({
+        type: 'battle_update',
+        state: plainState,
+        actions: plainActions,
+    });
+}
+
+export function sendPlayerAction(action: ActionWire): void {
+    if (!session.role) {
+        throw new Error('オンラインセッションが初期化されていません。');
+    }
+    sendMessage({
+        type: 'action_submit',
+        actorId: session.role,
+        action,
+    });
+}

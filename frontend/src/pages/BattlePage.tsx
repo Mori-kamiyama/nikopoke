@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import { cn } from '../lib/cn';
@@ -8,18 +8,246 @@ import {
     initEngine,
     createBattleState,
     stepBattle,
+    getFirstAvailableSwitchSlot,
     getBestMoveMinimax,
     isBattleOver,
     getWinner,
+    needsForcedSwitch,
+    replaceFaintedPokemon,
     type BattleStateWire,
     type PlayerStateWire,
     type CreatureStateWire,
     type ActionWire
 } from '../lib/engine';
+import {
+    clearOnlineSession,
+    getOnlineSessionSnapshot,
+    sendBattleInit,
+    sendBattleUpdate,
+    sendPlayerAction,
+    subscribeOnlineSession,
+    type OnlineRole,
+} from '../lib/p2p';
 import type { SpeciesData, MoveData, DeckPokemon } from '../types/pokemon';
+type FieldEffectValue =
+    | boolean
+    | number
+    | string
+    | null
+    | undefined
+    | {
+        id?: string;
+        name?: string;
+        active?: boolean;
+        turns?: number;
+        remaining?: number;
+        duration?: number;
+        layers?: number;
+        [key: string]: unknown;
+    };
 
+type BattleFieldLike = {
+    global?: Record<string, FieldEffectValue>;
+    sides?: Array<Record<string, FieldEffectValue>> | Record<string, Record<string, FieldEffectValue>>;
+};
+
+type BattleStateWithField = BattleStateWire & {
+    field?: BattleFieldLike;
+};
+
+type FieldEffectItem = {
+    key: string;
+    label: string;
+    turns?: number;
+    layers?: number;
+};
+
+const FIELD_EFFECT_LABELS: Record<string, string> = {
+    sun: '晴れ',
+    sunny: '晴れ',
+    harsh_sunlight: '晴れ',
+    rain: '雨',
+    rainy: '雨',
+    sandstorm: '砂嵐',
+    hail: 'あられ',
+    snow: '雪',
+
+    electric_terrain: 'エレキフィールド',
+    grassy_terrain: 'グラスフィールド',
+    misty_terrain: 'ミストフィールド',
+    psychic_terrain: 'サイコフィールド',
+
+    stealth_rock: 'ステルスロック',
+    spikes: 'まきびし',
+    toxic_spikes: 'どくびし',
+    sticky_web: 'ねばねばネット',
+
+    reflect: 'リフレクター',
+    light_screen: 'ひかりのかべ',
+    aurora_veil: 'オーロラベール',
+    safeguard: 'しんぴのまもり',
+    tailwind: 'おいかぜ',
+};
+
+function getEffectLabel(key: string): string {
+    return FIELD_EFFECT_LABELS[key] ?? key.replace(/^field_/, '').replace(/^side_/, '').replace(/_/g, ' ');
+}
+
+function isActiveEffect(value: FieldEffectValue): boolean {
+    if (value == null) return false;
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value > 0;
+    if (typeof value === 'string') return value.length > 0;
+
+    if (value.active === false) return false;
+    if (typeof value.remaining === 'number' && value.remaining <= 0) return false;
+    if (typeof value.turns === 'number' && value.turns <= 0) return false;
+    if (typeof value.layers === 'number' && value.layers <= 0) return false;
+
+    return true;
+}
+
+function normalizeEffects(effects?: Record<string, FieldEffectValue>): FieldEffectItem[] {
+    if (!effects) return [];
+
+    return Object.entries(effects)
+        .filter(([, value]) => isActiveEffect(value))
+        .map(([key, value]) => {
+            if (typeof value === 'object' && value !== null) {
+                const effectKey = value.id ?? key;
+
+                return {
+                    key: effectKey,
+                    label: value.name ?? getEffectLabel(effectKey),
+                    turns:
+                        typeof value.remaining === 'number'
+                            ? value.remaining
+                            : typeof value.turns === 'number'
+                                ? value.turns
+                                : undefined,
+                    layers: typeof value.layers === 'number' ? value.layers : undefined,
+                };
+            }
+
+            if (typeof value === 'string') {
+                return {
+                    key: value,
+                    label: getEffectLabel(value),
+                };
+            }
+
+            return {
+                key,
+                label: getEffectLabel(key),
+                layers:
+                    typeof value === 'number' && ['spikes', 'toxic_spikes'].includes(key)
+                        ? value
+                        : undefined,
+            };
+        });
+}
+
+function getSideField(
+    sides: BattleFieldLike['sides'],
+    playerId: string,
+    fallbackIndex: number,
+): Record<string, FieldEffectValue> | undefined {
+    if (!sides) return undefined;
+
+    if (Array.isArray(sides)) {
+        return sides[fallbackIndex];
+    }
+
+    return sides[playerId];
+}
+
+function FieldEffectChip({ effect }: { effect: FieldEffectItem }) {
+    const details = [
+        effect.layers && effect.layers > 1 ? `${effect.layers}層` : null,
+        effect.turns ? `あと${effect.turns}T` : null,
+    ]
+        .filter(Boolean)
+        .join(' / ');
+
+    return (
+        <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface-3)] px-2 py-1 text-xs text-[var(--text-primary)]">
+            <span>{effect.label}</span>
+            {details && <span className="text-[var(--text-muted)]">{details}</span>}
+        </span>
+    );
+}
+
+function EmptyFieldEffect() {
+    return <span className="text-xs text-[var(--text-muted)]">なし</span>;
+}
+
+function BattleFieldStatusPanel({
+    field,
+    localPlayerId,
+    opponentPlayerId,
+}: {
+    field?: BattleFieldLike;
+    localPlayerId: string;
+    opponentPlayerId: string;
+}) {
+    const globalEffects = normalizeEffects(field?.global);
+    const opponentSideEffects = normalizeEffects(getSideField(field?.sides, opponentPlayerId, 1));
+    const playerSideEffects = normalizeEffects(getSideField(field?.sides, localPlayerId, 0));
+
+    return (
+        <section className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-3">
+            <div className="mb-2 text-sm font-bold text-[var(--text-primary)]">場の状態</div>
+
+            <div className="space-y-3">
+                <div>
+                    <div className="mb-1 text-xs text-[var(--text-muted)]">天候・フィールド</div>
+                    <div className="flex flex-wrap gap-1.5">
+                        {globalEffects.length > 0 ? (
+                            globalEffects.map((effect) => (
+                                <FieldEffectChip key={effect.key} effect={effect} />
+                            ))
+                        ) : (
+                            <EmptyFieldEffect />
+                        )}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                    <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-3)] p-2">
+                        <div className="mb-1 text-xs text-[var(--text-muted)]">相手側</div>
+                        <div className="flex flex-wrap gap-1.5">
+                            {opponentSideEffects.length > 0 ? (
+                                opponentSideEffects.map((effect) => (
+                                    <FieldEffectChip key={effect.key} effect={effect} />
+                                ))
+                            ) : (
+                                <EmptyFieldEffect />
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-3)] p-2">
+                        <div className="mb-1 text-xs text-[var(--text-muted)]">自分側</div>
+                        <div className="flex flex-wrap gap-1.5">
+                            {playerSideEffects.length > 0 ? (
+                                playerSideEffects.map((effect) => (
+                                    <FieldEffectChip key={effect.key} effect={effect} />
+                                ))
+                            ) : (
+                                <EmptyFieldEffect />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+}
 export default function BattlePage() {
     const navigate = useNavigate();
+    const [battleMode] = useState<'ai' | 'player'>(() =>
+        sessionStorage.getItem('battleMode') === 'player' ? 'player' : 'ai',
+    );
     const [species, setSpecies] = useState<SpeciesData>({});
     const [moves, setMoves] = useState<MoveData>({});
     const [battleState, setBattleState] = useState<BattleStateWire | null>(null);
@@ -27,36 +255,228 @@ export default function BattlePage() {
     const [waiting, setWaiting] = useState(false);
     const [showSwitchMenu, setShowSwitchMenu] = useState(false);
     const [lastMoves, setLastMoves] = useState<{ player?: string; ai?: string }>({});
+    const [onlineSnapshot, setOnlineSnapshot] = useState(getOnlineSessionSnapshot());
+    const [localPlayerId, setLocalPlayerId] = useState<string>('player');
+    const [opponentPlayerId, setOpponentPlayerId] = useState<string>('ai');
+    const [statusText, setStatusText] = useState('');
     const logsRef = useRef<HTMLDivElement>(null);
+    const battleStateRef = useRef<BattleStateWire | null>(null);
+    const localPlayerIdRef = useRef(localPlayerId);
+    const opponentPlayerIdRef = useRef(opponentPlayerId);
+    const onlineRoleRef = useRef<OnlineRole | null>(onlineSnapshot.role);
+    const pendingLocalActionRef = useRef<ActionWire | null>(null);
+    const pendingRemoteActionRef = useRef<ActionWire | null>(null);
+    const resolvingTurnRef = useRef(false);
+    const initializedRef = useRef(false);
 
     useEffect(() => {
-        const init = async () => {
-            // Initialize WASM engine
+        battleStateRef.current = battleState;
+    }, [battleState]);
+
+    useEffect(() => {
+        localPlayerIdRef.current = localPlayerId;
+    }, [localPlayerId]);
+
+    useEffect(() => {
+        opponentPlayerIdRef.current = opponentPlayerId;
+    }, [opponentPlayerId]);
+
+    useEffect(() => {
+        onlineRoleRef.current = onlineSnapshot.role;
+    }, [onlineSnapshot.role]);
+
+    const updateLastMovesFromActions = useCallback((actions: ActionWire[]) => {
+        const localId = localPlayerIdRef.current;
+        const opponentId = opponentPlayerIdRef.current;
+        setLastMoves({
+            player: actions.find((action) => action.playerId === localId)?.moveId,
+            ai: actions.find((action) => action.playerId === opponentId)?.moveId,
+        });
+    }, []);
+
+    const finishBattle = useCallback(async (nextState: BattleStateWire) => {
+        const over = await isBattleOver(nextState);
+        if (!over) {
+            return false;
+        }
+        const winner = getWinner(nextState);
+        sessionStorage.setItem(
+            'battleResult',
+            JSON.stringify({
+                winner,
+                localPlayerId: localPlayerIdRef.current,
+                logs: nextState.log,
+            }),
+        );
+        window.setTimeout(() => {
+            navigate('/result');
+        }, 1500);
+        return true;
+    }, [navigate]);
+
+    const resolveHostTurn = useCallback(async (localAction: ActionWire, remoteAction: ActionWire) => {
+        const currentState = battleStateRef.current;
+        if (!currentState || resolvingTurnRef.current) {
+            return;
+        }
+        resolvingTurnRef.current = true;
+        try {
+            const actions = [localAction, remoteAction];
+            const nextState = await stepBattle(currentState, actions);
+            pendingLocalActionRef.current = null;
+            pendingRemoteActionRef.current = null;
+            updateLastMovesFromActions(actions);
+            setBattleState(nextState);
+            sendBattleUpdate(nextState, actions);
+            const finished = await finishBattle(nextState);
+            if (!finished) {
+                setWaiting(false);
+                setStatusText('');
+            }
+        } catch (error) {
+            console.error('Online battle step error:', error);
+            setStatusText('ターンの解決に失敗しました。');
+            setWaiting(false);
+        } finally {
+            resolvingTurnRef.current = false;
+        }
+    }, [finishBattle, updateLastMovesFromActions]);
+
+    const resolveForcedSwitch = useCallback(async (action: ActionWire, broadcast: boolean) => {
+        const currentState = battleStateRef.current;
+        if (!currentState || action.type !== 'switch' || typeof action.slot !== 'number') {
+            return;
+        }
+
+        try {
+            const nextState = replaceFaintedPokemon(currentState, action.playerId, action.slot);
+            pendingLocalActionRef.current = null;
+            pendingRemoteActionRef.current = null;
+            setBattleState(nextState);
+            if (broadcast) {
+                sendBattleUpdate(nextState, [action]);
+            }
+            const finished = await finishBattle(nextState);
+            if (!finished) {
+                setWaiting(false);
+                setStatusText('');
+            }
+        } catch (error) {
+            console.error('Forced switch error:', error);
+            setStatusText('ポケモンの出し直しに失敗しました。');
+            setWaiting(false);
+        }
+    }, [finishBattle]);
+
+    useEffect(() => {
+        let cancelled = false;
+        const boot = async () => {
             await initEngine();
-
-            const { species, moves } = await loadAllData();
-            setSpecies(species);
-            setMoves(moves);
-
-            // Get player deck from session storage
-            const deckJson = sessionStorage.getItem('playerDeck');
-            if (!deckJson) {
-                navigate('/home');
+            const { species: loadedSpecies, moves: loadedMoves } = await loadAllData();
+            if (cancelled) {
                 return;
             }
+            setSpecies(loadedSpecies);
+            setMoves(loadedMoves);
+            setLoading(false);
+        };
 
+        boot().catch((error) => {
+            console.error('Failed to initialize battle data:', error);
+            if (!cancelled) {
+                setStatusText('バトル準備に失敗しました。');
+                setLoading(false);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [navigate]);
+
+    useEffect(() => {
+        if (logsRef.current) {
+            logsRef.current.scrollTop = logsRef.current.scrollHeight;
+        }
+    }, [battleState?.log]);
+
+    useEffect(() => {
+        if (battleMode !== 'player') {
+            return;
+        }
+
+        return subscribeOnlineSession((event) => {
+            if (event.type === 'snapshot') {
+                setOnlineSnapshot(event.snapshot);
+                return;
+            }
+            if (event.type === 'battle_init') {
+                setBattleState(event.state);
+                setWaiting(false);
+                setStatusText('');
+                return;
+            }
+            if (event.type === 'battle_update') {
+                updateLastMovesFromActions(event.actions);
+                setBattleState(event.state);
+                setWaiting(false);
+                setStatusText('');
+                void finishBattle(event.state);
+                return;
+            }
+            if (event.type === 'remote_action' && onlineRoleRef.current === 'host') {
+                const currentState = battleStateRef.current;
+                if (
+                    currentState &&
+                    event.action.type === 'switch' &&
+                    needsForcedSwitch(currentState, event.action.playerId)
+                ) {
+                    void resolveForcedSwitch(event.action, true);
+                    return;
+                }
+                const localAction = pendingLocalActionRef.current;
+                if (localAction) {
+                    void resolveHostTurn(localAction, event.action);
+                    return;
+                }
+                pendingRemoteActionRef.current = event.action;
+                setStatusText('相手の入力を受け取りました。あなたの行動を選んでください。');
+                return;
+            }
+            if (event.type === 'peer_left') {
+                setStatusText('相手との接続が切れました。');
+                setWaiting(false);
+                return;
+            }
+            if (event.type === 'error') {
+                setStatusText(event.message);
+                setWaiting(false);
+            }
+        });
+    }, [battleMode, finishBattle, resolveForcedSwitch, resolveHostTurn, updateLastMovesFromActions]);
+
+    useEffect(() => {
+        if (loading || initializedRef.current) {
+            return;
+        }
+
+        const deckJson = sessionStorage.getItem('playerDeck');
+        if (!deckJson) {
+            navigate('/home');
+            return;
+        }
+
+        if (battleMode === 'ai') {
+            initializedRef.current = true;
             const playerDeck: DeckPokemon[] = JSON.parse(deckJson);
-
-            // Create AI deck (random selection)
             const speciesList = Object.values(species);
             const aiDeck: DeckPokemon[] = [];
-            const usedIds = new Set(playerDeck.map(p => p.speciesId));
+            const usedIds = new Set(playerDeck.map((pokemon) => pokemon.speciesId));
 
-            for (let i = 0; i < 3; i++) {
-                const available = speciesList.filter(s => !usedIds.has(s.id));
+            for (let i = 0; i < 3; i += 1) {
+                const available = speciesList.filter((mon) => !usedIds.has(mon.id));
                 const randomSpecies = available[Math.floor(Math.random() * available.length)];
                 usedIds.add(randomSpecies.id);
-
                 aiDeck.push({
                     speciesId: randomSpecies.id,
                     moves: playerDeck[0].moves.slice(0, 4),
@@ -64,31 +484,102 @@ export default function BattlePage() {
                 });
             }
 
-            // Initialize battle using WASM
-            const state = await createBattleState({
+            createBattleState({
                 player: { team: playerDeck },
                 ai: { team: aiDeck },
-            });
+            })
+                .then((state) => {
+                    setLocalPlayerId('player');
+                    setOpponentPlayerId('ai');
+                    setBattleState(state);
+                })
+                .catch((error) => {
+                    console.error('Failed to create AI battle state:', error);
+                    setStatusText('AI対戦の初期化に失敗しました。');
+                });
+            return;
+        }
 
-            setBattleState(state);
-            setLoading(false);
-        };
+        if (!onlineSnapshot.role || !onlineSnapshot.localDeck) {
+            navigate('/online-lobby');
+            return;
+        }
 
-        init().catch(err => {
-            console.error('Failed to initialize battle:', err);
-            setLoading(false);
-        });
-    }, [navigate]);
+        if (onlineSnapshot.role === 'host' && onlineSnapshot.remoteDeck) {
+            initializedRef.current = true;
+            setLocalPlayerId('host');
+            setOpponentPlayerId('guest');
+            createBattleState({
+                host: { team: onlineSnapshot.localDeck },
+                guest: { team: onlineSnapshot.remoteDeck },
+            })
+                .then((state) => {
+                    setBattleState(state);
+                    sendBattleInit(state);
+                })
+                .catch((error) => {
+                    console.error('Failed to create online battle state:', error);
+                    const message = error instanceof Error ? error.message : String(error);
+                    setStatusText(`オンライン対戦の初期化に失敗しました: ${message}`);
+                });
+            return;
+        }
+
+        if (onlineSnapshot.role === 'guest') {
+            initializedRef.current = true;
+            setLocalPlayerId('guest');
+            setOpponentPlayerId('host');
+            if (onlineSnapshot.latestState) {
+                setBattleState(onlineSnapshot.latestState);
+            } else {
+                setStatusText('ホストが対戦を開始するのを待っています...');
+            }
+        }
+    }, [battleMode, loading, navigate, onlineSnapshot.localDeck, onlineSnapshot.latestState, onlineSnapshot.remoteDeck, onlineSnapshot.role, species]);
 
     useEffect(() => {
-        // Scroll to bottom of logs
-        if (logsRef.current) {
-            logsRef.current.scrollTop = logsRef.current.scrollHeight;
+        if (battleMode !== 'ai' || waiting || !battleState) {
+            return;
         }
-    }, [battleState?.log]);
+
+        if (!needsForcedSwitch(battleState, opponentPlayerIdRef.current)) {
+            return;
+        }
+
+        const slot = getFirstAvailableSwitchSlot(battleState, opponentPlayerIdRef.current);
+        if (slot === null) {
+            void finishBattle(battleState);
+            return;
+        }
+
+        const nextState = replaceFaintedPokemon(battleState, opponentPlayerIdRef.current, slot);
+        setBattleState(nextState);
+        setWaiting(false);
+        void finishBattle(nextState);
+    }, [battleMode, battleState, finishBattle, waiting]);
 
     const getPlayer = (id: string): PlayerStateWire | undefined => {
         return battleState?.players.find(p => p.id === id);
+    };
+
+    const submitOnlineAction = async (action: ActionWire) => {
+        if (onlineSnapshot.role === 'guest') {
+            sendPlayerAction(action);
+            setWaiting(true);
+            setStatusText('ホストがターンを処理しています...');
+            return;
+        }
+
+        const remoteAction = pendingRemoteActionRef.current;
+        if (remoteAction) {
+            setWaiting(true);
+            await resolveHostTurn(action, remoteAction);
+            return;
+        }
+
+        pendingLocalActionRef.current = action;
+        setWaiting(true);
+        setStatusText('相手の行動を待っています...');
     };
 
     const handleSelectMove = async (moveId: string) => {
@@ -96,49 +587,41 @@ export default function BattlePage() {
         setWaiting(true);
         setShowSwitchMenu(false);
 
+        if (battleState && needsForcedSwitch(battleState, localPlayerIdRef.current)) {
+            setWaiting(false);
+            return;
+        }
+
         try {
-            // Player action
             const playerAction: ActionWire = {
                 type: 'move',
-                playerId: 'player',
+                playerId: localPlayerIdRef.current,
                 moveId,
-                targetId: 'ai'
+                targetId: opponentPlayerIdRef.current,
             };
 
-            // AI action using Minimax (depth 1 for speed)
-            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1);
+            if (battleMode === 'player') {
+                await submitOnlineAction(playerAction);
+                return;
+            }
 
+            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1);
             if (!aiAction) {
                 console.error('AI failed to select action');
                 setWaiting(false);
                 return;
             }
 
-            // Step battle
             const newState = await stepBattle(battleState, [playerAction, aiAction]);
-
-            // Track last moves
             setLastMoves({
                 player: moveId,
                 ai: aiAction.moveId || undefined
             });
-
             setBattleState(newState);
-
-            // Check if battle is over
-            const over = await isBattleOver(newState);
-            if (over) {
-                setTimeout(() => {
-                    const winner = getWinner(newState);
-                    sessionStorage.setItem('battleResult', JSON.stringify({
-                        winner,
-                        logs: newState.log,
-                    }));
-                    navigate('/result');
-                }, 1500);
-            }
+            await finishBattle(newState);
         } catch (err) {
             console.error('Battle step error:', err);
+            setStatusText('行動の送信に失敗しました。');
         }
 
         setWaiting(false);
@@ -146,7 +629,7 @@ export default function BattlePage() {
 
     const handleSwitch = async (index: number) => {
         if (!battleState || waiting) return;
-        const player = getPlayer('player');
+        const player = getPlayer(localPlayerIdRef.current);
         if (!player) return;
         if (index === player.activeSlot) return;
         if (player.team[index].hp <= 0) return;
@@ -157,9 +640,34 @@ export default function BattlePage() {
         try {
             const playerAction: ActionWire = {
                 type: 'switch',
-                playerId: 'player',
+                playerId: localPlayerIdRef.current,
                 slot: index
             };
+            const forcedSwitch = needsForcedSwitch(battleState, localPlayerIdRef.current);
+
+            if (battleMode === 'player') {
+                if (forcedSwitch) {
+                    if (onlineSnapshot.role === 'host') {
+                        await resolveForcedSwitch(playerAction, true);
+                    } else {
+                        sendPlayerAction(playerAction);
+                        setWaiting(true);
+                        setStatusText('ホストがポケモンの出し直しを処理しています...');
+                    }
+                    return;
+                }
+                await submitOnlineAction(playerAction);
+                return;
+            }
+
+            if (forcedSwitch) {
+                const newState = replaceFaintedPokemon(battleState, localPlayerIdRef.current, index);
+                setBattleState(newState);
+                await finishBattle(newState);
+                setWaiting(false);
+                setStatusText('');
+                return;
+            }
 
             const aiAction = await getBestMoveMinimax(battleState, 'ai', 1);
 
@@ -171,20 +679,20 @@ export default function BattlePage() {
 
             const newState = await stepBattle(battleState, [playerAction, aiAction]);
             setBattleState(newState);
-
-            // Track AI's move after switch
             setLastMoves(prev => ({
                 ...prev,
                 ai: aiAction.moveId || undefined
             }));
+            await finishBattle(newState);
         } catch (err) {
             console.error('Switch error:', err);
+            setStatusText('交代に失敗しました。');
         }
 
         setWaiting(false);
     };
 
-    if (loading || !battleState) {
+    if (loading) {
         return (
             <div className="flex min-h-dvh items-center justify-center bg-[var(--surface-1)]">
                 <div className="text-lg text-[var(--text-muted)]">バトル準備中...</div>
@@ -192,25 +700,42 @@ export default function BattlePage() {
         );
     }
 
-    const player = getPlayer('player')!;
-    const ai = getPlayer('ai')!;
+    if (!battleState) {
+        return (
+            <div className="flex min-h-dvh items-center justify-center bg-[var(--surface-1)]">
+                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] px-6 py-5 text-center">
+                    <p className="text-lg font-medium text-[var(--text-primary)]">対戦開始を待っています...</p>
+                    <p className="mt-2 text-sm text-[var(--text-muted)]">
+                        {statusText || 'ホストが初期盤面を準備中です。'}
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    const player = getPlayer(localPlayerId)!;
+    const ai = getPlayer(opponentPlayerId)!;
     const playerPokemon = player.team[player.activeSlot];
     const aiPokemon = ai.team[ai.activeSlot];
     const playerSpecies = species[playerPokemon.speciesId];
     const aiSpecies = species[aiPokemon.speciesId];
+    const mustSwitch = needsForcedSwitch(battleState, localPlayerId);
 
-    // Get last move objects
     const playerLastMove = lastMoves.player ? moves[lastMoves.player] : undefined;
     const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
 
     return (
         <div className="flex min-h-dvh flex-col bg-[var(--surface-1)]">
-            {/* Header */}
             <header className="border-b border-[var(--border)] bg-[var(--surface-2)]">
                 <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-3">
                         <button
-                            onClick={() => navigate('/home')}
+                            onClick={() => {
+                                if (battleMode === 'player') {
+                                    clearOnlineSession();
+                                }
+                                navigate('/home');
+                            }}
                             className="rounded-lg p-2 transition-colors hover:bg-[var(--surface-3)]"
                             aria-label="ホームに戻る"
                         >
@@ -218,13 +743,18 @@ export default function BattlePage() {
                         </button>
                         <span className="font-medium tabular-nums text-[var(--text-primary)]">ターン {battleState.turn}</span>
                     </div>
-                    <span className="text-sm text-[var(--text-muted)]">VS AI (Minimax)</span>
+                    <span className="text-sm text-[var(--text-muted)]">
+                        {battleMode === 'player' ? 'VS Player (PeerJS)' : 'VS AI (Minimax)'}
+                    </span>
                 </div>
+                {statusText && (
+                    <div className="border-t border-[var(--border)] px-4 py-2 text-center text-sm text-[var(--text-muted)]">
+                        {statusText}
+                    </div>
+                )}
             </header>
 
-            {/* Battle Field */}
             <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6">
-                {/* AI Pokemon + Team Indicator */}
                 <div className="flex items-start gap-4">
                     <TeamIndicator team={ai.team} activeSlot={ai.activeSlot} species={species} isPlayer={false} />
                     <PokemonStatus
@@ -233,15 +763,19 @@ export default function BattlePage() {
                         isPlayer={false}
                     />
                 </div>
+                
+                <BattleFieldStatusPanel
+                    field={(battleState as BattleStateWithField).field}
+                    localPlayerId={localPlayerId}
+                    opponentPlayerId={opponentPlayerId}
+                />
 
-                {/* Action Summary - Shows last turn's moves */}
                 <ActionSummary
                     playerMove={playerLastMove ? { name: playerLastMove.name, type: playerLastMove.type } : undefined}
                     aiMove={aiLastMove ? { name: aiLastMove.name, type: aiLastMove.type } : undefined}
                     getTypeColor={getTypeColor}
                 />
 
-                {/* Battle Logs */}
                 <div ref={logsRef}>
                     <BattleLog
                         logs={battleState.log}
@@ -249,7 +783,6 @@ export default function BattlePage() {
                     />
                 </div>
 
-                {/* Player Pokemon + Team Indicator */}
                 <div className="flex items-end gap-4">
                     <TeamIndicator team={player.team} activeSlot={player.activeSlot} species={species} isPlayer={true} />
                     <PokemonStatus
@@ -259,17 +792,20 @@ export default function BattlePage() {
                     />
                 </div>
 
-                {/* Action Buttons */}
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-4">
-                    {showSwitchMenu ? (
+                    {showSwitchMenu || mustSwitch ? (
                         <div>
                             <div className="mb-3 flex items-center justify-between">
-                                <span className="font-medium text-[var(--text-primary)]">ポケモンを交代</span>
-                                <button
-                                    onClick={() => setShowSwitchMenu(false)}
-                                    className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-                                    戻る
-                                </button>
+                                <span className="font-medium text-[var(--text-primary)]">
+                                    {mustSwitch ? '交代先を選んでください' : 'ポケモンを交代'}
+                                </span>
+                                {!mustSwitch && (
+                                    <button
+                                        onClick={() => setShowSwitchMenu(false)}
+                                        className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+                                        戻る
+                                    </button>
+                                )}
                             </div>
                             <div className="grid grid-cols-3 gap-2">
                                 {player.team.map((mon, idx) => {

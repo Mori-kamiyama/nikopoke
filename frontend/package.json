@@ -4,15 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "node ./node_modules/vite/bin/vite.js",
+    "build": "node ./node_modules/typescript/bin/tsc -b && node ./node_modules/vite/bin/vite.js build",
+    "lint": "node ./node_modules/eslint/bin/eslint.js .",
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "sync:data": "node ../scripts/sync-battle-data.cjs",
+    "check:data": "node ../scripts/check-battle-data.cjs",
+    "check:moves": "node ../scripts/check-move-yaml.cjs",
+    "normalize:moves": "node ../scripts/normalize-move-yaml.cjs",
+    "normalize:moves:write": "node ../scripts/normalize-move-yaml.cjs --write"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",
+    "peerjs": "^1.5.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.12.0",
