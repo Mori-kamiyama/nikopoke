@@ -98,6 +98,16 @@ interface OnlineSessionState {
 
 const listeners = new Set<(event: OnlineSessionEvent) => void>();
 
+const PEER_OPTIONS = {
+    debug: 2,
+    config: {
+        iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' },
+        ],
+    },
+};
+
 function createInitialState(): OnlineSessionState {
     return {
         role: null,
@@ -256,11 +266,15 @@ function handleIncomingMessage(raw: unknown): void {
 }
 
 function attachConnection(connection: DataConnection): void {
+    console.log('[p2p] attach connection', connection.peer);
+
     session.connection = connection;
     session.remotePeerId = connection.peer;
     emitSnapshot();
 
     connection.on('open', () => {
+        console.log('[p2p] connection open', connection.peer);
+
         session.connection = connection;
         session.remotePeerId = connection.peer;
         session.status = 'connected';
@@ -270,10 +284,13 @@ function attachConnection(connection: DataConnection): void {
     });
 
     connection.on('data', (message) => {
+        console.log('[p2p] data received', message);
         handleIncomingMessage(message);
     });
 
     connection.on('close', () => {
+        console.warn('[p2p] connection closed', connection.peer);
+
         if (session.connection !== connection) {
             return;
         }
@@ -284,19 +301,31 @@ function attachConnection(connection: DataConnection): void {
     });
 
     connection.on('error', (error) => {
+        console.error('[p2p] connection error', error);
         setError(error.message);
     });
 }
 
 function setupPeerCommon(peer: Peer): void {
+    peer.on('open', (peerId) => {
+        console.log('[p2p] peer open', peerId);
+    });
+
     peer.on('error', (error) => {
+        console.error('[p2p] peer error', error);
         setError(error.message);
     });
+
     peer.on('disconnected', () => {
+        console.warn('[p2p] peer disconnected');
         if (session.status !== 'error') {
             session.status = 'disconnected';
             emitSnapshot();
         }
+    });
+
+    peer.on('close', () => {
+        console.warn('[p2p] peer closed');
     });
 }
 
@@ -340,7 +369,7 @@ export async function createHostSession(deck: DeckPokemon[]): Promise<string> {
     emitSnapshot();
 
     return await new Promise<string>((resolve, reject) => {
-        const peer = new Peer();
+        const peer = new Peer(PEER_OPTIONS);
         session.peer = peer;
         emitSnapshot();
         setupPeerCommon(peer);
@@ -382,33 +411,48 @@ export async function joinHostSession(
 
     return await new Promise<void>((resolve, reject) => {
         let resolved = false;
-        const peer = new Peer();
-        session.peer = peer;
-        emitSnapshot();
-        setupPeerCommon(peer);
 
         const rejectOnce = (error: Error): void => {
             if (resolved) {
                 return;
             }
+            resolved = true;
+            setError(error.message);
             reject(error);
         };
 
+        const timeoutId = window.setTimeout(() => {
+            rejectOnce(
+                new Error('接続がタイムアウトしました。部屋IDが正しいか、ホスト側の画面が開いたままか確認してください。'),
+            );
+        }, 15000);
+
+        const peer = new Peer(PEER_OPTIONS);
+        session.peer = peer;
+        emitSnapshot();
+        setupPeerCommon(peer);
+
         peer.on('open', (peerId) => {
+            console.log('[p2p] guest peer open', peerId);
             session.localPeerId = peerId;
             emitSnapshot();
 
             const connection = peer.connect(session.hostPeerId!, {
                 reliable: true,
             });
+
+            console.log('[p2p] connecting to host', session.hostPeerId);
             attachConnection(connection);
+
             connection.on('open', () => {
                 if (resolved) {
                     return;
                 }
                 resolved = true;
+                window.clearTimeout(timeoutId);
                 resolve();
             });
+
             connection.on('error', (error) => {
                 rejectOnce(error);
             });
