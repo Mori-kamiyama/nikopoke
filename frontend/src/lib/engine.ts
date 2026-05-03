@@ -6,13 +6,16 @@ import init, {
     getBestMoveMCTS as wasmGetBestMoveMCTS,
     getBestMoveMinimax as wasmGetBestMoveMinimax,
     isBattleOver as wasmIsBattleOver,
+    replaceFaintedPokemon as wasmReplaceFaintedPokemon,
 } from './engine-rust/engine_rust.js';
 
 import type { DeckPokemon } from '../types/pokemon';
+import { loadAllData } from './data';
 
 // WASM initialization state
 let wasmInitialized = false;
 let wasmInitPromise: Promise<void> | null = null;
+const moveCompatibilityCache = new Map<string, boolean>();
 
 export async function initEngine(): Promise<void> {
     if (wasmInitialized) return;
@@ -46,6 +49,7 @@ export interface CreatureStateWire {
     spAttack: number;
     spDefense: number;
     speed: number;
+    weightKg?: number;
 }
 
 export interface PlayerStateWire {
@@ -75,11 +79,200 @@ export interface ActionWire {
     slot?: number;
 }
 
+const RESET_STAGES: CreatureStateWire['stages'] = {
+    atk: 0,
+    def: 0,
+    spa: 0,
+    spd: 0,
+    spe: 0,
+    accuracy: 0,
+    evasion: 0,
+};
+
+const NON_VOLATILE_STATUS_IDS = new Set([
+    'burn',
+    'poison',
+    'toxic',
+    'badly_poisoned',
+    'paralysis',
+    'freeze',
+    'sleep',
+]);
+
+function hasPendingSwitch(creature: CreatureStateWire): boolean {
+    return creature.statuses.some((status) => status.id === 'pending_switch');
+}
+
+export function needsForcedSwitch(state: BattleStateWire, playerId: string): boolean {
+    const player = state.players.find((candidate) => candidate.id === playerId);
+    if (!player) {
+        return false;
+    }
+    const active = player.team[player.activeSlot];
+    return active.hp <= 0 || hasPendingSwitch(active);
+}
+
+export function getFirstAvailableSwitchSlot(state: BattleStateWire, playerId: string): number | null {
+    const player = state.players.find((candidate) => candidate.id === playerId);
+    if (!player) {
+        return null;
+    }
+    const slot = player.team.findIndex((creature, index) => index !== player.activeSlot && creature.hp > 0);
+    return slot >= 0 ? slot : null;
+}
+
+function replaceFaintedPokemonLocally(
+    state: BattleStateWire,
+    playerId: string,
+    slot: number,
+): BattleStateWire {
+    const nextState = structuredClone(state) as BattleStateWire;
+    const player = nextState.players.find((candidate) => candidate.id === playerId);
+    if (!player) {
+        nextState.log.push(`unknown player ${playerId} cannot replace pokemon.`);
+        return nextState;
+    }
+
+    const outgoing = player.team[player.activeSlot];
+    const incoming = player.team[slot];
+    if (!incoming || slot === player.activeSlot || incoming.hp <= 0) {
+        nextState.log.push(`${player.name}は 交代先を選べない！`);
+        return nextState;
+    }
+
+    if (outgoing.hp > 0 && !hasPendingSwitch(outgoing)) {
+        nextState.log.push(`${outgoing.name}は まだ戦える！`);
+        return nextState;
+    }
+
+    outgoing.stages = { ...RESET_STAGES };
+    outgoing.statuses = outgoing.statuses.filter((status) => NON_VOLATILE_STATUS_IDS.has(status.id));
+    player.activeSlot = slot;
+    incoming.statuses = incoming.statuses.filter((status) => status.id !== 'pending_switch');
+    nextState.log.push(`${player.name}は ${incoming.name}を 繰り出した！`);
+    return nextState;
+}
+
+export function replaceFaintedPokemon(
+    state: BattleStateWire,
+    playerId: string,
+    slot: number,
+): BattleStateWire {
+    if (wasmInitialized) {
+        return wasmReplaceFaintedPokemon(state, playerId, slot) as BattleStateWire;
+    }
+    return replaceFaintedPokemonLocally(state, playerId, slot);
+}
+
+function normalizeMoveName(name: string | undefined): string {
+    return String(name || '')
+        .replace(/[ \t\r\n\u3000]+/g, '')
+        .trim();
+}
+
+function buildSameNameMoveIds(
+    moves: Record<string, { name?: string }>,
+): Map<string, string[]> {
+    const byName = new Map<string, string[]>();
+    for (const [moveId, move] of Object.entries(moves)) {
+        const normalizedName = normalizeMoveName(move?.name);
+        if (!normalizedName) {
+            continue;
+        }
+        const existing = byName.get(normalizedName) ?? [];
+        existing.push(moveId);
+        byName.set(normalizedName, existing);
+    }
+    return byName;
+}
+
+function canUseMoveWithCurrentWasm(speciesId: string, moveId: string): boolean {
+    const cacheKey = `${speciesId}:${moveId}`;
+    if (moveCompatibilityCache.has(cacheKey)) {
+        return moveCompatibilityCache.get(cacheKey)!;
+    }
+    let usable = false;
+    try {
+        const creature = wasmCreateCreature(speciesId, { moves: [moveId] }) as CreatureStateWire;
+        usable = Array.isArray(creature.moves) && creature.moves.includes(moveId);
+    } catch {
+        usable = false;
+    }
+    moveCompatibilityCache.set(cacheKey, usable);
+    return usable;
+}
+
+function resolveCompatibleMoveId(
+    speciesId: string,
+    moveId: string,
+    moves: Record<string, { name?: string }>,
+    sameNameMoveIds: Map<string, string[]>,
+): string | null {
+    if (canUseMoveWithCurrentWasm(speciesId, moveId)) {
+        return moveId;
+    }
+
+    // Only fallback to move IDs that share the exact same move name.
+    // This prevents conversions like "bulk_up -> superpower" that change behavior.
+    const moveName = normalizeMoveName(moves[moveId]?.name);
+    if (!moveName) {
+        return null;
+    }
+    const candidates = sameNameMoveIds.get(moveName) ?? [];
+    for (const candidateId of candidates) {
+        if (candidateId === moveId) {
+            continue;
+        }
+        if (canUseMoveWithCurrentWasm(speciesId, candidateId)) {
+            return candidateId;
+        }
+    }
+    return null;
+}
+
+function normalizeDeckPokemon(
+    pokemon: DeckPokemon,
+    learnsets: Record<string, string[]>,
+    moves: Record<string, { pp: number; name?: string }>,
+    sameNameMoveIds: Map<string, string[]>,
+): DeckPokemon {
+    const learnableMoves = learnsets[pokemon.speciesId] ?? [];
+    const selectedMoves = pokemon.moves
+        .filter((moveId, index, self) =>
+            self.indexOf(moveId) === index &&
+            learnableMoves.includes(moveId) &&
+            moves[moveId]
+        )
+        .map((moveId) => resolveCompatibleMoveId(pokemon.speciesId, moveId, moves, sameNameMoveIds))
+        .filter((moveId): moveId is string => Boolean(moveId))
+        .slice(0, 4);
+
+    for (const moveId of learnableMoves) {
+        if (selectedMoves.length >= 4) {
+            break;
+        }
+        if (!moves[moveId]) {
+            continue;
+        }
+        const compatibleMoveId = resolveCompatibleMoveId(pokemon.speciesId, moveId, moves, sameNameMoveIds);
+        if (compatibleMoveId && !selectedMoves.includes(compatibleMoveId)) {
+            selectedMoves.push(compatibleMoveId);
+        }
+    }
+
+    return {
+        ...pokemon,
+        moves: selectedMoves,
+    };
+}
+
 // Initialize and create battle state
 export async function createBattleState(playerDecks: {
     [playerId: string]: { team: DeckPokemon[] }
 }): Promise<BattleStateWire> {
     await initEngine();
+    const { moves, learnsets } = await loadAllData();
+    const sameNameMoveIds = buildSameNameMoveIds(moves);
 
     // Create creatures for each player
     const players: PlayerStateWire[] = [];
@@ -88,10 +281,11 @@ export async function createBattleState(playerDecks: {
         const team: CreatureStateWire[] = [];
 
         for (const pokemon of playerData.team) {
-            const creature = wasmCreateCreature(pokemon.speciesId, {
-                moves: pokemon.moves,
-                ability: pokemon.ability,
-                evs: pokemon.evs,
+            const normalizedPokemon = normalizeDeckPokemon(pokemon, learnsets, moves, sameNameMoveIds);
+            const creature = wasmCreateCreature(normalizedPokemon.speciesId, {
+                moves: normalizedPokemon.moves,
+                ability: normalizedPokemon.ability,
+                evs: normalizedPokemon.evs,
             });
             team.push(creature);
         }
