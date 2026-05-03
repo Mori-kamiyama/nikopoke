@@ -51,18 +51,23 @@ export default function HomePage() {
                             </div>
                         </Link>
 
-                        {/* VS Player (Coming Soon) */}
-                        <div className="bg-[var(--surface-2)] border border-[var(--border)] rounded-xl p-5 opacity-50 cursor-not-allowed">
+                        <Link
+                            to="/deck-builder?mode=player"
+                            className="group bg-[var(--surface-2)] border border-[var(--border)] rounded-xl p-5
+                                hover:border-[var(--border-hover)] hover:bg-[var(--surface-3)]
+                                transition-all duration-150 card-hover"
+                        >
                             <div className="flex items-center gap-4">
-                                <div className="p-3 bg-[var(--surface-3)] rounded-lg">
-                                    <Users className="size-6 text-[var(--text-muted)]" />
+                                <div className="p-3 bg-emerald-500/15 rounded-lg">
+                                    <Users className="size-6 text-emerald-400" />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-base font-semibold text-[var(--text-muted)]">VS Player</h3>
-                                    <p className="text-sm text-[var(--text-muted)]">Coming Soon...</p>
+                                    <h3 className="text-base font-semibold text-[var(--text-primary)]">VS Player</h3>
+                                    <p className="text-sm text-[var(--text-muted)]">PeerJS でルームを作って対戦する</p>
                                 </div>
+                                <ChevronRight className="size-5 text-[var(--text-muted)] group-hover:text-emerald-400 transition-colors" />
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 </section>
 
