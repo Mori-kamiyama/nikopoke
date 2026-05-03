@@ -243,6 +243,42 @@ function BattleFieldStatusPanel({
         </section>
     );
 }
+const STATUS_LABELS: Record<string, string> = {
+    sleep: 'ねむり',
+    asleep: 'ねむり',
+    burn: 'やけど',
+    burned: 'やけど',
+    poison: 'どく',
+    poisoned: 'どく',
+    toxic: 'もうどく',
+    badly_poison: 'もうどく',
+    badly_poisoned: 'もうどく',
+    paralysis: 'まひ',
+    paralyzed: 'まひ',
+    paralyze: 'まひ',
+    freeze: 'こおり',
+    frozen: 'こおり',
+    confusion: 'こんらん',
+    confused: 'こんらん',
+    flinch: 'ひるみ',
+    faint: 'ひんし',
+    fainted: 'ひんし',
+
+    leech_seed: 'やどりぎ',
+    substitute: 'みがわり',
+    protect: 'まもる',
+    endure: 'こらえる',
+    taunt: 'ちょうはつ',
+    encore: 'アンコール',
+    disable: 'かなしばり',
+};
+
+function getStatusLabel(statusId: string): string {
+    return STATUS_LABELS[statusId] ?? statusId.replace(/_/g, ' ');
+}
+
+
+
 export default function BattlePage() {
     const navigate = useNavigate();
     const [battleMode] = useState<'ai' | 'player'>(() =>
@@ -841,35 +877,110 @@ export default function BattlePage() {
                                 {playerPokemon.moves.map((moveId) => {
                                     const move = moves[moveId];
                                     const pp = playerPokemon.movePp[moveId] ?? 10;
+
+                                    if (!move) return null;
+
+                                    const categoryLabel =
+                                    move.category === 'physical'
+                                        ? '物理'
+                                        : move.category === 'special'
+                                            ? '特殊'
+                                            : move.category === 'status'
+                                                ? '変化'
+                                                : move.category ?? '-';
+                                
+                                const accuracyLabel =
+                                    typeof move.accuracy === 'number'
+                                        ? Math.round(move.accuracy * 100)
+                                        : '-';
+                                
+                                const moveDescription = move.description || '説明なし';
+
                                     return (
-                                        <button
-                                            key={moveId}
-                                            onClick={() => handleSelectMove(moveId)}
-                                            disabled={waiting || pp === 0}
-                                            className={cn(
-                                                'rounded-xl border p-3 transition-all',
-                                                waiting || pp === 0
-                                                    ? 'cursor-not-allowed border-[var(--border)] bg-[var(--surface-3)] opacity-50'
-                                                    : 'border-[var(--border)] bg-[var(--surface-3)] hover:border-[var(--border-hover)] hover:bg-[var(--accent-muted)]'
-                                            )}
-                                        >
-                                            <div className="flex items-center gap-2">
-                                                <span
-                                                    className="rounded-md px-2 py-0.5 text-xs text-white"
-                                                    style={{ backgroundColor: getTypeColor(move?.type || 'normal') }}
-                                                >
-                                                    {move?.type}
-                                                </span>
-                                                <span className="font-medium text-[var(--text-primary)]">{move?.name || moveId}</span>
+                                        <div key={moveId} className="group relative">
+                                            <button
+                                                onClick={() => handleSelectMove(moveId)}
+                                                disabled={waiting || pp === 0}
+                                                className={cn(
+                                                    'w-full rounded-xl border p-3 text-left transition-all',
+                                                    waiting || pp === 0
+                                                        ? 'cursor-not-allowed border-[var(--border)] bg-[var(--surface-3)] opacity-50'
+                                                        : 'border-[var(--border)] bg-[var(--surface-3)] hover:border-[var(--border-hover)] hover:bg-[var(--surface-4)]',
+                                                )}
+                                            >
+                                                <div className="mb-2 flex items-center justify-between gap-2">
+                                                    <span className="font-medium text-[var(--text-primary)]">
+                                                        {move.name}
+                                                    </span>
+                                                    <span
+                                                        className="rounded-full px-2 py-0.5 text-xs text-white"
+                                                        style={{ backgroundColor: getTypeColor(move.type) }}
+                                                    >
+                                                        {move.type}
+                                                    </span>
+                                                </div>
+                                    
+                                                <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+                                                    <span>{categoryLabel}</span>
+                                                    <span>
+                                                    威力 {move.power ?? '-'} / 命中 {accuracyLabel}
+                                                    </span>
+                                                </div>
+                                    
+                                                <div className="mt-1 text-xs tabular-nums text-[var(--text-muted)]">
+                                                    PP: {pp}
+                                                </div>
+                                            </button>
+                                    
+                                            <div className="pointer-events-none absolute bottom-full left-0 z-30 mb-2 hidden w-80 rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-4 shadow-2xl group-hover:block group-focus-within:block">
+                                                <div className="mb-3 flex items-start justify-between gap-3">
+                                                    <div>
+                                                        <div className="text-sm font-bold text-[var(--text-primary)]">
+                                                            {move.name}
+                                                        </div>
+                                                        <div className="mt-1 text-xs text-[var(--text-muted)]">
+                                                            {categoryLabel}
+                                                        </div>
+                                                    </div>
+                                    
+                                                    <span
+                                                        className="rounded-full px-2 py-1 text-xs text-white"
+                                                        style={{ backgroundColor: getTypeColor(move.type) }}
+                                                    >
+                                                        {move.type}
+                                                    </span>
+                                                </div>
+                                    
+                                                <div className="mb-3 grid grid-cols-3 gap-2 text-xs">
+                                                    <div className="rounded-lg bg-[var(--surface-3)] px-3 py-2">
+                                                        <div className="text-[10px] text-[var(--text-muted)]">威力</div>
+                                                        <div className="font-semibold text-[var(--text-primary)]">
+                                                            {move.power ?? '-'}
+                                                        </div>
+                                                    </div>
+                                                    <div className="rounded-lg bg-[var(--surface-3)] px-3 py-2">
+                                                        <div className="text-[10px] text-[var(--text-muted)]">命中</div>
+                                                        <div className="font-semibold text-[var(--text-primary)]">
+                                                        {accuracyLabel}
+                                                        </div>
+                                                    </div>
+                                                    <div className="rounded-lg bg-[var(--surface-3)] px-3 py-2">
+                                                        <div className="text-[10px] text-[var(--text-muted)]">PP</div>
+                                                        <div className="font-semibold text-[var(--text-primary)]">
+                                                            {pp}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    
+                                                <div className="rounded-lg bg-[var(--surface-3)] px-3 py-3 text-xs leading-relaxed text-[var(--text-primary)]">
+                                                    {moveDescription}
+                                                </div>
                                             </div>
-                                            <div className="mt-1 flex gap-3 text-xs tabular-nums text-[var(--text-muted)]">
-                                                <span>威力: {move?.power || '-'}</span>
-                                                <span>PP: {pp}</span>
-                                            </div>
-                                        </button>
+                                        </div>
                                     );
                                 })}
                             </div>
+
                             <button
                                 onClick={() => setShowSwitchMenu(true)}
                                 disabled={waiting}
@@ -991,11 +1102,11 @@ function PokemonStatus({
                 {(() => {
                     const stages = creature.stages;
                     const displayStages: { label: string; value: number }[] = [];
-                    if (stages.atk !== 0) displayStages.push({ label: 'Atk', value: stages.atk });
-                    if (stages.def !== 0) displayStages.push({ label: 'Def', value: stages.def });
-                    if (stages.spa !== 0) displayStages.push({ label: 'SpA', value: stages.spa });
-                    if (stages.spd !== 0) displayStages.push({ label: 'SpD', value: stages.spd });
-                    if (stages.spe !== 0) displayStages.push({ label: 'Spe', value: stages.spe });
+                    if (stages.atk !== 0) displayStages.push({ label: 'こうげき', value: stages.atk });
+                    if (stages.def !== 0) displayStages.push({ label: 'ぼうぎょ', value: stages.def });
+                    if (stages.spa !== 0) displayStages.push({ label: 'とくこう', value: stages.spa });
+                    if (stages.spd !== 0) displayStages.push({ label: 'とくぼう', value: stages.spd });
+                    if (stages.spe !== 0) displayStages.push({ label: 'すばやさ', value: stages.spe });
 
                     return displayStages.length > 0 && (
                         <div className="mt-2 flex flex-wrap gap-1">
@@ -1019,7 +1130,7 @@ function PokemonStatus({
                     <div className="mt-2 flex flex-wrap gap-1">
                         {creature.statuses.map((status, i) => (
                             <span key={i} className="rounded bg-purple-600 px-2 py-0.5 text-xs text-white">
-                                {status.id}
+                                {getStatusLabel(status.id)}
                             </span>
                         ))}
                     </div>
