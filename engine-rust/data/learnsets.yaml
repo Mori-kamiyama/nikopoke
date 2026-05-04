@@ -218,7 +218,7 @@ eiraku:
   - focus_blast
   - aura_sphere
   - destiny_bond
-  - ten_million_horsepower
+  - high_horsepower
   - dig
   - stomping_tantrum
   - charge
@@ -361,7 +361,7 @@ futo:
   - heat_wave
   - torch_song
   - eruption
-  - flame_vortex
+  - fire_spin
   - fiery_dance
   - waterfall
   - quiver_dance
@@ -528,7 +528,7 @@ ikkun:
   - noble_roar
   - harden
   - recover
-  - shed_tail
+  - absolute_zero
   - growth
   - minimize
   - swords_dance
@@ -568,6 +568,7 @@ ikkun:
   - u_turn
   - fury_cutter
   - infestation
+  - shed_tail
 macchan:
   - torment
   - flatter
@@ -611,7 +612,7 @@ macchan:
   - shadow_punch
   - rage_fist
   - ice_punch
-  - ten_million_horsepower
+  - high_horsepower
   - stomping_tantrum
   - bone_rush
   - charge
@@ -686,7 +687,7 @@ machida:
   - petal_blizzard
   - petal_dance
   - magical_leaf
-  - ten_million_horsepower
+  - high_horsepower
   - earthquake
   - bulldoze
   - fissure
@@ -843,7 +844,7 @@ michii:
   - torment
   - fake_tears
   - memento
-  - switcheroo
+  - trick_exchange
   - taunt
   - hone_claws
   - nasty_plot
@@ -992,7 +993,7 @@ morimitu:
   - harden
   - endure
   - recover
-  - shed_tail
+  - absolute_zero
   - growth
   - stockpile
   - minimize
@@ -1046,7 +1047,7 @@ morimitu:
   - fire_blast
   - heat_wave
   - eruption
-  - flame_vortex
+  - fire_spin
   - burn_up
   - dive
   - surf
@@ -1056,6 +1057,7 @@ morimitu:
   - u_turn
   - pin_missile
   - infestation
+  - shed_tail
 morimori:
   - torment
   - nasty_plot
@@ -1582,7 +1584,7 @@ tatuta:
   - pollen_puff
 tomoki:
   - torment
-  - switcheroo
+  - trick_exchange
   - nasty_plot
   - lash_out
   - fling
@@ -1621,7 +1623,7 @@ tomoki:
   - harden
   - endure
   - recover
-  - shed_tail
+  - absolute_zero
   - growth
   - stockpile
   - minimize
@@ -1661,6 +1663,7 @@ tomoki:
   - snipe_shot
   - u_turn
   - pollen_puff
+  - shed_tail
 touma:
   - torment
   - fake_tears
@@ -1737,7 +1740,7 @@ touma:
   - harden
   - tickle
   - recover
-  - shed_tail
+  - absolute_zero
   - growth
   - minimize
   - swords_dance
@@ -1777,7 +1780,7 @@ touma:
   - hurricane
   - charm
   - play_rough
-  - flame_vortex
+  - fire_spin
   - burn_up
   - aqua_cutter
   - scald
@@ -1786,6 +1789,7 @@ touma:
   - x_scissor
   - lunge
   - fury_cutter
+  - shed_tail
 ume:
   - torment
   - taunt
@@ -1855,7 +1859,7 @@ ume:
   - noble_roar
   - harden
   - recover
-  - shed_tail
+  - absolute_zero
   - growth
   - minimize
   - confide
@@ -1886,3 +1890,4 @@ ume:
   - lunge
   - u_turn
   - pollen_puff
+  - shed_tail

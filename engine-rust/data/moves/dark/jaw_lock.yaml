@@ -11,5 +11,15 @@ steps:
 - type: damage
   power: 80
   accuracy: 1.0
+- type: apply_status
+  statusId: trapped
+  target: target
+  immuneTypes:
+  - ghost
+- type: apply_status
+  statusId: trapped
+  target: user
+  immuneTypes:
+  - ghost
 tags:
 - contact

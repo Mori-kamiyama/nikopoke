@@ -221,7 +221,7 @@
     "focus_blast",
     "aura_sphere",
     "destiny_bond",
-    "ten_million_horsepower",
+    "high_horsepower",
     "dig",
     "stomping_tantrum",
     "charge",
@@ -365,7 +365,7 @@
     "heat_wave",
     "torch_song",
     "eruption",
-    "flame_vortex",
+    "fire_spin",
     "fiery_dance",
     "waterfall",
     "quiver_dance",
@@ -534,7 +534,7 @@
     "noble_roar",
     "harden",
     "recover",
-    "shed_tail",
+    "absolute_zero",
     "growth",
     "minimize",
     "swords_dance",
@@ -573,7 +573,8 @@
     "sticky_web",
     "u_turn",
     "fury_cutter",
-    "infestation"
+    "infestation",
+    "shed_tail"
   ],
   "macchan": [
     "torment",
@@ -618,7 +619,7 @@
     "shadow_punch",
     "rage_fist",
     "ice_punch",
-    "ten_million_horsepower",
+    "high_horsepower",
     "stomping_tantrum",
     "bone_rush",
     "charge",
@@ -694,7 +695,7 @@
     "petal_blizzard",
     "petal_dance",
     "magical_leaf",
-    "ten_million_horsepower",
+    "high_horsepower",
     "earthquake",
     "bulldoze",
     "fissure",
@@ -853,7 +854,7 @@
     "torment",
     "fake_tears",
     "memento",
-    "switcheroo",
+    "trick_exchange",
     "taunt",
     "hone_claws",
     "nasty_plot",
@@ -1003,7 +1004,7 @@
     "harden",
     "endure",
     "recover",
-    "shed_tail",
+    "absolute_zero",
     "growth",
     "stockpile",
     "minimize",
@@ -1057,7 +1058,7 @@
     "fire_blast",
     "heat_wave",
     "eruption",
-    "flame_vortex",
+    "fire_spin",
     "burn_up",
     "dive",
     "surf",
@@ -1066,7 +1067,8 @@
     "lunge",
     "u_turn",
     "pin_missile",
-    "infestation"
+    "infestation",
+    "shed_tail"
   ],
   "morimori": [
     "torment",
@@ -1600,7 +1602,7 @@
   ],
   "tomoki": [
     "torment",
-    "switcheroo",
+    "trick_exchange",
     "nasty_plot",
     "lash_out",
     "fling",
@@ -1639,7 +1641,7 @@
     "harden",
     "endure",
     "recover",
-    "shed_tail",
+    "absolute_zero",
     "growth",
     "stockpile",
     "minimize",
@@ -1678,7 +1680,8 @@
     "flamethrower",
     "snipe_shot",
     "u_turn",
-    "pollen_puff"
+    "pollen_puff",
+    "shed_tail"
   ],
   "touma": [
     "torment",
@@ -1756,7 +1759,7 @@
     "harden",
     "tickle",
     "recover",
-    "shed_tail",
+    "absolute_zero",
     "growth",
     "minimize",
     "swords_dance",
@@ -1796,7 +1799,7 @@
     "hurricane",
     "charm",
     "play_rough",
-    "flame_vortex",
+    "fire_spin",
     "burn_up",
     "aqua_cutter",
     "scald",
@@ -1804,7 +1807,8 @@
     "sticky_web",
     "x_scissor",
     "lunge",
-    "fury_cutter"
+    "fury_cutter",
+    "shed_tail"
   ],
   "ume": [
     "torment",
@@ -1875,7 +1879,7 @@
     "noble_roar",
     "harden",
     "recover",
-    "shed_tail",
+    "absolute_zero",
     "growth",
     "minimize",
     "confide",
@@ -1905,6 +1909,7 @@
     "leech_life",
     "lunge",
     "u_turn",
-    "pollen_puff"
+    "pollen_puff",
+    "shed_tail"
   ]
 }
