@@ -6,6 +6,7 @@ import BattlePage from './pages/BattlePage';
 import OnlineLobbyPage from './pages/OnlineLobbyPage';
 import ResultPage from './pages/ResultPage';
 import PokemonDetailPage from './pages/PokemonDetailPage';
+import TeamPreviewPage from './pages/TeamPreviewPage';
 import './index.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<TitlePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/deck-builder" element={<DeckBuilderPage />} />
+        <Route path="/team-preview" element={<TeamPreviewPage />} />
         <Route path="/online-lobby" element={<OnlineLobbyPage />} />
         <Route path="/battle" element={<BattlePage />} />
         <Route path="/result" element={<ResultPage />} />

@@ -769,23 +769,24 @@ export default function BattlePage() {
         }
 
         if (battleMode === 'ai') {
-            initializedRef.current = true;
-            const playerDeck: DeckPokemon[] = JSON.parse(deckJson);
-            const speciesList = Object.values(species);
-            const aiDeck: DeckPokemon[] = [];
-            const usedIds = new Set(playerDeck.map((pokemon) => pokemon.speciesId));
-
-            for (let i = 0; i < 3; i += 1) {
-                const available = speciesList.filter((mon) => !usedIds.has(mon.id));
-                const randomSpecies = available[Math.floor(Math.random() * available.length)];
-                usedIds.add(randomSpecies.id);
-                aiDeck.push({
-                    speciesId: randomSpecies.id,
-                    moves: playerDeck[0].moves.slice(0, 4),
-                    ability: randomSpecies.abilities[0] || 'none',
-                });
+            const selectedPlayerDeckJson = sessionStorage.getItem('selectedPlayerDeck');
+            const selectedOpponentDeckJson = sessionStorage.getItem('selectedOpponentDeck');
+        
+            if (!selectedPlayerDeckJson || !selectedOpponentDeckJson) {
+                navigate('/team-preview');
+                return;
             }
-
+        
+            initializedRef.current = true;
+        
+            const playerDeck: DeckPokemon[] = JSON.parse(selectedPlayerDeckJson);
+            const aiDeck: DeckPokemon[] = JSON.parse(selectedOpponentDeckJson);
+        
+            if (playerDeck.length !== 3 || aiDeck.length !== 3) {
+                navigate('/team-preview');
+                return;
+            }
+        
             localDeckRef.current = playerDeck;
             opponentDeckRef.current = aiDeck;
             battleRecordSavedRef.current = false;
@@ -810,18 +811,33 @@ export default function BattlePage() {
             navigate('/online-lobby');
             return;
         }
+        const selectedPlayerDeckJson = sessionStorage.getItem('selectedPlayerDeck');
+const selectedOpponentDeckJson = sessionStorage.getItem('selectedOpponentDeck');
 
-        if (onlineSnapshot.role === 'host' && onlineSnapshot.remoteDeck) {
-            initializedRef.current = true;
-            setLocalPlayerId('host');
-            setOpponentPlayerId('guest');
-            localDeckRef.current = onlineSnapshot.localDeck;
-            opponentDeckRef.current = onlineSnapshot.remoteDeck;
-            battleRecordSavedRef.current = false;
-            createBattleState({
-                host: { team: onlineSnapshot.localDeck },
-                guest: { team: onlineSnapshot.remoteDeck },
-            })
+if (!selectedPlayerDeckJson || !selectedOpponentDeckJson) {
+    navigate('/team-preview');
+    return;
+}
+
+const selectedPlayerDeck: DeckPokemon[] = JSON.parse(selectedPlayerDeckJson);
+const selectedOpponentDeck: DeckPokemon[] = JSON.parse(selectedOpponentDeckJson);
+
+if (selectedPlayerDeck.length !== 3 || selectedOpponentDeck.length !== 3) {
+    navigate('/team-preview');
+    return;
+}
+
+if (onlineSnapshot.role === 'host' && onlineSnapshot.remoteDeck) {
+    initializedRef.current = true;
+    setLocalPlayerId('host');
+    setOpponentPlayerId('guest');
+    localDeckRef.current = selectedPlayerDeck;
+    opponentDeckRef.current = selectedOpponentDeck;
+    battleRecordSavedRef.current = false;
+    createBattleState({
+        host: { team: selectedPlayerDeck },
+        guest: { team: selectedOpponentDeck },
+    })
                 .then((state) => {
                     setBattleState(state);
                     sendBattleInit(state);
@@ -836,9 +852,9 @@ export default function BattlePage() {
 
         if (onlineSnapshot.role === 'guest') {
             initializedRef.current = true;
-            localDeckRef.current = onlineSnapshot.localDeck;
-opponentDeckRef.current = onlineSnapshot.remoteDeck ?? null;
-battleRecordSavedRef.current = false;
+            localDeckRef.current = selectedPlayerDeck;
+            opponentDeckRef.current = selectedOpponentDeck;
+            battleRecordSavedRef.current = false;
             setLocalPlayerId('guest');
             setOpponentPlayerId('host');
             if (onlineSnapshot.latestState) {

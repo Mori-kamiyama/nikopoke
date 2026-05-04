@@ -6,6 +6,8 @@ import { clearOnlineSession } from '../lib/p2p';
 import type { SpeciesData, MoveData, Learnset, Species, DeckPokemon, EVStats } from '../types/pokemon';
 import { getPokemonPreset, resolvePresetMoveIds } from '../lib/pokemonPresets';
 
+const DECK_SIZE = 6;
+
 export default function DeckBuilderPage() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -53,7 +55,7 @@ export default function DeckBuilderPage() {
     const speciesList = Object.values(species);
 
     const handleSelectPokemon = (mon: Species) => {
-        if (selectedPokemon.length >= 3) return;
+        if (selectedPokemon.length >= DECK_SIZE) return;
         if (selectedPokemon.some(p => p.speciesId === mon.id)) return;
     
         const preset = getPokemonPreset(mon.id);
@@ -119,12 +121,12 @@ export default function DeckBuilderPage() {
     };
 
     const handleStartBattle = () => {
-        if (selectedPokemon.length < 3) return;
+        if (selectedPokemon.length < DECK_SIZE) return;
         const sanitizedDeck = selectedPokemon
             .map((pokemon) => sanitizeDeckPokemon(pokemon, species, moves, learnsets))
             .filter((pokemon): pokemon is DeckPokemon => pokemon !== null);
 
-        if (sanitizedDeck.length < 3 || sanitizedDeck.some((pokemon) => pokemon.moves.length === 0)) {
+        if (sanitizedDeck.length < DECK_SIZE || sanitizedDeck.some((pokemon) => pokemon.moves.length === 0)) {
             window.alert('デッキに古い技データが残っています。技を確認して保存し直してください。');
             return;
         }
@@ -136,7 +138,9 @@ export default function DeckBuilderPage() {
         localStorage.setItem('savedDeck', JSON.stringify(sanitizedDeck));
         sessionStorage.setItem('playerDeck', JSON.stringify(sanitizedDeck));
         sessionStorage.setItem('battleMode', mode);
-        navigate(mode === 'player' ? '/online-lobby' : '/battle');
+        sessionStorage.removeItem('selectedPlayerDeck');
+        sessionStorage.removeItem('selectedOpponentDeck');
+        navigate(mode === 'player' ? '/online-lobby' : '/team-preview');
     };
 
     if (loading) {
@@ -161,7 +165,7 @@ export default function DeckBuilderPage() {
                     </button>
                     <div>
                         <h1 className="text-lg font-semibold text-[var(--text-primary)]">デッキ作成</h1>
-                        <p className="text-sm text-[var(--text-muted)]">3匹のポケモンを選んでください</p>
+                        <p className="text-sm text-[var(--text-muted)]">6匹のデッキを作成してください</p>
                     </div>
                 </div>
             </header>
@@ -172,11 +176,11 @@ export default function DeckBuilderPage() {
                     <div className="lg:col-span-1">
                         <div className="bg-[var(--surface-2)] border border-[var(--border)] rounded-xl p-5 sticky top-24">
                             <h2 className="text-base font-semibold text-[var(--text-primary)] mb-4">
-                                選択中 <span className="text-[var(--text-muted)] font-normal">({selectedPokemon.length}/3)</span>
+                                選択中 <span className="text-[var(--text-muted)] font-normal">({selectedPokemon.length}/{DECK_SIZE})</span>
                             </h2>
 
                             <div className="space-y-3">
-                                {[0, 1, 2].map((idx) => (
+                            {Array.from({ length: DECK_SIZE }, (_, idx) => idx).map((idx) => (
                                     <div
                                         key={idx}
                                         className={`p-4 rounded-xl border transition-all ${selectedPokemon[idx]
@@ -204,9 +208,9 @@ export default function DeckBuilderPage() {
 
                             <button
                                 onClick={handleStartBattle}
-                                disabled={selectedPokemon.length < 3}
+                                disabled={selectedPokemon.length < DECK_SIZE}
                                 className={`w-full mt-6 py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all
-                                    ${selectedPokemon.length >= 3
+                                    ${selectedPokemon.length >= DECK_SIZE
                                         ? 'bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] shadow-lg shadow-[var(--accent)]/20'
                                         : 'bg-[var(--surface-3)] text-[var(--text-muted)] cursor-not-allowed'
                                     }`}
@@ -247,10 +251,10 @@ export default function DeckBuilderPage() {
                                             <button
                                                 key={mon.id}
                                                 onClick={() => handleSelectPokemon(mon)}
-                                                disabled={isSelected || selectedPokemon.length >= 3}
+                                                disabled={isSelected || selectedPokemon.length >= DECK_SIZE}
                                                 className={`p-4 rounded-xl border text-left transition-all ${isSelected
                                                     ? 'bg-[var(--accent-muted)] border-[var(--accent)]/50'
-                                                    : selectedPokemon.length >= 3
+                                                    : selectedPokemon.length >= DECK_SIZE
                                                         ? 'bg-[var(--surface-2)] border-[var(--border)] opacity-50 cursor-not-allowed'
                                                         : 'bg-[var(--surface-2)] border-[var(--border)] hover:border-[var(--border-hover)] hover:bg-[var(--surface-3)] card-hover'
                                                     }`}

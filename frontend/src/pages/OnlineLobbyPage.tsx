@@ -91,7 +91,7 @@ export default function OnlineLobbyPage() {
                 return;
             }
             if (event.type === 'start_battle') {
-                navigate('/battle');
+                navigate('/team-preview');
                 return;
             }
             if (event.type === 'error') {
@@ -157,7 +157,7 @@ export default function OnlineLobbyPage() {
     const handleStartBattle = () => {
         try {
             startOnlineBattle();
-            navigate('/battle');
+            navigate('/team-preview');
         } catch (startError) {
             const message = startError instanceof Error ? startError.message : '対戦開始に失敗しました。';
             setError(message);

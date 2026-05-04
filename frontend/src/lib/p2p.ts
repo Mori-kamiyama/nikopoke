@@ -21,6 +21,8 @@ export interface OnlineSessionSnapshot {
     remotePeerId: string | null;
     localDeck: DeckPokemon[] | null;
     remoteDeck: DeckPokemon[] | null;
+    localSelectedDeck: DeckPokemon[] | null;
+    remoteSelectedDeck: DeckPokemon[] | null;
     latestState: BattleStateWire | null;
     latestActions: ActionWire[] | null;
     error: string | null;
@@ -35,6 +37,10 @@ type OnlineMessage =
     }
     | {
         type: 'start_battle';
+    }
+    | {
+        type: 'team_selected';
+        deck: DeckPokemon[];
     }
     | {
         type: 'battle_init';
@@ -58,6 +64,10 @@ type OnlineSessionEvent =
     }
     | {
         type: 'start_battle';
+    }
+    | {
+        type: 'team_selected';
+        deck: DeckPokemon[];
     }
     | {
         type: 'battle_init';
@@ -91,6 +101,8 @@ interface OnlineSessionState {
     remotePeerId: string | null;
     localDeck: DeckPokemon[] | null;
     remoteDeck: DeckPokemon[] | null;
+    localSelectedDeck: DeckPokemon[] | null;
+    remoteSelectedDeck: DeckPokemon[] | null;
     latestState: BattleStateWire | null;
     latestActions: ActionWire[] | null;
     error: string | null;
@@ -119,6 +131,8 @@ function createInitialState(): OnlineSessionState {
         remotePeerId: null,
         localDeck: null,
         remoteDeck: null,
+        localSelectedDeck: null,
+        remoteSelectedDeck: null,
         latestState: null,
         latestActions: null,
         error: null,
@@ -168,6 +182,8 @@ function getSnapshot(): OnlineSessionSnapshot {
         remotePeerId: session.remotePeerId,
         localDeck: session.localDeck ? cloneDeck(session.localDeck) : null,
         remoteDeck: session.remoteDeck ? cloneDeck(session.remoteDeck) : null,
+        localSelectedDeck: session.localSelectedDeck ? cloneDeck(session.localSelectedDeck) : null,
+        remoteSelectedDeck: session.remoteSelectedDeck ? cloneDeck(session.remoteSelectedDeck) : null,
         latestState: session.latestState,
         latestActions: session.latestActions ? [...session.latestActions] : null,
         error: session.error,
@@ -234,6 +250,15 @@ function handleIncomingMessage(raw: unknown): void {
             emitSnapshot();
             emit({ type: 'start_battle' });
             return;
+            case 'team_selected':
+    session.remoteSelectedDeck = cloneDeck(message.deck);
+    emitSnapshot();
+    emit({
+        type: 'team_selected',
+        deck: cloneDeck(message.deck),
+    });
+    return;
+case 'battle_init':
         case 'battle_init':
             session.status = 'in_battle';
             session.latestState = toPlainData(message.state);
@@ -475,6 +500,23 @@ export function startOnlineBattle(): void {
     session.latestActions = null;
     emitSnapshot();
     sendMessage({ type: 'start_battle' });
+}
+
+export function sendTeamSelected(deck: DeckPokemon[]): void {
+    if (!session.role) {
+        throw new Error('オンラインセッションが初期化されていません。');
+    }
+    if (deck.length !== 3) {
+        throw new Error('選出は3匹である必要があります。');
+    }
+
+    session.localSelectedDeck = cloneDeck(deck);
+    emitSnapshot();
+
+    sendMessage({
+        type: 'team_selected',
+        deck: cloneDeck(deck),
+    });
 }
 
 export function sendBattleInit(state: BattleStateWire): void {
