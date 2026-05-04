@@ -91,6 +91,238 @@ const FIELD_EFFECT_LABELS: Record<string, string> = {
     tailwind: 'おいかぜ',
 };
 
+const TYPE_LABELS: Record<string, string> = {
+    normal: 'ノーマル',
+    fire: 'ほのお',
+    water: 'みず',
+    electric: 'でんき',
+    grass: 'くさ',
+    ice: 'こおり',
+    fighting: 'かくとう',
+    poison: 'どく',
+    ground: 'じめん',
+    flying: 'ひこう',
+    psychic: 'エスパー',
+    bug: 'むし',
+    rock: 'いわ',
+    ghost: 'ゴースト',
+    dragon: 'ドラゴン',
+    dark: 'あく',
+    steel: 'はがね',
+    fairy: 'フェアリー',
+};
+
+function getTypeLabel(type: string): string {
+    return TYPE_LABELS[type] ?? type;
+}
+
+const TYPE_EFFECTIVENESS: Record<string, Partial<Record<string, number>>> = {
+    normal: {
+      rock: 0.5,
+      ghost: 0,
+      steel: 0.5,
+    },
+    fire: {
+      fire: 0.5,
+      water: 0.5,
+      grass: 2,
+      ice: 2,
+      bug: 2,
+      rock: 0.5,
+      dragon: 0.5,
+      steel: 2,
+    },
+    water: {
+      fire: 2,
+      water: 0.5,
+      grass: 0.5,
+      ground: 2,
+      rock: 2,
+      dragon: 0.5,
+    },
+    electric: {
+      water: 2,
+      electric: 0.5,
+      grass: 0.5,
+      ground: 0,
+      flying: 2,
+      dragon: 0.5,
+    },
+    grass: {
+      fire: 0.5,
+      water: 2,
+      grass: 0.5,
+      poison: 0.5,
+      ground: 2,
+      flying: 0.5,
+      bug: 0.5,
+      rock: 2,
+      dragon: 0.5,
+      steel: 0.5,
+    },
+    ice: {
+      fire: 0.5,
+      water: 0.5,
+      grass: 2,
+      ice: 0.5,
+      ground: 2,
+      flying: 2,
+      dragon: 2,
+      steel: 0.5,
+    },
+    fighting: {
+      normal: 2,
+      ice: 2,
+      poison: 0.5,
+      flying: 0.5,
+      psychic: 0.5,
+      bug: 0.5,
+      rock: 2,
+      ghost: 0,
+      dark: 2,
+      steel: 2,
+      fairy: 0.5,
+    },
+    poison: {
+      grass: 2,
+      poison: 0.5,
+      ground: 0.5,
+      rock: 0.5,
+      ghost: 0.5,
+      steel: 0,
+      fairy: 2,
+    },
+    ground: {
+      fire: 2,
+      electric: 2,
+      grass: 0.5,
+      poison: 2,
+      flying: 0,
+      bug: 0.5,
+      rock: 2,
+      steel: 2,
+    },
+    flying: {
+      electric: 0.5,
+      grass: 2,
+      fighting: 2,
+      bug: 2,
+      rock: 0.5,
+      steel: 0.5,
+    },
+    psychic: {
+      fighting: 2,
+      poison: 2,
+      psychic: 0.5,
+      dark: 0,
+      steel: 0.5,
+    },
+    bug: {
+      fire: 0.5,
+      grass: 2,
+      fighting: 0.5,
+      poison: 0.5,
+      flying: 0.5,
+      psychic: 2,
+      ghost: 0.5,
+      dark: 2,
+      steel: 0.5,
+      fairy: 0.5,
+    },
+    rock: {
+      fire: 2,
+      ice: 2,
+      fighting: 0.5,
+      ground: 0.5,
+      flying: 2,
+      bug: 2,
+      steel: 0.5,
+    },
+    ghost: {
+      normal: 0,
+      psychic: 2,
+      ghost: 2,
+      dark: 0.5,
+    },
+    dragon: {
+      dragon: 2,
+      steel: 0.5,
+      fairy: 0,
+    },
+    dark: {
+      fighting: 0.5,
+      psychic: 2,
+      ghost: 2,
+      dark: 0.5,
+      fairy: 0.5,
+    },
+    steel: {
+      fire: 0.5,
+      water: 0.5,
+      electric: 0.5,
+      ice: 2,
+      rock: 2,
+      steel: 0.5,
+      fairy: 2,
+    },
+    fairy: {
+      fire: 0.5,
+      fighting: 2,
+      poison: 0.5,
+      dragon: 2,
+      dark: 2,
+      steel: 0.5,
+    },
+  };
+
+  function getTypeEffectiveness(moveType?: string, targetTypes?: string[]): number | null {
+    if (!moveType || !targetTypes?.length) return null;
+  
+    return targetTypes.reduce((multiplier, targetType) => {
+      const typeMultiplier = TYPE_EFFECTIVENESS[moveType]?.[targetType] ?? 1;
+      return multiplier * typeMultiplier;
+    }, 1);
+  }
+  
+  function getEffectivenessLabel(multiplier: number | null): string | null {
+    if (multiplier === null) return null;
+    if (multiplier === 0) return '無効';
+    if (multiplier >= 4) return 'ちょうばつぐん';
+    if (multiplier >= 2) return 'ばつぐん';
+    if (multiplier <= 0.25) return 'かなりいまひとつ';
+    if (multiplier < 1) return 'いまひとつ';
+    return null;
+  }
+  
+  function getEffectivenessClass(multiplier: number | null): string {
+    if (multiplier === 0) {
+      return 'bg-slate-800 text-white border border-slate-700';
+    }
+  
+    if (multiplier !== null && multiplier >= 4) {
+      return 'bg-pink-100 text-pink-700 border border-pink-200';
+    }
+  
+    if (multiplier !== null && multiplier >= 2) {
+      return 'bg-red-100 text-red-700 border border-red-200';
+    }
+  
+    if (multiplier !== null && multiplier <= 0.25) {
+      return 'bg-indigo-100 text-indigo-700 border border-indigo-200';
+    }
+  
+    if (multiplier !== null && multiplier < 1) {
+      return 'bg-blue-100 text-blue-700 border border-blue-200';
+    }
+  
+    return 'bg-slate-100 text-slate-500 border border-slate-200';
+  }
+  
+  function formatEffectivenessMultiplier(multiplier: number | null): string {
+    if (multiplier === null || multiplier === 1) return '';
+    return ` ×${multiplier}`;
+  }
+
 function getEffectLabel(key: string): string {
     return FIELD_EFFECT_LABELS[key] ?? key.replace(/^field_/, '').replace(/^side_/, '').replace(/_/g, ' ');
 }
@@ -1026,6 +1258,19 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                                 
                                 const moveDescription = move.description || '説明なし';
 
+                                const targetTypes = aiPokemon.types ?? species[aiPokemon.speciesId]?.type ?? [];
+
+const shouldShowEffectiveness =
+    move.category !== 'status' &&
+    typeof move.power === 'number' &&
+    move.power > 0;
+
+const effectiveness = shouldShowEffectiveness
+    ? getTypeEffectiveness(move.type, targetTypes)
+    : null;
+
+const effectivenessLabel = getEffectivenessLabel(effectiveness);
+
                                     return (
                                         <div key={moveId} className="group relative">
                                             <button
@@ -1039,16 +1284,28 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                                                 )}
                                             >
                                                 <div className="mb-2 flex items-center justify-between gap-2">
-                                                    <span className="font-medium text-[var(--text-primary)]">
-                                                        {move.name}
-                                                    </span>
-                                                    <span
-                                                        className="rounded-full px-2 py-0.5 text-xs text-white"
-                                                        style={{ backgroundColor: getTypeColor(move.type) }}
-                                                    >
-                                                        {move.type}
-                                                    </span>
-                                                </div>
+    <span className="min-w-0 flex-1 truncate font-medium text-[var(--text-primary)]">
+        {move.name}
+    </span>
+
+    <div className="flex shrink-0 items-center gap-1">
+        {effectivenessLabel && (
+            <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getEffectivenessClass(effectiveness)}`}
+            >
+                {effectivenessLabel}
+                {formatEffectivenessMultiplier(effectiveness)}
+            </span>
+        )}
+
+<span
+    className="rounded-full px-2 py-0.5 text-xs text-white"
+    style={{ backgroundColor: getTypeColor(move.type) }}
+>
+    {getTypeLabel(move.type)}
+</span>
+    </div>
+</div>
                                     
                                                 <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
                                                     <span>{categoryLabel}</span>
@@ -1073,12 +1330,22 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                                                         </div>
                                                     </div>
                                     
+                                                    <div className="flex shrink-0 flex-col items-end gap-1">
                                                     <span
-                                                        className="rounded-full px-2 py-1 text-xs text-white"
-                                                        style={{ backgroundColor: getTypeColor(move.type) }}
-                                                    >
-                                                        {move.type}
-                                                    </span>
+    className="rounded-full px-2 py-1 text-xs text-white"
+    style={{ backgroundColor: getTypeColor(move.type) }}
+>
+    {getTypeLabel(move.type)}
+</span>
+    {effectivenessLabel && (
+        <span
+            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${getEffectivenessClass(effectiveness)}`}
+        >
+            {effectivenessLabel}
+            {formatEffectivenessMultiplier(effectiveness)}
+        </span>
+    )}
+</div>
                                                 </div>
                                     
                                                 <div className="mb-3 grid grid-cols-3 gap-2 text-xs">
@@ -1201,15 +1468,15 @@ function PokemonStatus({
                     <div className={isPlayer ? 'text-right' : ''}>
                         <h3 className="text-balance text-lg font-bold text-[var(--text-primary)]">{species?.name || creature.name}</h3>
                         <div className={cn('flex gap-1', isPlayer ? 'justify-end' : '')}>
-                            {(creature.types || species?.type || []).map((t) => (
-                                <span
-                                    key={t}
-                                    className="rounded-md px-1.5 py-0.5 text-xs text-white"
-                                    style={{ backgroundColor: getTypeColor(t) }}
-                                >
-                                    {t}
-                                </span>
-                            ))}
+                        {(creature.types || species?.type || []).map((t) => (
+    <span
+        key={t}
+        className="rounded-full px-2 py-0.5 text-xs text-white"
+        style={{ backgroundColor: getTypeColor(t) }}
+    >
+        {getTypeLabel(t)}
+    </span>
+))}
                         </div>
                     </div>
                 </div>
