@@ -5,6 +5,7 @@ import DeckBuilderPage from './pages/DeckBuilderPage';
 import BattlePage from './pages/BattlePage';
 import OnlineLobbyPage from './pages/OnlineLobbyPage';
 import ResultPage from './pages/ResultPage';
+import PokemonDetailPage from './pages/PokemonDetailPage';
 import './index.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/online-lobby" element={<OnlineLobbyPage />} />
         <Route path="/battle" element={<BattlePage />} />
         <Route path="/result" element={<ResultPage />} />
+        <Route path="/pokedex/:speciesId" element={<PokemonDetailPage />} />
       </Routes>
     </BrowserRouter>
   );

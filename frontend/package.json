@@ -15,6 +15,7 @@
     "normalize:moves:write": "node ../scripts/normalize-move-yaml.cjs --write"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.1",
     "@tailwindcss/vite": "^4.1.18",
     "clsx": "^2.1.1",
     "lucide-react": "^0.562.0",

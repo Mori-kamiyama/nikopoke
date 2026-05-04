@@ -4,6 +4,8 @@ import { ArrowLeft, RotateCcw } from 'lucide-react';
 import { cn } from '../lib/cn';
 import { loadAllData, getTypeColor } from '../lib/data';
 import { BattleLog, ActionSummary } from '../components/BattleLog';
+import { createBattleRecord, saveBattleRecord } from '../lib/battleStats';
+import { uploadGlobalBattleRecord } from '../lib/globalBattleStats';
 import {
     initEngine,
     createBattleState,
@@ -299,6 +301,9 @@ export default function BattlePage() {
     const battleStateRef = useRef<BattleStateWire | null>(null);
     const localPlayerIdRef = useRef(localPlayerId);
     const opponentPlayerIdRef = useRef(opponentPlayerId);
+    const localDeckRef = useRef<DeckPokemon[] | null>(null);
+    const opponentDeckRef = useRef<DeckPokemon[] | null>(null);
+    const battleRecordSavedRef = useRef(false);
     const onlineRoleRef = useRef<OnlineRole | null>(onlineSnapshot.role);
     const pendingLocalActionRef = useRef<ActionWire | null>(null);
     const pendingRemoteActionRef = useRef<ActionWire | null>(null);
@@ -332,10 +337,37 @@ export default function BattlePage() {
 
     const finishBattle = useCallback(async (nextState: BattleStateWire) => {
         const over = await isBattleOver(nextState);
+    
         if (!over) {
             return false;
         }
+    
         const winner = getWinner(nextState);
+    
+        if (battleMode === 'player' && !battleRecordSavedRef.current) {
+            battleRecordSavedRef.current = true;
+        
+            const record = createBattleRecord({
+                winner,
+                localPlayerId: localPlayerIdRef.current,
+                opponentPlayerId: opponentPlayerIdRef.current,
+                mode: battleMode,
+                playerDeck: localDeckRef.current,
+                opponentDeck: opponentDeckRef.current,
+            });
+        
+            saveBattleRecord(record);
+        
+            if (localPlayerIdRef.current === 'host') {
+                void uploadGlobalBattleRecord({
+                    id: record.id,
+                    winner,
+                    hostDeck: localDeckRef.current,
+                    guestDeck: opponentDeckRef.current,
+                });
+            }
+        }
+    
         sessionStorage.setItem(
             'battleResult',
             JSON.stringify({
@@ -344,11 +376,13 @@ export default function BattlePage() {
                 logs: nextState.log,
             }),
         );
+    
         window.setTimeout(() => {
             navigate('/result');
         }, 1500);
+    
         return true;
-    }, [navigate]);
+    }, [battleMode, navigate]);
 
     const resolveHostTurn = useCallback(async (localAction: ActionWire, remoteAction: ActionWire) => {
         const currentState = battleStateRef.current;
@@ -428,7 +462,7 @@ export default function BattlePage() {
         return () => {
             cancelled = true;
         };
-    }, [navigate]);
+    }, [battleMode, navigate]);
 
     useEffect(() => {
         if (logsRef.current) {
@@ -520,6 +554,10 @@ export default function BattlePage() {
                 });
             }
 
+            localDeckRef.current = playerDeck;
+            opponentDeckRef.current = aiDeck;
+            battleRecordSavedRef.current = false;
+
             createBattleState({
                 player: { team: playerDeck },
                 ai: { team: aiDeck },
@@ -545,6 +583,9 @@ export default function BattlePage() {
             initializedRef.current = true;
             setLocalPlayerId('host');
             setOpponentPlayerId('guest');
+            localDeckRef.current = onlineSnapshot.localDeck;
+            opponentDeckRef.current = onlineSnapshot.remoteDeck;
+            battleRecordSavedRef.current = false;
             createBattleState({
                 host: { team: onlineSnapshot.localDeck },
                 guest: { team: onlineSnapshot.remoteDeck },
@@ -563,6 +604,9 @@ export default function BattlePage() {
 
         if (onlineSnapshot.role === 'guest') {
             initializedRef.current = true;
+            localDeckRef.current = onlineSnapshot.localDeck;
+opponentDeckRef.current = onlineSnapshot.remoteDeck ?? null;
+battleRecordSavedRef.current = false;
             setLocalPlayerId('guest');
             setOpponentPlayerId('host');
             if (onlineSnapshot.latestState) {
@@ -598,6 +642,49 @@ export default function BattlePage() {
         return battleState?.players.find(p => p.id === id);
     };
 
+    const getFallbackAiAction = (state: BattleStateWire): ActionWire | null => {
+        const aiPlayer = state.players.find((player) => player.id === opponentPlayerIdRef.current);
+        if (!aiPlayer) return null;
+    
+        const activePokemon = aiPlayer.team[aiPlayer.activeSlot];
+        if (!activePokemon) return null;
+    
+        const moveIds = activePokemon.moves ?? [];
+        const movePp = activePokemon.movePp as unknown;
+    
+        const getPp = (moveId: string): number | undefined => {
+            if (movePp instanceof Map) {
+                return movePp.get(moveId);
+            }
+    
+            if (movePp && typeof movePp === 'object') {
+                return (movePp as Record<string, number | undefined>)[moveId];
+            }
+    
+            return undefined;
+        };
+    
+        const fallbackMoveId = moveIds.find((moveId) => {
+            const pp = getPp(moveId);
+            return pp === undefined || pp > 0;
+        });
+    
+        if (!fallbackMoveId) return null;
+    
+        console.warn('[battle] AI minimax failed. fallback move selected:', {
+            speciesId: activePokemon.speciesId,
+            fallbackMoveId,
+            moves: moveIds,
+            movePp,
+        });
+    
+        return {
+            type: 'move',
+            playerId: opponentPlayerIdRef.current,
+            moveId: fallbackMoveId,
+            targetId: localPlayerIdRef.current,
+        };
+    };
     const submitOnlineAction = async (action: ActionWire) => {
         if (onlineSnapshot.role === 'guest') {
             sendPlayerAction(action);
@@ -641,12 +728,13 @@ export default function BattlePage() {
                 return;
             }
 
-            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1);
-            if (!aiAction) {
-                console.error('AI failed to select action');
-                setWaiting(false);
-                return;
-            }
+            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1) ?? getFallbackAiAction(battleState);
+
+if (!aiAction) {
+    console.error('AI failed to select action');
+    setWaiting(false);
+    return;
+}
 
             const newState = await stepBattle(battleState, [playerAction, aiAction]);
             setLastMoves({
@@ -705,13 +793,13 @@ export default function BattlePage() {
                 return;
             }
 
-            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1);
+            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1) ?? getFallbackAiAction(battleState);
 
-            if (!aiAction) {
-                console.error('AI failed to select action');
-                setWaiting(false);
-                return;
-            }
+if (!aiAction) {
+    console.error('AI failed to select action');
+    setWaiting(false);
+    return;
+}
 
             const newState = await stepBattle(battleState, [playerAction, aiAction]);
             setBattleState(newState);
@@ -749,23 +837,58 @@ export default function BattlePage() {
         );
     }
 
-    const player = getPlayer(localPlayerId)!;
-    const ai = getPlayer(opponentPlayerId)!;
-    const playerPokemon = player.team[player.activeSlot];
-    console.log('[battle] playerPokemon moves', {
-        speciesId: playerPokemon.speciesId,
-        name: playerPokemon.name,
-        moves: playerPokemon.moves,
-        movePp: playerPokemon.movePp,
-        moveNames: playerPokemon.moves?.map((moveId) => moves[moveId]?.name ?? `NOT FOUND: ${moveId}`),
-    });
-    const aiPokemon = ai.team[ai.activeSlot];
-    const playerSpecies = species[playerPokemon.speciesId];
-    const aiSpecies = species[aiPokemon.speciesId];
-    const mustSwitch = needsForcedSwitch(battleState, localPlayerId);
+    const player = getPlayer(localPlayerId);
+const ai = getPlayer(opponentPlayerId);
 
-    const playerLastMove = lastMoves.player ? moves[lastMoves.player] : undefined;
-    const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
+if (!player || !ai) {
+    return (
+        <div className="flex min-h-dvh items-center justify-center bg-[var(--surface-1)]">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] px-6 py-5 text-center">
+                <p className="text-lg font-medium text-[var(--text-primary)]">対戦情報を同期中です...</p>
+                <p className="mt-2 text-sm text-[var(--text-muted)]">
+                    プレイヤー情報を取得しています。
+                </p>
+            </div>
+        </div>
+    );
+}
+
+const playerPokemon = player.team[player.activeSlot];
+const aiPokemon = ai.team[ai.activeSlot];
+
+if (!playerPokemon || !aiPokemon) {
+    return (
+        <div className="flex min-h-dvh items-center justify-center bg-[var(--surface-1)]">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] px-6 py-5 text-center">
+                <p className="text-lg font-medium text-[var(--text-primary)]">対戦情報を同期中です...</p>
+                <p className="mt-2 text-sm text-[var(--text-muted)]">
+                    ポケモン情報を取得しています。
+                </p>
+            </div>
+        </div>
+    );
+}
+
+const playerSpecies = species[playerPokemon.speciesId];
+const aiSpecies = species[aiPokemon.speciesId];
+
+if (!playerSpecies || !aiSpecies) {
+    return (
+        <div className="flex min-h-dvh items-center justify-center bg-[var(--surface-1)]">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] px-6 py-5 text-center">
+                <p className="text-lg font-medium text-[var(--text-primary)]">対戦情報を同期中です...</p>
+                <p className="mt-2 text-sm text-[var(--text-muted)]">
+                    種族データを取得しています。
+                </p>
+            </div>
+        </div>
+    );
+}
+
+const mustSwitch = needsForcedSwitch(battleState, localPlayerId);
+
+const playerLastMove = lastMoves.player ? moves[lastMoves.player] : undefined;
+const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
 
     return (
         <div className="flex min-h-dvh flex-col bg-[var(--surface-1)]">
