@@ -50,6 +50,7 @@ export default function TeamPreviewPage() {
     const [opponentDeck, setOpponentDeck] = useState<DeckPokemon[]>([]);
     const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
     const [battleMode, setBattleMode] = useState<'ai' | 'player'>('ai');
+    const [aiLevel, setAiLevel] = useState<'lv1' | 'lv2'>('lv1');
     const [onlineSnapshot, setOnlineSnapshot] = useState(getOnlineSessionSnapshot());
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -60,8 +61,10 @@ export default function TeamPreviewPage() {
         const boot = async () => {
             const currentBattleMode =
                 sessionStorage.getItem('battleMode') === 'player' ? 'player' : 'ai';
+            const storedAiLevel = sessionStorage.getItem('aiLevel') === 'lv2' ? 'lv2' : 'lv1';
     
             setBattleMode(currentBattleMode);
+            setAiLevel(storedAiLevel);
     
             const { species: loadedSpecies, moves: loadedMoves } = await loadAllData();
     
@@ -219,6 +222,7 @@ export default function TeamPreviewPage() {
     
         sessionStorage.setItem('selectedPlayerDeck', JSON.stringify(selectedTeam));
         sessionStorage.setItem('selectedOpponentDeck', JSON.stringify(selectedOpponentDeck));
+        sessionStorage.setItem('aiLevel', aiLevel);
         navigate('/battle');
     };
 
@@ -252,13 +256,43 @@ export default function TeamPreviewPage() {
 
             <main className="mx-auto max-w-6xl px-6 py-8">
                 <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[var(--surface-2)] p-5">
-                    <div className="mb-3 flex items-center justify-between gap-3">
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <h2 className="text-base font-bold text-[var(--text-primary)]">あなたの選出</h2>
                             <p className="text-sm text-[var(--text-muted)]">
                                 {selectedIndexes.length}/{SELECT_TEAM_SIZE} 匹選択中
                             </p>
                         </div>
+
+                        {battleMode === 'ai' && (
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-[var(--text-primary)]">AIの強さ:</span>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setAiLevel('lv1')}
+                                        className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+                                            aiLevel === 'lv1'
+                                                ? 'bg-[var(--accent)] text-white'
+                                                : 'bg-[var(--surface-3)] text-[var(--text-muted)] hover:bg-[var(--surface-4)]'
+                                        }`}
+                                    >
+                                        LV1: Minimax
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setAiLevel('lv2')}
+                                        className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+                                            aiLevel === 'lv2'
+                                                ? 'bg-[var(--accent)] text-white'
+                                                : 'bg-[var(--surface-3)] text-[var(--text-muted)] hover:bg-[var(--surface-4)]'
+                                        }`}
+                                    >
+                                        LV2: MLP (進化戦略)
+                                    </button>
+                                </div>
+                            </div>
+                        )}
 
                         <button
                                 onClick={startBattle}
