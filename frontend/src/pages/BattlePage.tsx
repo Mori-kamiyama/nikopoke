@@ -7,6 +7,8 @@ import { BattleLog, ActionSummary } from '../components/BattleLog';
 import { createBattleRecord, saveBattleRecord } from '../lib/battleStats';
 import { getAbilityLabel } from './PokemonDetailPage';
 import { uploadGlobalBattleRecord } from '../lib/globalBattleStats';
+import { mlpAI } from '../lib/mlpAI';
+import { useAuth } from '../contexts/AuthContext';
 import {
     initEngine,
     createBattleState,
@@ -516,8 +518,12 @@ function getStatusLabel(statusId: string): string {
 
 export default function BattlePage() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [battleMode] = useState<'ai' | 'player'>(() =>
         sessionStorage.getItem('battleMode') === 'player' ? 'player' : 'ai',
+    );
+    const [aiLevel] = useState<'lv1' | 'lv2'>(() =>
+        sessionStorage.getItem('aiLevel') === 'lv2' ? 'lv2' : 'lv1',
     );
     const [species, setSpecies] = useState<SpeciesData>({});
     const [moves, setMoves] = useState<MoveData>({});
@@ -560,6 +566,12 @@ export default function BattlePage() {
         onlineRoleRef.current = onlineSnapshot.role;
     }, [onlineSnapshot.role]);
 
+    useEffect(() => {
+        if (aiLevel === 'lv2') {
+            mlpAI.load().catch(console.error);
+        }
+    }, [aiLevel]);
+
     const updateLastMovesFromActions = useCallback((actions: ActionWire[]) => {
         const localId = localPlayerIdRef.current;
         const opponentId = opponentPlayerIdRef.current;
@@ -598,6 +610,8 @@ export default function BattlePage() {
                     winner,
                     hostDeck: localDeckRef.current,
                     guestDeck: opponentDeckRef.current,
+                    host_user_id: user?.id ?? null,
+                    guest_user_id: onlineSnapshot.remoteUserId,
                 });
             }
         }
@@ -616,7 +630,7 @@ export default function BattlePage() {
         }, 1500);
     
         return true;
-    }, [battleMode, navigate]);
+    }, [battleMode, navigate, onlineSnapshot.remoteUserId, user?.id]);
 
     const resolveHostTurn = useCallback(async (localAction: ActionWire, remoteAction: ActionWire) => {
         const currentState = battleStateRef.current;
@@ -935,6 +949,18 @@ if (onlineSnapshot.role === 'host' && onlineSnapshot.remoteDeck) {
             targetId: localPlayerIdRef.current,
         };
     };
+
+    const getAiAction = async (state: BattleStateWire): Promise<ActionWire | null> => {
+        if (aiLevel === 'lv2' && mlpAI.isReady()) {
+            const mlpAction = mlpAI.getBestAction(state, opponentPlayerIdRef.current, moves);
+            if (mlpAction) {
+                return mlpAction;
+            }
+        }
+
+        return await getBestMoveMinimax(state, opponentPlayerIdRef.current, 1) ?? getFallbackAiAction(state);
+    };
+
     const submitOnlineAction = async (action: ActionWire) => {
         if (onlineSnapshot.role === 'guest') {
             sendPlayerAction(action);
@@ -978,7 +1004,7 @@ if (onlineSnapshot.role === 'host' && onlineSnapshot.remoteDeck) {
                 return;
             }
 
-            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1) ?? getFallbackAiAction(battleState);
+            const aiAction = await getAiAction(battleState);
 
 if (!aiAction) {
     console.error('AI failed to select action');
@@ -1043,7 +1069,7 @@ if (!aiAction) {
                 return;
             }
 
-            const aiAction = await getBestMoveMinimax(battleState, 'ai', 1) ?? getFallbackAiAction(battleState);
+            const aiAction = await getAiAction(battleState);
 
 if (!aiAction) {
     console.error('AI failed to select action');
@@ -1160,7 +1186,11 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                         <span className="font-medium tabular-nums text-[var(--text-primary)]">ターン {battleState.turn}</span>
                     </div>
                     <span className="text-sm text-[var(--text-muted)]">
-                        {battleMode === 'player' ? 'VS Player (PeerJS)' : 'VS AI (Minimax)'}
+                        {battleMode === 'player'
+                            ? 'VS Player (PeerJS)'
+                            : aiLevel === 'lv2'
+                                ? 'VS AI (MLP LV2)'
+                                : 'VS AI (Minimax LV1)'}
                     </span>
                 </div>
                 {statusText && (

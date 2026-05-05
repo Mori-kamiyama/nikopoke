@@ -1,14 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
 import type { BattleRecord } from './battleStats';
 import type { DeckPokemon } from '../types/pokemon';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
-
-const supabase =
-    supabaseUrl && supabaseAnonKey
-        ? createClient(supabaseUrl, supabaseAnonKey)
-        : null;
+import { supabase } from './supabase';
 
 export type GlobalBattleTeamPokemon = {
     speciesId: string;
@@ -20,6 +12,8 @@ export type GlobalBattleRecord = {
     id: string;
     created_at?: string;
     winner: 'host' | 'guest';
+    host_user_id?: string | null;
+    guest_user_id?: string | null;
     host_team: GlobalBattleTeamPokemon[];
     guest_team: GlobalBattleTeamPokemon[];
 };
@@ -39,6 +33,8 @@ export async function uploadGlobalBattleRecord(args: {
     winner: string | null;
     hostDeck: DeckPokemon[] | null | undefined;
     guestDeck: DeckPokemon[] | null | undefined;
+    host_user_id?: string | null;
+    guest_user_id?: string | null;
 }) {
     if (!supabase) {
         console.warn('[globalBattleStats] Supabase env is not configured.');
@@ -53,6 +49,8 @@ export async function uploadGlobalBattleRecord(args: {
     const record: GlobalBattleRecord = {
         id: args.id,
         winner: args.winner,
+        host_user_id: args.host_user_id ?? null,
+        guest_user_id: args.guest_user_id ?? null,
         host_team: deckToGlobalTeam(args.hostDeck),
         guest_team: deckToGlobalTeam(args.guestDeck),
     };
@@ -80,7 +78,7 @@ export async function loadGlobalBattleRecords(): Promise<GlobalBattleRecord[]> {
 
     const { data, error } = await supabase
         .from('battle_records')
-        .select('id, created_at, winner, host_team, guest_team')
+        .select('id, created_at, winner, host_user_id, guest_user_id, host_team, guest_team')
         .order('created_at', { ascending: false })
         .limit(500);
 
