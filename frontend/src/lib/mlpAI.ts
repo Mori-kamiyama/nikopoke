@@ -8,7 +8,15 @@ interface MlpWeights {
     b2: number[];
     w3: number[][];
     b3: number[];
+    w4: number[][];
+    b4: number[];
 }
+
+const TYPES_LIST = [
+    'bug', 'dark', 'dragon', 'electric', 'fairy', 'fighting',
+    'fire', 'flying', 'ghost', 'grass', 'ground', 'ice',
+    'normal', 'poison', 'psychic', 'rock', 'steel', 'water',
+] as const;
 
 const TYPE_EFFECTIVENESS: Record<string, Partial<Record<string, number>>> = {
     normal: { rock: 0.5, ghost: 0, steel: 0.5 },
@@ -96,8 +104,10 @@ class MlpAI {
         const opponentActive = opponent?.team[opponent.activeSlot];
 
         const features: number[] = [];
-        this.appendSideFeatures(features, player);
-        this.appendSideFeatures(features, opponent);
+        this.appendSideFeatures(features, player, opponentActive);
+        this.appendSideFeatures(features, opponent, active);
+        this.appendBenchFeatures(features, player, opponentActive);
+        this.appendBenchFeatures(features, opponent, active);
 
         for (let slot = 0; slot < 4; slot += 1) {
             const moveId = active?.moves[slot];
@@ -128,10 +138,14 @@ class MlpAI {
         return features;
     }
 
-    private appendSideFeatures(features: number[], player?: PlayerStateWire): void {
+    private appendSideFeatures(
+        features: number[],
+        player?: PlayerStateWire,
+        opponentActive?: CreatureStateWire,
+    ): void {
         const active = player?.team[player.activeSlot];
-        if (!player || !active) {
-            features.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        if (!player || !active || !opponentActive) {
+            features.push(...Array(49).fill(0));
             return;
         }
 
@@ -155,26 +169,66 @@ class MlpAI {
             aliveCount / 3,
             hpSum / 3,
         );
+        this.appendTypeOnehot(features, active.types[0]);
+        this.appendTypeOnehot(features, active.types[1]);
+
+        const speed = Math.max(active.speed, 0);
+        const opponentSpeed = Math.max(opponentActive.speed, 0);
+        features.push(speed / (speed + opponentSpeed + 1e-8));
+    }
+
+    private appendTypeOnehot(features: number[], typeName?: string): void {
+        for (const candidate of TYPES_LIST) {
+            features.push(typeName === candidate ? 1 : 0);
+        }
+    }
+
+    private appendBenchFeatures(
+        features: number[],
+        player?: PlayerStateWire,
+        opponentActive?: CreatureStateWire,
+    ): void {
+        if (!player || !opponentActive) {
+            features.push(0, 0, 0, 0, 0, 0);
+            return;
+        }
+
+        const bench = player.team
+            .map((pokemon, index) => ({ pokemon, index }))
+            .filter(({ pokemon, index }) => index !== player.activeSlot && pokemon.hp > 0)
+            .map(({ pokemon }) => pokemon);
+
+        for (let slot = 0; slot < 2; slot += 1) {
+            const pokemon = bench[slot];
+            if (!pokemon) {
+                features.push(0, 0, 0);
+                continue;
+            }
+
+            const hpRatio = Math.max(0, Math.min(1, pokemon.hp / Math.max(pokemon.maxHp, 1)));
+            const attackingType = opponentActive.types[0] ?? '';
+            const typeEffVsOpp = this.getTypeEffectiveness(attackingType, pokemon.types) / 4;
+            features.push(hpRatio, 1, typeEffVsOpp);
+        }
     }
 
     private forward(x: number[]): number[] {
         if (!this.weights) return [];
 
-        const h1 = this.relu(this.addBias(this.matVec(this.weights.w1, x), this.weights.b1));
-        const h2 = this.relu(this.addBias(this.matVec(this.weights.w2, h1), this.weights.b2));
-        return this.addBias(this.matVec(this.weights.w3, h2), this.weights.b3);
+        const h1 = this.relu(this.matVecAdd(this.weights.w1, x, this.weights.b1));
+        const h2 = this.relu(this.matVecAdd(this.weights.w2, h1, this.weights.b2));
+        const h3 = this.relu(this.matVecAdd(this.weights.w3, h2, this.weights.b3));
+        return this.matVecAdd(this.weights.w4, h3, this.weights.b4);
     }
 
     private relu(x: number[]): number[] {
         return x.map((value) => Math.max(0, value));
     }
 
-    private matVec(w: number[][], x: number[]): number[] {
-        return w.map((row) => row.reduce((sum, weight, index) => sum + weight * (x[index] ?? 0), 0));
-    }
-
-    private addBias(values: number[], bias: number[]): number[] {
-        return values.map((value, index) => value + (bias[index] ?? 0));
+    private matVecAdd(w: number[][], x: number[], b: number[]): number[] {
+        return w.map((row, rowIndex) => {
+            return row.reduce((sum, weight, index) => sum + weight * (x[index] ?? 0), 0) + (b[rowIndex] ?? 0);
+        });
     }
 
     private actionMask(state: BattleStateWire, playerId: string, moves: MoveData): boolean[] {

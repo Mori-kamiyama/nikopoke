@@ -1,5 +1,6 @@
-use engine_rust::ai::get_best_move_minimax;
-use engine_rust::core::battle::{is_battle_over, step_battle, BattleOptions};
+use engine_rust::core::battle::{
+    is_battle_over, replace_fainted_pokemon, step_battle, BattleOptions,
+};
 use engine_rust::core::factory::{create_creature, CreateCreatureOptions};
 use engine_rust::core::state::{
     create_battle_state, Action, ActionType, BattleState, CreatureState, PlayerState,
@@ -13,10 +14,16 @@ use std::env;
 use std::fs;
 use std::path::Path;
 
-const INPUT_SIZE: usize = 44;
-const HIDDEN1_SIZE: usize = 64;
-const HIDDEN2_SIZE: usize = 32;
+const INPUT_SIZE: usize = 130;
+const HIDDEN1_SIZE: usize = 128;
+const HIDDEN2_SIZE: usize = 64;
+const HIDDEN3_SIZE: usize = 32;
 const OUTPUT_SIZE: usize = 6;
+
+const TYPES_LIST: &[&str] = &[
+    "bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass",
+    "ground", "ice", "normal", "poison", "psychic", "rock", "steel", "water",
+];
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct MlpWeights {
@@ -26,6 +33,8 @@ struct MlpWeights {
     b2: Vec<f64>,
     w3: Vec<Vec<f64>>,
     b3: Vec<f64>,
+    w4: Vec<Vec<f64>>,
+    b4: Vec<f64>,
 }
 
 #[derive(Debug)]
@@ -34,7 +43,18 @@ struct Config {
     weight_b: String,
     games: usize,
     seed: u64,
+    team_a: Option<String>,
+    team_b: Option<String>,
+    batch: Option<String>,
 }
+
+#[derive(Deserialize, Clone)]
+struct PokemonSpec {
+    species_id: String,
+    moves: Vec<String>,
+}
+
+type TeamSpec = Vec<PokemonSpec>;
 
 #[derive(Serialize)]
 struct Results {
@@ -43,44 +63,14 @@ struct Results {
     draws: usize,
 }
 
-fn main() {
-    let config = parse_args();
-    let weights_a = load_weights_or_random(&config.weight_a, 0);
-    let weights_b = load_weights_or_random(&config.weight_b, 1);
-
-    let species_db = SpeciesDatabase::load_default().expect("failed to load species");
-    let move_db = MoveDatabase::load_default().unwrap_or_else(|_| MoveDatabase::minimal());
-    let learnset_db = LearnsetDatabase::load_default().unwrap_or_else(|_| LearnsetDatabase::new());
-    let type_chart = TypeChart::new();
-
-    let mut results = Results {
-        wins_a: 0,
-        wins_b: 0,
-        draws: 0,
-    };
-
-    for game_index in 0..config.games {
-        let outcome = play_game(
-            &weights_a,
-            &weights_b,
-            &species_db,
-            &move_db,
-            &learnset_db,
-            &type_chart,
-            config.seed + game_index as u64,
-        );
-
-        match outcome {
-            GameOutcome::A => results.wins_a += 1,
-            GameOutcome::B => results.wins_b += 1,
-            GameOutcome::Draw => results.draws += 1,
-        }
-    }
-
-    println!(
-        "{}",
-        serde_json::to_string(&results).expect("failed to serialize results")
-    );
+#[derive(Deserialize)]
+struct BatchMatch {
+    weights_a: MlpWeights,
+    weights_b: MlpWeights,
+    team_a: Option<TeamSpec>,
+    team_b: Option<TeamSpec>,
+    games: usize,
+    seed: u64,
 }
 
 #[derive(Clone, Copy)]
@@ -90,11 +80,114 @@ enum GameOutcome {
     Draw,
 }
 
+fn main() {
+    let config = parse_args();
+    let species_db = SpeciesDatabase::load_default().expect("failed to load species");
+    let move_db = MoveDatabase::load_default().unwrap_or_else(|_| MoveDatabase::minimal());
+    let learnset_db = LearnsetDatabase::load_default().unwrap_or_else(|_| LearnsetDatabase::new());
+    let type_chart = TypeChart::new();
+
+    if let Some(batch_path) = config.batch.as_ref() {
+        let matches: Vec<BatchMatch> = fs::read_to_string(batch_path)
+            .ok()
+            .and_then(|content| serde_json::from_str(&content).ok())
+            .expect("failed to load batch matches");
+        let results: Vec<Results> = matches
+            .iter()
+            .map(|batch_match| {
+                evaluate_matches(
+                    &batch_match.weights_a,
+                    &batch_match.weights_b,
+                    batch_match.team_a.as_ref(),
+                    batch_match.team_b.as_ref(),
+                    batch_match.games,
+                    batch_match.seed,
+                    &species_db,
+                    &move_db,
+                    &learnset_db,
+                    &type_chart,
+                )
+            })
+            .collect();
+        println!(
+            "{}",
+            serde_json::to_string(&results).expect("failed to serialize batch results")
+        );
+        return;
+    }
+
+    let weights_a = load_weights_or_random(&config.weight_a, 0);
+    let weights_b = load_weights_or_random(&config.weight_b, 1);
+    let team_spec_a = config.team_a.as_ref().and_then(|path| load_team_spec(path));
+    let team_spec_b = config.team_b.as_ref().and_then(|path| load_team_spec(path));
+    let results = evaluate_matches(
+        &weights_a,
+        &weights_b,
+        team_spec_a.as_ref(),
+        team_spec_b.as_ref(),
+        config.games,
+        config.seed,
+        &species_db,
+        &move_db,
+        &learnset_db,
+        &type_chart,
+    );
+
+    println!(
+        "{}",
+        serde_json::to_string(&results).expect("failed to serialize results")
+    );
+}
+
+fn evaluate_matches(
+    weights_a: &MlpWeights,
+    weights_b: &MlpWeights,
+    team_spec_a: Option<&TeamSpec>,
+    team_spec_b: Option<&TeamSpec>,
+    games: usize,
+    seed: u64,
+    species_db: &SpeciesDatabase,
+    move_db: &MoveDatabase,
+    learnset_db: &LearnsetDatabase,
+    type_chart: &TypeChart,
+) -> Results {
+    let mut results = Results {
+        wins_a: 0,
+        wins_b: 0,
+        draws: 0,
+    };
+
+    for game_index in 0..games {
+        let outcome = run_game(
+            weights_a,
+            weights_b,
+            team_spec_a,
+            team_spec_b,
+            species_db,
+            move_db,
+            learnset_db,
+            type_chart,
+            seed + game_index as u64,
+        );
+
+        match outcome {
+            GameOutcome::A => results.wins_a += 1,
+            GameOutcome::B => results.wins_b += 1,
+            GameOutcome::Draw => results.draws += 1,
+        }
+    }
+
+    results
+}
+
 fn parse_args() -> Config {
     let mut weight_a = String::new();
     let mut weight_b = String::new();
     let mut games = 20usize;
     let mut seed = 42u64;
+    let mut team_a = None;
+    let mut team_b = None;
+    let mut batch = None;
 
     let args: Vec<String> = env::args().collect();
     let mut i = 1;
@@ -124,6 +217,24 @@ fn parse_args() -> Config {
                     i += 1;
                 }
             }
+            "--team-a" => {
+                if let Some(value) = args.get(i + 1) {
+                    team_a = Some(value.clone());
+                    i += 1;
+                }
+            }
+            "--team-b" => {
+                if let Some(value) = args.get(i + 1) {
+                    team_b = Some(value.clone());
+                    i += 1;
+                }
+            }
+            "--batch" => {
+                if let Some(value) = args.get(i + 1) {
+                    batch = Some(value.clone());
+                    i += 1;
+                }
+            }
             _ => {}
         }
         i += 1;
@@ -134,12 +245,23 @@ fn parse_args() -> Config {
         weight_b,
         games,
         seed,
+        team_a,
+        team_b,
+        batch,
     }
 }
 
-fn play_game(
+fn load_team_spec(path: &str) -> Option<TeamSpec> {
+    fs::read_to_string(path)
+        .ok()
+        .and_then(|content| serde_json::from_str::<TeamSpec>(&content).ok())
+}
+
+fn run_game(
     weights_a: &MlpWeights,
     weights_b: &MlpWeights,
+    team_spec_a: Option<&TeamSpec>,
+    team_spec_b: Option<&TeamSpec>,
     species_db: &SpeciesDatabase,
     move_db: &MoveDatabase,
     learnset_db: &LearnsetDatabase,
@@ -147,7 +269,27 @@ fn play_game(
     seed: u64,
 ) -> GameOutcome {
     let mut rng = make_rng(seed);
-    let (team_a, team_b) = create_random_teams(species_db, move_db, learnset_db, &mut rng);
+    let (team_a, team_b) = match (team_spec_a, team_spec_b) {
+        (Some(spec_a), Some(spec_b)) => (
+            create_team_from_spec(spec_a, "a", species_db, move_db, learnset_db),
+            create_team_from_spec(spec_b, "b", species_db, move_db, learnset_db),
+        ),
+        (Some(spec_a), None) => {
+            let (_, random_b) = create_random_teams(species_db, move_db, learnset_db, &mut rng);
+            (
+                create_team_from_spec(spec_a, "a", species_db, move_db, learnset_db),
+                random_b,
+            )
+        }
+        (None, Some(spec_b)) => {
+            let (random_a, _) = create_random_teams(species_db, move_db, learnset_db, &mut rng);
+            (
+                random_a,
+                create_team_from_spec(spec_b, "b", species_db, move_db, learnset_db),
+            )
+        }
+        (None, None) => create_random_teams(species_db, move_db, learnset_db, &mut rng),
+    };
 
     let mut state = create_battle_state(vec![
         PlayerState {
@@ -172,24 +314,8 @@ fn play_game(
         }
 
         let mut actions = Vec::new();
-        push_action(
-            &state,
-            "a",
-            weights_a,
-            move_db,
-            type_chart,
-            true,
-            &mut actions,
-        );
-        push_action(
-            &state,
-            "b",
-            weights_b,
-            move_db,
-            type_chart,
-            true,
-            &mut actions,
-        );
+        push_action(&state, "a", weights_a, move_db, type_chart, &mut actions);
+        push_action(&state, "b", weights_b, move_db, type_chart, &mut actions);
 
         if actions.is_empty() {
             break;
@@ -210,39 +336,37 @@ fn play_game(
 }
 
 fn handle_forced_switches(state: &mut BattleState, rng: &mut impl FnMut() -> f64) {
+    let mut attempts = 0;
     loop {
         if is_battle_over(state) {
             return;
         }
+        if attempts >= 12 {
+            return;
+        }
+        attempts += 1;
 
-        let mut actions = Vec::new();
+        let mut switched = false;
         if needs_switch(state, "a") {
-            if let Some(action) =
-                get_best_move_minimax(state, "a", 2).or_else(|| first_switch(state, "a"))
-            {
-                actions.push(action);
+            if let Some(action) = first_switch(state, "a") {
+                if let Some(slot) = action.slot {
+                    *state = replace_fainted_pokemon(state, "a", slot, rng);
+                    switched = true;
+                }
             }
         }
         if needs_switch(state, "b") {
-            if let Some(action) =
-                get_best_move_minimax(state, "b", 2).or_else(|| first_switch(state, "b"))
-            {
-                actions.push(action);
+            if let Some(action) = first_switch(state, "b") {
+                if let Some(slot) = action.slot {
+                    *state = replace_fainted_pokemon(state, "b", slot, rng);
+                    switched = true;
+                }
             }
         }
 
-        if actions.is_empty() {
+        if !switched {
             return;
         }
-
-        *state = step_battle(
-            state,
-            &actions,
-            rng,
-            BattleOptions {
-                record_history: false,
-            },
-        );
     }
 }
 
@@ -252,20 +376,75 @@ fn push_action(
     weights: &MlpWeights,
     move_db: &MoveDatabase,
     type_chart: &TypeChart,
-    minimax_when_forced: bool,
     actions: &mut Vec<Action>,
 ) {
-    let action = if minimax_when_forced && needs_switch(state, player_id) {
-        get_best_move_minimax(state, player_id, 2).or_else(|| first_switch(state, player_id))
-    } else {
-        select_action_mlp(state, player_id, weights, move_db, type_chart)
-            .or_else(|| get_best_move_minimax(state, player_id, 1))
-            .or_else(|| first_switch(state, player_id))
-    };
+    let action = select_action_mlp(state, player_id, weights, move_db, type_chart)
+        .or_else(|| first_switch(state, player_id));
 
     if let Some(action) = action {
         actions.push(action);
     }
+}
+
+fn create_team_from_spec(
+    spec: &TeamSpec,
+    prefix: &str,
+    species_db: &SpeciesDatabase,
+    move_db: &MoveDatabase,
+    learnset_db: &LearnsetDatabase,
+) -> Vec<CreatureState> {
+    let fallback_species = sorted_species(species_db);
+    spec.iter()
+        .take(3)
+        .enumerate()
+        .filter_map(|(index, pokemon)| {
+            let species = species_db
+                .get(&pokemon.species_id)
+                .or_else(|| fallback_species.get(index).copied())?;
+            let moves = normalize_spec_moves(&species.id, &pokemon.moves, move_db, learnset_db);
+            create_creature(
+                species,
+                CreateCreatureOptions {
+                    moves: Some(moves),
+                    name: Some(format!("{}-{}", prefix, species.name)),
+                    ..Default::default()
+                },
+                learnset_db,
+                move_db,
+            )
+            .ok()
+        })
+        .collect()
+}
+
+fn normalize_spec_moves(
+    species_id: &str,
+    requested_moves: &[String],
+    move_db: &MoveDatabase,
+    learnset_db: &LearnsetDatabase,
+) -> Vec<String> {
+    let mut moves: Vec<String> = requested_moves
+        .iter()
+        .filter(|move_id| move_db.get(move_id).is_some())
+        .take(4)
+        .cloned()
+        .collect();
+
+    let learnable = learnset_db.get(species_id).cloned().unwrap_or_default();
+    for move_id in learnable {
+        if moves.len() >= 4 {
+            break;
+        }
+        if move_db.get(&move_id).is_some() && !moves.contains(&move_id) {
+            moves.push(move_id);
+        }
+    }
+
+    if moves.is_empty() && move_db.get("tackle").is_some() {
+        moves.push("tackle".to_string());
+    }
+
+    moves
 }
 
 fn create_random_teams(
@@ -274,11 +453,10 @@ fn create_random_teams(
     learnset_db: &LearnsetDatabase,
     rng: &mut impl FnMut() -> f64,
 ) -> (Vec<CreatureState>, Vec<CreatureState>) {
-    let mut species_list: Vec<&SpeciesData> = species_db.as_map().values().collect();
-    species_list.sort_by(|a, b| a.id.cmp(&b.id));
-
+    let mut species_list = sorted_species(species_db);
     let mut team_a = Vec::new();
     let mut team_b = Vec::new();
+
     while (team_a.len() < 3 || team_b.len() < 3) && !species_list.is_empty() {
         let for_a = team_a.len() <= team_b.len() && team_a.len() < 3;
         let idx = random_index(species_list.len(), rng);
@@ -296,13 +474,21 @@ fn create_random_teams(
             move_db,
         )
         .expect("failed to create creature");
+
         if for_a {
             team_a.push(creature);
         } else {
             team_b.push(creature);
         }
     }
+
     (team_a, team_b)
+}
+
+fn sorted_species(species_db: &SpeciesDatabase) -> Vec<&SpeciesData> {
+    let mut species_list: Vec<&SpeciesData> = species_db.as_map().values().collect();
+    species_list.sort_by(|a, b| a.id.cmp(&b.id));
+    species_list
 }
 
 fn random_moves(
@@ -371,55 +557,22 @@ fn extract_features(
     let opponent_active = opponent.team.get(opponent.active_slot)?;
 
     let mut features = Vec::with_capacity(INPUT_SIZE);
-    append_side_features(&mut features, player);
-    append_side_features(&mut features, opponent);
-
-    for slot in 0..4 {
-        if let Some(move_id) = active.moves.get(slot) {
-            if let Some(move_data) = move_db.get(move_id) {
-                let max_pp = move_data.pp.unwrap_or(1).max(1);
-                let remaining_pp = active
-                    .move_pp
-                    .get(move_id)
-                    .copied()
-                    .unwrap_or(max_pp)
-                    .max(0);
-                let category = move_data.category.as_deref().unwrap_or("");
-                let is_physical = category == "physical";
-                let is_special = category == "special";
-                let is_status = category == "status";
-                let power_norm = if is_physical || is_special {
-                    move_data.power.unwrap_or(0) as f64 / 150.0
-                } else {
-                    0.0
-                };
-                let type_effectiveness = move_data
-                    .move_type
-                    .as_deref()
-                    .map(|move_type| {
-                        type_chart.effectiveness(move_type, &opponent_active.types) as f64 / 4.0
-                    })
-                    .unwrap_or(0.0);
-
-                features.push(remaining_pp as f64 / max_pp as f64);
-                features.push(power_norm);
-                features.push(type_effectiveness);
-                features.push(if is_physical { 1.0 } else { 0.0 });
-                features.push(if is_status { 1.0 } else { 0.0 });
-            } else {
-                features.extend([0.0; 5]);
-            }
-        } else {
-            features.extend([0.0; 5]);
-        }
-    }
+    append_side_features(&mut features, player, opponent_active);
+    append_side_features(&mut features, opponent, active);
+    append_bench_features(&mut features, player, opponent_active, type_chart);
+    append_bench_features(&mut features, opponent, active, type_chart);
+    append_move_features(&mut features, active, opponent_active, move_db, type_chart);
 
     Some(features)
 }
 
-fn append_side_features(features: &mut Vec<f64>, player: &PlayerState) {
+fn append_side_features(
+    features: &mut Vec<f64>,
+    player: &PlayerState,
+    opponent_active: &CreatureState,
+) {
     let Some(active) = player.team.get(player.active_slot) else {
-        features.extend([0.0; 12]);
+        features.extend([0.0; 49]);
         return;
     };
 
@@ -470,6 +623,101 @@ fn append_side_features(features: &mut Vec<f64>, player: &PlayerState) {
         .sum();
     features.push(alive / 3.0);
     features.push(hp_sum / 3.0);
+    append_type_onehot(features, active.types.get(0).map(String::as_str));
+    append_type_onehot(features, active.types.get(1).map(String::as_str));
+
+    let speed = active.speed.max(0) as f64;
+    let opponent_speed = opponent_active.speed.max(0) as f64;
+    features.push(speed / (speed + opponent_speed + 1e-8));
+}
+
+fn append_type_onehot(features: &mut Vec<f64>, type_name: Option<&str>) {
+    for candidate in TYPES_LIST {
+        features.push(if type_name == Some(*candidate) {
+            1.0
+        } else {
+            0.0
+        });
+    }
+}
+
+fn append_bench_features(
+    features: &mut Vec<f64>,
+    player: &PlayerState,
+    opponent_active: &CreatureState,
+    type_chart: &TypeChart,
+) {
+    let bench: Vec<&CreatureState> = player
+        .team
+        .iter()
+        .enumerate()
+        .filter(|(idx, creature)| *idx != player.active_slot && creature.hp > 0)
+        .map(|(_, creature)| creature)
+        .collect();
+
+    for slot in 0..2 {
+        if let Some(creature) = bench.get(slot) {
+            let max_hp = creature.max_hp.max(1) as f64;
+            let hp_ratio = (creature.hp.max(0) as f64 / max_hp).clamp(0.0, 1.0);
+            let attacking_type = opponent_active
+                .types
+                .get(0)
+                .map(String::as_str)
+                .unwrap_or("");
+            let type_eff = type_chart.effectiveness(attacking_type, &creature.types) as f64 / 4.0;
+            features.extend([hp_ratio, 1.0, type_eff]);
+        } else {
+            features.extend([0.0, 0.0, 0.0]);
+        }
+    }
+}
+
+fn append_move_features(
+    features: &mut Vec<f64>,
+    active: &CreatureState,
+    opponent_active: &CreatureState,
+    move_db: &MoveDatabase,
+    type_chart: &TypeChart,
+) {
+    for slot in 0..4 {
+        if let Some(move_id) = active.moves.get(slot) {
+            if let Some(move_data) = move_db.get(move_id) {
+                let max_pp = move_data.pp.unwrap_or(1).max(1);
+                let remaining_pp = active
+                    .move_pp
+                    .get(move_id)
+                    .copied()
+                    .unwrap_or(max_pp)
+                    .max(0);
+                let category = move_data.category.as_deref().unwrap_or("");
+                let is_physical = category == "physical";
+                let is_special = category == "special";
+                let is_status = category == "status";
+                let power_norm = if is_physical || is_special {
+                    move_data.power.unwrap_or(0) as f64 / 150.0
+                } else {
+                    0.0
+                };
+                let type_effectiveness = move_data
+                    .move_type
+                    .as_deref()
+                    .map(|move_type| {
+                        type_chart.effectiveness(move_type, &opponent_active.types) as f64 / 4.0
+                    })
+                    .unwrap_or(0.0);
+
+                features.push(remaining_pp as f64 / max_pp as f64);
+                features.push(power_norm);
+                features.push(type_effectiveness);
+                features.push(if is_physical { 1.0 } else { 0.0 });
+                features.push(if is_status { 1.0 } else { 0.0 });
+            } else {
+                features.extend([0.0; 5]);
+            }
+        } else {
+            features.extend([0.0; 5]);
+        }
+    }
 }
 
 fn has_status(creature: &CreatureState, ids: &[&str]) -> bool {
@@ -608,12 +856,13 @@ fn winner(state: &BattleState) -> GameOutcome {
 }
 
 fn forward(weights: &MlpWeights, x: &[f64]) -> Vec<f64> {
-    let h1 = relu(mat_vec(&weights.w1, &weights.b1, x));
-    let h2 = relu(mat_vec(&weights.w2, &weights.b2, &h1));
-    mat_vec(&weights.w3, &weights.b3, &h2)
+    let h1 = relu(mat_vec_add(&weights.w1, x, &weights.b1));
+    let h2 = relu(mat_vec_add(&weights.w2, &h1, &weights.b2));
+    let h3 = relu(mat_vec_add(&weights.w3, &h2, &weights.b3));
+    mat_vec_add(&weights.w4, &h3, &weights.b4)
 }
 
-fn mat_vec(w: &[Vec<f64>], b: &[f64], x: &[f64]) -> Vec<f64> {
+fn mat_vec_add(w: &[Vec<f64>], x: &[f64], b: &[f64]) -> Vec<f64> {
     w.iter()
         .enumerate()
         .map(|(row_idx, row)| {
@@ -648,8 +897,10 @@ fn random_weights(seed: u64) -> MlpWeights {
         b1: vec![0.0; HIDDEN1_SIZE],
         w2: random_matrix(HIDDEN2_SIZE, HIDDEN1_SIZE, &mut rng),
         b2: vec![0.0; HIDDEN2_SIZE],
-        w3: random_matrix(OUTPUT_SIZE, HIDDEN2_SIZE, &mut rng),
-        b3: vec![0.0; OUTPUT_SIZE],
+        w3: random_matrix(HIDDEN3_SIZE, HIDDEN2_SIZE, &mut rng),
+        b3: vec![0.0; HIDDEN3_SIZE],
+        w4: random_matrix(OUTPUT_SIZE, HIDDEN3_SIZE, &mut rng),
+        b4: vec![0.0; OUTPUT_SIZE],
     }
 }
 
