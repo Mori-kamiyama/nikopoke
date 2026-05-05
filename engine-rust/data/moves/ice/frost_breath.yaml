@@ -11,5 +11,6 @@ steps:
 - type: damage
   power: 60
   accuracy: 0.9
-tags: []
+tags:
+- always_crit
 critRate: 6

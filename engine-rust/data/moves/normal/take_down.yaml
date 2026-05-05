@@ -11,8 +11,9 @@ steps:
 - type: damage
   power: 90
   accuracy: 0.85
-- type: damage_ratio
-  ratioMaxHp: 0.25
+- type: recoil_last_damage
   target: self
+  ratio: 0.25
 tags:
 - contact
+- recoil

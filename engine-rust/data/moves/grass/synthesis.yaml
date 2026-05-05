@@ -10,5 +10,18 @@ description: 自分の　ＨＰを　回復する。 天気に　よって 回�
 steps:
 - type: damage_ratio
   ratioMaxHp: -0.5
+  ratioMaxHpIf:
+  - if:
+      type: weather_is_sunny
+    ratio: -0.6666667
+  - if:
+      type: weather_is_raining
+    ratio: -0.25
+  - if:
+      type: weather_is_hail
+    ratio: -0.25
+  - if:
+      type: weather_is_sandstorm
+    ratio: -0.25
   target: self
 tags: []

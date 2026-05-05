@@ -11,4 +11,7 @@ steps:
 - type: apply_status
   statusId: sleep
   target: target
-tags: []
+  immuneTypes:
+  - grass
+tags:
+- powder

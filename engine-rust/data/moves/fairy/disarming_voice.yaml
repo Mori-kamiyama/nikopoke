@@ -10,4 +10,9 @@ description: 魅惑の　鳴き声を　だして　相手に 精神的な　ダ
 steps:
 - type: damage
   power: 40
-tags: []
+  accuracy: 1
+- type: bypass_substitute
+- type: sound
+tags:
+- sound
+- always_hit

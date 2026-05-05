@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: 超能力で 自分の　攻撃と　防御の 力を　交換する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: swap_attack_defense
 tags: []

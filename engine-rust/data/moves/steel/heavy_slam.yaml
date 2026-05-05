@@ -8,7 +8,6 @@ accuracy: 1.0
 priority: 0
 description: 重たい　体で　相手に　ぶつかって 攻撃する。自分が　相手より 重いほど　威力が　あがる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: relative_weight_damage
 tags:
 - contact

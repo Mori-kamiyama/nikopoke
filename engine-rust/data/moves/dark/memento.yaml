@@ -13,4 +13,7 @@ steps:
   stages:
     atk: -2
     spa: -2
+- type: damage_ratio
+  target: self
+  ratioCurrentHp: 1.0
 tags: []

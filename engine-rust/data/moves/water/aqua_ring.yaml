@@ -8,6 +8,7 @@ accuracy: null
 priority: 0
 description: 自分の　体の　周りを 水で　つくった　ベールで　おおう。 毎ターン　ＨＰを　回復する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: aqua_ring
+  target: self
 tags: []

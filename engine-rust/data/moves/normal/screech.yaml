@@ -12,4 +12,5 @@ steps:
   target: target
   stages:
     def: -2
-tags: []
+tags:
+- sound

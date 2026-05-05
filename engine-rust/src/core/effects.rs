@@ -22,6 +22,7 @@ pub struct EffectContext<'a> {
     pub ignore_immunity: bool,
     pub bypass_substitute: bool,
     pub ignore_substitute: bool,
+    pub ignore_ability: bool,
     pub is_sound: bool,
     pub last_damage: Option<i32>,
 }
@@ -69,6 +70,9 @@ fn apply_effect(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     match effect_type {
         "protect" => apply_protect(state, effect, ctx),
         "damage" => apply_damage(state, effect, ctx),
+        "heal_last_damage" => apply_last_damage_ratio(state, effect, ctx, true),
+        "recoil_last_damage" => apply_last_damage_ratio(state, effect, ctx, false),
+        "crash_if_no_damage" => apply_crash_if_no_damage(state, effect, ctx),
         "speed_based_damage" => apply_speed_based_damage(state, effect, ctx),
         "apply_status" => apply_status(state, effect, ctx),
         "remove_status" => apply_remove_status(effect, ctx),
@@ -77,7 +81,39 @@ fn apply_effect(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         "clear_stages" => apply_clear_stages(effect, ctx),
         "reset_stages" => apply_reset_stages(effect, ctx),
         "disable_move" => apply_disable_move(state, effect, ctx),
+        "disable_last_move" => apply_disable_last_move(state, effect, ctx),
         "damage_ratio" => apply_damage_ratio(state, effect, ctx),
+        "hp_based_damage" => apply_hp_based_damage(state, effect, ctx),
+        "pain_split_effect" => apply_pain_split_effect(state, ctx),
+        "endeavor_effect" => apply_endeavor_effect(state, ctx),
+        "final_gambit_effect" => apply_final_gambit_effect(state, ctx),
+        "counter_effect" => apply_counter_effect(state, ctx),
+        "mirror_coat_effect" => apply_mirror_coat_effect(state, ctx),
+        "hp_ratio_damage" => apply_hp_ratio_damage(state, effect, ctx),
+        "set_atk_max" => apply_set_atk_max(state, ctx),
+        "copy_stages" => apply_copy_stages(state, ctx),
+        "swap_stages" => apply_swap_stages(state, effect, ctx),
+        "average_stages" => apply_average_stages(state, effect, ctx),
+        "random_stage_boost" => apply_random_stage_boost(state, ctx),
+        "swap_items" => apply_swap_items(state, ctx),
+        "steal_item" => apply_steal_item(state, effect, ctx),
+        "swap_abilities" => apply_swap_abilities(state, ctx),
+        "set_ability" => apply_set_ability(state, effect, ctx),
+        "suppress_ability" => apply_suppress_ability(state, effect, ctx),
+        "haze_effect" => apply_haze_effect(state, ctx),
+        "curse_effect" => apply_curse_effect(state, ctx),
+        "swap_attack_defense" => apply_swap_attack_defense(ctx),
+        "inverse_speed_based_damage" => apply_inverse_speed_based_damage(state, effect, ctx),
+        "weight_based_damage" => apply_weight_based_damage(state, effect, ctx),
+        "relative_weight_damage" => apply_relative_weight_damage(state, effect, ctx),
+        "fling_effect" => apply_fling_effect(state, ctx),
+        "beat_up_effect" => apply_beat_up_effect(state, ctx),
+        "imprison_effect" => apply_imprison_effect(state, ctx),
+        "healing_wish_effect" => apply_healing_wish_effect(state, ctx),
+        "strength_sap_effect" => apply_strength_sap_effect(state, ctx),
+        "charge_attack" => apply_charge_attack(state, effect, ctx),
+        "triple_axel_effect" => apply_triple_axel_effect(state, effect, ctx),
+        "after_you_effect" => apply_after_you_effect(state, ctx),
         "delay" | "wait" => apply_delay(state, effect, ctx),
         "over_time" => apply_over_time(state, effect, ctx),
         "chance" => apply_chance(state, effect, ctx),
@@ -100,11 +136,36 @@ fn apply_effect(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         "bypass_protect"
         | "bypass_substitute"
         | "ignore_immunity"
+        | "ignore_ability"
         | "ignore_substitute"
         | "sound" => Vec::new(),
         "manual" => apply_manual_effect(effect, ctx),
         _ => Vec::new(),
     }
+}
+
+fn apply_after_you_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(target) = get_active_creature(state, &ctx.target_player_id) else {
+        return Vec::new();
+    };
+    if target.hp <= 0 {
+        return vec![BattleEvent::Log {
+            message: "しかし うまく きまらなかった！".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    vec![
+        BattleEvent::Log {
+            message: format!("{}に おさきにどうぞ！", target.name),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        // Set a flag on the target creature; battle.rs picks this up to reorder remaining actions.
+        BattleEvent::SetVolatile {
+            target_id: ctx.target_player_id.clone(),
+            key: "afterYouPending".to_string(),
+            value: serde_json::Value::Bool(true),
+        },
+    ]
 }
 
 fn apply_manual_effect(effect: &Effect, ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
@@ -133,7 +194,7 @@ fn apply_manual_effect(effect: &Effect, ctx: &EffectContext<'_>) -> Vec<BattleEv
     }]
 }
 
-fn apply_protect(state: &BattleState, _effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+fn apply_protect(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
     let Some(attacker) = get_active_creature(state, &ctx.attacker_player_id) else {
         return Vec::new();
     };
@@ -171,7 +232,12 @@ fn apply_protect(state: &BattleState, _effect: &Effect, ctx: &mut EffectContext<
         },
         BattleEvent::ApplyStatus {
         target_id: ctx.attacker_player_id.clone(),
-        status_id: "protect".to_string(),
+        status_id: effect
+            .data
+            .get("statusId")
+            .and_then(|v| v.as_str())
+            .unwrap_or("protect")
+            .to_string(),
         duration: Some(1),
         stack: false,
         data: HashMap::new(),
@@ -188,9 +254,30 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         return Vec::new();
     };
 
-    let accuracy = value_f64(effect.data.get("accuracy"), state, ctx).unwrap_or(1.0);
+    let mut accuracy = value_f64(effect.data.get("accuracy"), state, ctx).unwrap_or(1.0);
+    if let Some(Value::Array(overrides)) = effect.data.get("accuracyIf") {
+        for override_value in overrides {
+            let Some(override_map) = override_value.as_object() else {
+                continue;
+            };
+            if evaluate_condition(state, override_map.get("if"), ctx) {
+                accuracy = value_f64(override_map.get("accuracy"), state, ctx).unwrap_or(accuracy);
+                break;
+            }
+        }
+    }
+    if attacker.statuses.iter().any(|status| {
+        status.id == "lock_on"
+            && status
+                .data
+                .get("targetId")
+                .and_then(|v| v.as_str())
+                == Some(target_id.as_str())
+    }) {
+        accuracy = 1.0;
+    }
     let move_category = get_move_category(ctx.move_data);
-    let accuracy = run_ability_value_hook(
+    accuracy = run_ability_value_hook(
         state,
         &ctx.attacker_player_id,
         "onModifyAccuracy",
@@ -212,11 +299,58 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         }];
     }
 
-    let power = value_i32(effect.data.get("power"), state, ctx).unwrap_or(0);
+    let mut power = value_i32(effect.data.get("power"), state, ctx).unwrap_or(0);
+    if evaluate_condition(state, effect.data.get("powerMultiplierIf"), ctx) {
+        let multiplier = value_f64(effect.data.get("powerMultiplier"), state, ctx).unwrap_or(1.0);
+        power = ((power as f64) * multiplier).round() as i32;
+    }
+    if let Some(per_stage) = value_i32(effect.data.get("powerPerPositiveStage"), state, ctx) {
+        let base_power = value_i32(effect.data.get("basePower"), state, ctx).unwrap_or(power);
+        power = base_power + per_stage * positive_stage_total(attacker);
+    }
+    if let Some(per_hit) = value_i32(effect.data.get("powerPerHitTaken"), state, ctx) {
+        let hits = attacker
+            .volatile_data
+            .get("moveHitsTaken")
+            .and_then(|v| v.as_i64())
+            .unwrap_or(0) as i32;
+        power += per_hit * hits;
+    }
+    if effect
+        .data
+        .get("powerDoublesPerConsecutiveUse")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false)
+    {
+        let count = attacker
+            .volatile_data
+            .get("consecutiveMoveCount")
+            .and_then(|v| v.as_i64())
+            .unwrap_or(1)
+            .max(1) as u32;
+        power = power.saturating_mul(2_i32.saturating_pow(count.saturating_sub(1)));
+    }
+    if let Some(max_power) = value_i32(effect.data.get("maxPower"), state, ctx) {
+        power = power.min(max_power);
+    }
+    let charge_boost = ctx
+        .move_data
+        .and_then(|m| m.move_type.as_deref())
+        .is_some_and(|move_type| move_type == "electric")
+        && attacker.statuses.iter().any(|status| status.id == "charge");
+    if charge_boost {
+        power *= 2;
+    }
     let attacker_id = ctx.attacker_player_id.clone();
     
     // Pass false for is_secondary_hit, let calc_damage handle crit logic
-    let (amount, is_crit) = calc_damage(power, state, &attacker_id, &target_id, ctx, false);
+    let use_defensive_stat = effect
+        .data
+        .get("useDefensiveStat")
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false);
+    let offensive_stat = effect.data.get("useOffensiveStat").and_then(|v| v.as_str());
+    let (amount, is_crit) = calc_damage(power, state, &attacker_id, &target_id, ctx, false, use_defensive_stat, offensive_stat);
     
     let mut events = Vec::new();
 
@@ -229,7 +363,8 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         }
 
         if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
-            let eff = ctx.type_chart.effectiveness(move_type, &target.types);
+            let target_types = effective_types(target);
+            let eff = ctx.type_chart.effectiveness(move_type, &target_types);
             if eff > 1.0 {
                 events.push(BattleEvent::Log {
                     message: "効果は 抜群だ！".to_string(),
@@ -247,16 +382,26 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
     meta.insert("target".to_string(), Value::String(target_id.clone()));
     meta.insert("cancellable".to_string(), Value::Bool(true));
+    if let Some(category) = move_category.as_deref() {
+        meta.insert("category".to_string(), Value::String(category.to_string()));
+    }
     events.push(BattleEvent::Damage {
         target_id: target_id.clone(),
         amount,
         meta,
     });
+    if charge_boost {
+        events.push(BattleEvent::RemoveStatus {
+            target_id: attacker_id.clone(),
+            status_id: "charge".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        });
+    }
 
     if attacker.ability.as_deref() == Some("parental_bond") {
         let second_power = (power as f32 * 0.25).floor() as i32;
         // Pass true for is_secondary_hit, parental bond 2nd hit doesn't crit
-        let (second_amount, _) = calc_damage(second_power, state, &attacker_id, &target_id, ctx, true);
+        let (second_amount, _) = calc_damage(second_power, state, &attacker_id, &target_id, ctx, true, use_defensive_stat, offensive_stat);
         
         let mut second_meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
         second_meta.insert("target".to_string(), Value::String(ctx.target_player_id.clone()));
@@ -271,6 +416,79 @@ fn apply_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     }
 
     events
+}
+
+fn apply_last_damage_ratio(
+    state: &BattleState,
+    effect: &Effect,
+    ctx: &mut EffectContext<'_>,
+    healing: bool,
+) -> Vec<BattleEvent> {
+    let Some(last_damage) = ctx.last_damage else {
+        return Vec::new();
+    };
+    if last_damage <= 0 {
+        return Vec::new();
+    }
+    let ratio = value_f64(effect.data.get("ratio"), state, ctx).unwrap_or(0.5);
+    let mut amount = ((last_damage as f64) * ratio).floor() as i32;
+    if amount <= 0 && ratio > 0.0 {
+        amount = 1;
+    }
+    if healing {
+        amount = -amount;
+    }
+    let target_id = resolve_target(effect.data.get("target"), ctx);
+    let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
+    meta.insert("target".to_string(), Value::String(target_id.clone()));
+    vec![BattleEvent::Damage {
+        target_id,
+        amount,
+        meta,
+    }]
+}
+
+fn apply_crash_if_no_damage(
+    state: &BattleState,
+    effect: &Effect,
+    ctx: &mut EffectContext<'_>,
+) -> Vec<BattleEvent> {
+    if ctx.last_damage.unwrap_or(0) > 0 {
+        return Vec::new();
+    }
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let ratio = value_f64(effect.data.get("ratioMaxHp"), state, ctx).unwrap_or(0.5);
+    let amount = ((user.max_hp as f64) * ratio).floor().max(1.0) as i32;
+    let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
+    meta.insert("target".to_string(), Value::String(ctx.attacker_player_id.clone()));
+    vec![
+        BattleEvent::Log {
+            message: format!("{}は 勢いあまって 地面に ぶつかった！", user.name),
+            meta: meta.clone(),
+        },
+        BattleEvent::Damage {
+            target_id: ctx.attacker_player_id.clone(),
+            amount,
+            meta,
+        },
+    ]
+}
+
+fn positive_stage_total(creature: &crate::core::state::CreatureState) -> i32 {
+    [
+        creature.stages.atk,
+        creature.stages.def,
+        creature.stages.spa,
+        creature.stages.spd,
+        creature.stages.spe,
+        creature.stages.accuracy,
+        creature.stages.evasion,
+    ]
+    .into_iter()
+    .filter(|stage| *stage > 0)
+    .sum()
 }
 
 fn apply_speed_based_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
@@ -317,6 +535,21 @@ fn apply_status(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
         return apply_item_status(state, &status_id, &target_id, ctx);
     }
 
+    // Type immunity check (e.g. leech_seed vs Ghost)
+    if let Some(Value::Array(immune_types)) = effect.data.get("immuneTypes") {
+        if let Some(target) = get_active_creature(state, &target_id) {
+            let immune = immune_types.iter().any(|t| {
+                t.as_str().map(|s| target.types.iter().any(|ty| ty.eq_ignore_ascii_case(s))).unwrap_or(false)
+            });
+            if immune {
+                return vec![BattleEvent::Log {
+                    message: format!("{}には 効かないようだ……", target.name),
+                    meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+                }];
+            }
+        }
+    }
+
     if let Some(chance) = value_f64(effect.data.get("chance"), state, ctx) {
         if (ctx.rng)() > chance {
             return vec![BattleEvent::Log {
@@ -339,7 +572,16 @@ fn apply_status(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
     let mut data = HashMap::new();
     if let Some(Value::Object(raw)) = effect.data.get("data") {
         for (k, v) in raw {
-            data.insert(k.clone(), v.clone());
+            let value = if k == "sideId" {
+                match v.as_str() {
+                    Some("self") => Value::String(ctx.attacker_player_id.clone()),
+                    Some("target") => Value::String(ctx.target_player_id.clone()),
+                    _ => v.clone(),
+                }
+            } else {
+                v.clone()
+            };
+            data.insert(k.clone(), value);
         }
     }
     if let Some(Value::String(source)) = data.get("sourceId") {
@@ -348,6 +590,34 @@ fn apply_status(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_
                 "sourceId".to_string(),
                 Value::String(ctx.attacker_player_id.clone()),
             );
+        }
+    }
+    if let Some(Value::String(target)) = data.get("targetId") {
+        let resolved = match target.as_str() {
+            "self" => Some(ctx.attacker_player_id.clone()),
+            "target" => Some(ctx.target_player_id.clone()),
+            _ => None,
+        };
+        if let Some(resolved) = resolved {
+            data.insert("targetId".to_string(), Value::String(resolved));
+        }
+    }
+    if let Some(Value::String(target)) = data.get("targetId") {
+        if target == "target" {
+            data.insert(
+                "targetId".to_string(),
+                Value::String(ctx.target_player_id.clone()),
+            );
+        }
+    }
+    if let Some(Value::String(moves)) = data.get("moves") {
+        if moves == "self_moves" {
+            if let Some(attacker) = get_active_creature(state, &ctx.attacker_player_id) {
+                data.insert(
+                    "moves".to_string(),
+                    Value::Array(attacker.moves.iter().map(|move_id| Value::String(move_id.clone())).collect()),
+                );
+            }
         }
     }
     if status_id == "substitute" && !data.contains_key("hp") {
@@ -457,9 +727,23 @@ fn apply_reset_stages(effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<Battl
 
 fn apply_disable_move(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
     let target_id = resolve_target(effect.data.get("target"), ctx);
-    let move_id = effect.data.get("moveId").and_then(|v| v.as_str()).unwrap_or("");
+    let move_id = effect
+        .data
+        .get("moveId")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+        .or_else(|| {
+            get_active_creature(state, &target_id)
+                .and_then(|c| c.volatile_data.get("lastMove"))
+                .and_then(|v| v.as_str())
+                .map(|s| s.to_string())
+        })
+        .unwrap_or_default();
+    if move_id.is_empty() {
+        return Vec::new();
+    }
     let mut data = HashMap::new();
-    data.insert("moveId".to_string(), Value::String(move_id.to_string()));
+    data.insert("moveId".to_string(), Value::String(move_id));
     vec![BattleEvent::ApplyStatus {
         target_id,
         status_id: "disable_move".to_string(),
@@ -476,14 +760,26 @@ fn apply_damage_ratio(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
         return Vec::new();
     };
     // Support both ratioMaxHp (based on max HP) and ratioCurrentHp (based on current HP)
+    let mut selected_ratio_max_hp = value_f64(effect.data.get("ratioMaxHp"), state, ctx).unwrap_or(0.0);
+    if let Some(Value::Array(overrides)) = effect.data.get("ratioMaxHpIf") {
+        for override_value in overrides {
+            let Some(override_map) = override_value.as_object() else {
+                continue;
+            };
+            if evaluate_condition(state, override_map.get("if"), ctx) {
+                selected_ratio_max_hp = value_f64(override_map.get("ratio"), state, ctx)
+                    .unwrap_or(selected_ratio_max_hp);
+                break;
+            }
+        }
+    }
     let mut amount = if let Some(ratio) = value_f64(effect.data.get("ratioCurrentHp"), state, ctx) {
         (target.hp as f64 * ratio).floor() as i32
     } else {
-        let ratio = value_f64(effect.data.get("ratioMaxHp"), state, ctx).unwrap_or(0.0);
-        (target.max_hp as f64 * ratio).floor() as i32
+        (target.max_hp as f64 * selected_ratio_max_hp).floor() as i32
     };
     let ratio = value_f64(effect.data.get("ratioCurrentHp"), state, ctx)
-        .or_else(|| value_f64(effect.data.get("ratioMaxHp"), state, ctx))
+        .or_else(|| Some(selected_ratio_max_hp))
         .unwrap_or(0.0);
     if amount == 0 && ratio != 0.0 {
         amount = if ratio > 0.0 { 1 } else { -1 };
@@ -500,6 +796,468 @@ fn apply_damage_ratio(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
         target_id,
         amount,
         meta,
+    }]
+}
+
+fn apply_hp_based_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let target_id = resolve_target(effect.data.get("target"), ctx);
+    let Some(target) = get_active_creature(state, &target_id) else {
+        return Vec::new();
+    };
+    let ratio = value_f64(effect.data.get("ratio"), state, ctx).unwrap_or(0.5);
+    let amount = ((target.hp as f64) * ratio).floor() as i32;
+    let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
+    meta.insert("target".to_string(), Value::String(target_id.clone()));
+    meta.insert("cancellable".to_string(), Value::Bool(true));
+    vec![BattleEvent::Damage {
+        target_id,
+        amount: amount.max(1),
+        meta,
+    }]
+}
+
+fn apply_pain_split_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    let average = ((user.hp + target.hp) / 2).max(1);
+    vec![
+        BattleEvent::Damage {
+            target_id: ctx.attacker_player_id.clone(),
+            amount: user.hp - average,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::Damage {
+            target_id: ctx.target_player_id.clone(),
+            amount: target.hp - average,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_endeavor_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    let amount = (target.hp - user.hp).max(0);
+    let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
+    meta.insert("target".to_string(), Value::String(ctx.target_player_id.clone()));
+    meta.insert("cancellable".to_string(), Value::Bool(true));
+    vec![BattleEvent::Damage {
+        target_id: ctx.target_player_id.clone(),
+        amount,
+        meta,
+    }]
+}
+
+fn apply_final_gambit_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let amount = user.hp.max(0);
+    vec![
+        BattleEvent::Damage {
+            target_id: ctx.target_player_id.clone(),
+            amount,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::Damage {
+            target_id: ctx.attacker_player_id.clone(),
+            amount,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_reflective_counter(state: &BattleState, ctx: &mut EffectContext<'_>, expected_category: &str) -> Vec<BattleEvent> {
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let last_amount = user
+        .volatile_data
+        .get("lastDamageTakenAmount")
+        .and_then(|v| v.as_i64())
+        .map(|v| v as i32)
+        .unwrap_or(0);
+    let last_category = user
+        .volatile_data
+        .get("lastDamageTakenCategory")
+        .and_then(|v| v.as_str())
+        .unwrap_or("");
+    let last_source = user
+        .volatile_data
+        .get("lastDamageTakenSource")
+        .and_then(|v| v.as_str())
+        .unwrap_or("");
+    if last_amount <= 0 || last_category != expected_category || last_source != ctx.target_player_id {
+        return vec![BattleEvent::Log {
+            message: "しかし うまく きまらなかった！".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    vec![BattleEvent::Damage {
+        target_id: ctx.target_player_id.clone(),
+        amount: last_amount * 2,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_counter_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    apply_reflective_counter(state, ctx, "physical")
+}
+
+fn apply_mirror_coat_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    apply_reflective_counter(state, ctx, "special")
+}
+
+fn apply_hp_ratio_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let ratio = user.hp as f64 / user.max_hp.max(1) as f64;
+    let mut chosen_power = 20;
+    if let Some(Value::Array(thresholds)) = effect.data.get("thresholds") {
+        let mut parsed: Vec<(f64, i32)> = thresholds
+            .iter()
+            .filter_map(|value| {
+                let threshold = value.get("ratio").and_then(|v| v.as_f64())?;
+                let power = value.get("power").and_then(|v| v.as_i64())? as i32;
+                Some((threshold, power))
+            })
+            .collect();
+        parsed.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
+        for (threshold, power) in parsed {
+            if ratio <= threshold {
+                chosen_power = power;
+                break;
+            }
+        }
+    }
+    let mut cloned = effect.clone();
+    cloned.data.insert("power".to_string(), Value::Number(chosen_power.into()));
+    apply_damage(state, &cloned, ctx)
+}
+
+fn apply_set_atk_max(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let cost = (user.max_hp / 2).max(1);
+    if user.hp <= cost {
+        return vec![BattleEvent::Log {
+            message: format!("{}は HPが 足りない！", user.name),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    if user.stages.atk >= 6 {
+        return vec![BattleEvent::Log {
+            message: format!("{}の こうげきは もう あがらない！", user.name),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    vec![
+        BattleEvent::Damage {
+            target_id: ctx.attacker_player_id.clone(),
+            amount: cost,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::ModifyStage {
+            target_id: ctx.attacker_player_id.clone(),
+            stages: HashMap::from([("atk".to_string(), 6 - user.stages.atk)]),
+            clamp: true,
+            fail_if_no_change: false,
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_copy_stages(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    let mut stages = HashMap::new();
+    for stat in ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion", "crit"] {
+        stages.insert(stat.to_string(), stage_value(&target.stages, stat) - stage_value(&user.stages, stat));
+    }
+    vec![BattleEvent::ModifyStage {
+        target_id: ctx.attacker_player_id.clone(),
+        stages,
+        clamp: true,
+        fail_if_no_change: false,
+        show_event: true,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_swap_stages(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let stats = stat_list(effect);
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    let mut user_delta = HashMap::new();
+    let mut target_delta = HashMap::new();
+    for stat in stats {
+        let user_stage = stage_value(&user.stages, &stat);
+        let target_stage = stage_value(&target.stages, &stat);
+        user_delta.insert(stat.clone(), target_stage - user_stage);
+        target_delta.insert(stat, user_stage - target_stage);
+    }
+    vec![
+        BattleEvent::ModifyStage {
+            target_id: ctx.attacker_player_id.clone(),
+            stages: user_delta,
+            clamp: true,
+            fail_if_no_change: false,
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::ModifyStage {
+            target_id: ctx.target_player_id.clone(),
+            stages: target_delta,
+            clamp: true,
+            fail_if_no_change: false,
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_average_stages(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let stats = stat_list(effect);
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    let mut user_delta = HashMap::new();
+    let mut target_delta = HashMap::new();
+    for stat in stats {
+        let user_stage = stage_value(&user.stages, &stat);
+        let target_stage = stage_value(&target.stages, &stat);
+        let average = (user_stage + target_stage) / 2;
+        user_delta.insert(stat.clone(), average - user_stage);
+        target_delta.insert(stat, average - target_stage);
+    }
+    vec![
+        BattleEvent::ModifyStage {
+            target_id: ctx.attacker_player_id.clone(),
+            stages: user_delta,
+            clamp: true,
+            fail_if_no_change: false,
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::ModifyStage {
+            target_id: ctx.target_player_id.clone(),
+            stages: target_delta,
+            clamp: true,
+            fail_if_no_change: false,
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_random_stage_boost(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let candidates: Vec<&str> = ["atk", "def", "spa", "spd", "spe", "accuracy", "evasion"]
+        .into_iter()
+        .filter(|stat| stage_value(&user.stages, stat) < 6)
+        .collect();
+    if candidates.is_empty() {
+        return vec![BattleEvent::Log {
+            message: format!("{}の 能力は もう 上がらない！", user.name),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    let idx = (((ctx.rng)() * candidates.len() as f64).floor() as usize).min(candidates.len() - 1);
+    vec![BattleEvent::ModifyStage {
+        target_id: ctx.attacker_player_id.clone(),
+        stages: HashMap::from([(candidates[idx].to_string(), 2)]),
+        clamp: true,
+        fail_if_no_change: false,
+        show_event: true,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_swap_items(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    if !has_item(user) && !has_item(target) {
+        return vec![BattleEvent::Log {
+            message: "しかし 交換するものが ない！".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    vec![BattleEvent::SwapItems {
+        left_id: ctx.attacker_player_id.clone(),
+        right_id: ctx.target_player_id.clone(),
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_steal_item(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let target_id = resolve_target(effect.data.get("target"), ctx);
+    let user_id = resolve_target(effect.data.get("receiver"), ctx);
+    let Some(target) = get_active_creature(state, &target_id) else {
+        return Vec::new();
+    };
+    if !has_item(target) {
+        return Vec::new();
+    }
+    if let Some(user) = get_active_creature(state, &user_id) {
+        if has_item(user) {
+            return Vec::new();
+        }
+    }
+    let Some(item_id) = get_item_id(target) else {
+        return Vec::new();
+    };
+    vec![
+        BattleEvent::RemoveStatus {
+            target_id: target_id.clone(),
+            status_id: "item".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::RemoveStatus {
+            target_id,
+            status_id: "berry".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::SetItem {
+            target_id: user_id,
+            item_id: Some(item_id),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_swap_abilities(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let (Some(user), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    if user.ability.is_none() && target.ability.is_none() {
+        return Vec::new();
+    }
+    vec![BattleEvent::SwapAbilities {
+        left_id: ctx.attacker_player_id.clone(),
+        right_id: ctx.target_player_id.clone(),
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_set_ability(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let target_id = resolve_target(effect.data.get("target"), ctx);
+    if get_active_creature(state, &target_id).is_none() {
+        return Vec::new();
+    }
+    let ability_id = effect
+        .data
+        .get("abilityId")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+        .or_else(|| {
+            if effect.data.get("copyUserAbility").and_then(|v| v.as_bool()) == Some(true) {
+                get_active_creature(state, &ctx.attacker_player_id).and_then(|c| c.ability.clone())
+            } else {
+                None
+            }
+        });
+    vec![BattleEvent::SetAbility {
+        target_id,
+        ability_id,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_suppress_ability(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let target_id = resolve_target(effect.data.get("target"), ctx);
+    if get_active_creature(state, &target_id).is_none() {
+        return Vec::new();
+    }
+    vec![BattleEvent::SetAbility {
+        target_id,
+        ability_id: None,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_haze_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    state
+        .players
+        .iter()
+        .map(|player| BattleEvent::ResetStages {
+            target_id: player.id.clone(),
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        })
+        .collect()
+}
+
+fn apply_curse_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(user) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    if user.types.iter().any(|t| t == "ghost") {
+        let cost = (user.max_hp / 2).max(1);
+        return vec![
+            BattleEvent::Damage {
+                target_id: ctx.attacker_player_id.clone(),
+                amount: cost,
+                meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+            },
+            BattleEvent::ApplyStatus {
+                target_id: ctx.target_player_id.clone(),
+                status_id: "curse".to_string(),
+                duration: None,
+                stack: false,
+                data: HashMap::new(),
+                meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+            },
+        ];
+    }
+    vec![BattleEvent::ModifyStage {
+        target_id: ctx.attacker_player_id.clone(),
+        stages: HashMap::from([
+            ("atk".to_string(), 1),
+            ("def".to_string(), 1),
+            ("spe".to_string(), -1),
+        ]),
+        clamp: true,
+        fail_if_no_change: false,
+        show_event: true,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_swap_attack_defense(ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    vec![BattleEvent::SwapAttackDefense {
+        target_id: ctx.attacker_player_id.clone(),
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
     }]
 }
 
@@ -645,6 +1403,15 @@ fn apply_field_status(state: &BattleState, effect: &Effect, ctx: &mut EffectCont
             data.insert(k.clone(), v.clone());
         }
     }
+    if let Some(side) = effect.data.get("side").and_then(|v| v.as_bool()) {
+        data.insert("scope".to_string(), Value::String("side".to_string()));
+        let side_id = if side {
+            ctx.attacker_player_id.clone()
+        } else {
+            ctx.target_player_id.clone()
+        };
+        data.insert("sideId".to_string(), Value::String(side_id));
+    }
     vec![BattleEvent::ApplyFieldStatus {
         status_id,
         duration: value_i32(effect.data.get("duration"), state, ctx),
@@ -659,9 +1426,13 @@ fn apply_remove_field_status(effect: &Effect, ctx: &mut EffectContext<'_>) -> Ve
         Some(id) => id.to_string(),
         None => return Vec::new(),
     };
+    let mut meta = meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id));
+    if effect.data.get("side").and_then(|v| v.as_bool()) == Some(true) {
+        meta.insert("sideId".to_string(), Value::String(ctx.attacker_player_id.clone()));
+    }
     vec![BattleEvent::RemoveFieldStatus {
         status_id,
-        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        meta,
     }]
 }
 
@@ -841,6 +1612,17 @@ fn apply_ohko(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>)
         },
     ) as f64;
 
+    let lock_on_applies = attacker.statuses.iter().any(|status| {
+        status.id == "lock_on"
+            && status
+                .data
+                .get("targetId")
+                .and_then(|v| v.as_str())
+                .map(|target| target == ctx.target_player_id.as_str())
+                .unwrap_or(false)
+    });
+    let accuracy = if lock_on_applies { 1.0 } else { accuracy };
+
     if (ctx.rng)() > accuracy {
         return vec![BattleEvent::Log {
             message: "しかし はずれた！".to_string(),
@@ -867,6 +1649,343 @@ fn apply_cure_all_status(effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<Ba
         target_id,
         meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
     }]
+}
+
+fn apply_disable_last_move(state: &BattleState, effect: &Effect, ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
+    let target_id = resolve_target(effect.data.get("target"), ctx);
+    let Some(target) = get_active_creature(state, &target_id) else {
+        return Vec::new();
+    };
+    let move_id = target
+        .volatile_data
+        .get("lastMove")
+        .and_then(|v| v.as_str())
+        .map(|s| s.to_string())
+        .unwrap_or_default();
+    if move_id.is_empty() {
+        return vec![BattleEvent::Log {
+            message: "しかし かなしばりに できなかった！".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    }
+    let mut data = HashMap::new();
+    data.insert("moveId".to_string(), Value::String(move_id));
+    vec![BattleEvent::ApplyStatus {
+        target_id,
+        status_id: "disable_move".to_string(),
+        duration: value_i32(effect.data.get("duration"), state, ctx),
+        stack: false,
+        data,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_inverse_speed_based_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let attacker_speed = compute_speed(state, &ctx.attacker_player_id, ctx.turn);
+    let target_speed = compute_speed(state, &ctx.target_player_id, ctx.turn);
+    let ratio = if attacker_speed <= 0.0 {
+        f32::INFINITY
+    } else {
+        target_speed / attacker_speed
+    };
+    let mut power = ((25.0 * ratio).floor() as i32).clamp(1, 150);
+    if let Some(max_power) = effect.data.get("maxPower").and_then(|v| v.as_i64()) {
+        power = power.min(max_power as i32);
+    }
+    let mut cloned = effect.clone();
+    cloned.effect_type = "damage".to_string();
+    cloned.data.insert("power".to_string(), Value::Number(power.into()));
+    apply_damage(state, &cloned, ctx)
+}
+
+fn creature_weight(creature: &crate::core::state::CreatureState) -> f64 {
+    if creature.weight_kg > 0.0 {
+        creature.weight_kg
+    } else {
+        // max_hp-based fallback (50.0 kg average if no data)
+        50.0
+    }
+}
+
+fn apply_weight_based_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(target) = get_active_creature(state, &ctx.target_player_id) else {
+        return Vec::new();
+    };
+    let w = creature_weight(target);
+    // Official Pokémon weight-to-power table (kg)
+    let power = if w < 10.0 {
+        20
+    } else if w < 25.0 {
+        40
+    } else if w < 50.0 {
+        60
+    } else if w < 100.0 {
+        80
+    } else if w < 200.0 {
+        100
+    } else {
+        120
+    };
+    let mut cloned = effect.clone();
+    cloned.effect_type = "damage".to_string();
+    cloned.data.insert("power".to_string(), Value::Number(power.into()));
+    apply_damage(state, &cloned, ctx)
+}
+
+fn apply_relative_weight_damage(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let (Some(attacker), Some(target)) = (
+        get_active_creature(state, &ctx.attacker_player_id),
+        get_active_creature(state, &ctx.target_player_id),
+    ) else {
+        return Vec::new();
+    };
+    let atk_w = creature_weight(attacker);
+    let tgt_w = creature_weight(target).max(0.1);
+    let ratio = atk_w / tgt_w;
+    // Official Pokémon heavy_slam weight-ratio table
+    let power = if ratio >= 5.0 {
+        120
+    } else if ratio >= 4.0 {
+        100
+    } else if ratio >= 3.0 {
+        80
+    } else if ratio >= 2.0 {
+        60
+    } else {
+        40
+    };
+    let mut cloned = effect.clone();
+    cloned.effect_type = "damage".to_string();
+    cloned.data.insert("power".to_string(), Value::Number(power.into()));
+    apply_damage(state, &cloned, ctx)
+}
+
+fn apply_fling_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(attacker) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let Some(item_id) = get_item_id(attacker) else {
+        return vec![BattleEvent::Log {
+            message: "しかし 投げる道具が なかった！".to_string(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+    };
+    let power = match item_id.as_str() {
+        "iron_ball" => 130,
+        "hard_stone" => 100,
+        "poison_barb" | "sharp_beak" | "black_belt" => 70,
+        _ => 30,
+    };
+    let mut damage_effect = Effect {
+        effect_type: "damage".to_string(),
+        data: Map::new(),
+    };
+    damage_effect.data.insert("power".to_string(), Value::Number(power.into()));
+    damage_effect.data.insert("accuracy".to_string(), Value::Number(1.into()));
+    let mut events = apply_damage(state, &damage_effect, ctx);
+    events.push(BattleEvent::SetItem {
+        target_id: ctx.attacker_player_id.clone(),
+        item_id: None,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    });
+    events
+}
+
+fn apply_beat_up_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(player) = state.players.iter().find(|p| p.id == ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    // Official: each non-fainted, non-status-affected party member strikes once.
+    // Power = member's base Attack / 10 + 5.  We use the stored `attack` stat as base.
+    let member_powers: Vec<i32> = player
+        .team
+        .iter()
+        .filter(|c| c.hp > 0 && !c.statuses.iter().any(|s| {
+            matches!(s.id.as_str(), "burn" | "poison" | "toxic" | "paralysis" | "freeze" | "sleep")
+        }))
+        .map(|c| c.attack / 10 + 5)
+        .collect();
+    let member_powers = if member_powers.is_empty() {
+        vec![10] // fallback: at least one hit at power 10
+    } else {
+        member_powers
+    };
+    let mut events = Vec::new();
+    for power in member_powers {
+        let mut damage_effect = Effect {
+            effect_type: "damage".to_string(),
+            data: Map::new(),
+        };
+        damage_effect.data.insert("power".to_string(), Value::Number(power.into()));
+        damage_effect.data.insert("accuracy".to_string(), Value::Number(1.into()));
+        events.extend(apply_damage(state, &damage_effect, ctx));
+    }
+    events
+}
+
+fn apply_imprison_effect(state: &BattleState, ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(attacker) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let moves: Vec<Value> = attacker.moves.iter().cloned().map(Value::String).collect();
+    let mut data = HashMap::new();
+    data.insert("sourceId".to_string(), Value::String(ctx.attacker_player_id.clone()));
+    data.insert("moves".to_string(), Value::Array(moves));
+    vec![BattleEvent::ApplyStatus {
+        target_id: ctx.target_player_id.clone(),
+        status_id: "imprison".to_string(),
+        duration: Some(5),
+        stack: false,
+        data,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    }]
+}
+
+fn apply_healing_wish_effect(state: &BattleState, ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(attacker) = get_active_creature(state, &ctx.attacker_player_id) else {
+        return Vec::new();
+    };
+    let mut data = HashMap::new();
+    data.insert("sideId".to_string(), Value::String(ctx.attacker_player_id.clone()));
+    vec![
+        BattleEvent::ApplyFieldStatus {
+            status_id: "healing_wish".to_string(),
+            duration: None,
+            stack: false,
+            data,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::Damage {
+            target_id: ctx.attacker_player_id.clone(),
+            amount: attacker.hp,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_strength_sap_effect(state: &BattleState, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let Some(target) = get_active_creature(state, &ctx.target_player_id) else {
+        return Vec::new();
+    };
+    vec![
+        BattleEvent::Damage {
+            target_id: ctx.attacker_player_id.clone(),
+            amount: -target.attack.max(1),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+        BattleEvent::ModifyStage {
+            target_id: ctx.target_player_id.clone(),
+            stages: HashMap::from([("atk".to_string(), -1)]),
+            clamp: true,
+            fail_if_no_change: false,
+            show_event: true,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        },
+    ]
+}
+
+fn apply_charge_attack(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let move_id = ctx.move_data.map(|m| m.id.as_str()).unwrap_or("charge_attack");
+    let charge_status = effect
+        .data
+        .get("chargeStatusId")
+        .and_then(|v| v.as_str())
+        .map(str::to_string)
+        .unwrap_or_else(|| format!("charging_{}", move_id));
+    let semi_status = effect.data.get("semiStatusId").and_then(|v| v.as_str()).map(str::to_string);
+    let charged = get_active_creature(state, &ctx.attacker_player_id)
+        .map_or(false, |c| c.statuses.iter().any(|s| s.id == charge_status));
+    let skip_charge = evaluate_condition(state, effect.data.get("skipChargeIf"), ctx);
+    if charged || skip_charge {
+        let mut events = vec![BattleEvent::RemoveStatus {
+            target_id: ctx.attacker_player_id.clone(),
+            status_id: charge_status,
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        }];
+        if let Some(semi_status) = semi_status {
+            events.push(BattleEvent::RemoveStatus {
+                target_id: ctx.attacker_player_id.clone(),
+                status_id: semi_status,
+                meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+            });
+        }
+        let mut damage_effect = effect.clone();
+        damage_effect.effect_type = "damage".to_string();
+        damage_effect.data.insert(
+            "power".to_string(),
+            effect.data.get("power").cloned().unwrap_or(Value::Number(0.into())),
+        );
+        if let Some(accuracy) = effect.data.get("accuracy").cloned() {
+            damage_effect.data.insert("accuracy".to_string(), accuracy);
+        }
+        events.extend(apply_damage(state, &damage_effect, ctx));
+        let steps = steps_from_value(effect.data.get("afterSteps"));
+        events.extend(apply_effects(state, &steps, ctx));
+        return events;
+    }
+
+    let mut data = HashMap::new();
+    data.insert("moveId".to_string(), Value::String(move_id.to_string()));
+    let before_steps = steps_from_value(effect.data.get("beforeSteps"));
+    let mut events = apply_effects(state, &before_steps, ctx);
+    events.push(BattleEvent::ApplyStatus {
+        target_id: ctx.attacker_player_id.clone(),
+        status_id: charge_status,
+        duration: Some(2),
+        stack: false,
+        data,
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    });
+    if let Some(semi_status) = semi_status {
+        events.push(BattleEvent::ApplyStatus {
+            target_id: ctx.attacker_player_id.clone(),
+            status_id: semi_status,
+            duration: Some(2),
+            stack: false,
+            data: HashMap::new(),
+            meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+        });
+    }
+    events.push(BattleEvent::Log {
+        message: "力を ためている！".to_string(),
+        meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+    });
+    events
+}
+
+fn apply_triple_axel_effect(state: &BattleState, effect: &Effect, ctx: &mut EffectContext<'_>) -> Vec<BattleEvent> {
+    let accuracy = value_f64(effect.data.get("accuracy"), state, ctx).unwrap_or(0.9);
+    let mut events = Vec::new();
+    let mut working_state = state.clone();
+    let powers = [20, 40, 60];
+    let mut hits = 0;
+    for power in powers {
+        if (ctx.rng)() > accuracy {
+            events.push(BattleEvent::Log {
+                message: "しかし はずれた！".to_string(),
+                meta: meta_with_move_source(ctx.move_data.map(|m| m.id.as_str()), Some(&ctx.attacker_player_id)),
+            });
+            break;
+        }
+        let mut damage_effect = effect.clone();
+        damage_effect.effect_type = "damage".to_string();
+        damage_effect.data.insert("power".to_string(), Value::Number(power.into()));
+        damage_effect.data.insert("accuracy".to_string(), Value::Number(1.into()));
+        let hit_events = apply_damage(&working_state, &damage_effect, ctx);
+        working_state = apply_events(&working_state, &hit_events);
+        events.extend(hit_events);
+        hits += 1;
+        if get_active_creature(&working_state, &ctx.target_player_id).map_or(true, |c| c.hp <= 0) {
+            break;
+        }
+    }
+    if hits > 1 {
+        events.push(BattleEvent::Log {
+            message: format!("{}回 あたった！", hits),
+            meta: Map::new(),
+        });
+    }
+    events
 }
 
 fn apply_self_switch(ctx: &EffectContext<'_>) -> Vec<BattleEvent> {
@@ -1138,6 +2257,7 @@ fn apply_effect_flags(ctx: &mut EffectContext<'_>, effects: &[Effect]) {
         match effect.effect_type.as_str() {
             "bypass_protect" => ctx.bypass_protect = true,
             "ignore_immunity" => ctx.ignore_immunity = true,
+            "ignore_ability" => ctx.ignore_ability = true,
             "bypass_substitute" => ctx.bypass_substitute = true,
             "ignore_substitute" => {
                 ctx.ignore_substitute = true;
@@ -1156,6 +2276,7 @@ fn apply_move_tag_flags(ctx: &mut EffectContext<'_>) {
     for tag in &move_data.tags {
         match tag.as_str() {
             "sound" => ctx.is_sound = true,
+            "ignore_ability" => ctx.ignore_ability = true,
             "bypass_substitute" | "bypass-substitute" => ctx.bypass_substitute = true,
             _ => {}
         }
@@ -1163,16 +2284,16 @@ fn apply_move_tag_flags(ctx: &mut EffectContext<'_>) {
 }
 
 fn apply_meta_flags(events: &mut [BattleEvent], ctx: &EffectContext<'_>) {
-    if !(ctx.bypass_protect
-        || ctx.ignore_immunity
-        || ctx.bypass_substitute
-        || ctx.ignore_substitute
-        || ctx.is_sound)
-    {
-        return;
-    }
     for event in events {
         if let Some(meta) = event_meta_mut(event) {
+            if let Some(category) = ctx.move_data.and_then(|m| m.category.as_deref()) {
+                meta.entry("category".to_string())
+                    .or_insert_with(|| Value::String(category.to_string()));
+            }
+            if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
+                meta.entry("moveType".to_string())
+                    .or_insert_with(|| Value::String(move_type.to_string()));
+            }
             if ctx.bypass_protect {
                 meta.insert("bypassProtect".to_string(), Value::Bool(true));
             }
@@ -1187,6 +2308,12 @@ fn apply_meta_flags(events: &mut [BattleEvent], ctx: &EffectContext<'_>) {
             }
             if ctx.is_sound {
                 meta.insert("sound".to_string(), Value::Bool(true));
+            }
+            if ctx
+                .move_data
+                .is_some_and(|move_data| move_data.tags.iter().any(|tag| tag == "contact"))
+            {
+                meta.insert("contact".to_string(), Value::Bool(true));
             }
         }
     }
@@ -1214,7 +2341,15 @@ fn event_meta_mut(event: &mut BattleEvent) -> Option<&mut Map<String, Value>> {
         | BattleEvent::CureAllStatus { meta, .. }
         | BattleEvent::ApplyFieldStatus { meta, .. }
         | BattleEvent::RemoveFieldStatus { meta, .. }
-        | BattleEvent::RandomMove { meta, .. } => Some(meta),
+        | BattleEvent::RandomMove { meta, .. }
+        | BattleEvent::SetAbility { meta, .. }
+        | BattleEvent::SwapAbilities { meta, .. }
+        | BattleEvent::SetItem { meta, .. }
+        | BattleEvent::SwapItems { meta, .. }
+        | BattleEvent::SetStages { meta, .. }
+        | BattleEvent::SwapStages { meta, .. }
+        | BattleEvent::AverageStats { meta, .. }
+        | BattleEvent::SwapAttackDefense { meta, .. } => Some(meta),
         _ => None,
     }
 }
@@ -1234,6 +2369,15 @@ fn evaluate_condition(state: &BattleState, cond: Option<&Value>, ctx: &EffectCon
                 return target.map_or(false, |c| has_item(c));
             }
             target.map_or(false, |c| c.statuses.iter().any(|s| s.id == status_id))
+        }
+        "target_has_any_status" => {
+            let target = get_active_creature(state, &ctx.target_player_id);
+            let statuses: Vec<String> = cond_map
+                .get("statusIds")
+                .and_then(|v| v.as_array())
+                .map(|items| items.iter().filter_map(|item| item.as_str().map(str::to_string)).collect())
+                .unwrap_or_default();
+            target.map_or(false, |c| c.statuses.iter().any(|s| statuses.iter().any(|id| id == &s.id)))
         }
         "target_hp_lt" => {
             let target = get_active_creature(state, &ctx.target_player_id);
@@ -1256,7 +2400,7 @@ fn evaluate_condition(state: &BattleState, cond: Option<&Value>, ctx: &EffectCon
         "user_type" => {
             let type_id = cond_map.get("typeId").and_then(|v| v.as_str()).unwrap_or("");
             get_active_creature(state, &ctx.attacker_player_id)
-                .map_or(false, |c| c.types.iter().any(|t| t == type_id))
+                .map_or(false, |c| effective_types(c).iter().any(|t| t == type_id))
         }
         "user_has_status" => {
             let status_id = cond_map.get("statusId").and_then(|v| v.as_str()).unwrap_or("");
@@ -1265,6 +2409,73 @@ fn evaluate_condition(state: &BattleState, cond: Option<&Value>, ctx: &EffectCon
         }
         "target_has_item" => get_active_creature(state, &ctx.target_player_id).map_or(false, |c| has_item(c)),
         "user_has_item" => get_active_creature(state, &ctx.attacker_player_id).map_or(false, |c| has_item(c)),
+        "user_has_no_item" => get_active_creature(state, &ctx.attacker_player_id).map_or(false, |c| !has_item(c)),
+        "target_has_major_status" => {
+            let major_statuses = ["burn", "poison", "toxic", "badly_poisoned", "paralysis", "freeze", "sleep"];
+            get_active_creature(state, &ctx.target_player_id)
+                .map_or(false, |c| c.statuses.iter().any(|s| major_statuses.contains(&s.id.as_str())))
+        }
+        "all" => cond_map
+            .get("conditions")
+            .and_then(|v| v.as_array())
+            .map_or(false, |conditions| conditions.iter().all(|condition| evaluate_condition(state, Some(condition), ctx))),
+        "any" => cond_map
+            .get("conditions")
+            .and_then(|v| v.as_array())
+            .map_or(false, |conditions| conditions.iter().any(|condition| evaluate_condition(state, Some(condition), ctx))),
+        "not" => !evaluate_condition(state, cond_map.get("condition"), ctx),
+        "target_fainted" => get_active_creature(state, &ctx.target_player_id).map_or(false, |c| c.hp <= 0),
+        "target_boosted_this_turn" => get_active_creature(state, &ctx.target_player_id).map_or(false, |c| {
+            c.volatile_data
+                .get("boostedThisTurn")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false)
+        }),
+        "user_damaged_this_turn" => get_active_creature(state, &ctx.attacker_player_id).map_or(false, |c| {
+            c.volatile_data
+                .get("damagedThisTurn")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false)
+        }),
+        "user_last_move_failed" => get_active_creature(state, &ctx.attacker_player_id).map_or(false, |c| {
+            c.volatile_data
+                .get("lastMoveFailed")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false)
+        }),
+        "user_first_turn_active" => get_active_creature(state, &ctx.attacker_player_id).map_or(false, |c| {
+            c.volatile_data
+                .get("turnEntered")
+                .and_then(|v| v.as_i64())
+                .map(|turn| state.turn as i64 - turn <= 1)
+                .unwrap_or(state.turn <= 1)
+        }),
+        "ally_fainted_last_turn" => state
+            .field
+            .sides
+            .get(&ctx.attacker_player_id)
+            .map_or(false, |effects| {
+                effects.iter().any(|effect| {
+                    effect.id == "ally_fainted"
+                        && effect
+                            .data
+                            .get("turn")
+                            .and_then(|v| v.as_i64())
+                            .is_some_and(|turn| turn + 1 == state.turn as i64)
+                })
+            }),
+        "target_selected_priority_positive" => get_active_creature(state, &ctx.target_player_id).map_or(false, |c| {
+            c.volatile_data
+                .get("selectedPriority")
+                .and_then(|v| v.as_i64())
+                .is_some_and(|priority| priority > 0)
+        }),
+        "target_has_not_acted_this_turn" => get_active_creature(state, &ctx.target_player_id).map_or(false, |c| {
+            !c.volatile_data
+                .get("actedThisTurn")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false)
+        }),
         _ => false,
     }
 }
@@ -1300,7 +2511,7 @@ fn compute_speed(state: &BattleState, player_id: &str, turn: u32) -> f32 {
     speed
 }
 
-fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &str, ctx: &mut EffectContext<'_>, is_secondary_hit: bool) -> (i32, bool) {
+fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &str, ctx: &mut EffectContext<'_>, is_secondary_hit: bool, use_defensive_stat: bool, offensive_stat: Option<&str>) -> (i32, bool) {
     let Some(attacker) = get_active_creature(state, attacker_id) else {
         return (0, false);
     };
@@ -1352,38 +2563,78 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
         (ctx.rng)() < crit_chance
     };
 
-    let mut move_power = run_ability_value_hook(
-        state,
-        attacker_id,
-        "onModifyPower",
-        power,
-        AbilityValueContext {
-            move_data: ctx.move_data,
-            category: Some(&category),
-            target: Some(target),
-            weather: None,
-            turn: ctx.turn,
-            stages: None,
-        },
-    );
+    let mut move_power = if ctx.ignore_ability {
+        power
+    } else {
+        run_ability_value_hook(
+            state,
+            attacker_id,
+            "onModifyPower",
+            power,
+            AbilityValueContext {
+                move_data: ctx.move_data,
+                category: Some(&category),
+                target: Some(target),
+                weather: None,
+                turn: ctx.turn,
+                stages: None,
+            },
+        )
+    };
 
-    move_power = run_ability_value_hook(
-        state,
-        target_id,
-        "onDefensivePower",
-        move_power,
-        AbilityValueContext {
-            move_data: ctx.move_data,
-            category: Some(&category),
-            target: Some(attacker),
-            weather: None,
-            turn: ctx.turn,
-            stages: None,
-        },
-    );
+    if !ctx.ignore_ability {
+        move_power = run_ability_value_hook(
+            state,
+            target_id,
+            "onDefensivePower",
+            move_power,
+            AbilityValueContext {
+                move_data: ctx.move_data,
+                category: Some(&category),
+                target: Some(attacker),
+                weather: None,
+                turn: ctx.turn,
+                stages: None,
+            },
+        );
+    }
+    if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
+        let weather = crate::core::abilities::get_weather(state);
+        match (weather, move_type) {
+            (Some(WeatherKind::Sun), "fire") => move_power *= 1.5,
+            (Some(WeatherKind::Sun), "water") => move_power *= 0.5,
+            (Some(WeatherKind::Rain), "water") => move_power *= 1.5,
+            (Some(WeatherKind::Rain), "fire") => move_power *= 0.5,
+            _ => {}
+        }
+        if move_type == "electric"
+            && state.field.global.iter().any(|effect| effect.id == "electric_terrain")
+            && is_grounded_for_field(attacker)
+        {
+            move_power *= 1.3;
+        }
+        if move_type == "grass"
+            && state.field.global.iter().any(|effect| effect.id == "grassy_terrain")
+            && is_grounded_for_field(attacker)
+        {
+            move_power *= 1.3;
+        }
+        if move_type == "dragon"
+            && state.field.global.iter().any(|effect| effect.id == "misty_terrain")
+            && is_grounded_for_field(target)
+        {
+            move_power *= 0.5;
+        }
+    }
 
-    let (offense_key, defense_key, stage_key_offense, stage_key_defense) = if category == "special" {
+    let (offense_key, defense_key, stage_key_offense, stage_key_defense) = if offensive_stat == Some("defense") {
+        (attacker.defense, target.defense, attacker.stages.def, target.stages.def)
+    } else if offensive_stat == Some("spDefense") || offensive_stat == Some("spd") {
+        (attacker.sp_defense, target.defense, attacker.stages.spd, target.stages.def)
+    } else if category == "special" && !use_defensive_stat {
         (attacker.sp_attack, target.sp_defense, attacker.stages.spa, target.stages.spd)
+    } else if category == "special" {
+        (attacker.sp_attack, target.defense, attacker.stages.spa, target.stages.def)
     } else {
         (attacker.attack, target.defense, attacker.stages.atk, target.stages.def)
     };
@@ -1405,7 +2656,7 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
     if attacker.ability.as_deref() == Some("unaware") {
         def_stage = 0;
     }
-    if target.ability.as_deref() == Some("unaware") {
+    if !ctx.ignore_ability && target.ability.as_deref() == Some("unaware") {
         atk_stage = 0;
     }
 
@@ -1427,20 +2678,24 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
         },
     );
 
-    let defense = run_ability_value_hook(
-        state,
-        target_id,
-        "onModifyDefense",
-        defense,
-        AbilityValueContext {
-            move_data: ctx.move_data,
-            category: Some(&category),
-            target: Some(attacker),
-            weather: None,
-            turn: ctx.turn,
-            stages: Some(def_stage),
-        },
-    );
+    let defense = if ctx.ignore_ability {
+        defense
+    } else {
+        run_ability_value_hook(
+            state,
+            target_id,
+            "onModifyDefense",
+            defense,
+            AbilityValueContext {
+                move_data: ctx.move_data,
+                category: Some(&category),
+                target: Some(attacker),
+                weather: None,
+                turn: ctx.turn,
+                stages: Some(def_stage),
+            },
+        )
+    };
 
     let level = attacker.level as f32;
     let base = (((2.0 * level / 5.0 + 2.0) * move_power * attack / defense) / 50.0 + 2.0).max(1.0);
@@ -1450,12 +2705,24 @@ fn calc_damage(power: i32, state: &BattleState, attacker_id: &str, target_id: &s
 
     let mut modifier = 1.0;
     if let Some(move_type) = ctx.move_data.and_then(|m| m.move_type.as_deref()) {
-        if attacker.types.iter().any(|t| t.eq_ignore_ascii_case(move_type)) {
+        let attacker_types = effective_types(attacker);
+        let target_types = effective_types(target);
+        if attacker_types.iter().any(|t| t.eq_ignore_ascii_case(move_type)) {
             modifier *= 1.5;
         }
-        let mut effectiveness = ctx.type_chart.effectiveness(move_type, &target.types);
+        let gravity_active = state.field.global.iter().any(|e| e.id == "gravity");
+        let magnet_rise_active = target.statuses.iter().any(|s| s.id == "magnet_rise");
+        if move_type == "ground" && magnet_rise_active && !gravity_active {
+            return (0, false);
+        }
+        let mut effectiveness = ctx.type_chart.effectiveness(move_type, &target_types);
+        if let Some(move_data) = ctx.move_data {
+            if move_data.id == "freeze_dry" && target_types.iter().any(|t| t == "water") {
+                effectiveness *= 4.0;
+            }
+        }
         if effectiveness == 0.0 {
-            if ctx.ignore_immunity {
+            if ctx.ignore_immunity || (gravity_active && move_type == "ground") {
                 effectiveness = 1.0;
             } else {
                 return (0, false);
@@ -1504,6 +2771,27 @@ pub fn has_item(creature: &crate::core::state::CreatureState) -> bool {
         .any(|s| s.id == "item" || s.id == "berry")
 }
 
+fn is_grounded_for_field(creature: &crate::core::state::CreatureState) -> bool {
+    (creature.statuses.iter().any(|s| s.id == "roosted")
+        || !effective_types(creature).iter().any(|t| t == "flying"))
+        && creature.ability.as_deref() != Some("levitate")
+        && !creature.statuses.iter().any(|s| s.id == "magnet_rise")
+}
+
+fn effective_types(creature: &crate::core::state::CreatureState) -> Vec<String> {
+    creature
+        .types
+        .iter()
+        .filter(|type_id| {
+            let removed_status = format!("type_removed_{}", type_id);
+            !creature.statuses.iter().any(|status| status.id == removed_status)
+                && !(type_id.as_str() == "flying"
+                    && creature.statuses.iter().any(|status| status.id == "roosted"))
+        })
+        .cloned()
+        .collect()
+}
+
 fn get_item_id(creature: &crate::core::state::CreatureState) -> Option<String> {
     if let Some(item) = &creature.item {
         return Some(item.clone());
@@ -1515,4 +2803,32 @@ fn get_item_id(creature: &crate::core::state::CreatureState) -> Option<String> {
         .and_then(|s| s.data.get("itemId"))
         .and_then(|v| v.as_str())
         .map(|s| s.to_string())
+}
+
+fn stat_list(effect: &Effect) -> Vec<String> {
+    effect
+        .data
+        .get("stats")
+        .and_then(|v| v.as_array())
+        .map(|values| {
+            values
+                .iter()
+                .filter_map(|value| value.as_str().map(|s| s.to_string()))
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+fn stage_value(stages: &crate::core::state::StatStages, stat: &str) -> i32 {
+    match stat {
+        "atk" => stages.atk,
+        "def" => stages.def,
+        "spa" => stages.spa,
+        "spd" => stages.spd,
+        "spe" => stages.spe,
+        "accuracy" | "acc" => stages.accuracy,
+        "evasion" | "eva" => stages.evasion,
+        "crit" => stages.crit,
+        _ => 0,
+    }
 }

@@ -4,13 +4,13 @@ type: dark
 category: physical
 pp: 15
 power: 70
-accuracy: 1.0
+accuracy: 1
 priority: 0
 description: 一瞬の　すきを　ついて 相手を　切りはらう。 急所に　当たりやすい。
 steps:
-- type: damage
-  power: 70
-  accuracy: 1.0
+  - type: damage
+    power: 70
+    accuracy: 1
 tags:
-- contact
+  - contact
 critRate: 1

@@ -15,7 +15,11 @@ steps:
   p: 0.5
   then:
   - type: apply_status
-    statusId: poison
+    statusId: toxic
     target: target
+    immuneTypes:
+    - poison
+    - steel
 tags:
 - contact
+- bite

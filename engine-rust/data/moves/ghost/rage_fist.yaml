@@ -4,7 +4,7 @@ type: ghost
 category: physical
 pp: 10
 power: 50
-accuracy: 1.0
+accuracy: 1
 priority: 0
 description: |-
   これまでに受けた攻撃1回につき、威力が50上がる(最大威力350)。手持ちに戻っても、リセットされない。
@@ -12,6 +12,9 @@ description: |-
 steps:
 - type: damage
   power: 50
-  accuracy: 1.0
+  accuracy: 1
+  powerPerHitTaken: 50
+  maxPower: 350
 tags:
 - contact
+- punch

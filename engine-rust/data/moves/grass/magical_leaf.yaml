@@ -10,4 +10,6 @@ description: 相手を　追跡する 不思議な　はっぱを まきちら�
 steps:
 - type: damage
   power: 60
-tags: []
+  accuracy: 1.0
+tags:
+- always_hit

@@ -15,7 +15,9 @@ steps:
   p: 0.1
   then:
   - type: modify_stage
-    target: self
+    target: target
     stages:
       spd: -1
-tags: []
+tags:
+- sound
+- bypass_substitute

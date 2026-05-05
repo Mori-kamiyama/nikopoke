@@ -3,6 +3,10 @@ name: だくりゅう
 type: water
 category: special
 pp: 10
+power: 90
+accuracy: 0.85
+priority: 0
+description: 30%の確率で相手の命中率を1段階下げる。
 steps:
 - type: damage
   power: 90
@@ -14,3 +18,4 @@ steps:
     target: target
     stages:
       accuracy: -1
+tags: []

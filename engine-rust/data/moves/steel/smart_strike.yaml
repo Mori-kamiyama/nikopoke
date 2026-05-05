@@ -12,3 +12,4 @@ steps:
   power: 70
 tags:
 - contact
+- always_hit

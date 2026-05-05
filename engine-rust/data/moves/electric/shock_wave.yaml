@@ -10,4 +10,6 @@ description: 電撃を　素早く 相手に　浴びせる。 攻撃は　必�
 steps:
 - type: damage
   power: 60
-tags: []
+  accuracy: 1.0
+tags:
+- always_hit

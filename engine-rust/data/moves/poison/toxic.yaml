@@ -9,6 +9,10 @@ priority: 0
 description: 相手を　猛毒の　状態に　する。 ターンが　すすむほど 毒の　ダメージが　増えていく。
 steps:
 - type: apply_status
-  statusId: poison
+  statusId: toxic
   target: target
+  chance: 0.9
+  immuneTypes:
+  - poison
+  - steel
 tags: []

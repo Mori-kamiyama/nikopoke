@@ -11,4 +11,5 @@ steps:
 - type: apply_field_status
   statusId: reflect
   duration: 5
+  side: true
 tags: []

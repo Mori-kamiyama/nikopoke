@@ -3,6 +3,9 @@ name: れいとうビーム
 type: ice
 category: special
 pp: 10
+power: 90
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 90
@@ -12,3 +15,6 @@ steps:
   then:
   - type: apply_status
     statusId: freeze
+    target: target
+tags:
+- beam

@@ -8,13 +8,7 @@ accuracy: 0.9
 priority: 0
 description: ３回連続で　キックを　くりだして 攻撃する。　技が　当たるたびに 威力は　あがる。
 steps:
-- type: repeat
-  times:
-    min: 3
-    max: 3
-  steps:
-  - type: damage
-    power: 20
-    accuracy: 0.9
+- type: triple_axel_effect
+  accuracy: 0.9
 tags:
 - contact

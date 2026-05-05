@@ -3,6 +3,10 @@ name: かえんボール
 type: fire
 category: physical
 pp: 5
+power: 120
+accuracy: 0.9
+priority: 0
+description: 攻撃し、10%で相手を『やけど』状態にする。
 steps:
 - type: damage
   power: 120
@@ -16,3 +20,5 @@ steps:
 - type: remove_status
   statusId: freeze
   target: self
+tags:
+- ball

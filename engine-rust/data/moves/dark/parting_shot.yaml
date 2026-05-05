@@ -13,4 +13,6 @@ steps:
   stages:
     atk: -1
     spa: -1
-tags: []
+- type: self_switch
+tags:
+- sound

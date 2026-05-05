@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: ハッピータイムの　技を　使うと 戦闘の　あとで　もらえる お金が　倍になる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: log
+  message: ハッピータイムで 会場が 盛り上がった！
 tags: []

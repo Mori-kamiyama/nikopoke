@@ -11,4 +11,5 @@ steps:
 - type: apply_status
   statusId: sleep
   target: target
+  chance: 0.6
 tags: []

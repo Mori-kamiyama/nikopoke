@@ -4,12 +4,14 @@ type: normal
 category: physical
 pp: 5
 power: 70
-accuracy: 1.0
+accuracy: 1
 priority: 0
 description: 倒れた　味方の　かたきを　討つ。 前の　ターンに　味方が 倒されていると　威力が　あがる。
 steps:
 - type: damage
   power: 70
-  accuracy: 1.0
+  powerMultiplierIf:
+    type: ally_fainted_last_turn
+  powerMultiplier: 2
 tags:
 - contact

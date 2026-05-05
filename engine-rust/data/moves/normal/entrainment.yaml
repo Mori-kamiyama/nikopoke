@@ -8,6 +8,7 @@ accuracy: 1.0
 priority: 0
 description: 不思議な　リズムで　おどる。 動きを　まねさせて　自分と　相手の 特性を　同じに　する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: set_ability
+  target: target
+  copyUserAbility: true
 tags: []

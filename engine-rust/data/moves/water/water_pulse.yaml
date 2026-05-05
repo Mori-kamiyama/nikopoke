@@ -17,4 +17,5 @@ steps:
   - type: apply_status
     statusId: confusion
     target: target
-tags: []
+tags:
+- pulse

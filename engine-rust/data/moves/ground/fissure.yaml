@@ -10,4 +10,7 @@ description: 地割れの　裂け目に 相手を　落として　攻撃する
 steps:
 - type: ohko
   baseAccuracy: 0.3
-tags: []
+  levelScaling: true
+  respectTypeImmunity: true
+tags:
+- one_hit_ko

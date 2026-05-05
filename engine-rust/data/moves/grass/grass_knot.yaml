@@ -8,6 +8,5 @@ accuracy: 1.0
 priority: 0
 description: 草を　からませて　相手を 転ばせる。相手が　重いほど 威力が　あがる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: weight_based_damage
 tags: []

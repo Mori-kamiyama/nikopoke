@@ -2,7 +2,15 @@ id: night_burst
 name: ナイトバースト
 type: dark
 category: special
+pp: 10
+power: 85
+accuracy: 0.95
+priority: 0
+description: 暗黒の　衝撃波を とばして　相手を　攻撃する。 命中率を　さげることが　ある。
 steps:
+- type: damage
+  power: 85
+  accuracy: 0.95
 - type: chance
   p: 0.4
   then:
@@ -10,3 +18,4 @@ steps:
     target: target
     stages:
       accuracy: -1
+tags: []

@@ -307,7 +307,7 @@ function mockAbilitiesFor(species: Species): UsageItem[] {
     }));
 }
 
-function getAbilityLabel(abilityId: string): string {
+export function getAbilityLabel(abilityId: string): string {
     return ABILITY_LABELS[abilityId] ?? abilityId;
 }
 

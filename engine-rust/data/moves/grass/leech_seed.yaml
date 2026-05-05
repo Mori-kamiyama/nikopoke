@@ -8,6 +8,12 @@ accuracy: 0.9
 priority: 0
 description: 植えつけた　相手の　ＨＰを 毎ターン　少しだけ　吸い取り 自分の　ＨＰを　回復する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: leech_seed
+  target: target
+  chance: 0.9
+  immuneTypes:
+  - grass
+  data:
+    sourceId: self
 tags: []

@@ -8,6 +8,16 @@ accuracy: 1.0
 priority: 0
 description: 電気の　塊を　相手に ぶつける。相手より　素早さが 速いほど　威力が　あがる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
-tags: []
+- type: speed_based_damage
+  basePower: 40
+  thresholds:
+  - ratio: 4.0
+    power: 150
+  - ratio: 3.0
+    power: 120
+  - ratio: 2.0
+    power: 80
+  - ratio: 1.0
+    power: 60
+tags:
+- ball

@@ -8,6 +8,7 @@ accuracy: 1.0
 priority: 0
 description: 心を　なやませる　タネを 植えつける。相手を　眠れなくして 特性を　ふみんに　する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: set_ability
+  target: target
+  abilityId: insomnia
 tags: []

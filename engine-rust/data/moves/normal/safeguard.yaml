@@ -8,6 +8,8 @@ accuracy: null
 priority: 0
 description: ５ターンの　あいだ 不思議な　力に　守られて 状態異常に　ならなくなる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: safeguard
+  duration: 5
+  side: true
 tags: []

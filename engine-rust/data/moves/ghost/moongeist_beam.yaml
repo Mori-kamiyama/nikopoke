@@ -11,4 +11,5 @@ steps:
 - type: damage
   power: 100
   accuracy: 1.0
-tags: []
+tags:
+- ignore_ability

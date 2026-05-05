@@ -10,4 +10,7 @@ description: 体の　奥から　波導の　力を 相手に　うち放つ。
 steps:
 - type: damage
   power: 80
-tags: []
+  accuracy: 1.0
+tags:
+- pulse
+- always_hit

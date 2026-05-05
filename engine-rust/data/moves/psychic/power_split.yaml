@@ -8,6 +8,10 @@ accuracy: null
 priority: 0
 description: 超能力で　自分と　相手の 攻撃と　特攻を　たして 半分に　わける。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: average_stages
+  stats:
+  - atk
+  - spa
+- type: log
+  message: "NOTE: パワーシェアは本来ランクではなく実数値のこうげき・とくこうを平均化する。現在はランク平均として処理。"
 tags: []

@@ -9,13 +9,12 @@ priority: 0
 description: 強い　電撃を 相手に　浴びせて　攻撃する。 まひ状態に　することが　ある。
 steps:
 - type: damage
-  power: 100
+  power: 90
   accuracy: 1
 - type: chance
   p: 0.1
   then:
   - type: apply_status
-    statusId: やけど
-    target: 相手
-    chance: 1
+    statusId: paralysis
+    target: target
 tags: []

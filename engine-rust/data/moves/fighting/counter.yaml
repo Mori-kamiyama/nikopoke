@@ -8,7 +8,6 @@ accuracy: 1.0
 priority: -5
 description: 相手から　受けた　物理攻撃の ダメージを　２倍に　して 同じ　相手に　返す。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: counter_effect
 tags:
 - contact

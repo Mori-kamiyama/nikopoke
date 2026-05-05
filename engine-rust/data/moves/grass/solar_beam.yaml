@@ -8,7 +8,17 @@ accuracy: 1.0
 priority: 0
 description: １ターン目に　光を　いっぱいに　集め ２ターン目に　光の　束を 発射して　攻撃する。
 steps:
-- type: damage
+- type: charge_attack
   power: 120
   accuracy: 1.0
-tags: []
+  skipChargeIf:
+    type: weather_is_sunny
+  powerMultiplierIf:
+    type: any
+    conditions:
+    - type: weather_is_raining
+    - type: weather_is_hail
+    - type: weather_is_sandstorm
+  powerMultiplier: 0.5
+tags:
+- charge

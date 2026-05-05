@@ -10,6 +10,9 @@ description: 軽やかに　相手を　攻撃する。 自分が　道具を　
 steps:
 - type: damage
   power: 55
+  powerMultiplierIf:
+    type: user_has_no_item
+  powerMultiplier: 2
   accuracy: 1.0
 tags:
 - contact

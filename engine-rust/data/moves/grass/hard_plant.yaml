@@ -7,7 +7,9 @@ steps:
 - type: damage
   power: 150
   accuracy: 0.9
-- type: wait
-  turns: 1
-  timing: turn_start
-  steps: []
+- type: apply_status
+  statusId: recharge
+  target: self
+  duration: 1
+tags:
+- recharge

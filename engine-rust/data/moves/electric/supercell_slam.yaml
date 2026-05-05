@@ -13,5 +13,7 @@ steps:
 - type: damage
   power: 100
   accuracy: 0.95
+- type: crash_if_no_damage
+  ratioMaxHp: 0.5
 tags:
 - contact

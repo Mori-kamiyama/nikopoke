@@ -8,6 +8,9 @@ accuracy: null
 priority: 0
 description: 5ターンの間、天気を『ゆき』にする(『こおり』タイプのポケモンは、『ぼうぎょ』が1.5倍になる)。
 steps:
-- type: damage
-  power: 0
+- type: apply_field_status
+  statusId: snow
+  duration: 5
+  data:
+    boost_ice_def: 1.5
 tags: []

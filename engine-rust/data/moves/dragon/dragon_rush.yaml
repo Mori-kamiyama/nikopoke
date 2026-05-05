@@ -11,6 +11,15 @@ steps:
 - type: damage
   power: 100
   accuracy: 0.75
+  powerMultiplierIf:
+    type: target_has_status
+    statusId: minimize
+  powerMultiplier: 2
+  accuracyIf:
+  - if:
+      type: target_has_status
+      statusId: minimize
+    accuracy: 1.0
 - type: chance
   p: 0.2
   then:

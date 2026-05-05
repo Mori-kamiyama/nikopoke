@@ -8,7 +8,6 @@ accuracy: 1.0
 priority: 0
 description: 足を　強く　けり 相手を　転ばせて　攻撃する。 相手が　重いほど　威力が　あがる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: weight_based_damage
 tags:
 - contact

@@ -2,16 +2,19 @@ id: mist_burst
 name: ミストバースト
 type: fairy
 category: special
+pp: 5
+power: 100
+accuracy: 1.0
+priority: 0
+description: 攻撃後、自分が『ひんし』状態になる。ミストフィールド下で威力が上がる。
 steps:
 - type: damage
   power: 100
-- type: apply_status
-  statusId: fainted
-  target: self
-- type: conditional
-  if:
+  powerMultiplierIf:
     type: field_has_status
     statusId: misty_terrain
-  then:
-  - type: damage
-    power: 150
+  powerMultiplier: 1.5
+- type: damage_ratio
+  target: self
+  ratioCurrentHp: 1.0
+tags: []

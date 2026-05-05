@@ -11,6 +11,7 @@ steps:
 - type: delay
   target: self
   turns: 1
+  timing: turn_end
   steps:
   - type: damage_ratio
     ratioMaxHp: -0.5

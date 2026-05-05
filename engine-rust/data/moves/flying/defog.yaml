@@ -12,4 +12,30 @@ steps:
   target: target
   stages:
     evasion: -1
+- type: remove_field_status
+  statusId: mist
+- type: remove_field_status
+  statusId: light_screen
+- type: remove_field_status
+  statusId: reflect
+- type: remove_field_status
+  statusId: safeguard
+- type: remove_field_status
+  statusId: aurora_veil
+- type: remove_field_status
+  statusId: spikes
+- type: remove_field_status
+  statusId: toxic_spikes
+- type: remove_field_status
+  statusId: stealth_rock
+- type: remove_field_status
+  statusId: sticky_web
+- type: remove_field_status
+  statusId: electric_terrain
+- type: remove_field_status
+  statusId: grassy_terrain
+- type: remove_field_status
+  statusId: psychic_terrain
+- type: remove_field_status
+  statusId: misty_terrain
 tags: []

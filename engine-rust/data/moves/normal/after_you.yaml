@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: 相手の　行動を　サポートして 自分の　行動の　あとに 続けて　動けるように　する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: after_you_effect
 tags: []

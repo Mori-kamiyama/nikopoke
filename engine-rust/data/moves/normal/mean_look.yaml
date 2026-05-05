@@ -8,6 +8,9 @@ accuracy: null
 priority: 0
 description: 吸いこまれるような　黒い　まなざしで じっと　みつめて　相手を 戦闘から　逃げられなくする。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: trapped
+  target: target
+  immuneTypes:
+  - ghost
 tags: []

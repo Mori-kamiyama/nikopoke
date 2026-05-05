@@ -10,4 +10,5 @@ description: 相手の　周りに　ねばねばした ネットを　はりめ
 steps:
 - type: apply_field_status
   statusId: sticky_web
+  side: false
 tags: []

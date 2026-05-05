@@ -15,7 +15,8 @@ steps:
   p: 0.1
   then:
   - type: modify_stage
-    target: self
+    target: target
     stages:
       atk: -1
-tags: []
+tags:
+- beam

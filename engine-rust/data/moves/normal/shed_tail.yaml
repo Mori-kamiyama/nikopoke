@@ -11,6 +11,11 @@ description: |-
   『みがわり』状態のまま手持ちのポケモンに入れ替わる。
   『みがわり』のHPは最大HPの1/4になる。
 steps:
-- type: damage
-  power: 0
+- type: damage_ratio
+  target: self
+  ratioMaxHp: 0.5
+- type: apply_status
+  statusId: substitute
+  target: self
+- type: self_switch
 tags: []

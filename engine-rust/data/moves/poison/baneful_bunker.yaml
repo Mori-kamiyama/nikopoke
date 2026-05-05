@@ -9,4 +9,6 @@ priority: 4
 description: 相手の　攻撃を　防ぐと 同時に　触れた　相手に 毒を　与えてしまう。
 steps:
 - type: protect
-tags: []
+  statusId: baneful_bunker
+tags:
+- protect

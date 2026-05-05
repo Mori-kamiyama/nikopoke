@@ -3,8 +3,16 @@ name: ワイドブレイカー
 type: dragon
 category: physical
 pp: 15
+power: 60
+accuracy: 1.0
+priority: 0
 steps:
+- type: damage
+  power: 60
+  accuracy: 1.0
 - type: modify_stage
   target: target
   stages:
     atk: -1
+tags:
+- contact

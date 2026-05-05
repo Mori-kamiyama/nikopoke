@@ -8,7 +8,61 @@ accuracy: 1.0
 priority: 0
 description: たたみかける　ように　攻撃する。 状態異常の　相手に 大きな　ダメージを　与える。
 steps:
-- type: damage
-  power: 65
-  accuracy: 1.0
+- type: conditional
+  if:
+    type: target_has_status
+    statusId: poison
+  then:
+  - type: damage
+    power: 130
+    accuracy: 1.0
+  else:
+  - type: conditional
+    if:
+      type: target_has_status
+      statusId: toxic
+    then:
+    - type: damage
+      power: 130
+      accuracy: 1.0
+    else:
+    - type: conditional
+      if:
+        type: target_has_status
+        statusId: burn
+      then:
+      - type: damage
+        power: 130
+        accuracy: 1.0
+      else:
+      - type: conditional
+        if:
+          type: target_has_status
+          statusId: paralysis
+        then:
+        - type: damage
+          power: 130
+          accuracy: 1.0
+        else:
+        - type: conditional
+          if:
+            type: target_has_status
+            statusId: sleep
+          then:
+          - type: damage
+            power: 130
+            accuracy: 1.0
+          else:
+          - type: conditional
+            if:
+              type: target_has_status
+              statusId: freeze
+            then:
+            - type: damage
+              power: 130
+              accuracy: 1.0
+            else:
+            - type: damage
+              power: 65
+              accuracy: 1.0
 tags: []

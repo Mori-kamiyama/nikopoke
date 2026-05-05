@@ -3,7 +3,12 @@ name: えだづき
 type: grass
 category: physical
 pp: 40
+power: 40
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 40
-  accuracy: 1
+  accuracy: 1.0
+tags:
+- contact

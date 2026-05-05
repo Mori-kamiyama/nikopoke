@@ -3,10 +3,10 @@ name: いたみわけ
 type: normal
 category: status
 pp: 20
+power: null
+accuracy: null
+priority: 0
+description: お互いのHPを足して2で割り、それぞれのHPにする。
 steps:
-- type: damage_ratio
-  ratioMaxHp: -0.5
-  target: self
-- type: damage_ratio
-  ratioMaxHp: -0.5
-  target: target
+- type: pain_split_effect
+tags: []

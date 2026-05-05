@@ -8,7 +8,7 @@ accuracy: 0.9
 priority: 0
 description: 相手のHPを残りHPの半分にする。タイプ相性の影響を受けない。
 steps:
-- type: damage
-  power: 1
-  accuracy: 0.9
+  - type: damage_ratio
+    ratioCurrentHp: 0.5
+    target: target
 tags: []

@@ -17,4 +17,5 @@ steps:
   - type: apply_status
     statusId: burn
     target: target
-tags: []
+tags:
+- thaws_user

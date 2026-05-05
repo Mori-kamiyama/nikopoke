@@ -11,4 +11,9 @@ steps:
 - type: apply_status
   statusId: paralysis
   target: target
-tags: []
+  chance: 0.75
+  immuneTypes:
+  - grass
+  - electric
+tags:
+- powder

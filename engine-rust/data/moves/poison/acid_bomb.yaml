@@ -3,6 +3,9 @@ name: アシッドボム
 type: poison
 category: special
 pp: 20
+power: 40
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 40
@@ -11,3 +14,4 @@ steps:
   target: target
   stages:
     spd: -2
+tags: []

@@ -17,4 +17,8 @@ steps:
   - type: apply_status
     statusId: poison
     target: target
-tags: []
+    immuneTypes:
+    - poison
+    - steel
+tags:
+- bomb

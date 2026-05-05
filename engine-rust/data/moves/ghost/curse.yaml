@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: 使う　ポケモンが ゴーストタイプと　それ以外　とでは 効果が　変わる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: curse_effect
 tags: []

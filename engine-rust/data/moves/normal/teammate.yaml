@@ -3,8 +3,12 @@ name: なかまづくり
 type: normal
 category: status
 pp: 15
+power: null
+accuracy: 1.0
+priority: 0
+description: 相手の特性を自分と同じにする。
 steps:
-- type: replace_status
-  from: ability
-  to: ability
+- type: set_ability
   target: target
+  copyUserAbility: true
+tags: []

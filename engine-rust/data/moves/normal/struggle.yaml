@@ -10,5 +10,9 @@ description: 自分の　ＰＰが　なくなると あがいて　相手を　
 steps:
 - type: damage
   power: 50
+- type: damage_ratio
+  target: self
+  ratioMaxHp: 0.25
 tags:
 - contact
+- recoil

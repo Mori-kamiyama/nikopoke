@@ -3,13 +3,18 @@ name: おどろかす
 type: ghost
 category: physical
 pp: 15
+power: 30
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 30
-  accuracy: 1
+  accuracy: 1.0
 - type: chance
   p: 0.3
   then:
   - type: apply_status
     statusId: flinch
     target: target
+tags:
+- contact

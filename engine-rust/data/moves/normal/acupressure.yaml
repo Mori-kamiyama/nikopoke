@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: つぼおしで　体を　活性化させる。 能力の　どれか　１つを ぐーんと　あげる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: random_stage_boost
 tags: []

@@ -3,9 +3,11 @@ name: トーチカ
 type: poison
 category: status
 pp: 10
+power: null
+accuracy: null
 priority: 4
 steps:
 - type: protect
-- type: apply_status
-  statusId: poison
-  chance: 1
+  statusId: baneful_bunker
+tags:
+- protect

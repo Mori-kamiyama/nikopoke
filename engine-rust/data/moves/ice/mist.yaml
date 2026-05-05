@@ -8,6 +8,8 @@ accuracy: null
 priority: 0
 description: 白い霧で　体を　おおう。 ５ターンの　あいだ　相手に 能力を　さげられなく　なる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_field_status
+  statusId: mist
+  duration: 5
+  side: true
 tags: []

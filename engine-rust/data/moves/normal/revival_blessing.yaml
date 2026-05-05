@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: 手持ちの『ひんし』状態のポケモンを、最大HPの半分だけ回復させる。
 steps:
-- type: damage
-  power: 0
+- type: log
+  message: さいきのいのりは まだ実装されていない！
 tags: []

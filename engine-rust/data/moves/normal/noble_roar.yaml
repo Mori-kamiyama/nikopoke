@@ -13,4 +13,5 @@ steps:
   stages:
     atk: -1
     spa: -1
-tags: []
+tags:
+- sound

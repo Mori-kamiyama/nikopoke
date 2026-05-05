@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: 自分は　ひんしに　なるが 控えから　でてくる　ポケモンの 状態異常と　ＨＰを　回復する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: healing_wish_effect
 tags: []

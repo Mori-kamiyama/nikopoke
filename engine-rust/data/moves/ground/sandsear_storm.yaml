@@ -11,4 +11,14 @@ steps:
 - type: damage
   power: 100
   accuracy: 0.8
+  accuracyIf:
+  - if:
+      type: weather_is_raining
+    accuracy: 1.0
+- type: chance
+  p: 0.2
+  then:
+  - type: apply_status
+    statusId: burn
+    target: target
 tags: []

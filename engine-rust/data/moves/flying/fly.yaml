@@ -8,8 +8,10 @@ accuracy: 0.95
 priority: 0
 description: １ターン目で　空へ　飛び ２ターン目に　相手を　攻撃する。 知っている　街に　飛ぶことも　できる。
 steps:
-- type: damage
+- type: charge_attack
   power: 90
   accuracy: 0.95
+  semiStatusId: fly
 tags:
 - contact
+- charge

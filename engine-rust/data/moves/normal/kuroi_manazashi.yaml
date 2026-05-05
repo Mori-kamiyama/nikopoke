@@ -3,10 +3,14 @@ name: くろいまなざし
 type: normal
 category: status
 pp: 5
+power: null
+accuracy: null
+priority: 0
+description: 相手は交代できなくなる。
 steps:
 - type: apply_status
-  statusId: lock_move
-  chance: 1
-  data:
-    immuneTypes:
-    - ghost
+  statusId: trapped
+  target: target
+  immuneTypes:
+  - ghost
+tags: []

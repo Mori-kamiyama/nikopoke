@@ -11,6 +11,13 @@ steps:
 - type: damage
   power: 110
   accuracy: 0.7
+  accuracyIf:
+  - if:
+      type: weather_is_raining
+    accuracy: 1.0
+  - if:
+      type: weather_is_sunny
+    accuracy: 0.5
 - type: chance
   p: 0.3
   then:

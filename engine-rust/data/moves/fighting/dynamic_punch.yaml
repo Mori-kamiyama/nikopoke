@@ -16,3 +16,4 @@ steps:
   target: target
 tags:
 - contact
+- punch

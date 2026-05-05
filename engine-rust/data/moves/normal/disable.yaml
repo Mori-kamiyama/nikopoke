@@ -8,6 +8,7 @@ accuracy: 1.0
 priority: 0
 description: 相手の　動きを　とめて 直前に　だしていた　技を ４ターンの　あいだ　使えなくする。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: disable_last_move
+  target: target
+  duration: 4
 tags: []

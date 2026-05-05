@@ -10,8 +10,9 @@ description: |-
   自分のHPを最大HPの半分だけ減らす代わりに、
   自分の『こうげき』『とくこう』『すばやさ』ランクが2段階ずつ上がる。
 steps:
-- type: damage
-  power: 0
+- type: damage_ratio
+  target: self
+  ratioMaxHp: 0.5
 - type: modify_stage
   target: self
   stages:

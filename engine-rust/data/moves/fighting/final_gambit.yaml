@@ -8,6 +8,5 @@ accuracy: 1.0
 priority: 0
 description: 命懸けで　相手を　攻撃する。 自分は　ひんしに　なるが　相手に ＨＰ分の　ダメージを　与える。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: final_gambit_effect
 tags: []

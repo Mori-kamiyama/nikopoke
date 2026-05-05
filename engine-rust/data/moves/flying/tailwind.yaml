@@ -11,4 +11,5 @@ steps:
 - type: apply_field_status
   statusId: tailwind
   duration: 4
+  side: true
 tags: []

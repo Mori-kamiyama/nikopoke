@@ -79,7 +79,7 @@ pub fn run_field_hooks(
     let mut event_transforms = Vec::new();
 
     for effect in &state.field.global {
-        let result = match_field_effect(&working_state, hook, effect.id.as_str(), effect, &mut StatusHookContext {
+        let result = match_field_effect(&working_state, hook, effect.id.as_str(), effect, None, &mut StatusHookContext {
             rng: ctx.rng,
             action: ctx.action,
             move_data: ctx.move_data,
@@ -90,6 +90,22 @@ pub fn run_field_hooks(
         }
         events.extend(result.events);
         event_transforms.extend(result.event_transforms);
+    }
+
+    for (side_id, effects) in &state.field.sides {
+        for effect in effects {
+            let result = match_field_effect(&working_state, hook, effect.id.as_str(), effect, Some(side_id.as_str()), &mut StatusHookContext {
+                rng: ctx.rng,
+                action: ctx.action,
+                move_data: ctx.move_data,
+                type_chart: ctx.type_chart,
+            });
+            if let Some(next) = result.state {
+                working_state = next;
+            }
+            events.extend(result.events);
+            event_transforms.extend(result.event_transforms);
+        }
     }
 
     StatusHookResult {
@@ -106,6 +122,7 @@ fn match_field_effect(
     hook: &str,
     status_id: &str,
     status: &crate::core::state::FieldEffect,
+    owner_side: Option<&str>,
     ctx: &mut StatusHookContext<'_>,
 ) -> StatusHookResult {
     // グラスフィールド回復は特別処理
@@ -142,7 +159,13 @@ fn match_field_effect(
     let pseudo_status = Status {
         id: status_id.to_string(),
         remaining_turns: status.remaining_turns,
-        data: status.data.clone(),
+        data: {
+            let mut data = status.data.clone();
+            if let Some(owner_side) = owner_side {
+                data.insert("ownerSideId".to_string(), Value::String(owner_side.to_string()));
+            }
+            data
+        },
     };
     match_status(state, "", hook, &pseudo_status, ctx)
 }
@@ -154,6 +177,22 @@ fn match_status(
     status: &Status,
     ctx: &mut StatusHookContext<'_>,
 ) -> StatusHookResult {
+    if status.id.starts_with("charging_") && hook == "onBeforeAction" {
+        if let Some(move_id) = status.data.get("moveId").and_then(|v| v.as_str()) {
+            if let Some(action) = ctx.action {
+                let mut new_action = action.clone();
+                new_action.move_id = Some(move_id.to_string());
+                return StatusHookResult {
+                    override_action: Some(new_action),
+                    events: vec![BattleEvent::Log {
+                        message: format!("{}は 力を 解き放つ！", get_active_creature(state, player_id).unwrap().name),
+                        meta: Map::new(),
+                    }],
+                    ..Default::default()
+                };
+            }
+        }
+    }
     match status.id.as_str() {
         "burn" => match hook {
             "onStatusDamage" => {
@@ -324,6 +363,25 @@ fn match_status(
         "freeze" => match hook {
             "onBeforeAction" => {
                 let active = get_active_creature(state, player_id).unwrap();
+                if ctx
+                    .move_data
+                    .is_some_and(|move_data| move_data.tags.iter().any(|tag| tag == "thaws_user"))
+                {
+                    return StatusHookResult {
+                        events: vec![
+                            BattleEvent::RemoveStatus {
+                                target_id: player_id.to_string(),
+                                status_id: "freeze".to_string(),
+                                meta: Map::new(),
+                            },
+                            BattleEvent::Log {
+                                message: format!("{}の こおりが とけた！", active.name),
+                                meta: Map::new(),
+                            },
+                        ],
+                        ..Default::default()
+                    };
+                }
                 if (ctx.rng)() < 0.2 {
                     StatusHookResult {
                         events: vec![
@@ -406,10 +464,68 @@ fn match_status(
                         target_id: Some(player_id.to_string()),
                         except_source_id: Some(player_id.to_string()),
                         require_absent_meta: Some("bypassProtect".to_string()),
+                        require_present_meta: None,
                         to: vec![BattleEvent::Log {
                             message: format!("{}は 攻撃から 身を 守った！", active.name),
                             meta: Map::new(),
                         }],
+                        priority: 0,
+                    });
+                }
+                StatusHookResult {
+                    event_transforms: transforms,
+                    ..Default::default()
+                }
+            }
+            _ => StatusHookResult::default(),
+        },
+        "baneful_bunker" => match hook {
+            "onEventTransform" => {
+                let active = get_active_creature(state, player_id).unwrap();
+                let source_id = state
+                    .players
+                    .iter()
+                    .find(|player| player.id != player_id)
+                    .map(|player| player.id.clone())
+                    .unwrap_or_default();
+                let mut transforms = Vec::new();
+                let types = ["damage", "apply_status", "modify_stage"];
+                for t in types {
+                    let mut replacement = vec![BattleEvent::Log {
+                        message: format!("{}は 攻撃から 身を 守った！", active.name),
+                        meta: Map::new(),
+                    }];
+                    if t == "damage" && !source_id.is_empty() {
+                        replacement.push(BattleEvent::ApplyStatus {
+                            target_id: source_id.clone(),
+                            status_id: "poison".to_string(),
+                            duration: None,
+                            stack: false,
+                            data: HashMap::new(),
+                            meta: Map::new(),
+                        });
+                        transforms.push(EventTransform {
+                            transform_type: "replace_event".to_string(),
+                            from: Some(t.to_string()),
+                            target_type: None,
+                            target_id: Some(player_id.to_string()),
+                            except_source_id: Some(player_id.to_string()),
+                            require_absent_meta: Some("bypassProtect".to_string()),
+                            require_present_meta: Some("contact".to_string()),
+                            to: replacement.clone(),
+                            priority: 1,
+                        });
+                        replacement.truncate(1);
+                    }
+                    transforms.push(EventTransform {
+                        transform_type: "replace_event".to_string(),
+                        from: Some(t.to_string()),
+                        target_type: None,
+                        target_id: Some(player_id.to_string()),
+                        except_source_id: Some(player_id.to_string()),
+                        require_absent_meta: Some("bypassProtect".to_string()),
+                        require_present_meta: None,
+                        to: replacement,
                         priority: 0,
                     });
                 }
@@ -433,6 +549,7 @@ fn match_status(
                         target_id: Some(player_id.to_string()),
                         except_source_id: Some(player_id.to_string()),
                         require_absent_meta: Some("bypassSubstitute".to_string()),
+                        require_present_meta: None,
                         to: vec![BattleEvent::Log {
                             message: format!("{}の みがわりが 攻撃を 受けた！", active.name),
                             meta: Map::new(),
@@ -549,6 +666,88 @@ fn match_status(
             }
             _ => StatusHookResult::default(),
         },
+        "torment" => match hook {
+            "onBeforeAction" => {
+                let Some(action) = ctx.action else {
+                    return StatusHookResult::default();
+                };
+                let Some(active) = get_active_creature(state, player_id) else {
+                    return StatusHookResult::default();
+                };
+                let last_move = active.volatile_data.get("lastMove").and_then(|v| v.as_str());
+                if let (Some(last_move), Some(current_move)) = (last_move, action.move_id.as_deref()) {
+                    if last_move == current_move {
+                        return StatusHookResult {
+                            prevent_action: true,
+                            events: vec![BattleEvent::Log {
+                                message: format!("{}は いちゃもんで 同じ技を 連続で 出せない！", active.name),
+                                meta: Map::new(),
+                            }],
+                            ..Default::default()
+                        };
+                    }
+                }
+                StatusHookResult::default()
+            }
+            _ => StatusHookResult::default(),
+        },
+        "throat_chop" => match hook {
+            "onBeforeAction" => {
+                let Some(move_data) = ctx.move_data else {
+                    return StatusHookResult::default();
+                };
+                let is_sound_move = move_data.tags.iter().any(|tag| tag == "sound");
+                if !is_sound_move {
+                    return StatusHookResult::default();
+                }
+                let active = get_active_creature(state, player_id).unwrap();
+                let move_name = move_data.name.clone().unwrap_or_else(|| move_data.id.clone());
+                StatusHookResult {
+                    prevent_action: true,
+                    events: vec![BattleEvent::Log {
+                        message: format!("{}は じごくづきで {}を 出せない！", active.name, move_name),
+                        meta: Map::new(),
+                    }],
+                    ..Default::default()
+                }
+            }
+            _ => StatusHookResult::default(),
+        },
+        "trapped" => match hook {
+            "onTrap" => StatusHookResult {
+                prevent_action: true,
+                ..Default::default()
+            },
+            _ => StatusHookResult::default(),
+        },
+        "mist" => match hook {
+            "onEventTransform" => {
+                let owner_side = status
+                    .data
+                    .get("ownerSideId")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or(player_id)
+                    .to_string();
+                StatusHookResult {
+                    event_transforms: vec![EventTransform {
+                        transform_type: "replace_event".to_string(),
+                        from: Some("modify_stage".to_string()),
+                        target_type: None,
+                        target_id: Some(owner_side),
+                        except_source_id: Some(player_id.to_string()),
+                        require_absent_meta: None,
+                        require_present_meta: None,
+                        to: vec![BattleEvent::Log {
+                            message: "しろいきりが 能力変化を 防いだ！".to_string(),
+                            meta: Map::new(),
+                        }],
+                        priority: 1,
+                    }],
+                    ..Default::default()
+                }
+            }
+            _ => StatusHookResult::default(),
+        },
         "leech_seed" => match hook {
             "onLeechSeed" => {
                 let source_id = status.data.get("sourceId").and_then(|v| v.as_str());
@@ -573,6 +772,30 @@ fn match_status(
                         BattleEvent::Damage {
                             target_id: source_id.to_string(),
                             amount: -damage,
+                            meta: Map::new(),
+                        },
+                    ],
+                    ..Default::default()
+                }
+            }
+            _ => StatusHookResult::default(),
+        },
+        "aqua_ring" | "ingrain" => match hook {
+            "onTurnEnd" => {
+                let active = get_active_creature(state, player_id).unwrap();
+                if active.hp <= 0 || active.hp >= active.max_hp {
+                    return StatusHookResult::default();
+                }
+                let heal = (active.max_hp / 16).max(1);
+                StatusHookResult {
+                    events: vec![
+                        BattleEvent::Log {
+                            message: format!("{}は 少し 回復した！", active.name),
+                            meta: Map::new(),
+                        },
+                        BattleEvent::Damage {
+                            target_id: player_id.to_string(),
+                            amount: -heal,
                             meta: Map::new(),
                         },
                     ],
@@ -814,6 +1037,32 @@ fn match_status(
             }
             _ => StatusHookResult::default(),
         },
+        "safeguard" => match hook {
+            "onEventTransform" => {
+                let owner_side = status.data.get("ownerSideId").and_then(|v| v.as_str()).unwrap_or("");
+                if owner_side.is_empty() {
+                    return StatusHookResult::default();
+                }
+                StatusHookResult {
+                    event_transforms: vec![EventTransform {
+                        transform_type: "replace_event".to_string(),
+                        from: Some("apply_status".to_string()),
+                        target_type: None,
+                        target_id: Some(owner_side.to_string()),
+                        except_source_id: Some(owner_side.to_string()),
+                        require_absent_meta: None,
+                        require_present_meta: None,
+                        to: vec![BattleEvent::Log {
+                            message: "しろいベールが 状態異常を 防いだ！".to_string(),
+                            meta: Map::new(),
+                        }],
+                        priority: 0,
+                    }],
+                    ..Default::default()
+                }
+            }
+            _ => StatusHookResult::default(),
+        },
         _ => StatusHookResult::default(),
     }
 }
@@ -856,6 +1105,7 @@ fn handle_delayed(
         ignore_immunity: false,
         bypass_substitute: false,
         ignore_substitute: false,
+        ignore_ability: false,
         is_sound: false,
         last_damage: None,
     };
@@ -901,6 +1151,7 @@ fn handle_over_time(
         ignore_immunity: false,
         bypass_substitute: false,
         ignore_substitute: false,
+        ignore_ability: false,
         is_sound: false,
         last_damage: None,
     };
@@ -986,6 +1237,14 @@ pub fn tick_field_effects(state: &BattleState) -> BattleState {
     next.field
         .global
         .retain(|e| e.remaining_turns.map(|t| t > 0).unwrap_or(true));
+    for effects in next.field.sides.values_mut() {
+        for effect in effects.iter_mut() {
+            if let Some(turns) = effect.remaining_turns {
+                effect.remaining_turns = Some(turns - 1);
+            }
+        }
+        effects.retain(|e| e.remaining_turns.map(|t| t > 0).unwrap_or(true));
+    }
     next
 }
 

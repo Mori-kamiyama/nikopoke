@@ -6,6 +6,7 @@ export const createCreature: (a: number, b: number, c: any) => [number, number, 
 export const getBestMoveMCTS: (a: any, b: number, c: number, d: number) => [number, number, number];
 export const getBestMoveMinimax: (a: any, b: number, c: number, d: number) => [number, number, number];
 export const isBattleOver: (a: any) => [number, number, number];
+export const replaceFaintedPokemon: (a: any, b: number, c: number, d: number) => [number, number, number];
 export const stepBattle: (a: any, b: any, c: any) => [number, number, number];
 export const __wbindgen_malloc: (a: number, b: number) => number;
 export const __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

@@ -3,10 +3,15 @@ name: ダイビング
 type: water
 category: physical
 pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
+description: 1ターン目に水中へ潜り、2ターン目に攻撃する。
 steps:
-- type: wait
-  turns: 1
-  steps:
-  - type: damage
-    power: 80
-    accuracy: 1
+- type: charge_attack
+  power: 80
+  accuracy: 1
+  semiStatusId: dive
+tags:
+- contact
+- charge

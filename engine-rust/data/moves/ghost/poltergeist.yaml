@@ -8,7 +8,14 @@ accuracy: 0.9
 priority: 0
 description: 相手の　持ち物を　あやつって　攻撃。 相手が　道具を　持っていない　場合は 失敗する。
 steps:
-- type: damage
-  power: 110
-  accuracy: 0.9
+- type: conditional
+  if:
+    type: target_has_item
+  then:
+  - type: damage
+    power: 110
+    accuracy: 0.9
+  else:
+  - type: log
+    message: "しかし 相手は 道具を 持っていない！"
 tags: []

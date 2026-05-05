@@ -3,13 +3,15 @@ name: かたきうち
 type: normal
 category: physical
 pp: 5
+power: 70
+accuracy: 1.0
+priority: 0
+description: 前のターンに味方がひんしになっていると、威力が2倍になる。
 steps:
 - type: damage
   power: 70
-- type: conditional
-  if:
-    type: target_has_status
-    statusId: fainted_ally_last_turn
-  then:
-  - type: damage
-    power: 140
+  powerMultiplierIf:
+    type: ally_fainted_last_turn
+  powerMultiplier: 2
+tags:
+- contact

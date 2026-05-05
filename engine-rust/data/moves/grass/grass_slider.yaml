@@ -3,8 +3,12 @@ name: グラススライダー
 type: grass
 category: physical
 pp: 20
-priority: 1
+power: 55
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 55
   accuracy: 1
+tags:
+- contact

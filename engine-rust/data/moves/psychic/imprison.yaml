@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: 相手が　自分と　同じ　技を おぼえていたら　相手だけ その技を　使えなくする。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: imprison_effect
 tags: []

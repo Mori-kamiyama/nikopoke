@@ -3,7 +3,12 @@ name: 10まんばりき
 type: ground
 category: physical
 pp: 10
+power: 95
+accuracy: 0.95
+priority: 0
 steps:
 - type: damage
   power: 95
   accuracy: 0.95
+tags:
+- contact

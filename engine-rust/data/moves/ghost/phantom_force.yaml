@@ -4,12 +4,14 @@ type: ghost
 category: physical
 pp: 10
 power: 90
-accuracy: 1.0
+accuracy: 1
 priority: 0
 description: １ターンめで　どこかに　消えて ２ターンめに　相手を　攻撃する。 守りを　無視して　攻撃できる。
 steps:
-- type: damage
+- type: charge_attack
   power: 90
-  accuracy: 1.0
+  accuracy: 1
+  semiStatusId: phantom_force
 tags:
-- contact
+  - contact
+  - charge

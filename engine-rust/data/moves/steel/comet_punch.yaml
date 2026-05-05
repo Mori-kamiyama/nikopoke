@@ -3,6 +3,10 @@ name: コメットパンチ
 type: steel
 category: physical
 pp: 10
+power: 90
+accuracy: 0.9
+priority: 0
+description: 20%の確率で自分の『こうげき』ランクが1段階上がる。
 steps:
 - type: damage
   power: 90
@@ -14,3 +18,6 @@ steps:
     target: self
     stages:
       atk: 1
+tags:
+- contact
+- punch

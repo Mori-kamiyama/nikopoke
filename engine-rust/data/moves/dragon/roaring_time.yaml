@@ -3,10 +3,16 @@ name: ときのほうこう
 type: dragon
 category: special
 pp: 5
+power: 150
+accuracy: 0.9
+priority: 0
 steps:
 - type: damage
   power: 150
   accuracy: 0.9
-- type: wait
-  turns: 1
-  steps: []
+- type: apply_status
+  statusId: recharge
+  target: self
+  duration: 1
+tags:
+- recharge

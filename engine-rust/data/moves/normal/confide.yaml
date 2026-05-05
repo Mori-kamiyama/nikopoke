@@ -12,4 +12,5 @@ steps:
   target: target
   stages:
     spa: -1
-tags: []
+tags:
+- sound

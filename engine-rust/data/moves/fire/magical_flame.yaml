@@ -3,6 +3,10 @@ name: マジカルフレイム
 type: fire
 category: special
 pp: 10
+power: 75
+accuracy: 1.0
+priority: 0
+description: 攻撃し、100%で相手の『とくこう』ランクを1段階下げる。
 steps:
 - type: damage
   power: 75
@@ -11,4 +15,4 @@ steps:
   target: target
   stages:
     spa: -1
-  chance: 1
+tags: []

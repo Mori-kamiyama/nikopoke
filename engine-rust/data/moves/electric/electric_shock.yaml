@@ -3,6 +3,9 @@ name: でんきショック
 type: electric
 category: special
 pp: 30
+power: 40
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 40
@@ -12,3 +15,5 @@ steps:
   then:
   - type: apply_status
     statusId: paralysis
+    target: target
+tags: []

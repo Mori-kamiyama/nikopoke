@@ -11,4 +11,10 @@ steps:
 - type: apply_status
   statusId: poison
   target: target
-tags: []
+  chance: 0.75
+  immuneTypes:
+  - poison
+  - steel
+  - grass
+tags:
+- powder

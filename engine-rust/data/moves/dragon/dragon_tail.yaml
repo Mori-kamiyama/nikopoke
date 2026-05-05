@@ -11,5 +11,7 @@ steps:
 - type: damage
   power: 60
   accuracy: 0.9
+- type: force_switch
+  target: target
 tags:
 - contact

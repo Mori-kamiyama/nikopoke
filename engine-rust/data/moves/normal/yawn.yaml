@@ -11,5 +11,4 @@ steps:
 - type: apply_status
   statusId: yawn
   target: target
-  chance: 1
 tags: []

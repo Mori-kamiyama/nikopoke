@@ -3,8 +3,12 @@ name: でんじふゆう
 type: electric
 category: status
 pp: 10
+power: null
+accuracy: null
+priority: 0
 steps:
 - type: apply_status
-  statusId: telekinesis
+  statusId: magnet_rise
   target: self
   duration: 5
+tags: []

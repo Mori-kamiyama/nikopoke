@@ -15,7 +15,8 @@ steps:
   p: 0.2
   then:
   - type: modify_stage
-    target: self
+    target: target
     stages:
       spd: -1
-tags: []
+tags:
+- ball

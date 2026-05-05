@@ -19,4 +19,9 @@ steps:
 - type: damage
   power: 75
   accuracy: 1.0
-tags: []
+- type: apply_status
+  statusId: heal_block
+  target: target
+  duration: 2
+tags:
+- sound

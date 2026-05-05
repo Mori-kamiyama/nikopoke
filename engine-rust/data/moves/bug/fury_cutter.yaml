@@ -11,5 +11,7 @@ steps:
 - type: damage
   power: 40
   accuracy: 0.95
+  powerDoublesPerConsecutiveUse: true
+  maxPower: 160
 tags:
 - contact

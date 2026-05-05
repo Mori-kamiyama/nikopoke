@@ -3,10 +3,17 @@ name: はめつのめがい
 type: steel
 category: special
 pp: 5
+power: 140
+accuracy: 1.0
+priority: 0
+description: 2ターン後に攻撃する（交代しても同じ位置のポケモンに当たる）。
 steps:
-- type: wait
+- type: delay
+  target: target
   turns: 2
+  timing: turn_start
   steps:
   - type: damage
     power: 140
-    accuracy: 1
+    accuracy: 1.0
+tags: []

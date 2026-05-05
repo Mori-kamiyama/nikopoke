@@ -11,4 +11,5 @@ steps:
 - type: damage
   power: 80
   accuracy: 1.0
-tags: []
+tags:
+- bomb

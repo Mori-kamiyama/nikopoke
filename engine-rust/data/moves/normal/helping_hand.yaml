@@ -1,10 +1,13 @@
 id: helping_hand
-name: おさきにどうぞ
+name: てだすけ
 type: normal
 category: status
-pp: 15
+pp: 20
+power: null
+accuracy: null
+priority: 5
+description: 味方の技の威力を1.5倍にする。シングルでは基本的に効果なし。
 steps:
-- type: wait
-  turns: 0
-  timing: turn_start
-  steps: []
+- type: log
+  message: "しかし うまく きまらなかった！"
+tags: []

@@ -11,6 +11,16 @@ steps:
 - type: damage
   power: 20
   accuracy: 1.0
-- type: manual
-  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
+- type: apply_status
+  statusId: bind
+  target: target
+  duration: 5
+  data:
+    moveName: まとわりつく
+- type: apply_status
+  statusId: trapped
+  target: target
+  duration: 5
+  immuneTypes:
+  - ghost
 tags: []

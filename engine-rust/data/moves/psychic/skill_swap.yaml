@@ -8,6 +8,5 @@ accuracy: null
 priority: 0
 description: '超能力で　自分の　特性と 相手の　特性を　入れ替える。 '
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: swap_abilities
 tags: []

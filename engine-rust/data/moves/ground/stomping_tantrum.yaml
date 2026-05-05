@@ -11,5 +11,8 @@ steps:
 - type: damage
   power: 75
   accuracy: 1.0
+  powerMultiplierIf:
+    type: user_last_move_failed
+  powerMultiplier: 2
 tags:
 - contact

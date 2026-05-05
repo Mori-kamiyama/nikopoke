@@ -8,6 +8,7 @@ accuracy: 1.0
 priority: 0
 description: 相手に　いちゃもんを　つけて 同じ　技を　２回連続で だせなくする。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: torment
+  target: target
 tags: []

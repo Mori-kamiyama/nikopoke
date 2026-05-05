@@ -8,6 +8,10 @@ accuracy: null
 priority: 0
 description: 照準を　しっかり　あわせて 次の　攻撃が　必ず 相手に　当たるように　する。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: lock_on
+  target: self
+  duration: 2
+  data:
+    targetId: target
 tags: []

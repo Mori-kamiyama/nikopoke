@@ -8,6 +8,6 @@ accuracy: null
 priority: 0
 description: '攻撃もせずに　ピョン　ピョンと 跳ねるだけで　なにも　おこらない……。 '
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: log
+  message: しかし なにも おこらなかった！
 tags: []

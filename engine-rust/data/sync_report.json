@@ -1,0 +1,2068 @@
+{
+  "csvPath": "/Users/motok/Downloads/nikopoke/engine-rust/data/2期生男子種族値 - 技一覧.csv",
+  "copiedCsvFrom": "/Users/motok/Downloads/2期生男子種族値 - 技記憶.csv",
+  "activeCsvSource": "/Users/motok/Downloads/2期生男子種族値 - 技記憶.csv",
+  "moveCount": 593,
+  "speciesCount": 20,
+  "learnsetSpeciesCount": 20,
+  "duplicateMoveNames": [
+    {
+      "moveName": "ちょうのまい",
+      "moveIds": [
+        "butterfly_dance",
+        "quiver_dance"
+      ]
+    },
+    {
+      "moveName": "ほたるび",
+      "moveIds": [
+        "firefly",
+        "tail_glow"
+      ]
+    },
+    {
+      "moveName": "かふんだんご",
+      "moveIds": [
+        "kafun_dango",
+        "pollen_puff"
+      ]
+    },
+    {
+      "moveName": "ミサイルばり",
+      "moveIds": [
+        "missile_needle",
+        "pin_missile"
+      ]
+    },
+    {
+      "moveName": "シザークロス",
+      "moveIds": [
+        "scissor_cross",
+        "x_scissor"
+      ]
+    },
+    {
+      "moveName": "バークアウト",
+      "moveIds": [
+        "bark_out",
+        "snarl"
+      ]
+    },
+    {
+      "moveName": "ぶんまわす",
+      "moveIds": [
+        "brutal_swing",
+        "swing"
+      ]
+    },
+    {
+      "moveName": "カタストロフィ",
+      "moveIds": [
+        "catastrophe",
+        "ruination"
+      ]
+    },
+    {
+      "moveName": "いちゃもん",
+      "moveIds": [
+        "embargo",
+        "torment"
+      ]
+    },
+    {
+      "moveName": "うそなき",
+      "moveIds": [
+        "fake_out",
+        "fake_tears"
+      ]
+    },
+    {
+      "moveName": "じごくづき",
+      "moveIds": [
+        "hell_blow",
+        "throat_chop"
+      ]
+    },
+    {
+      "moveName": "つめとぎ",
+      "moveIds": [
+        "hone_claws",
+        "sharpen"
+      ]
+    },
+    {
+      "moveName": "わるだくみ",
+      "moveIds": [
+        "nasty_plot",
+        "wicked_plot"
+      ]
+    },
+    {
+      "moveName": "ナイトバースト",
+      "moveIds": [
+        "night_burst",
+        "night_daze"
+      ]
+    },
+    {
+      "moveName": "つじぎり",
+      "moveIds": [
+        "night_slash",
+        "tsujigiri"
+      ]
+    },
+    {
+      "moveName": "すりかえ",
+      "moveIds": [
+        "switcheroo",
+        "trick_exchange",
+        "trick"
+      ]
+    },
+    {
+      "moveName": "ワイドブレイカー",
+      "moveIds": [
+        "breaking_swipe",
+        "wide_breaker"
+      ]
+    },
+    {
+      "moveName": "りゅうせいぐん",
+      "moveIds": [
+        "draco_meteor",
+        "meteor_beam",
+        "ryuseigun"
+      ]
+    },
+    {
+      "moveName": "ドラゴンダイブ",
+      "moveIds": [
+        "dragon_dive",
+        "dragon_rush"
+      ]
+    },
+    {
+      "moveName": "ときのほうこう",
+      "moveIds": [
+        "roar_of_time",
+        "roaring_time"
+      ]
+    },
+    {
+      "moveName": "たつまき",
+      "moveIds": [
+        "tatsumaki",
+        "twister"
+      ]
+    },
+    {
+      "moveName": "ボルトチェンジ",
+      "moveIds": [
+        "bolt_change",
+        "volt_switch"
+      ]
+    },
+    {
+      "moveName": "ほっぺすりすり",
+      "moveIds": [
+        "cheek_pouch",
+        "nuzzle"
+      ]
+    },
+    {
+      "moveName": "でんじふゆう",
+      "moveIds": [
+        "denji_fuyu",
+        "magnet_rise"
+      ]
+    },
+    {
+      "moveName": "かいでんぱ",
+      "moveIds": [
+        "eerie_impulse",
+        "kaidenpa"
+      ]
+    },
+    {
+      "moveName": "エレキボール",
+      "moveIds": [
+        "electric_ball",
+        "electro_ball"
+      ]
+    },
+    {
+      "moveName": "エレキネット",
+      "moveIds": [
+        "electric_net",
+        "electroweb"
+      ]
+    },
+    {
+      "moveName": "でんきショック",
+      "moveIds": [
+        "electric_shock",
+        "thunder_shock"
+      ]
+    },
+    {
+      "moveName": "パラボラチャージ",
+      "moveIds": [
+        "parabola_charge",
+        "parabolic_charge"
+      ]
+    },
+    {
+      "moveName": "サンダーダイブ",
+      "moveIds": [
+        "supercell_slam",
+        "thunder_dive"
+      ]
+    },
+    {
+      "moveName": "ボルテッカー",
+      "moveIds": [
+        "volt_tackle",
+        "volttackle"
+      ]
+    },
+    {
+      "moveName": "てんしのキッス",
+      "moveIds": [
+        "angel_kiss",
+        "sweet_kiss"
+      ]
+    },
+    {
+      "moveName": "チャームボイス",
+      "moveIds": [
+        "charm_voice",
+        "disarming_voice"
+      ]
+    },
+    {
+      "moveName": "マジカルシャイン",
+      "moveIds": [
+        "dazzling_gleam",
+        "magical_shine"
+      ]
+    },
+    {
+      "moveName": "ドレインキッス",
+      "moveIds": [
+        "drain_kiss",
+        "draining_kiss"
+      ]
+    },
+    {
+      "moveName": "ミストバースト",
+      "moveIds": [
+        "mist_burst",
+        "misty_explosion"
+      ]
+    },
+    {
+      "moveName": "ミストフィールド",
+      "moveIds": [
+        "mist_field",
+        "misty_terrain"
+      ]
+    },
+    {
+      "moveName": "アームハンマー",
+      "moveIds": [
+        "arm_hammer",
+        "hammer_arm"
+      ]
+    },
+    {
+      "moveName": "つっぱり",
+      "moveIds": [
+        "arm_thrust",
+        "tsuppari"
+      ]
+    },
+    {
+      "moveName": "はどうだん",
+      "moveIds": [
+        "aura_sphere",
+        "hadou_dan"
+      ]
+    },
+    {
+      "moveName": "インファイト",
+      "moveIds": [
+        "close_combat",
+        "infight"
+      ]
+    },
+    {
+      "moveName": "とびひざげり",
+      "moveIds": [
+        "flying_kick",
+        "high_jump_kick"
+      ]
+    },
+    {
+      "moveName": "はっけい",
+      "moveIds": [
+        "force_palm",
+        "hakkei"
+      ]
+    },
+    {
+      "moveName": "はいすいのじん",
+      "moveIds": [
+        "haisuinonjin",
+        "no_retreat"
+      ]
+    },
+    {
+      "moveName": "はやてがえし",
+      "moveIds": [
+        "quick_guard",
+        "upper_hand"
+      ]
+    },
+    {
+      "moveName": "しっとのほのお",
+      "moveIds": [
+        "burning_jealousy",
+        "scald"
+      ]
+    },
+    {
+      "moveName": "だいもんじ",
+      "moveIds": [
+        "daimonji",
+        "fire_blast"
+      ]
+    },
+    {
+      "moveName": "やけっぱち",
+      "moveIds": [
+        "desperation",
+        "temper_flare"
+      ]
+    },
+    {
+      "moveName": "ほのおのまい",
+      "moveIds": [
+        "fiery_dance",
+        "flame_dance"
+      ]
+    },
+    {
+      "moveName": "ほのおのうず",
+      "moveIds": [
+        "fire_spin",
+        "flame_vortex"
+      ]
+    },
+    {
+      "moveName": "かえんボール",
+      "moveIds": [
+        "flame_ball",
+        "pyro_ball"
+      ]
+    },
+    {
+      "moveName": "ニトロチャージ",
+      "moveIds": [
+        "flame_charge",
+        "nitro_charge"
+      ]
+    },
+    {
+      "moveName": "フレアドライブ",
+      "moveIds": [
+        "flare_blitz",
+        "flare_drive"
+      ]
+    },
+    {
+      "moveName": "フレアソング",
+      "moveIds": [
+        "flare_song",
+        "torch_song"
+      ]
+    },
+    {
+      "moveName": "ねっぷう",
+      "moveIds": [
+        "heat_wave",
+        "neppuu"
+      ]
+    },
+    {
+      "moveName": "れんごく",
+      "moveIds": [
+        "hell_fire",
+        "inferno"
+      ]
+    },
+    {
+      "moveName": "マジカルフレイム",
+      "moveIds": [
+        "magical_flame",
+        "mystical_fire"
+      ]
+    },
+    {
+      "moveName": "おにび",
+      "moveIds": [
+        "onibi",
+        "will_o_wisp"
+      ]
+    },
+    {
+      "moveName": "ダブルウイング",
+      "moveIds": [
+        "double_wing",
+        "dual_wingbeat"
+      ]
+    },
+    {
+      "moveName": "おどろかす",
+      "moveIds": [
+        "astonish",
+        "odorokasu",
+        "scary_face"
+      ]
+    },
+    {
+      "moveName": "うらみつらみ",
+      "moveIds": [
+        "bitter_malice",
+        "grudge_hatred"
+      ]
+    },
+    {
+      "moveName": "ゴーストダイブ",
+      "moveIds": [
+        "ghost_dive",
+        "phantom_force"
+      ]
+    },
+    {
+      "moveName": "たたりめ",
+      "moveIds": [
+        "hex",
+        "ominous_wind"
+      ]
+    },
+    {
+      "moveName": "シャドーレイ",
+      "moveIds": [
+        "moongeist_beam",
+        "shadow_ray"
+      ]
+    },
+    {
+      "moveName": "ふんどのこぶし",
+      "moveIds": [
+        "rage_fist",
+        "revenge"
+      ]
+    },
+    {
+      "moveName": "かげぬい",
+      "moveIds": [
+        "shadow_stitch",
+        "spirit_shackle"
+      ]
+    },
+    {
+      "moveName": "えだづき",
+      "moveIds": [
+        "branch_poke",
+        "eda_zuki"
+      ]
+    },
+    {
+      "moveName": "タネマシンガン",
+      "moveIds": [
+        "bullet_seed",
+        "seed_machine_gun"
+      ]
+    },
+    {
+      "moveName": "ハードプラント",
+      "moveIds": [
+        "frenzy_plant",
+        "hard_plant"
+      ]
+    },
+    {
+      "moveName": "ギガドレイン",
+      "moveIds": [
+        "giga_drain",
+        "gigadrain"
+      ]
+    },
+    {
+      "moveName": "くさわけ",
+      "moveIds": [
+        "grass_divide",
+        "trailblaze"
+      ]
+    },
+    {
+      "moveName": "グラスフィールド",
+      "moveIds": [
+        "grass_field",
+        "grassy_terrain"
+      ]
+    },
+    {
+      "moveName": "グラススライダー",
+      "moveIds": [
+        "grass_slider",
+        "grassy_glide"
+      ]
+    },
+    {
+      "moveName": "ウッドホーン",
+      "moveIds": [
+        "horn_leech",
+        "wood_horn"
+      ]
+    },
+    {
+      "moveName": "ねをはる",
+      "moveIds": [
+        "ingrain",
+        "root_grow"
+      ]
+    },
+    {
+      "moveName": "キノコのほうし",
+      "moveIds": [
+        "mushroom_spore",
+        "spore"
+      ]
+    },
+    {
+      "moveName": "なやみのタネ",
+      "moveIds": [
+        "nayanomi_tane",
+        "worry_seed"
+      ]
+    },
+    {
+      "moveName": "しびれごな",
+      "moveIds": [
+        "paralysis_powder",
+        "stun_spore"
+      ]
+    },
+    {
+      "moveName": "はなびらのまい",
+      "moveIds": [
+        "petal_dance",
+        "petals_dance"
+      ]
+    },
+    {
+      "moveName": "ちからをすいとる",
+      "moveIds": [
+        "steal_power",
+        "strength_sap"
+      ]
+    },
+    {
+      "moveName": "10まんばりき",
+      "moveIds": [
+        "high_horsepower",
+        "ten_million_horsepower"
+      ]
+    },
+    {
+      "moveName": "ねっさのだいち",
+      "moveIds": [
+        "netsu_no_daichi",
+        "scorching_sands"
+      ]
+    },
+    {
+      "moveName": "ぜったいれいど",
+      "moveIds": [
+        "absolute_zero",
+        "sheer_cold"
+      ]
+    },
+    {
+      "moveName": "くろいきり",
+      "moveIds": [
+        "black_fog",
+        "haze"
+      ]
+    },
+    {
+      "moveName": "さむいギャグ",
+      "moveIds": [
+        "chilly_reception",
+        "samui_gag"
+      ]
+    },
+    {
+      "moveName": "れいとうビーム",
+      "moveIds": [
+        "freezing_beam",
+        "ice_beam"
+      ]
+    },
+    {
+      "moveName": "れいとうパンチ",
+      "moveIds": [
+        "freezing_punch",
+        "ice_punch"
+      ]
+    },
+    {
+      "moveName": "こおりのいぶき",
+      "moveIds": [
+        "frost_breath",
+        "ice_breath"
+      ]
+    },
+    {
+      "moveName": "こごえるかぜ",
+      "moveIds": [
+        "ice_wind",
+        "icy_wind"
+      ]
+    },
+    {
+      "moveName": "しろいきり",
+      "moveIds": [
+        "mist",
+        "shiroi_kiri"
+      ]
+    },
+    {
+      "moveName": "こなゆき",
+      "moveIds": [
+        "powder_snow",
+        "snow_powder"
+      ]
+    },
+    {
+      "moveName": "ばくおんぱ",
+      "moveIds": [
+        "boom_burst",
+        "boomburst"
+      ]
+    },
+    {
+      "moveName": "ないしょばなし",
+      "moveIds": [
+        "confide",
+        "nayshobanashi"
+      ]
+    },
+    {
+      "moveName": "がむしゃら",
+      "moveIds": [
+        "desperate",
+        "endeavor"
+      ]
+    },
+    {
+      "moveName": "はかいこうせん",
+      "moveIds": [
+        "destruction_beam",
+        "hyper_beam"
+      ]
+    },
+    {
+      "moveName": "かなしばり",
+      "moveIds": [
+        "disable",
+        "kanashibari"
+      ]
+    },
+    {
+      "moveName": "ダブルアタック",
+      "moveIds": [
+        "double_attack",
+        "double_hit"
+      ]
+    },
+    {
+      "moveName": "かげぶんしん",
+      "moveIds": [
+        "double_team",
+        "kage_bunshin"
+      ]
+    },
+    {
+      "moveName": "エコーボイス",
+      "moveIds": [
+        "echo_voice",
+        "echoed_voice"
+      ]
+    },
+    {
+      "moveName": "なかまづくり",
+      "moveIds": [
+        "entrainment",
+        "teammate"
+      ]
+    },
+    {
+      "moveName": "からげんき",
+      "moveIds": [
+        "facade",
+        "karagenki"
+      ]
+    },
+    {
+      "moveName": "みだれづき",
+      "moveIds": [
+        "fury_attack",
+        "fury_swipes"
+      ]
+    },
+    {
+      "moveName": "ギガインパクト",
+      "moveIds": [
+        "giga_impact",
+        "gigaimpact"
+      ]
+    },
+    {
+      "moveName": "はねる",
+      "moveIds": [
+        "hazure",
+        "splash"
+      ]
+    },
+    {
+      "moveName": "かいりき",
+      "moveIds": [
+        "kairiki",
+        "strength"
+      ]
+    },
+    {
+      "moveName": "くろいまなざし",
+      "moveIds": [
+        "kuroi_manazashi",
+        "mean_look"
+      ]
+    },
+    {
+      "moveName": "ゆびをふる",
+      "moveIds": [
+        "metronome",
+        "yubi_o_furu"
+      ]
+    },
+    {
+      "moveName": "いたみわけ",
+      "moveIds": [
+        "pain_split",
+        "painsplit"
+      ]
+    },
+    {
+      "moveName": "じこあんじ",
+      "moveIds": [
+        "psych_up",
+        "self_suggestion"
+      ]
+    },
+    {
+      "moveName": "あばれる",
+      "moveIds": [
+        "rampage",
+        "thrash"
+      ]
+    },
+    {
+      "moveName": "かたきうち",
+      "moveIds": [
+        "retaliate",
+        "vengeance"
+      ]
+    },
+    {
+      "moveName": "スピードスター",
+      "moveIds": [
+        "speed_star",
+        "swift"
+      ]
+    },
+    {
+      "moveName": "たくわえる",
+      "moveIds": [
+        "stockpile",
+        "takuwaeru"
+      ]
+    },
+    {
+      "moveName": "ちょうおんぱ",
+      "moveIds": [
+        "supersonic",
+        "ultrasonic"
+      ]
+    },
+    {
+      "moveName": "つるぎのまい",
+      "moveIds": [
+        "sword_dance",
+        "swords_dance"
+      ]
+    },
+    {
+      "moveName": "アシッドボム",
+      "moveIds": [
+        "acid_bomb",
+        "acid_spray"
+      ]
+    },
+    {
+      "moveName": "トーチカ",
+      "moveIds": [
+        "baneful_bunker",
+        "torchica"
+      ]
+    },
+    {
+      "moveName": "とぐろをまく",
+      "moveIds": [
+        "coil_up",
+        "coil"
+      ]
+    },
+    {
+      "moveName": "ダストシュート",
+      "moveIds": [
+        "dust_shoot",
+        "gunk_shot"
+      ]
+    },
+    {
+      "moveName": "ベノムショック",
+      "moveIds": [
+        "venom_shock",
+        "venoshock"
+      ]
+    },
+    {
+      "moveName": "アシストパワー",
+      "moveIds": [
+        "assist_power",
+        "stored_power"
+      ]
+    },
+    {
+      "moveName": "めいそう",
+      "moveIds": [
+        "calm_mind",
+        "meditate"
+      ]
+    },
+    {
+      "moveName": "ねんりき",
+      "moveIds": [
+        "confusion",
+        "telekinesis"
+      ]
+    },
+    {
+      "moveName": "じんつうりき",
+      "moveIds": [
+        "extrasensory",
+        "jin_tsu_riki"
+      ]
+    },
+    {
+      "moveName": "ガードシェア",
+      "moveIds": [
+        "guard_share",
+        "guard_split"
+      ]
+    },
+    {
+      "moveName": "サイコファング",
+      "moveIds": [
+        "psychic_fangs",
+        "psycho_fang"
+      ]
+    },
+    {
+      "moveName": "サイコフィールド",
+      "moveIds": [
+        "psychic_terrain",
+        "psycho_field"
+      ]
+    },
+    {
+      "moveName": "サイコショック",
+      "moveIds": [
+        "psycho_shock",
+        "psyshock"
+      ]
+    },
+    {
+      "moveName": "ねむる",
+      "moveIds": [
+        "rest",
+        "sleep"
+      ]
+    },
+    {
+      "moveName": "アクセルロック",
+      "moveIds": [
+        "accel_rock",
+        "accelerock"
+      ]
+    },
+    {
+      "moveName": "てっていこうせん",
+      "moveIds": [
+        "blast_burn",
+        "steel_beam"
+      ]
+    },
+    {
+      "moveName": "コメットパンチ",
+      "moveIds": [
+        "comet_punch",
+        "meteor_mash"
+      ]
+    },
+    {
+      "moveName": "ラスターカノン",
+      "moveIds": [
+        "flash_cannon",
+        "luster_cannon"
+      ]
+    },
+    {
+      "moveName": "ギアチェンジ",
+      "moveIds": [
+        "gear_change",
+        "shift_gear"
+      ]
+    },
+    {
+      "moveName": "ゴールドラッシュ",
+      "moveIds": [
+        "gold_rush",
+        "make_it_rain"
+      ]
+    },
+    {
+      "moveName": "スマートホーン",
+      "moveIds": [
+        "smart_horn",
+        "smart_strike"
+      ]
+    },
+    {
+      "moveName": "アクアブレイク",
+      "moveIds": [
+        "aqua_break",
+        "liquidation"
+      ]
+    },
+    {
+      "moveName": "うたかたのアリア",
+      "moveIds": [
+        "aria",
+        "sparkling_aria"
+      ]
+    },
+    {
+      "moveName": "ひやみず",
+      "moveIds": [
+        "chilling_water",
+        "cold_water"
+      ]
+    },
+    {
+      "moveName": "ダイビング",
+      "moveIds": [
+        "dive",
+        "diving"
+      ]
+    },
+    {
+      "moveName": "クイックターン",
+      "moveIds": [
+        "flip_turn",
+        "quick_turn"
+      ]
+    },
+    {
+      "moveName": "だくりゅう",
+      "moveIds": [
+        "mud_bomb",
+        "mud_stream",
+        "muddy_water"
+      ]
+    },
+    {
+      "moveName": "ねっとう",
+      "moveIds": [
+        "nettou",
+        "scald"
+      ]
+    },
+    {
+      "moveName": "からにこもる",
+      "moveIds": [
+        "shell_fortify",
+        "shell_smash",
+        "withdraw"
+      ]
+    },
+    {
+      "moveName": "なみのり",
+      "moveIds": [
+        "surf",
+        "wave"
+      ]
+    }
+  ],
+  "duplicateSpeciesNames": [],
+  "moveIdMigrations": 159,
+  "totalRows": 445,
+  "matchedRows": 445,
+  "missingMoveNames": [],
+  "missingSpeciesNames": [],
+  "ambiguousMatches": [
+    {
+      "moveName": "つめとぎ",
+      "selectedMoveId": "hone_claws",
+      "candidateMoveIds": [
+        "hone_claws",
+        "sharpen"
+      ]
+    },
+    {
+      "moveName": "わるだくみ",
+      "selectedMoveId": "nasty_plot",
+      "candidateMoveIds": [
+        "nasty_plot",
+        "wicked_plot"
+      ]
+    },
+    {
+      "moveName": "じごくづき",
+      "selectedMoveId": "throat_chop",
+      "candidateMoveIds": [
+        "hell_blow",
+        "throat_chop"
+      ]
+    },
+    {
+      "moveName": "つじぎり",
+      "selectedMoveId": "night_slash",
+      "candidateMoveIds": [
+        "night_slash",
+        "tsujigiri"
+      ]
+    },
+    {
+      "moveName": "ぶんまわす",
+      "selectedMoveId": "brutal_swing",
+      "candidateMoveIds": [
+        "brutal_swing",
+        "swing"
+      ]
+    },
+    {
+      "moveName": "ナイトバースト",
+      "selectedMoveId": "night_daze",
+      "candidateMoveIds": [
+        "night_burst",
+        "night_daze"
+      ]
+    },
+    {
+      "moveName": "ガードシェア",
+      "selectedMoveId": "guard_split",
+      "candidateMoveIds": [
+        "guard_share",
+        "guard_split"
+      ]
+    },
+    {
+      "moveName": "サイコフィールド",
+      "selectedMoveId": "psychic_terrain",
+      "candidateMoveIds": [
+        "psychic_terrain",
+        "psycho_field"
+      ]
+    },
+    {
+      "moveName": "ねむる",
+      "selectedMoveId": "rest",
+      "candidateMoveIds": [
+        "rest",
+        "sleep"
+      ]
+    },
+    {
+      "moveName": "めいそう",
+      "selectedMoveId": "calm_mind",
+      "candidateMoveIds": [
+        "calm_mind",
+        "meditate"
+      ]
+    },
+    {
+      "moveName": "サイコファング",
+      "selectedMoveId": "psychic_fangs",
+      "candidateMoveIds": [
+        "psychic_fangs",
+        "psycho_fang"
+      ]
+    },
+    {
+      "moveName": "アシストパワー",
+      "selectedMoveId": "stored_power",
+      "candidateMoveIds": [
+        "assist_power",
+        "stored_power"
+      ]
+    },
+    {
+      "moveName": "サイコショック",
+      "selectedMoveId": "psyshock",
+      "candidateMoveIds": [
+        "psycho_shock",
+        "psyshock"
+      ]
+    },
+    {
+      "moveName": "じんつうりき",
+      "selectedMoveId": "extrasensory",
+      "candidateMoveIds": [
+        "extrasensory",
+        "jin_tsu_riki"
+      ]
+    },
+    {
+      "moveName": "ねんりき",
+      "selectedMoveId": "confusion",
+      "candidateMoveIds": [
+        "confusion",
+        "telekinesis"
+      ]
+    },
+    {
+      "moveName": "はいすいのじん",
+      "selectedMoveId": "no_retreat",
+      "candidateMoveIds": [
+        "haisuinonjin",
+        "no_retreat"
+      ]
+    },
+    {
+      "moveName": "はどうだん",
+      "selectedMoveId": "aura_sphere",
+      "candidateMoveIds": [
+        "aura_sphere",
+        "hadou_dan"
+      ]
+    },
+    {
+      "moveName": "キノコのほうし",
+      "selectedMoveId": "spore",
+      "candidateMoveIds": [
+        "mushroom_spore",
+        "spore"
+      ]
+    },
+    {
+      "moveName": "グラスフィールド",
+      "selectedMoveId": "grassy_terrain",
+      "candidateMoveIds": [
+        "grass_field",
+        "grassy_terrain"
+      ]
+    },
+    {
+      "moveName": "しびれごな",
+      "selectedMoveId": "stun_spore",
+      "candidateMoveIds": [
+        "paralysis_powder",
+        "stun_spore"
+      ]
+    },
+    {
+      "moveName": "なやみのタネ",
+      "selectedMoveId": "worry_seed",
+      "candidateMoveIds": [
+        "nayanomi_tane",
+        "worry_seed"
+      ]
+    },
+    {
+      "moveName": "ねをはる",
+      "selectedMoveId": "ingrain",
+      "candidateMoveIds": [
+        "ingrain",
+        "root_grow"
+      ]
+    },
+    {
+      "moveName": "えだづき",
+      "selectedMoveId": "branch_poke",
+      "candidateMoveIds": [
+        "branch_poke",
+        "eda_zuki"
+      ]
+    },
+    {
+      "moveName": "グラススライダー",
+      "selectedMoveId": "grassy_glide",
+      "candidateMoveIds": [
+        "grass_slider",
+        "grassy_glide"
+      ]
+    },
+    {
+      "moveName": "タネマシンガン",
+      "selectedMoveId": "bullet_seed",
+      "candidateMoveIds": [
+        "bullet_seed",
+        "seed_machine_gun"
+      ]
+    },
+    {
+      "moveName": "かげぬい",
+      "selectedMoveId": "spirit_shackle",
+      "candidateMoveIds": [
+        "shadow_stitch",
+        "spirit_shackle"
+      ]
+    },
+    {
+      "moveName": "ゴーストダイブ",
+      "selectedMoveId": "phantom_force",
+      "candidateMoveIds": [
+        "ghost_dive",
+        "phantom_force"
+      ]
+    },
+    {
+      "moveName": "ふんどのこぶし",
+      "selectedMoveId": "rage_fist",
+      "candidateMoveIds": [
+        "rage_fist",
+        "revenge"
+      ]
+    },
+    {
+      "moveName": "うらみつらみ",
+      "selectedMoveId": "bitter_malice",
+      "candidateMoveIds": [
+        "bitter_malice",
+        "grudge_hatred"
+      ]
+    },
+    {
+      "moveName": "シャドーレイ",
+      "selectedMoveId": "moongeist_beam",
+      "candidateMoveIds": [
+        "moongeist_beam",
+        "shadow_ray"
+      ]
+    },
+    {
+      "moveName": "たたりめ",
+      "selectedMoveId": "hex",
+      "candidateMoveIds": [
+        "hex",
+        "ominous_wind"
+      ]
+    },
+    {
+      "moveName": "くろいきり",
+      "selectedMoveId": "haze",
+      "candidateMoveIds": [
+        "black_fog",
+        "haze"
+      ]
+    },
+    {
+      "moveName": "さむいギャグ",
+      "selectedMoveId": "chilly_reception",
+      "candidateMoveIds": [
+        "chilly_reception",
+        "samui_gag"
+      ]
+    },
+    {
+      "moveName": "しろいきり",
+      "selectedMoveId": "mist",
+      "candidateMoveIds": [
+        "mist",
+        "shiroi_kiri"
+      ]
+    },
+    {
+      "moveName": "れいとうパンチ",
+      "selectedMoveId": "ice_punch",
+      "candidateMoveIds": [
+        "freezing_punch",
+        "ice_punch"
+      ]
+    },
+    {
+      "moveName": "こおりのいぶき",
+      "selectedMoveId": "frost_breath",
+      "candidateMoveIds": [
+        "frost_breath",
+        "ice_breath"
+      ]
+    },
+    {
+      "moveName": "こごえるかぜ",
+      "selectedMoveId": "icy_wind",
+      "candidateMoveIds": [
+        "ice_wind",
+        "icy_wind"
+      ]
+    },
+    {
+      "moveName": "こなゆき",
+      "selectedMoveId": "powder_snow",
+      "candidateMoveIds": [
+        "powder_snow",
+        "snow_powder"
+      ]
+    },
+    {
+      "moveName": "れいとうビーム",
+      "selectedMoveId": "ice_beam",
+      "candidateMoveIds": [
+        "freezing_beam",
+        "ice_beam"
+      ]
+    },
+    {
+      "moveName": "10まんばりき",
+      "selectedMoveId": "high_horsepower",
+      "candidateMoveIds": [
+        "high_horsepower",
+        "ten_million_horsepower"
+      ]
+    },
+    {
+      "moveName": "ねっさのだいち",
+      "selectedMoveId": "scorching_sands",
+      "candidateMoveIds": [
+        "netsu_no_daichi",
+        "scorching_sands"
+      ]
+    },
+    {
+      "moveName": "かいでんぱ",
+      "selectedMoveId": "eerie_impulse",
+      "candidateMoveIds": [
+        "eerie_impulse",
+        "kaidenpa"
+      ]
+    },
+    {
+      "moveName": "でんじふゆう",
+      "selectedMoveId": "magnet_rise",
+      "candidateMoveIds": [
+        "denji_fuyu",
+        "magnet_rise"
+      ]
+    },
+    {
+      "moveName": "サンダーダイブ",
+      "selectedMoveId": "supercell_slam",
+      "candidateMoveIds": [
+        "supercell_slam",
+        "thunder_dive"
+      ]
+    },
+    {
+      "moveName": "ほっぺすりすり",
+      "selectedMoveId": "nuzzle",
+      "candidateMoveIds": [
+        "cheek_pouch",
+        "nuzzle"
+      ]
+    },
+    {
+      "moveName": "エレキボール",
+      "selectedMoveId": "electro_ball",
+      "candidateMoveIds": [
+        "electric_ball",
+        "electro_ball"
+      ]
+    },
+    {
+      "moveName": "でんきショック",
+      "selectedMoveId": "thunder_shock",
+      "candidateMoveIds": [
+        "electric_shock",
+        "thunder_shock"
+      ]
+    },
+    {
+      "moveName": "パラボラチャージ",
+      "selectedMoveId": "parabolic_charge",
+      "candidateMoveIds": [
+        "parabola_charge",
+        "parabolic_charge"
+      ]
+    },
+    {
+      "moveName": "ボルトチェンジ",
+      "selectedMoveId": "volt_switch",
+      "candidateMoveIds": [
+        "bolt_change",
+        "volt_switch"
+      ]
+    },
+    {
+      "moveName": "トーチカ",
+      "selectedMoveId": "baneful_bunker",
+      "candidateMoveIds": [
+        "baneful_bunker",
+        "torchica"
+      ]
+    },
+    {
+      "moveName": "とぐろをまく",
+      "selectedMoveId": "coil",
+      "candidateMoveIds": [
+        "coil",
+        "coil_up"
+      ]
+    },
+    {
+      "moveName": "ダストシュート",
+      "selectedMoveId": "gunk_shot",
+      "candidateMoveIds": [
+        "dust_shoot",
+        "gunk_shot"
+      ]
+    },
+    {
+      "moveName": "アシッドボム",
+      "selectedMoveId": "acid_spray",
+      "candidateMoveIds": [
+        "acid_bomb",
+        "acid_spray"
+      ]
+    },
+    {
+      "moveName": "ベノムショック",
+      "selectedMoveId": "venoshock",
+      "candidateMoveIds": [
+        "venom_shock",
+        "venoshock"
+      ]
+    },
+    {
+      "moveName": "ドラゴンダイブ",
+      "selectedMoveId": "dragon_rush",
+      "candidateMoveIds": [
+        "dragon_dive",
+        "dragon_rush"
+      ]
+    },
+    {
+      "moveName": "ワイドブレイカー",
+      "selectedMoveId": "breaking_swipe",
+      "candidateMoveIds": [
+        "breaking_swipe",
+        "wide_breaker"
+      ]
+    },
+    {
+      "moveName": "たつまき",
+      "selectedMoveId": "twister",
+      "candidateMoveIds": [
+        "tatsumaki",
+        "twister"
+      ]
+    },
+    {
+      "moveName": "ときのほうこう",
+      "selectedMoveId": "roar_of_time",
+      "candidateMoveIds": [
+        "roar_of_time",
+        "roaring_time"
+      ]
+    },
+    {
+      "moveName": "りゅうせいぐん",
+      "selectedMoveId": "draco_meteor",
+      "candidateMoveIds": [
+        "draco_meteor",
+        "meteor_beam",
+        "ryuseigun"
+      ]
+    },
+    {
+      "moveName": "いたみわけ",
+      "selectedMoveId": "pain_split",
+      "candidateMoveIds": [
+        "pain_split",
+        "painsplit"
+      ]
+    },
+    {
+      "moveName": "かげぶんしん",
+      "selectedMoveId": "double_team",
+      "candidateMoveIds": [
+        "double_team",
+        "kage_bunshin"
+      ]
+    },
+    {
+      "moveName": "かなしばり",
+      "selectedMoveId": "disable",
+      "candidateMoveIds": [
+        "disable",
+        "kanashibari"
+      ]
+    },
+    {
+      "moveName": "くろいまなざし",
+      "selectedMoveId": "mean_look",
+      "candidateMoveIds": [
+        "kuroi_manazashi",
+        "mean_look"
+      ]
+    },
+    {
+      "moveName": "じこあんじ",
+      "selectedMoveId": "psych_up",
+      "candidateMoveIds": [
+        "psych_up",
+        "self_suggestion"
+      ]
+    },
+    {
+      "moveName": "しっぽぎり",
+      "selectedMoveId": "absolute_zero",
+      "candidateMoveIds": [
+        "absolute_zero",
+        "accel_rock",
+        "acid_armor",
+        "acupressure",
+        "after_you",
+        "agility",
+        "amnesia",
+        "aqua_ring",
+        "aurora_veil",
+        "baneful_bunker",
+        "bark_out",
+        "baton_pass",
+        "belly_drum",
+        "black_fog",
+        "blast_burn",
+        "bulk_up",
+        "butterfly_dance",
+        "calm_mind",
+        "charge",
+        "chilly_reception",
+        "coil",
+        "coil_up",
+        "confide",
+        "copycat",
+        "cosmic_power",
+        "cotton_guard",
+        "curse",
+        "daimonji",
+        "defog",
+        "denji_fuyu",
+        "destiny_bond",
+        "destruction_beam",
+        "detect",
+        "double_attack",
+        "double_team",
+        "dragon_dance",
+        "echo_voice",
+        "electric_net",
+        "electric_terrain",
+        "embargo",
+        "endure",
+        "fillet_away",
+        "firefly",
+        "flame_dance",
+        "flare_song",
+        "flying_kick",
+        "focus_energy",
+        "fury_swipes",
+        "gear_change",
+        "gigadrain",
+        "grass_field",
+        "grassy_terrain",
+        "gravity",
+        "growth",
+        "guard_share",
+        "guard_split",
+        "guard_swap",
+        "haisuinonjin",
+        "hakkei",
+        "happy_hour",
+        "hard_plant",
+        "harden",
+        "haze",
+        "hazure",
+        "healing_wish",
+        "helping_hand",
+        "hone_claws",
+        "imprison",
+        "infight",
+        "ingrain",
+        "iron_defense",
+        "kage_bunshin",
+        "kairiki",
+        "karagenki",
+        "kuroi_manazashi",
+        "light_screen",
+        "lock_on",
+        "luster_cannon",
+        "magnet_rise",
+        "mean_look",
+        "meditate",
+        "metronome",
+        "milk_drink",
+        "minimize",
+        "mist",
+        "mist_field",
+        "misty_terrain",
+        "moonlight",
+        "morning_sun",
+        "nasty_plot",
+        "nayshobanashi",
+        "nitro_charge",
+        "no_retreat",
+        "pain_split",
+        "painsplit",
+        "petals_dance",
+        "power_split",
+        "power_swap",
+        "power_trick",
+        "protect",
+        "psych_up",
+        "psychic_terrain",
+        "psycho_field",
+        "quiver_dance",
+        "rain_dance",
+        "rampage",
+        "recover",
+        "reflect",
+        "rest",
+        "revival_blessing",
+        "roar",
+        "rock_polish",
+        "roost",
+        "root_grow",
+        "safeguard",
+        "samui_gag",
+        "sandstorm",
+        "self_suggestion",
+        "sharpen",
+        "shed_tail",
+        "shell_fortify",
+        "shell_smash",
+        "shift_gear",
+        "shiroi_kiri",
+        "skill_swap",
+        "slack_off",
+        "sleep",
+        "sleep_talk",
+        "snowscape",
+        "speed_star",
+        "spikes",
+        "splash",
+        "steal_power",
+        "stealth_rock",
+        "sticky_web",
+        "stockpile",
+        "stuff_cheeks",
+        "substitute",
+        "sunny_day",
+        "sword_dance",
+        "swords_dance",
+        "synthesis",
+        "tail_glow",
+        "tailwind",
+        "takuwaeru",
+        "teleport",
+        "torchica",
+        "toxic_spikes",
+        "trick_exchange",
+        "trick_room",
+        "tsuppari",
+        "wicked_plot",
+        "wish",
+        "withdraw",
+        "work_up",
+        "yawn",
+        "yubi_o_furu"
+      ]
+    },
+    {
+      "moveName": "たくわえる",
+      "selectedMoveId": "stockpile",
+      "candidateMoveIds": [
+        "stockpile",
+        "takuwaeru"
+      ]
+    },
+    {
+      "moveName": "ちょうおんぱ",
+      "selectedMoveId": "supersonic",
+      "candidateMoveIds": [
+        "supersonic",
+        "ultrasonic"
+      ]
+    },
+    {
+      "moveName": "つるぎのまい",
+      "selectedMoveId": "swords_dance",
+      "candidateMoveIds": [
+        "sword_dance",
+        "swords_dance"
+      ]
+    },
+    {
+      "moveName": "ないしょばなし",
+      "selectedMoveId": "confide",
+      "candidateMoveIds": [
+        "confide",
+        "nayshobanashi"
+      ]
+    },
+    {
+      "moveName": "なかまづくり",
+      "selectedMoveId": "entrainment",
+      "candidateMoveIds": [
+        "entrainment",
+        "teammate"
+      ]
+    },
+    {
+      "moveName": "はねる",
+      "selectedMoveId": "splash",
+      "candidateMoveIds": [
+        "hazure",
+        "splash"
+      ]
+    },
+    {
+      "moveName": "ゆびをふる",
+      "selectedMoveId": "metronome",
+      "candidateMoveIds": [
+        "metronome",
+        "yubi_o_furu"
+      ]
+    },
+    {
+      "moveName": "かたきうち",
+      "selectedMoveId": "retaliate",
+      "candidateMoveIds": [
+        "retaliate",
+        "vengeance"
+      ]
+    },
+    {
+      "moveName": "がむしゃら",
+      "selectedMoveId": "endeavor",
+      "candidateMoveIds": [
+        "desperate",
+        "endeavor"
+      ]
+    },
+    {
+      "moveName": "ばくおんぱ",
+      "selectedMoveId": "boomburst",
+      "candidateMoveIds": [
+        "boom_burst",
+        "boomburst"
+      ]
+    },
+    {
+      "moveName": "ギアチェンジ",
+      "selectedMoveId": "shift_gear",
+      "candidateMoveIds": [
+        "gear_change",
+        "shift_gear"
+      ]
+    },
+    {
+      "moveName": "コメットパンチ",
+      "selectedMoveId": "meteor_mash",
+      "candidateMoveIds": [
+        "comet_punch",
+        "meteor_mash"
+      ]
+    },
+    {
+      "moveName": "スマートホーン",
+      "selectedMoveId": "smart_strike",
+      "candidateMoveIds": [
+        "smart_horn",
+        "smart_strike"
+      ]
+    },
+    {
+      "moveName": "ゴールドラッシュ",
+      "selectedMoveId": "make_it_rain",
+      "candidateMoveIds": [
+        "gold_rush",
+        "make_it_rain"
+      ]
+    },
+    {
+      "moveName": "ダブルウイング",
+      "selectedMoveId": "dual_wingbeat",
+      "candidateMoveIds": [
+        "double_wing",
+        "dual_wingbeat"
+      ]
+    },
+    {
+      "moveName": "てんしのキッス",
+      "selectedMoveId": "sweet_kiss",
+      "candidateMoveIds": [
+        "angel_kiss",
+        "sweet_kiss"
+      ]
+    },
+    {
+      "moveName": "ミストフィールド",
+      "selectedMoveId": "misty_terrain",
+      "candidateMoveIds": [
+        "mist_field",
+        "misty_terrain"
+      ]
+    },
+    {
+      "moveName": "チャームボイス",
+      "selectedMoveId": "disarming_voice",
+      "candidateMoveIds": [
+        "charm_voice",
+        "disarming_voice"
+      ]
+    },
+    {
+      "moveName": "ドレインキッス",
+      "selectedMoveId": "draining_kiss",
+      "candidateMoveIds": [
+        "drain_kiss",
+        "draining_kiss"
+      ]
+    },
+    {
+      "moveName": "マジカルシャイン",
+      "selectedMoveId": "dazzling_gleam",
+      "candidateMoveIds": [
+        "dazzling_gleam",
+        "magical_shine"
+      ]
+    },
+    {
+      "moveName": "ミストバースト",
+      "selectedMoveId": "misty_explosion",
+      "candidateMoveIds": [
+        "mist_burst",
+        "misty_explosion"
+      ]
+    },
+    {
+      "moveName": "おにび",
+      "selectedMoveId": "will_o_wisp",
+      "candidateMoveIds": [
+        "onibi",
+        "will_o_wisp"
+      ]
+    },
+    {
+      "moveName": "かえんボール",
+      "selectedMoveId": "pyro_ball",
+      "candidateMoveIds": [
+        "flame_ball",
+        "pyro_ball"
+      ]
+    },
+    {
+      "moveName": "フレアドライブ",
+      "selectedMoveId": "flare_blitz",
+      "candidateMoveIds": [
+        "flare_blitz",
+        "flare_drive"
+      ]
+    },
+    {
+      "moveName": "やけっぱち",
+      "selectedMoveId": "temper_flare",
+      "candidateMoveIds": [
+        "desperation",
+        "temper_flare"
+      ]
+    },
+    {
+      "moveName": "しっとのほのお",
+      "selectedMoveId": "burning_jealousy",
+      "candidateMoveIds": [
+        "burning_jealousy",
+        "scald"
+      ]
+    },
+    {
+      "moveName": "ねっぷう",
+      "selectedMoveId": "heat_wave",
+      "candidateMoveIds": [
+        "heat_wave",
+        "neppuu"
+      ]
+    },
+    {
+      "moveName": "ほのおのうず",
+      "selectedMoveId": "fire_spin",
+      "candidateMoveIds": [
+        "fire_spin",
+        "flame_vortex"
+      ]
+    },
+    {
+      "moveName": "マジカルフレイム",
+      "selectedMoveId": "mystical_fire",
+      "candidateMoveIds": [
+        "magical_flame",
+        "mystical_fire"
+      ]
+    },
+    {
+      "moveName": "れんごく",
+      "selectedMoveId": "inferno",
+      "candidateMoveIds": [
+        "hell_fire",
+        "inferno"
+      ]
+    },
+    {
+      "moveName": "からにこもる",
+      "selectedMoveId": "withdraw",
+      "candidateMoveIds": [
+        "shell_fortify",
+        "shell_smash",
+        "withdraw"
+      ]
+    },
+    {
+      "moveName": "アクアブレイク",
+      "selectedMoveId": "liquidation",
+      "candidateMoveIds": [
+        "aqua_break",
+        "liquidation"
+      ]
+    },
+    {
+      "moveName": "クイックターン",
+      "selectedMoveId": "flip_turn",
+      "candidateMoveIds": [
+        "flip_turn",
+        "quick_turn"
+      ]
+    },
+    {
+      "moveName": "ダイビング",
+      "selectedMoveId": "dive",
+      "candidateMoveIds": [
+        "dive",
+        "diving"
+      ]
+    },
+    {
+      "moveName": "うたかたのアリア",
+      "selectedMoveId": "sparkling_aria",
+      "candidateMoveIds": [
+        "aria",
+        "sparkling_aria"
+      ]
+    },
+    {
+      "moveName": "だくりゅう",
+      "selectedMoveId": "mud_bomb",
+      "candidateMoveIds": [
+        "mud_bomb",
+        "mud_stream",
+        "muddy_water"
+      ]
+    },
+    {
+      "moveName": "なみのり",
+      "selectedMoveId": "surf",
+      "candidateMoveIds": [
+        "surf",
+        "wave"
+      ]
+    },
+    {
+      "moveName": "ねっとう",
+      "selectedMoveId": "scald",
+      "candidateMoveIds": [
+        "nettou",
+        "scald"
+      ]
+    },
+    {
+      "moveName": "ひやみず",
+      "selectedMoveId": "chilling_water",
+      "candidateMoveIds": [
+        "chilling_water",
+        "cold_water"
+      ]
+    },
+    {
+      "moveName": "ちょうのまい",
+      "selectedMoveId": "quiver_dance",
+      "candidateMoveIds": [
+        "butterfly_dance",
+        "quiver_dance"
+      ]
+    },
+    {
+      "moveName": "ほたるび",
+      "selectedMoveId": "tail_glow",
+      "candidateMoveIds": [
+        "firefly",
+        "tail_glow"
+      ]
+    },
+    {
+      "moveName": "シザークロス",
+      "selectedMoveId": "x_scissor",
+      "candidateMoveIds": [
+        "scissor_cross",
+        "x_scissor"
+      ]
+    },
+    {
+      "moveName": "ミサイルばり",
+      "selectedMoveId": "pin_missile",
+      "candidateMoveIds": [
+        "missile_needle",
+        "pin_missile"
+      ]
+    },
+    {
+      "moveName": "かふんだんご",
+      "selectedMoveId": "pollen_puff",
+      "candidateMoveIds": [
+        "kafun_dango",
+        "pollen_puff"
+      ]
+    }
+  ]
+}

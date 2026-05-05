@@ -17,6 +17,10 @@ steps:
   - type: apply_status
     statusId: poison
     target: target
+    immuneTypes:
+    - poison
+    - steel
 tags:
 - contact
+- high_crit
 critRate: 1

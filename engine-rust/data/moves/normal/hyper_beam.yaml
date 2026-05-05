@@ -11,4 +11,10 @@ steps:
 - type: damage
   power: 150
   accuracy: 0.9
-tags: []
+- type: apply_status
+  target: self
+  statusId: recharge
+  duration: 1
+tags:
+- recharge
+- beam

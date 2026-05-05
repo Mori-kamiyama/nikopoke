@@ -13,4 +13,5 @@ steps:
   accuracy: 0.95
 tags:
 - contact
+- high_crit
 critRate: 1

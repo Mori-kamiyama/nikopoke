@@ -9,5 +9,8 @@ steps:
   accuracy: 0.9
 - type: apply_status
   target: self
-  statusId: lock_move
+  statusId: recharge
   duration: 1
+tags:
+- contact
+- recharge

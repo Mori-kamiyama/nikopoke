@@ -3,8 +3,12 @@ name: サイコショック
 type: psychic
 category: special
 pp: 10
+power: 80
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 80
   accuracy: 1
   useDefensiveStat: true
+tags: []

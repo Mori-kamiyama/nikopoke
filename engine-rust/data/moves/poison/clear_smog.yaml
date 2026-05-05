@@ -10,4 +10,7 @@ description: 特殊な　泥の　塊を 相手に　投げつけて　攻撃す
 steps:
 - type: damage
   power: 50
-tags: []
+- type: reset_stages
+  target: target
+tags:
+- always_hit

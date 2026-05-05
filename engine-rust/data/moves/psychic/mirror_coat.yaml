@@ -8,6 +8,5 @@ accuracy: 1.0
 priority: -5
 description: 相手から　受けた　特殊攻撃の ダメージを　２倍に　して その相手に　返す。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: mirror_coat_effect
 tags: []

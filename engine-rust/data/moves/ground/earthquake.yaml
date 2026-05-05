@@ -11,4 +11,10 @@ steps:
 - type: damage
   power: 100
   accuracy: 1.0
+  powerMultiplierIf:
+    type: target_has_any_status
+    statusIds:
+    - dig
+    - semi_invulnerable_underground
+  powerMultiplier: 2
 tags: []

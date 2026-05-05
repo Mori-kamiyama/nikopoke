@@ -3,10 +3,11 @@ name: なやみのタネ
 type: grass
 category: status
 pp: 10
+power: null
+accuracy: 1.0
+priority: 0
 steps:
-- type: chance
-  p: 1
-  then:
-  - type: apply_status
-    statusId: insomnia
-    chance: 1
+- type: set_ability
+  target: target
+  abilityId: insomnia
+tags: []

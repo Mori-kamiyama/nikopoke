@@ -3,6 +3,9 @@ name: うらみつらみ
 type: ghost
 category: special
 pp: 10
+power: 75
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 75
@@ -11,4 +14,4 @@ steps:
   target: target
   stages:
     atk: -1
-  chance: 1
+tags: []

@@ -11,5 +11,12 @@ steps:
 - type: damage
   power: 60
   accuracy: 1.0
+- type: conditional
+  if:
+    type: target_has_item
+  then:
+  - type: steal_item
+    target: target
+    receiver: self
 tags:
 - contact

@@ -4,5 +4,4 @@ type: dark
 category: status
 pp: 10
 steps:
-- type: manual
-  manualReason: 道具の交換はDSLで表現できないため
+- type: swap_items

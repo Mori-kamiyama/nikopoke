@@ -3,7 +3,13 @@ name: ちょうおんぱ
 type: normal
 category: status
 pp: 20
+power: null
+accuracy: 0.55
+priority: 0
+description: 相手を1～4ターンの間『こんらん』状態にする。
 steps:
 - type: apply_status
   statusId: confusion
-  chance: 0.55
+  target: target
+tags:
+- sound

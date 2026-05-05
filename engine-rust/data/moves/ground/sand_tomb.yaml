@@ -11,6 +11,18 @@ steps:
 - type: damage
   power: 35
   accuracy: 0.85
-- type: manual
-  manualReason: 'Multi-turn trapping/binding effects are not fully supported; Unsupported ailment: trap'
+- type: apply_status
+  statusId: bind
+  target: target
+  duration:
+    min: 4
+    max: 5
+  data:
+    moveName: すなじごく
+- type: apply_status
+  statusId: trapped
+  target: target
+  duration:
+    min: 4
+    max: 5
 tags: []

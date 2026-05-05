@@ -1,5 +1,7 @@
 # Tatuta
 
+> Deprecated: いまの運用では `tatuta` を使わず、`frontend` から `npm run sync:data` で CSV/YAML/公開JSON を同期します。
+
 `tatuta` は、`nikopoke` の技DSLを目視レビュー・直接修正するローカルWebツールです。
 
 ## できること
@@ -11,6 +13,8 @@
 - 保存時に `moves.yaml` と分割YAMLを直接更新
 
 ## 起動
+
+通常の対戦データ更新では不要です。既存DSLを目視確認したい時だけ使ってください。
 
 ```bash
 cd /Users/yuta/date/TypeScript/nikipoke/nikopoke/tatuta

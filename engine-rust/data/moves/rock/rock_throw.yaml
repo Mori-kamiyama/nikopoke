@@ -4,11 +4,11 @@ type: rock
 category: physical
 pp: 15
 power: 50
-accuracy: 0.9
+accuracy: 0.95
 priority: 0
 description: '小さな　岩を　持ちあげて 相手に　投げつけて　攻撃する。 '
 steps:
 - type: damage
   power: 50
-  accuracy: 0.9
+  accuracy: 0.95
 tags: []

@@ -11,3 +11,6 @@ steps:
   target: self
   stages:
     spe: -1
+tags:
+- contact
+- punch

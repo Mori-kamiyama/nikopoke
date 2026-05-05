@@ -13,3 +13,4 @@ steps:
   accuracy: 1.0
 tags:
 - contact
+- punch

@@ -11,4 +11,8 @@ steps:
 - type: apply_status
   statusId: paralysis
   target: target
+  chance: 0.9
+  immuneTypes:
+  - electric
+  - ground
 tags: []

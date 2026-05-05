@@ -8,8 +8,5 @@ accuracy: 1.0
 priority: 0
 description: 相手の　攻撃力と　同じだけ 自分の　ＨＰを　回復する。 そして　相手の　攻撃を　さげる。
 steps:
-- type: modify_stage
-  target: target
-  stages:
-    atk: -1
+- type: strength_sap_effect
 tags: []

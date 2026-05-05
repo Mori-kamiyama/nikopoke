@@ -3,7 +3,12 @@ name: シャドーレイ
 type: ghost
 category: special
 pp: 5
+power: 100
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 100
   accuracy: 1
+tags:
+- ignore_ability

@@ -10,7 +10,7 @@ use crate::core::utils::{get_active_creature, get_active_creature_mut, stage_mul
 use crate::data::moves::{MoveData, MoveDatabase};
 use crate::data::type_chart::TypeChart;
 use serde_json::{Map, Value};
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 
 #[derive(Clone, Debug)]
 pub struct BattleOptions {
@@ -52,6 +52,14 @@ impl BattleEngine {
     ) -> BattleState {
         let mut next = state.clone();
         next.turn += 1;
+        for player in &mut next.players {
+            if let Some(active) = player.team.get_mut(player.active_slot) {
+                active.volatile_data.remove("damagedThisTurn");
+                active.volatile_data.remove("boostedThisTurn");
+                active.volatile_data.remove("actedThisTurn");
+                active.volatile_data.remove("selectedPriority");
+            }
+        }
         let log_start = next.log.len();
         let mut rng_log = Vec::new();
         let mut rng_recorder = || {
@@ -123,7 +131,7 @@ impl BattleEngine {
             })
             .collect();
 
-        let mut ordered: Vec<OrderedAction> = filtered_actions
+        let mut ordered: VecDeque<OrderedAction> = filtered_actions
             .iter()
             .map(|action| {
                 if action.action_type == ActionType::Switch {
@@ -139,7 +147,7 @@ impl BattleEngine {
                     .as_deref()
                     .and_then(|id| self.move_db.get(id));
                 let base_priority = move_data.and_then(|m| m.priority).unwrap_or(0) as f32;
-                let priority = run_ability_value_hook(
+                let mut priority = run_ability_value_hook(
                     &next,
                     &action.player_id,
                     "onModifyPriority",
@@ -152,8 +160,15 @@ impl BattleEngine {
                         turn: next.turn,
                         stages: None,
                     },
-                )
-                .round() as i32;
+                );
+                if move_data
+                    .is_some_and(|m| matches!(m.id.as_str(), "grassy_glide" | "grass_slider"))
+                    && next.field.global.iter().any(|effect| effect.id == "grassy_terrain")
+                    && get_active_creature(&next, &action.player_id).is_some_and(is_grounded_for_field)
+                {
+                    priority += 1.0;
+                }
+                let priority = priority.round() as i32;
                 OrderedAction {
                     action: action.clone(),
                     priority,
@@ -164,19 +179,32 @@ impl BattleEngine {
             .collect();
 
         let trick_room_active = next.field.global.iter().any(|effect| effect.id == "trick_room");
-        ordered.sort_by(|a, b| {
-            let speed_order = if trick_room_active {
-                a.speed.cmp(&b.speed)
-            } else {
-                b.speed.cmp(&a.speed)
-            };
-            b.priority
-                .cmp(&a.priority)
-                .then_with(|| speed_order)
-                .then_with(|| a.rand.partial_cmp(&b.rand).unwrap_or(std::cmp::Ordering::Equal))
-        });
+        // Sort into a temporary Vec then convert back to VecDeque
+        {
+            let mut tmp: Vec<OrderedAction> = ordered.into_iter().collect();
+            tmp.sort_by(|a, b| {
+                let speed_order = if trick_room_active {
+                    a.speed.cmp(&b.speed)
+                } else {
+                    b.speed.cmp(&a.speed)
+                };
+                b.priority
+                    .cmp(&a.priority)
+                    .then_with(|| speed_order)
+                    .then_with(|| a.rand.partial_cmp(&b.rand).unwrap_or(std::cmp::Ordering::Equal))
+            });
+            ordered = tmp.into_iter().collect();
+        }
+        for ordered_action in &ordered {
+            if let Some(active) = get_active_creature_mut(&mut next, &ordered_action.action.player_id) {
+                active.volatile_data.insert(
+                    "selectedPriority".to_string(),
+                    Value::Number(ordered_action.priority.into()),
+                );
+            }
+        }
 
-        for ordered_action in ordered {
+        while let Some(ordered_action) = ordered.pop_front() {
             let mut action = ordered_action.action;
             let player_id = action.player_id.clone();
             let attacker_name = next
@@ -223,6 +251,22 @@ impl BattleEngine {
                     if active.hp > 0 {
                         let is_ghost = active.types.iter().any(|t| t == "ghost");
                         if !is_ghost {
+                            let trapped_by_status = run_status_hooks(
+                                &next,
+                                &action.player_id,
+                                "onTrap",
+                                StatusHookContext {
+                                    rng: &mut rng_recorder,
+                                    action: Some(&action),
+                                    move_data: None,
+                                    type_chart: &self.type_chart,
+                                },
+                            )
+                            .prevent_action;
+                            if trapped_by_status {
+                                next.log.push(format!("{}は 交代できなかった！", attacker_name));
+                                continue;
+                            }
                             let trapper = next.players.iter().find(|p| {
                                 p.id != action.player_id
                                     && run_ability_check_hook(
@@ -268,6 +312,7 @@ impl BattleEngine {
                 for event in switch_result.events {
                     next = apply_event(&next, &event);
                 }
+                next = apply_switch_in_field_effects(next, &action.player_id);
                 continue;
             }
 
@@ -439,6 +484,26 @@ impl BattleEngine {
                     next.log.push(format!("{}の {}は PPが 足りない！", attacker_name, move_name));
                     continue;
                 }
+                let previous_move = active.volatile_data.get("lastMove").and_then(|v| v.as_str());
+                let previous_failed = active
+                    .volatile_data
+                    .get("lastMoveFailed")
+                    .and_then(|v| v.as_bool())
+                    .unwrap_or(false);
+                let previous_count = active
+                    .volatile_data
+                    .get("consecutiveMoveCount")
+                    .and_then(|v| v.as_i64())
+                    .unwrap_or(0);
+                let consecutive_count = if previous_move == Some(move_id.as_str()) && !previous_failed {
+                    previous_count + 1
+                } else {
+                    1
+                };
+                active.volatile_data.insert(
+                    "consecutiveMoveCount".to_string(),
+                    Value::Number(consecutive_count.into()),
+                );
                 active
                     .volatile_data
                     .insert("lastMove".to_string(), Value::String(move_id.clone()));
@@ -455,6 +520,7 @@ impl BattleEngine {
                 ignore_immunity: false,
                 bypass_substitute: false,
                 ignore_substitute: false,
+                ignore_ability: false,
                 is_sound: false,
                 last_damage: None,
             };
@@ -484,6 +550,40 @@ impl BattleEngine {
             );
 
             next = apply_events(&next, &events);
+            let failed = move_failed(&events);
+            if let Some(active) = get_active_creature_mut(&mut next, &player_id) {
+                active
+                    .volatile_data
+                    .insert("lastMoveFailed".to_string(), Value::Bool(failed));
+                active
+                    .volatile_data
+                    .insert("actedThisTurn".to_string(), Value::Bool(true));
+            }
+
+            // after_you: if any player in the remaining queue has afterYouPending set,
+            // move their action to the front so they act next.
+            if !ordered.is_empty() {
+                let after_you_player: Option<String> = ordered.iter().find_map(|oa| {
+                    get_active_creature(&next, &oa.action.player_id)
+                        .and_then(|c| c.volatile_data.get("afterYouPending"))
+                        .and_then(|v| v.as_bool())
+                        .filter(|&b| b)
+                        .map(|_| oa.action.player_id.clone())
+                });
+                if let Some(pid) = after_you_player {
+                    // Clear the flag
+                    if let Some(player) = next.players.iter_mut().find(|p| p.id == pid) {
+                        if let Some(active) = player.team.get_mut(player.active_slot) {
+                            active.volatile_data.remove("afterYouPending");
+                        }
+                    }
+                    // Move that player's action to the front
+                    if let Some(idx) = ordered.iter().position(|oa| oa.action.player_id == pid) {
+                        let bumped = ordered.remove(idx).unwrap();
+                        ordered.push_front(bumped);
+                    }
+                }
+            }
 
             if is_battle_over(&next) {
                 break;
@@ -674,6 +774,158 @@ impl BattleEngine {
 
         next
     }
+
+    pub fn replace_fainted_pokemon(
+        &self,
+        state: &BattleState,
+        player_id: &str,
+        slot: usize,
+        rng: &mut dyn FnMut() -> f64,
+    ) -> BattleState {
+        let mut next = state.clone();
+        let Some(player) = next.players.iter().find(|p| p.id == player_id) else {
+            next.log.push(format!("{} tried to replace pokemon but player not found.", player_id));
+            return next;
+        };
+        if slot >= player.team.len() {
+            next.log.push(format!("{} tried to replace with an invalid slot.", player.name));
+            return next;
+        }
+        if slot == player.active_slot {
+            next.log.push(format!("{} tried to replace with the active slot.", player.name));
+            return next;
+        }
+        if player.team.get(slot).is_some_and(|creature| creature.hp <= 0) {
+            next.log.push(format!("{} tried to replace with a fainted Pokémon.", player.name));
+            return next;
+        }
+
+        let Some(active) = get_active_creature(&next, player_id) else {
+            return next;
+        };
+        let must_replace = active.hp <= 0 || active.statuses.iter().any(|status| status.id == "pending_switch");
+        if !must_replace {
+            next.log.push(format!("{}は まだ戦える！", active.name));
+            return next;
+        }
+
+        next = apply_event(
+            &next,
+            &BattleEvent::Switch {
+                player_id: player_id.to_string(),
+                slot,
+            },
+        );
+
+        let switch_result = run_ability_hooks(
+            &next,
+            player_id,
+            "onSwitchIn",
+            AbilityHookContext {
+                rng,
+                action: None,
+                move_data: None,
+            },
+        );
+        next = switch_result.state.unwrap_or(next);
+        for event in switch_result.events {
+            next = apply_event(&next, &event);
+        }
+        next = apply_switch_in_field_effects(next, player_id);
+        next
+    }
+}
+
+fn move_failed(events: &[BattleEvent]) -> bool {
+    if events.iter().any(|event| matches!(event, BattleEvent::Log { message, .. } if message.contains("はずれた") || message.contains("効かない"))) {
+        return true;
+    }
+    let has_progress = events.iter().any(|event| match event {
+        BattleEvent::Damage { amount, .. } => *amount > 0,
+        BattleEvent::ApplyStatus { .. }
+        | BattleEvent::ReplaceStatus { .. }
+        | BattleEvent::ModifyStage { .. }
+        | BattleEvent::ClearStages { .. }
+        | BattleEvent::ResetStages { .. }
+        | BattleEvent::CureAllStatus { .. }
+        | BattleEvent::ApplyFieldStatus { .. }
+        | BattleEvent::RemoveFieldStatus { .. }
+        | BattleEvent::Switch { .. }
+        | BattleEvent::SetVolatile { .. }
+        | BattleEvent::SetAbility { .. }
+        | BattleEvent::SwapAbilities { .. }
+        | BattleEvent::SetItem { .. }
+        | BattleEvent::SwapItems { .. }
+        | BattleEvent::SetStages { .. }
+        | BattleEvent::SwapStages { .. }
+        | BattleEvent::AverageStats { .. }
+        | BattleEvent::SwapAttackDefense { .. } => true,
+        _ => false,
+    });
+    !has_progress
+}
+
+fn apply_switch_in_field_effects(mut state: BattleState, player_id: &str) -> BattleState {
+    let effects = state
+        .field
+        .sides
+        .get(player_id)
+        .cloned()
+        .unwrap_or_default();
+    if effects.is_empty() {
+        return state;
+    }
+    let Some(active) = get_active_creature(&state, player_id).cloned() else {
+        return state;
+    };
+    if active.hp <= 0 {
+        return state;
+    }
+    let grounded = is_grounded_for_field(&active);
+    let mut events = Vec::new();
+    for effect in effects {
+        match effect.id.as_str() {
+            "spikes" if grounded => {
+                events.push(BattleEvent::Damage {
+                    target_id: player_id.to_string(),
+                    amount: (active.max_hp / 8).max(1),
+                    meta: Map::new(),
+                });
+            }
+            "stealth_rock" => {
+                events.push(BattleEvent::Damage {
+                    target_id: player_id.to_string(),
+                    amount: (active.max_hp / 8).max(1),
+                    meta: Map::new(),
+                });
+            }
+            "toxic_spikes" if grounded => {
+                events.push(BattleEvent::ApplyStatus {
+                    target_id: player_id.to_string(),
+                    status_id: "poison".to_string(),
+                    duration: None,
+                    stack: false,
+                    data: std::collections::HashMap::new(),
+                    meta: Map::new(),
+                });
+            }
+            "sticky_web" if grounded => {
+                events.push(BattleEvent::ModifyStage {
+                    target_id: player_id.to_string(),
+                    stages: std::collections::HashMap::from([("spe".to_string(), -1)]),
+                    clamp: true,
+                    fail_if_no_change: false,
+                    show_event: true,
+                    meta: Map::new(),
+                });
+            }
+            _ => {}
+        }
+    }
+    for event in events {
+        state = apply_event(&state, &event);
+    }
+    state
 }
 
 #[derive(Clone, Debug)]
@@ -691,6 +943,15 @@ pub fn step_battle(
     options: BattleOptions,
 ) -> BattleState {
     BattleEngine::default().step_battle(state, actions, rng, options)
+}
+
+pub fn replace_fainted_pokemon(
+    state: &BattleState,
+    player_id: &str,
+    slot: usize,
+    rng: &mut dyn FnMut() -> f64,
+) -> BattleState {
+    BattleEngine::default().replace_fainted_pokemon(state, player_id, slot, rng)
 }
 
 pub fn is_battle_over(state: &BattleState) -> bool {
@@ -841,6 +1102,27 @@ fn creature_speed(state: &BattleState, player_id: &str) -> i32 {
     speed.round() as i32
 }
 
+fn is_grounded_for_field(creature: &crate::core::state::CreatureState) -> bool {
+    (creature.statuses.iter().any(|s| s.id == "roosted")
+        || !effective_types_for_field(creature).iter().any(|t| t == "flying"))
+        && creature.ability.as_deref() != Some("levitate")
+        && !creature.statuses.iter().any(|s| s.id == "magnet_rise")
+}
+
+fn effective_types_for_field(creature: &crate::core::state::CreatureState) -> Vec<String> {
+    creature
+        .types
+        .iter()
+        .filter(|type_id| {
+            let removed_status = format!("type_removed_{}", type_id);
+            !creature.statuses.iter().any(|status| status.id == removed_status)
+                && !(type_id.as_str() == "flying"
+                    && creature.statuses.iter().any(|status| status.id == "roosted"))
+        })
+        .cloned()
+        .collect()
+}
+
 fn run_all_ability(
     state: BattleState,
     hook: &str,
@@ -962,6 +1244,14 @@ fn matches_transform(event: &BattleEvent, transform: &EventTransform) -> bool {
             }
         }
     }
+    if let Some(meta_key) = &transform.require_present_meta {
+        let Some(meta) = event_meta(event) else {
+            return false;
+        };
+        if !meta.get(meta_key).and_then(|v| v.as_bool()).unwrap_or(false) {
+            return false;
+        }
+    }
     true
 }
 
@@ -974,7 +1264,11 @@ fn event_target_id(event: &BattleEvent) -> Option<String> {
         | BattleEvent::ModifyStage { target_id, .. }
         | BattleEvent::ClearStages { target_id, .. }
         | BattleEvent::ResetStages { target_id, .. }
-        | BattleEvent::CureAllStatus { target_id, .. } => Some(target_id.clone()),
+        | BattleEvent::CureAllStatus { target_id, .. }
+        | BattleEvent::SetAbility { target_id, .. }
+        | BattleEvent::SetItem { target_id, .. }
+        | BattleEvent::SetStages { target_id, .. }
+        | BattleEvent::SwapAttackDefense { target_id, .. } => Some(target_id.clone()),
         _ => None,
     }
 }
@@ -992,7 +1286,15 @@ fn event_source_id(event: &BattleEvent) -> Option<String> {
         | BattleEvent::CureAllStatus { meta, .. }
         | BattleEvent::ApplyFieldStatus { meta, .. }
         | BattleEvent::RemoveFieldStatus { meta, .. }
-        | BattleEvent::RandomMove { meta, .. } => crate::core::events::meta_get_string(meta, "source"),
+        | BattleEvent::RandomMove { meta, .. }
+        | BattleEvent::SetAbility { meta, .. }
+        | BattleEvent::SwapAbilities { meta, .. }
+        | BattleEvent::SetItem { meta, .. }
+        | BattleEvent::SwapItems { meta, .. }
+        | BattleEvent::SetStages { meta, .. }
+        | BattleEvent::SwapStages { meta, .. }
+        | BattleEvent::AverageStats { meta, .. }
+        | BattleEvent::SwapAttackDefense { meta, .. } => crate::core::events::meta_get_string(meta, "source"),
         _ => None,
     }
 }
@@ -1010,7 +1312,15 @@ fn event_meta(event: &BattleEvent) -> Option<&Map<String, Value>> {
         | BattleEvent::CureAllStatus { meta, .. }
         | BattleEvent::ApplyFieldStatus { meta, .. }
         | BattleEvent::RemoveFieldStatus { meta, .. }
-        | BattleEvent::RandomMove { meta, .. } => Some(meta),
+        | BattleEvent::RandomMove { meta, .. }
+        | BattleEvent::SetAbility { meta, .. }
+        | BattleEvent::SwapAbilities { meta, .. }
+        | BattleEvent::SetItem { meta, .. }
+        | BattleEvent::SwapItems { meta, .. }
+        | BattleEvent::SetStages { meta, .. }
+        | BattleEvent::SwapStages { meta, .. }
+        | BattleEvent::AverageStats { meta, .. }
+        | BattleEvent::SwapAttackDefense { meta, .. } => Some(meta),
         _ => None,
     }
 }
@@ -1061,6 +1371,20 @@ fn choose_random_move(
                 Vec::new()
             }
         }
+        "recent_moves" => state
+            .history
+            .as_ref()
+            .and_then(|history| {
+                history
+                    .turns
+                    .iter()
+                    .rev()
+                    .flat_map(|turn| turn.actions.iter().rev())
+                    .filter_map(|action| action.move_id.clone())
+                    .find(|move_id| move_id != "copycat" && move_id != "metronome")
+            })
+            .into_iter()
+            .collect(),
         "physical" => move_db
             .as_map()
             .iter()
@@ -1083,6 +1407,9 @@ fn choose_random_move(
     };
 
     if candidates.is_empty() {
+        if pool == "recent_moves" {
+            return None;
+        }
         candidates = move_db.as_map().keys().cloned().collect();
     }
 
@@ -1174,6 +1501,7 @@ fn expand_random_moves(
                     ignore_immunity: false,
                     bypass_substitute: false,
                     ignore_substitute: false,
+                    ignore_ability: false,
                     is_sound: false,
                     last_damage: None,
                 };

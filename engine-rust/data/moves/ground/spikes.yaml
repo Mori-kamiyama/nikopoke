@@ -10,5 +10,6 @@ description: 相手の　足下に　まきびしを しかける。交代で　
 steps:
 - type: apply_field_status
   statusId: spikes
+  side: false
   stack: true
 tags: []

@@ -11,4 +11,6 @@ steps:
 - type: damage
   power: 40
   accuracy: 1.0
+- type: apply_field_status
+  statusId: echo_voice_power_up
 tags: []

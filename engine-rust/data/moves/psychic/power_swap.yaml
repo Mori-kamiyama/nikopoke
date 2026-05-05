@@ -8,6 +8,8 @@ accuracy: null
 priority: 0
 description: 超能力で　自分と　相手の 攻撃と　特攻の 能力変化を　入れ替える。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: swap_stages
+  stats:
+  - atk
+  - spa
 tags: []

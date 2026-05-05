@@ -11,4 +11,8 @@ steps:
 - type: damage_ratio
   ratioMaxHp: -0.5
   target: self
+- type: apply_status
+  statusId: roosted
+  target: self
+  duration: 1
 tags: []

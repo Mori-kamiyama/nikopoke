@@ -3,6 +3,9 @@ name: ねっさのだいち
 type: ground
 category: special
 pp: 10
+power: 70
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 70
@@ -21,3 +24,5 @@ steps:
   - type: remove_status
     statusId: freeze
     target: self
+tags:
+- thaws_user

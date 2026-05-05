@@ -11,4 +11,5 @@ steps:
   target: self
   stages:
     spe: 1
-  chance: 1
+tags:
+- contact

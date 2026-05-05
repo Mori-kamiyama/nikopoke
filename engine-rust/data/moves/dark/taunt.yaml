@@ -8,6 +8,8 @@ accuracy: 1.0
 priority: 0
 description: 相手を　怒らせる。３ターンの あいだ　相手は　ダメージを 与える　技しか　だせなくなる。
 steps:
-- type: manual
-  manualReason: No supported effects inferred
+- type: apply_status
+  statusId: taunt
+  target: target
+  duration: 3
 tags: []

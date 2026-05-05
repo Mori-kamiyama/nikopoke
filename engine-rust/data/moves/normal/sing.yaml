@@ -11,4 +11,5 @@ steps:
 - type: apply_status
   statusId: sleep
   target: target
-tags: []
+tags:
+- sound

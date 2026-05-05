@@ -3,9 +3,15 @@ name: こごえるかぜ
 type: ice
 category: special
 pp: 15
+power: 55
+accuracy: 0.95
+priority: 0
 steps:
+- type: damage
+  power: 55
+  accuracy: 0.95
 - type: modify_stage
   target: target
   stages:
     spe: -1
-  chance: 1
+tags: []

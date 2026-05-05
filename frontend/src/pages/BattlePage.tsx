@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, RotateCcw } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { cn } from '../lib/cn';
 import { loadAllData, getTypeColor } from '../lib/data';
 import { BattleLog, ActionSummary } from '../components/BattleLog';
 import { createBattleRecord, saveBattleRecord } from '../lib/battleStats';
+import { getAbilityLabel } from './PokemonDetailPage';
 import { uploadGlobalBattleRecord } from '../lib/globalBattleStats';
 import {
     initEngine,
@@ -522,8 +523,9 @@ export default function BattlePage() {
     const [moves, setMoves] = useState<MoveData>({});
     const [battleState, setBattleState] = useState<BattleStateWire | null>(null);
     const [loading, setLoading] = useState(true);
-    const [waiting, setWaiting] = useState(false);
-    const [showSwitchMenu, setShowSwitchMenu] = useState(false);
+    const [waiting, setWaiting] = useState(false);    
+    const [commandMode, setCommandMode] = useState<'fight' | 'pokemon'>('fight');
+    const [focusedTeamSlot, setFocusedTeamSlot] = useState(0);
     const [lastMoves, setLastMoves] = useState<{ player?: string; ai?: string }>({});
     const [onlineSnapshot, setOnlineSnapshot] = useState(getOnlineSessionSnapshot());
     const [localPlayerId, setLocalPlayerId] = useState<string>('player');
@@ -956,7 +958,7 @@ if (onlineSnapshot.role === 'host' && onlineSnapshot.remoteDeck) {
     const handleSelectMove = async (moveId: string) => {
         if (!battleState || waiting) return;
         setWaiting(true);
-        setShowSwitchMenu(false);
+        setCommandMode('fight');
 
         if (battleState && needsForcedSwitch(battleState, localPlayerIdRef.current)) {
             setWaiting(false);
@@ -1007,7 +1009,7 @@ if (!aiAction) {
         if (player.team[index].hp <= 0) return;
 
         setWaiting(true);
-        setShowSwitchMenu(false);
+        setCommandMode('fight');
 
         try {
             const playerAction: ActionWire = {
@@ -1168,7 +1170,8 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                 )}
             </header>
 
-            <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-4 px-4 py-6">
+            <main className="mx-auto grid h-[calc(100dvh-65px)] w-full max-w-7xl grid-cols-1 gap-4 overflow-hidden px-4 py-4 lg:grid-cols-[minmax(0,1fr)_420px]">
+            <section className="flex min-h-0 flex-col gap-3 overflow-hidden">
                 <div className="flex items-start gap-4">
                     <TeamIndicator team={ai.team} activeSlot={ai.activeSlot} species={species} isPlayer={false} />
                     <PokemonStatus
@@ -1190,13 +1193,6 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                     getTypeColor={getTypeColor}
                 />
 
-                <div ref={logsRef}>
-                    <BattleLog
-                        logs={battleState.log}
-                        currentTurn={battleState.turn}
-                    />
-                </div>
-
                 <div className="flex items-end gap-4">
                     <TeamIndicator team={player.team} activeSlot={player.activeSlot} species={species} isPlayer={true} />
                     <PokemonStatus
@@ -1207,49 +1203,32 @@ const aiLastMove = lastMoves.ai ? moves[lastMoves.ai] : undefined;
                 </div>
 
                 <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-4">
-                    {showSwitchMenu || mustSwitch ? (
-                        <div>
-                            <div className="mb-3 flex items-center justify-between">
-                                <span className="font-medium text-[var(--text-primary)]">
-                                    {mustSwitch ? '交代先を選んでください' : 'ポケモンを交代'}
-                                </span>
-                                {!mustSwitch && (
-                                    <button
-                                        onClick={() => setShowSwitchMenu(false)}
-                                        className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-                                        戻る
-                                    </button>
-                                )}
-                            </div>
-                            <div className="grid grid-cols-3 gap-2">
-                                {player.team.map((mon, idx) => {
-                                    const monSpecies = species[mon.speciesId];
-                                    const isActive = idx === player.activeSlot;
-                                    const isFainted = mon.hp <= 0;
-                                    return (
-                                        <button
-                                            key={idx}
-                                            onClick={() => handleSwitch(idx)}
-                                            disabled={isActive || isFainted || waiting}
-                                            className={cn(
-                                                'rounded-xl border p-3 text-left transition-all',
-                                                isActive
-                                                    ? 'border-[var(--accent)]/50 bg-[var(--accent-muted)]'
-                                                    : isFainted
-                                                        ? 'cursor-not-allowed border-red-500/30 bg-red-900/10 opacity-50'
-                                                        : 'border-[var(--border)] bg-[var(--surface-3)] hover:border-[var(--border-hover)]'
-                                            )}
-                                        >
-                                            <div className="text-sm font-medium text-[var(--text-primary)]">{monSpecies?.name}</div>
-                                            <div className="text-xs tabular-nums text-[var(--text-muted)]">
-                                                HP: {mon.hp}/{mon.maxHp}
-                                            </div>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ) : (
+                <div className="mb-3 grid grid-cols-2 gap-2">
+    <button
+        onClick={() => setCommandMode('fight')}
+        className={cn(
+            'rounded-lg p-2 text-sm font-medium transition-all',
+            commandMode === 'fight'
+                ? 'bg-[var(--accent)] text-white'
+                : 'bg-[var(--surface-3)] text-[var(--text-muted)] hover:bg-[var(--surface-4)]'
+        )}
+    >
+        たたかう
+    </button>
+
+    <button
+        onClick={() => setCommandMode('pokemon')}
+        className={cn(
+            'rounded-lg p-2 text-sm font-medium transition-all',
+            commandMode === 'pokemon'
+                ? 'bg-[var(--accent)] text-white'
+                : 'bg-[var(--surface-3)] text-[var(--text-muted)] hover:bg-[var(--surface-4)]'
+        )}
+    >
+        ニキモン
+    </button>
+</div>
+                    {false ? null : (
                         <div>
                             <div className="mb-3 grid grid-cols-2 gap-2">
                                 {playerPokemon.moves.map((moveId) => {
@@ -1393,19 +1372,254 @@ const effectivenessLabel = getEffectivenessLabel(effectiveness);
                                     );
                                 })}
                             </div>
-
-                            <button
-                                onClick={() => setShowSwitchMenu(true)}
-                                disabled={waiting}
-                                className="flex w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-3)] p-3 text-[var(--text-primary)] transition-all hover:border-[var(--border-hover)] hover:bg-[var(--surface-4)]"
-                            >
-                                <RotateCcw className="size-4" />
-                                ポケモン交代
-                            </button>
                         </div>
                     )}
                 </div>
-            </main>
+                </section>
+
+                <aside className="min-h-0 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] p-3">
+            <div ref={logsRef} className="h-full overflow-y-auto pr-1">
+        <BattleLog
+            logs={battleState.log}
+            currentTurn={battleState.turn}
+        />
+            </div>
+        </aside>
+        {(commandMode === 'pokemon' || mustSwitch) && (
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 px-4">
+        <div className="grid h-[80dvh] w-full max-w-7xl grid-cols-[320px_minmax(0,1fr)_320px] gap-5">
+            {/* Left column: player team list */}
+            <div className="flex min-h-0 flex-col space-y-2 rounded-xl bg-[var(--surface-2)] p-4">
+                <div className="mb-2 text-sm font-bold text-[var(--text-primary)]">
+                    味方チーム
+                </div>
+
+                {player.team.map((mon, idx) => {
+                    const monSpecies = species[mon.speciesId];
+                    const isActive = idx === player.activeSlot;
+                    const isFainted = mon.hp <= 0;
+
+                    return (
+                        <button
+                            key={idx}
+                            onClick={() => setFocusedTeamSlot(idx)}
+                            disabled={isFainted}
+                            className={cn(
+                                'w-full rounded-lg border p-2 text-left transition-all',
+                                focusedTeamSlot === idx
+                                    ? 'border-[var(--accent)] bg-[var(--accent-muted)]'
+                                    : isActive
+                                        ? 'border-[var(--accent)]/50 bg-[var(--surface-3)]'
+                                        : 'border-[var(--border)] bg-[var(--surface-3)] hover:border-[var(--border-hover)]',
+                                isFainted && 'opacity-50'
+                            )}
+                        >
+                            <div className="truncate text-sm font-medium text-[var(--text-primary)]">
+                                {monSpecies?.name}
+                            </div>
+                            <div className="text-xs tabular-nums text-[var(--text-muted)]">
+                                HP {mon.hp}/{mon.maxHp}
+                            </div>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Center column: focused pokemon detail */}
+            <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)] rounded-xl bg-[var(--surface-2)] p-6">
+                {(() => {
+                    const mon = player.team[focusedTeamSlot] ?? player.team[player.activeSlot];
+                    const monSpecies = species[mon.speciesId];
+                    const isActive = focusedTeamSlot === player.activeSlot;
+                    const isFainted = mon.hp <= 0;
+                    const statusLabel = mon.statuses.length > 0
+                        ? mon.statuses.map((status) => getStatusLabel(status.id)).join(' / ')
+                        : 'なし';
+
+                    if (!monSpecies) return null;
+
+                    return (
+                        <>
+                            {/* 上段 */}
+                            <div className="grid grid-cols-[minmax(0,1fr)_360px] gap-4">
+                                {/* 左：基本情報 */}
+                                <div className="space-y-4">
+                                    <div className="mb-3 flex items-start justify-between gap-3">
+                                        <div>
+                                            <div className="text-xl font-bold text-[var(--text-primary)]">
+                                                {monSpecies?.name}
+                                            </div>
+                                            <div className="mt-1 flex gap-1">
+                                                {(monSpecies?.type ?? []).map((t) => (
+                                                    <span
+                                                        key={t}
+                                                        className="rounded-full px-2 py-0.5 text-xs text-white"
+                                                        style={{ backgroundColor: getTypeColor(t) }}
+                                                    >
+                                                        {getTypeLabel(t)}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <div className="mt-1 text-sm text-[var(--text-muted)]">
+                                                HP {mon.hp}/{mon.maxHp}
+                                            </div>
+                                            <div className="mt-2 h-2 w-full rounded-full bg-[var(--surface-3)]">
+                                                <div
+                                                    className="h-full rounded-full bg-emerald-500"
+                                                    style={{
+                                                        width: `${(mon.hp / mon.maxHp) * 100}%`,
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="mt-4 rounded-lg bg-[var(--surface-3)] p-3">
+                                                <div className="text-xs text-[var(--text-muted)]">特性</div>
+                                                <div className="font-bold text-[var(--text-primary)]">
+                                                    {mon.ability ? getAbilityLabel(mon.ability) : 'なし'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setCommandMode('fight')}
+                                            disabled={mustSwitch}
+                                            className="rounded-lg bg-[var(--surface-3)] px-3 py-1 text-sm text-[var(--text-muted)] disabled:opacity-40"
+                                        >
+                                            戻る
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* 右：種族値 */}
+                                <div className="rounded-xl bg-[var(--surface-3)] p-4">
+                                    <div className="mb-3 text-sm font-semibold text-[var(--text-muted)]">
+                                        種族値
+                                    </div>
+                                    {(() => {
+                                        const stats = monSpecies?.baseStats;
+                                        if (!stats) return null;
+                                        const evs = {
+                                            hp: 0,
+                                            atk: 252,
+                                            def: 0,
+                                            spa: 252,
+                                            spd: 4,
+                                            spe: 0,
+                                        };
+                                        const total = stats.hp + stats.atk + stats.def + stats.spa + stats.spd + stats.spe;
+                                        const renderBar = (label: string, value: number, ev: number, max: number) => {
+                                            const percentage = Math.min(100, (value / max) * 100);
+                                            const evBonus = Math.floor(ev / 4);
+                                            const evPercentage = Math.min(100, (evBonus / max) * 100);
+                                            return (
+                                                <div className="grid grid-cols-[64px_1fr_40px] items-center gap-2 text-xs">
+                                                    <span className="text-[var(--text-muted)]">{label}</span>
+                                                    <div className="relative h-2.5 overflow-hidden rounded-full bg-[var(--surface-4)]">
+                                                        <div
+                                                            className="absolute left-0 top-0 h-full rounded-full bg-amber-400"
+                                                            style={{ width: `${Math.min(100, percentage + evPercentage)}%` }}
+                                                        />
+                                                        <div
+                                                            className="absolute left-0 top-0 h-full rounded-full bg-[var(--accent)]"
+                                                            style={{ width: `${percentage}%` }}
+                                                        />
+                                                    </div>
+                                                    <span className="text-right tabular-nums text-[var(--text-primary)]">
+                                                        {value}
+                                                    </span>
+                                                </div>
+                                            );
+                                        };
+                                        return (
+                                            <div className="space-y-2">
+                                                {renderBar('HP', stats.hp, evs.hp, 255)}
+                                                {renderBar('攻撃', stats.atk, evs.atk, 255)}
+                                                {renderBar('防御', stats.def, evs.def, 255)}
+                                                {renderBar('特攻', stats.spa, evs.spa, 255)}
+                                                {renderBar('特防', stats.spd, evs.spd, 255)}
+                                                {renderBar('素早さ', stats.spe, evs.spe, 255)}
+                                                {renderBar('合計', total, 0, 720)}
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            </div>
+
+                            {/* 下段 */}
+                            <div className="mt-4 space-y-3">
+                                <div className="rounded-lg bg-[var(--surface-3)] p-3">
+                                    <div className="text-xs text-[var(--text-muted)]">状態</div>
+                                    <div className="font-bold text-[var(--text-primary)]">{statusLabel}</div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {mon.moves?.map((moveId) => {
+                                        const move = moves[moveId];
+                                        if (!move) return null;
+                                        return (
+                                            <div
+                                                key={moveId}
+                                                className="rounded-lg border border-[var(--border)] bg-[var(--surface-3)] px-3 py-3 text-sm"
+                                            >
+                                                <div className="truncate font-medium text-[var(--text-primary)]">
+                                                    {move.name}
+                                                </div>
+                                                <div className="mt-1 flex items-center justify-between text-xs text-[var(--text-muted)]">
+                                                    <span>{move.power ?? '-'}</span>
+                                                    <span
+                                                        className="rounded-full px-2 text-white"
+                                                        style={{ backgroundColor: getTypeColor(move.type) }}
+                                                    >
+                                                        {getTypeLabel(move.type)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <button
+                                    onClick={() => handleSwitch(focusedTeamSlot)}
+                                    disabled={isActive || isFainted || waiting}
+                                    className="w-full rounded-xl bg-[var(--accent)] p-3 font-bold text-white disabled:opacity-40"
+                                >
+                                    {isActive ? '場に出ています' : isFainted ? 'ひんしです' : '交代する'}
+                                </button>
+                            </div>
+                        </>
+                    );
+                })()}
+            </div>
+
+            {/* Right column: opponent team list */}
+            <div className="flex min-h-0 flex-col space-y-2 rounded-xl bg-[var(--surface-2)] p-4">
+                <div className="mb-2 text-sm font-bold text-[var(--text-primary)]">
+                    相手チーム
+                </div>
+
+                {ai.team.map((mon, idx) => {
+                    const monSpecies = species[mon.speciesId];
+                    const isActive = idx === ai.activeSlot;
+                    const isFainted = mon.hp <= 0;
+
+                    return (
+                        <div
+                            key={idx}
+                            className={cn(
+                                'rounded-lg border p-2 text-left transition-all',
+                                isActive
+                                    ? 'border-[var(--accent)] bg-[var(--accent-muted)]'
+                                    : 'border-[var(--border)] bg-[var(--surface-3)]',
+                                isFainted && 'opacity-50'
+                            )}
+                        >
+                            <div className="truncate text-sm font-medium text-[var(--text-primary)]">
+                                {monSpecies?.name ?? '???'}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    </div>
+)}
+        </main>
         </div>
     );
 }

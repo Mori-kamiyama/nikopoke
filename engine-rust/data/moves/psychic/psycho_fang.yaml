@@ -3,6 +3,9 @@ name: サイコファング
 type: psychic
 category: physical
 pp: 10
+power: 85
+accuracy: 1.0
+priority: 0
 steps:
 - type: damage
   power: 85
@@ -13,3 +16,6 @@ steps:
   statusId: light_screen
 - type: remove_field_status
   statusId: aurora_veil
+tags:
+- contact
+- bite

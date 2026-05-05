@@ -16,5 +16,4 @@ steps:
   - type: damage
     power: 25
     accuracy: 1.0
-tags:
-- contact
+tags: []

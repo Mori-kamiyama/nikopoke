@@ -3,13 +3,14 @@ name: フレアドライブ
 type: fire
 category: physical
 pp: 15
+power: 120
+accuracy: 1.0
+priority: 0
+description: 攻撃し、10%で相手を『やけど』状態にする。反動あり。
 steps:
 - type: damage
   power: 120
   accuracy: 1
-- type: damage_ratio
-  ratioMaxHp: 0.33
-  target: self
 - type: chance
   p: 0.1
   then:
@@ -24,3 +25,9 @@ steps:
   - type: remove_status
     statusId: freeze
     target: self
+- type: recoil_last_damage
+  target: self
+  ratio: 0.3333333333
+tags:
+- contact
+- recoil

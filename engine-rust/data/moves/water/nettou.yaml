@@ -3,6 +3,10 @@ name: ねっとう
 type: water
 category: special
 pp: 15
+power: 80
+accuracy: 1.0
+priority: 0
+description: 30%の確率で相手を『やけど』状態にする。
 steps:
 - type: damage
   power: 80
@@ -19,3 +23,5 @@ steps:
 - type: remove_status
   statusId: freeze
   target: target
+tags:
+- thaws_user
